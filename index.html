@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Terra: un análisis académico de la producción terrestre de petróleo en Brasil a partir de los registros de enero de 2023.">
+  <title>Producción terrestre de petróleo en Brasil</title>
+  <link rel="preload" href="fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    (function () {
+      try { if (localStorage.getItem('sidebar-expanded') === '1') document.documentElement.classList.add('sidebar-expanded'); } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="css/styles.css">
+  <script defer src="js/main.js"></script>
+  <script defer src="js/sidebar.js"></script>
+</head>
+<body class="has-sidebar">
+  <aside class="sidebar" id="sidebar" aria-label="Navegación lateral">
+    <div class="sidebar-top">
+      <button class="sidebar-toggle" id="sidebar-toggle" type="button" aria-label="Alternar menú lateral" aria-expanded="false" aria-controls="sidebar">
+        <span class="sidebar-toggle-icon" aria-hidden="true">☰</span>
+      </button>
+      <a class="sidebar-brand" href="index.html" aria-label="Terra, inicio">
+        <img class="sidebar-logo" src="img/logo-universidad.png" alt="" width="34" height="34">
+        <span class="sidebar-name">Universidad Central del Ecuador</span>
+      </a>
+    </div>
+    <nav class="sidebar-nav" aria-label="Navegación lateral">
+      <a class="sidebar-link" href="index.html#inicio">
+        <span class="sidebar-link-icon" aria-hidden="true">⌂</span>
+        <span class="sidebar-link-label">Inicio</span>
+      </a>
+      <a class="sidebar-link" href="Estadistica.html">
+        <span class="sidebar-link-icon" aria-hidden="true">∑</span>
+        <span class="sidebar-link-label">Estadística Descriptiva</span>
+      </a>
+    </nav>
+  </aside>
+  <div class="sidebar-backdrop" id="sidebar-backdrop" hidden></div>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <noscript><p class="noscript">Este análisis carga sus datos con JavaScript. Actívalo para ver las cifras y los gráficos.</p></noscript>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="sidebar">
+        <span aria-hidden="true">☰</span>
+      </button>
+      <a class="brand" href="#inicio" aria-label="Terra, inicio">
+        <img class="brand-mark" src="img/logo-universidad.png" alt="" aria-hidden="true" width="34" height="34">
+        <span class="brand-word">Universidad Central del Ecuador</span>
+        <span class="brand-caption">Proyecto de Estadistica</span>
+      </a>
+      <nav class="site-nav" aria-label="Navegación principal">
+        <a href="#planteamiento">Planteamiento</a>
+        <a href="#ubicacion">Ubicación Geográfica</a>
+        <a href="#objetivos">Objetivos</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido">
+    <section class="video-hero" id="inicio" aria-label="Video de introducción al proyecto">
+      <h1 class="sr-only">Terra · Producción terrestre de hidrocarburos en Brasil</h1>
+      <video class="intro-video" autoplay muted loop playsinline preload="auto" aria-hidden="true" tabindex="-1">
+        <source src="video/video-inicio.mp4" type="video/mp4">
+        Tu navegador no puede reproducir el video.
+      </video>
+    </section>
+
+    <section class="section context-section" id="planteamiento" aria-labelledby="planteamiento-title">
+      <div class="container context-grid">
+        <div class="context-aside" data-reveal>
+          <p class="section-kicker">Planteamiento del problema</p>
+          <h2 id="planteamiento-title">Planteamiento del problema.</h2>
+        </div>
+
+        <div class="context-body">
+          <p class="status" id="estado-planteamiento" role="status">Cargando planteamiento…</p>
+          <div id="planteamiento-contenido" hidden>
+            <div class="prose" id="problema" data-reveal>
+              <p>La producción terrestre de hidrocarburos en Brasil presenta diferencias entre estados, cuencas y pozos que requieren un análisis estadístico para comprender su distribución y variabilidad. Los registros de enero de 2023 contienen información sobre los volúmenes de óleo, gas natural y agua, así como características territoriales y operativas; sin embargo, estos datos deben depurarse y organizarse para obtener resultados comparables e interpretables. En este contexto, el problema de investigación consiste en determinar cómo se distribuye la producción, qué diferencias existen entre las unidades observadas y qué relaciones estadísticas pueden identificarse entre las variables disponibles. Para abordar esta problemática, se plantea integrar técnicas de estadística descriptiva, evaluación de modelos probabilísticos y análisis de correlación y regresión, considerando la presencia de datos faltantes, valores iguales a cero y observaciones atípicas. Con ello, se busca aportar evidencia cuantitativa que permita reconocer patrones productivos y fundamentar la discusión sobre la gestión de recursos, sin atribuir causalidad a las asociaciones encontradas. El alcance del estudio se limita al período observado, por lo que la identificación de tendencias temporales y la elaboración de pronósticos requerirán información de meses adicionales.</p>
+            </div>
+          </div>
+
+          <aside class="academic-note" data-reveal>
+            </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="section data-section" id="ubicacion" aria-labelledby="ubicacion-title">
+      <div class="container">
+        <div class="data-head" data-reveal>
+          <div>
+            <p class="section-kicker">Ubicación Geográfica</p>
+            <h2 id="ubicacion-title">Ubicación Geográfica.</h2>
+          </div>
+        </div>
+
+        <div id="ubicacion-view">
+          <figure class="chart-figure" id="mapa-geografico" data-reveal aria-labelledby="mapa-title">
+            <div class="chart-top">
+              <p class="chart-title" id="mapa-title">Mapa geográfico</p>
+            </div>
+
+            <div class="map-placeholder" aria-hidden="true">
+            </div>
+
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="section method-section" id="objetivos" aria-labelledby="objetivos-title">
+      <div class="container">
+        <div class="method-head" data-reveal>
+          <p class="section-kicker">Objetivos</p>
+          <h2 id="objetivos-title">Objetivos del estudio.</h2>
+        </div>
+
+        <div class="objectives-grid" data-reveal>
+          <div class="objective-block">
+            <h3 id="objetivo-general-title">Objetivo general</h3>
+            <p id="objetivo-general">Analizar la distribución, variabilidad y relaciones estadísticas de la producción terrestre de hidrocarburos en Brasil durante enero de 2023, mediante técnicas descriptivas, inferenciales y de regresión, con el fin de identificar patrones productivos y aportar evidencia cuantitativa que contribuya a comprender las diferencias entre las unidades observadas y fundamentar la discusión sobre la gestión de recursos.</p>
+          </div>
+
+          <div class="objective-block" id="objetivos-especificos">
+            <h3>Objetivos específicos</h3>
+            <ol>
+              <li>Caracterizar las variables de producción de óleo, gas natural y agua mediante tablas de frecuencias, representaciones gráficas y medidas de tendencia central, dispersión y forma, considerando su distribución territorial y el tratamiento de datos faltantes, valores iguales a cero y observaciones atípicas.</li>
+              <li>Evaluar la adecuación de modelos probabilísticos a las variables seleccionadas mediante la estimación de parámetros y la aplicación de pruebas de bondad de ajuste, como chi-cuadrado de Pearson, cuando se cumplan sus supuestos, explicitando las limitaciones de la inferencia según la cobertura y naturaleza de los registros.</li>
+              <li>Examinar las relaciones entre las variables productivas mediante análisis de correlación y modelos de regresión, evaluando sus supuestos, capacidad explicativa y limitaciones, para identificar asociaciones relevantes sin atribuirles causalidad ni extrapolar los resultados más allá del período estudiado.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <a class="brand brand-footer" href="#inicio" aria-label="Terra, volver al inicio">
+          <img class="brand-mark" src="img/logo-universidad.png" alt="" aria-hidden="true" width="34" height="34">
+          <span class="brand-word">Universidad Central del Ecuador</span>
+        </a>
+        <p>Un análisis académico de la producción terrestre de hidrocarburos en Brasil.</p>
+      </div>
+      <div>
+          <p class="footer-label">Fuente</p>
+          <p>
+            <a href="https://www.gov.br/anp/pt-br/centrais-de-conteudo/dados-abertos/producao-de-petroleo-e-gas-natural-por-poco?utm_source=chatgpt.com" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              style="color: inherit; text-decoration: none;">
+              ANP (Brasil) - Dados Abertos
+            </a>
+            <br>Agregación por Estado
+          </p>
+      </div>
+      <div>
+        <p class="footer-label">Proyecto</p>
+        <p>Proyecto de Estadística<br>Enero de 2026</p>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>Datos analizados con fines educativos.</p>
+      <a href="#inicio">Volver al inicio ↑</a>
+    </div>
+  </footer>
+</body>
+</html>

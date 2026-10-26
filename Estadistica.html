@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Estadística descriptiva de la producción terrestre de petróleo en Brasil: población, individuo y delimitación del estudio (enero de 2023).">
+  <title>Estadística descriptiva · Terra</title>
+  <script>
+    (function () {
+      try { if (localStorage.getItem('sidebar-expanded') === '1') document.documentElement.classList.add('sidebar-expanded'); } catch (e) {}
+    })();
+  </script>
+  <link rel="preload" href="fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/styles.css">
+  <script defer src="js/sidebar.js"></script>
+  <script defer src="js/estadistica.js"></script>
+</head>
+<body class="has-sidebar">
+  <aside class="sidebar" id="sidebar" aria-label="Navegación lateral">
+    <div class="sidebar-top">
+      <button class="sidebar-toggle" id="sidebar-toggle" type="button" aria-label="Alternar menú lateral" aria-expanded="false" aria-controls="sidebar">
+        <span class="sidebar-toggle-icon" aria-hidden="true">☰</span>
+      </button>
+      <a class="sidebar-brand" href="index.html" aria-label="Terra, inicio">
+        <img class="sidebar-logo" src="img/logo-universidad.png" alt="" width="34" height="34">
+        <span class="sidebar-name">Universidad Central del Ecuador</span>
+      </a>
+    </div>
+    <nav class="sidebar-nav" aria-label="Navegación lateral">
+      <a class="sidebar-link" href="index.html#inicio">
+        <span class="sidebar-link-icon" aria-hidden="true">⌂</span>
+        <span class="sidebar-link-label">Inicio</span>
+      </a>
+      <a class="sidebar-link" href="Estadistica.html" aria-current="page">
+        <span class="sidebar-link-icon" aria-hidden="true">∑</span>
+        <span class="sidebar-link-label">Estadística</span>
+      </a>
+    </nav>
+  </aside>
+  <div class="sidebar-backdrop" id="sidebar-backdrop" hidden></div>
+
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="sidebar">
+        <span aria-hidden="true">☰</span>
+      </button>
+      <a class="brand" href="index.html" aria-label="Terra, inicio">
+        <img class="brand-mark" src="img/logo-universidad.png" alt="" aria-hidden="true" width="34" height="34">
+        <span class="brand-word">Universidad Central del Ecuador</span>
+        <span class="brand-caption">Proyecto de Estadística</span>
+      </a>
+      <nav class="site-nav" aria-label="Navegación principal">
+        <a href="#poblacion-individuo">Población e individuo</a>
+        <a href="#muestra">Muestra</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido">
+    <section class="section context-section" id="estadistica" aria-labelledby="estadistica-titulo">
+      <div class="container context-grid">
+        <div class="context-aside" data-reveal>
+          <p class="section-kicker">04 / Análisis estadístico</p>
+          <h1 id="estadistica-titulo">Estadística descriptiva.</h1>
+          <p class="aside-meta">Brasil · Enero de 2023</p>
+        </div>
+
+        <div class="context-body">
+          <p class="status" id="estado-estadistica" role="status">Calculando la delimitación del estudio…</p>
+          <div id="contenido-estadistica" hidden>
+            <h3 class="stat-subtitle" data-reveal id="poblacion-individuo">4.1.1. Población e individuo</h3>
+
+            <dl class="stat-metrics" data-reveal>
+              <div><dt>Pozos únicos · N</dt><dd id="total-pozos">—</dd></div>
+              <div><dt>Registros · R</dt><dd id="total-registros">—</dd></div>
+              <div><dt>Estados representados</dt><dd id="total-estados">—</dd></div>
+              <div><dt>Período observado</dt><dd id="periodo-estadistica">—</dd></div>
+            </dl>
+
+            <div class="stat-definitions" data-reveal>
+              <article>
+                <h4>Población de estudio</h4>
+                <p>Conjunto de pozos terrestres de hidrocarburos de Brasil representados en el archivo durante el período observado.</p>
+                <p class="stat-formula" aria-label="Población P igual al conjunto de pozos p uno hasta p N">𝒫 = {p₁, p₂, …, p<sub>N</sub>}</p>
+                <p class="stat-notation">N = |𝒫| = <span id="poblacion-n">—</span> pozos únicos.</p>
+              </article>
+              <article>
+                <h4>Individuo o unidad estadística</h4>
+                <p>Cada pozo terrestre identificado mediante <code>Nome Poço</code> durante el período observado.</p>
+                <p class="stat-formula" aria-label="Pozo p sub i pertenece a la población P">p<sub>i</sub> ∈ 𝒫</p>
+                <p class="stat-notation">i = 1, 2, …, N. Un identificador de pozo define una unidad.</p>
+              </article>
+            </div>
+
+            <aside class="stat-caution" data-reveal aria-label="Distinción entre registros y pozos">
+              <strong>Registro ≠ individuo.</strong>
+              <span id="nota-registros"></span>
+              Antes de calcular indicadores por pozo se deben revisar y consolidar sus registros, sin eliminarlos ni sumarlos automáticamente.
+            </aside>
+
+            <p class="stat-scope" data-reveal>La población se delimita al archivo analizado; su cobertura no permite afirmar que incluya todos los pozos terrestres de Brasil.</p>
+
+            <h3 class="stat-subtitle" data-reveal id="muestra">4.1.2. Muestra: método y tamaño</h3>
+
+            <div class="stat-definitions" data-reveal>
+              <article>
+                <h4>Método de inclusión</h4>
+                <p>Los criterios de inclusión definen la muestra a partir de la población: se integran los registros de producción terrestre de enero de 2023 considerados en el análisis, sin excluir los registros con producción igual a cero.</p>
+              </article>
+              <article>
+                <h4>Representación simbólica</h4>
+                <p>La muestra se denota como el conjunto 𝒩 = {x₁, x₂, …, x<sub>n</sub>}.</p>
+                <p class="stat-formula" aria-label="Muestra N igual al conjunto de x uno hasta x n">𝒩 = {x₁, x₂, …, x<sub>n</sub>}</p>
+                <p class="stat-notation">n = |𝒩| es el tamaño de la muestra.</p>
+              </article>
+            </div>
+
+            <p class="source" data-reveal">Fuente: <span id="fuente-estadistica"></span> · Conteo de identificadores únicos, sin excluir producción igual a cero.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <a class="brand brand-footer" href="index.html" aria-label="Terra, volver al inicio">
+          <img class="brand-mark" src="img/logo-universidad.png" alt="" aria-hidden="true" width="34" height="34">
+          <span class="brand-word">Universidad Central del Ecuador</span>
+        </a>
+        <p>Un análisis académico de la producción terrestre de hidrocarburos en Brasil.</p>
+      </div>
+      <div>
+        <p class="footer-label">Fuente</p>
+        <p>
+          <a href="https://www.gov.br/anp/pt-br/centrais-de-conteudo/dados-abertos/producao-de-petroleo-e-gas-natural-por-poco?utm_source=chatgpt.com" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">
+            ANP (Brasil) - Dados Abertos
+          </a>
+          <br>Agregación por Estado
+        </p>
+      </div>
+      <div>
+        <p class="footer-label">Proyecto</p>
+        <p>Proyecto de Estadística<br>Enero de 2026</p>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>Datos analizados con fines educativos.</p>
+      <a href="index.html">Volver al inicio ↑</a>
+    </div>
+  </footer>
+</body>
+</html>
