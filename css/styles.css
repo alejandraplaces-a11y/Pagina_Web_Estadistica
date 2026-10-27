@@ -191,6 +191,34 @@ button { font: inherit; }
   color: var(--white);
 }
 
+/* Video de fondo del hero (antes estaba en introduccion.html) */
+.hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(1.45) saturate(1.1);
+}
+
+/* Velo para que el texto del hero siga til Legible sobre el video */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(5, 24, 17, .82) 0%,
+    rgba(5, 24, 17, .55) 55%,
+    rgba(5, 24, 17, .25) 100%
+  );
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+}
+
 .hero::before {
   content: "";
   position: absolute;
@@ -885,7 +913,7 @@ h1 {
 /* Footer */
 
 .site-footer {
-  padding-top: 64px;
+  padding-top: 28px;
   background: var(--basin);
   color: var(--white);
 }
@@ -970,14 +998,15 @@ html.sidebar-expanded .sidebar {
 }
 
 .sidebar-top {
+  /* Width interno fijo al ancho expandido + align stretch siempre:
+     el layout interno NUNCA se re-maqueta durante la transición de width,
+     así los íconos no se mueven (ni vertical ni horizontal) al expandir/colapsar. */
+  width: var(--sidebar-expanded);
+  flex-shrink: 0;
   padding: 14px 12px 12px;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  align-items: center;
-}
-
-html.sidebar-expanded .sidebar-top {
   align-items: stretch;
 }
 
@@ -1025,26 +1054,27 @@ html.sidebar-expanded .sidebar-top {
   font-weight: 500;
   line-height: 1.25;
   letter-spacing: -.01em;
-  opacity: 0;
-  width: 0;
+  /* Siempre maquetado a su ancho natural (el contenedor interno es de 260px fijo);
+     colapsado se recorta con overflow de la propia sidebar. Solo hace fade. */
+  min-width: 0;
   overflow: hidden;
-  white-space: normal;
-  word-break: break-word;
-  transition: opacity .3s ease .05s, width .45s var(--ease);
+  transition: opacity .3s ease .05s;
 }
 
 html.sidebar-expanded .sidebar-name {
   opacity: 1;
-  width: auto;
 }
 
 .sidebar-nav {
   flex: 1;
+  width: var(--sidebar-expanded); /* igual que .sidebar-top: layout interno fijo */
+  flex-shrink: 0;
   padding: 8px;
   display: flex;
   flex-direction: column;
   gap: 4px;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .sidebar-link {
@@ -1069,23 +1099,21 @@ html.sidebar-expanded .sidebar-name {
 .sidebar-link-icon {
   display: grid;
   place-items: center;
-  width: 20px;
+  width: 32px;
   flex-shrink: 0;
-  font-size: 14px;
+  font-size: 20px;
   opacity: .85;
 }
 
 .sidebar-link-label {
-  opacity: 0;
-  width: 0;
+  opacity: 1;
   overflow: hidden;
   white-space: nowrap;
-  transition: opacity .3s ease .05s, width .45s var(--ease);
+  transition: opacity .3s ease;
 }
 
 html.sidebar-expanded .sidebar-link-label {
   opacity: 1;
-  width: auto;
 }
 
 .sidebar-backdrop {
@@ -1441,6 +1469,158 @@ h1 { animation-delay: .12s; }
 
 @media (max-width: 520px) {
   .brand-caption { display: none; }
+
+/* ============================================================
+    Sidebar theme Terra (formato unificado)
+    ============================================================ */
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: var(--sidebar-collapsed, 64px);
+  background: var(--basin);
+  color: var(--white);
+  z-index: 50;
+  overflow-y: auto;
+  padding-top: 20px;
+}
+
+.sidebar.sidebar-expanded { width: var(--sidebar-expanded, 260px); }
+
+.sidebar-brand {
+  padding: 0 14px 16px;
+  text-align: center;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--line);
+}
+
+.sidebar-brand .sidebar-logo {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--basin);
+  margin: 0 auto 12px;
+  flex-shrink: 0;
+}
+
+.sidebar-brand .brand-symbol {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--basin);
+  color: var(--white);
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.sidebar-brand .sidebar-logo-text {
+  font-family: var(--serif);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--white);
+  display: block;
+}
+
+.sidebar-brand .sidebar-title {
+  font-family: var(--serif);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--oil-light);
+  margin-bottom: 4px;
+}
+
+.sidebar-brand .sidebar-subtitle {
+  font-size: 10px;
+  color: var(--ink-faint);
+}
+
+.sidebar-nav { padding: 0 14px; }
+
+.sidebar-list { list-style: none; padding: 0; margin: 0; }
+
+.sidebar-list li { margin-bottom: 8px; }
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  color: var(--ink-soft);
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color .18s var(--ease), color .18s var(--ease);
+  white-space: nowrap;
+}
+
+.sidebar-link.is-active {
+  background: rgba(182, 101, 47, .08);
+  color: var(--oil);
+}
+
+.sidebar-link:hover { background: rgba(248, 249, 243, .08); color: var(--white); }
+
+.sidebar-link .sidebar-icon {
+  flex-shrink: 0;
+  width: 20px;
+  display: grid;
+  place-items: center;
+}
+
+.sidebar-link .sidebar-icon svg { width: 18px; height: 18px; }
+
+.sidebar-link span { white-space: normal; }
+
+.sidebar-more {
+  width: 100%;
+  padding: 10px 14px;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  color: var(--ink-soft);
+  font-size: 13px;
+  font-weight: 500;
+  text-align: left;
+  border-radius: 8px;
+  margin-top: 8px;
+}
+
+.sidebar-more:hover {
+  background: rgba(248, 249, 243, .08);
+  color: var(--white);
+}
+
+.sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .45);
+  z-index: 45;
+  opacity: 0;
+  visibility: hidden;
+  transition: visibility .2s, opacity .2s;
+}
+
+.sidebar-backdrop.visible { visibility: visible; opacity: 1; }
+
+@media (max-width: 760px) {
+  .sidebar { transform: translateX(-100%); transition: transform .45s var(--ease); }
+  .sidebar.is-open { transform: translateX(0); }
+  .sidebar-backdrop { left: 260px; visibility: visible; opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar { transition: width .01s ease, transform .01s ease; }
+  .sidebar-backdrop { transition: none; }
+}
   .site-nav { gap: 20px; font-size: 11px; }
 
   h1 { font-size: clamp(2.5rem, 12vw, 3.4rem); }
@@ -1548,3 +1728,1181 @@ h1 { animation-delay: .12s; }
   font-weight: 600;
   letter-spacing: .08em;
 }
+
+/* ============================================================
+   Index · diagrama interactivo (tema Terra)
+   ============================================================ */
+
+.navigation {
+  min-height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.brand-symbol {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--basin);
+  color: var(--white);
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.brand-name {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -.02em;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.nav-links a {
+  position: relative;
+  padding-block: 6px;
+  color: var(--ink-soft);
+  transition: color .2s ease;
+}
+
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--oil);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .25s var(--ease);
+}
+
+.nav-links a:hover { color: var(--ink); }
+.nav-links a:hover::after { transform: scaleX(1); }
+.nav-links a[aria-current="page"] { color: var(--ink); }
+.nav-links a[aria-current="page"]::after { transform: scaleX(1); }
+
+.hero-content {
+  padding-block: clamp(72px, 9vw, 120px) clamp(52px, 6vw, 76px);
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--oil-light);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.hero-badge::before {
+  content: "";
+  width: 26px;
+  height: 1px;
+  background: currentColor;
+}
+
+.hero h1 {
+  color: var(--white);
+}
+
+.hero-description {
+  max-width: 48ch;
+  margin-top: 28px;
+  color: rgba(248, 249, 243, .74);
+  font-size: clamp(.98rem, 1.2vw, 1.12rem);
+  line-height: 1.75;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 34px;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 22px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color .2s var(--ease), color .2s var(--ease), border-color .2s var(--ease), transform .2s var(--ease);
+}
+
+.button:hover { transform: translateY(-1px); }
+
+.button-primary {
+  background: var(--oil);
+  color: var(--white);
+  border-color: var(--oil);
+}
+
+.button-primary:hover {
+  background: var(--oil-deep);
+  border-color: var(--oil-deep);
+}
+
+.button-secondary {
+  background: transparent;
+  color: var(--white);
+  border-color: rgba(248, 249, 243, .45);
+}
+
+.button-secondary:hover {
+  background: rgba(248, 249, 243, .08);
+  border-color: var(--oil-light);
+  color: var(--oil-light);
+}
+
+.diagram-section {
+  padding-block: clamp(72px, 9vw, 120px);
+  background: var(--paper-2);
+  border-top: 1px solid var(--line);
+}
+
+.section-heading {
+  max-width: 760px;
+  margin-bottom: clamp(32px, 5vw, 56px);
+}
+
+.section-heading .eyebrow { margin-bottom: 12px; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--oil-deep);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.eyebrow::before {
+  content: "";
+  width: 22px;
+  height: 1px;
+  background: var(--oil);
+}
+
+.section-heading h2 {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 3.6vw, 3.5rem);
+  font-weight: 500;
+  line-height: 1.02;
+  letter-spacing: -.04em;
+  color: var(--ink);
+}
+
+.section-description {
+  margin-top: 14px;
+  color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 1.7;
+  max-width: 62ch;
+}
+
+.diagram-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(300px, .65fr);
+  gap: clamp(24px, 4vw, 48px);
+  align-items: start;
+}
+
+.diagram-map {
+  margin: 0;
+  padding: 20px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.diagram-caption {
+  margin-bottom: 12px;
+  color: var(--ink-faint);
+  font-size: 10px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+#mapa {
+  width: 100%;
+  min-height: 520px;
+}
+
+.diagram-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-top: 14px;
+  padding: 0;
+  list-style: none;
+  color: var(--ink-soft);
+  font-size: 11px;
+}
+
+.diagram-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legend-swatch {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  border: 1px solid rgba(0, 0, 0, .08);
+}
+
+.legend-swatch-data { background: #b6652f; }
+.legend-swatch-empty { background: #e3e8e5; }
+
+.diagram-panel {
+  padding: 22px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.panel-title {
+  font-family: var(--serif);
+  font-size: clamp(1.4rem, 2.2vw, 1.9rem);
+  font-weight: 500;
+  letter-spacing: -.02em;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+
+.panel-subtitle {
+  color: var(--ink-soft);
+  font-size: 13px;
+  line-height: 1.6;
+  margin-bottom: 18px;
+}
+
+.panel-metrics {
+  margin: 0 0 20px;
+  padding: 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.panel-metrics > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.panel-metrics > div:last-child { border-bottom: 0; }
+
+.panel-metrics dt {
+  color: var(--ink-faint);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.panel-metrics dd {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.metric-unit {
+  color: var(--ink-faint);
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 400;
+}
+
+.panel-ranking {
+  margin-bottom: 20px;
+}
+
+.panel-ranking-title {
+  color: var(--ink-faint);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.ranking-track {
+  height: 6px;
+  background: rgba(23, 37, 31, .08);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.ranking-progress {
+  height: 100%;
+  width: 0%;
+  background: var(--oil);
+  transition: width .4s var(--ease);
+}
+
+.ranking-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.ranking-list li {
+  margin-bottom: 6px;
+}
+
+.ranking-item {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--paper-2);
+  color: var(--ink);
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color .18s var(--ease), border-color .18s var(--ease);
+}
+
+.ranking-item:hover {
+  background: var(--paper-3);
+  border-color: var(--oil);
+}
+
+.ranking-name { font-weight: 500; }
+.ranking-value { color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+
+.ranking-list li.is-active .ranking-item {
+  border-color: var(--oil);
+  background: rgba(182, 101, 47, .08);
+}
+
+.panel-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.panel-actions .button { flex: 1; min-width: 140px; }
+
+.mission-section {
+  padding-block: clamp(72px, 9vw, 120px);
+  background: var(--paper);
+  border-top: 1px solid var(--line);
+}
+
+.mission-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(24px, 4vw, 40px);
+}
+
+.card {
+  padding: 30px 32px;
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.card-mission { border-top: 3px solid var(--oil); }
+.card-vision { border-top: 3px solid var(--basin-2); }
+
+.card h2 {
+  font-family: var(--serif);
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  font-weight: 500;
+  letter-spacing: -.03em;
+  color: var(--ink);
+  margin-bottom: 14px;
+}
+
+.card p {
+  color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.motivation-section {
+  padding-block: clamp(72px, 9vw, 120px);
+  background: var(--paper-2);
+  border-top: 1px solid var(--line);
+}
+
+.motivation-layout {
+  display: grid;
+  grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+  gap: clamp(24px, 5vw, 64px);
+  align-items: center;
+  margin-top: 24px;
+}
+
+.motivation-figure {
+  margin: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--paper-3);
+}
+
+.motivation-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.motivation-figcaption {
+  padding: 10px 14px;
+  color: var(--ink-faint);
+  font-size: 10px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  background: var(--paper-2);
+  border-top: 1px solid var(--line);
+}
+
+.motivation-content .eyebrow { margin-bottom: 10px; }
+
+.motivation-content h3 {
+  font-family: var(--serif);
+  font-size: clamp(1.6rem, 2.6vw, 2.2rem);
+  font-weight: 500;
+  letter-spacing: -.025em;
+  color: var(--ink);
+  margin-bottom: 14px;
+}
+
+.motivation-content p {
+  color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 1.8;
+  margin-bottom: 14px;
+}
+
+.motivation-content p:last-of-type { margin-bottom: 18px; }
+
+.heading-rule {
+  display: block;
+  width: 60px;
+  height: 2px;
+  background: var(--oil);
+  margin-top: 12px;
+}
+
+.footer-content {
+  padding-block: 28px;
+  text-align: center;
+  color: rgba(248, 249, 243, .62);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.footer-content p { margin: 4px 0; }
+.footer-members { color: var(--oil-light); font-weight: 600; }
+.footer-location { color: rgba(248, 249, 243, .45); font-size: 11px; }
+
+/* Footer: copiraid a la izquierda, fuente a la derecha */
+.footer-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px 40px;
+  padding-block: 14px;
+  font-size: 11px;
+  line-height: 1.6;
+  color: rgba(248, 249, 243, .62);
+  text-align: left;
+}
+
+.footer-row p { margin: 4px 0; }
+
+.footer-row a {
+  color: var(--oil-light);
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.footer-row a:hover { color: var(--white); }
+
+.footer-label {
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: rgba(248, 249, 243, .45);
+  font-size: 11px;
+}
+
+@media (max-width: 760px) {
+  .footer-row { flex-direction: column; align-items: flex-start; }
+}
+
+@media (max-width: 1000px) {
+  .diagram-layout { grid-template-columns: 1fr; }
+  .mission-grid { grid-template-columns: 1fr; }
+  .motivation-layout { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 760px) {
+  .navigation { flex-wrap: wrap; min-height: auto; padding-block: 12px; }
+  .nav-links { gap: 16px; font-size: 11px; flex-wrap: wrap; }
+  .hero-actions { flex-direction: column; align-items: stretch; }
+  .hero-actions .button { text-align: center; }
+  .panel-actions { flex-direction: column; }
+  .panel-actions .button { min-width: 0; }
+  #mapa { height: 360px; }
+  .diagram-map { padding: 14px; }
+}
+
+@media (max-width: 520px) {
+  .brand-caption { display: none; }
+
+/* ============================================================
+    Sidebar theme Terra (formato unificado)
+    ============================================================ */
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: var(--sidebar-collapsed, 64px);
+  background: var(--basin);
+  color: var(--white);
+  z-index: 50;
+  overflow-y: auto;
+  padding-top: 20px;
+}
+
+.sidebar.sidebar-expanded { width: var(--sidebar-expanded, 260px); }
+
+.sidebar-brand {
+  padding: 0 14px 16px;
+  text-align: center;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--line);
+}
+
+.sidebar-brand .sidebar-logo {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--basin);
+  margin: 0 auto 12px;
+  flex-shrink: 0;
+}
+
+.sidebar-brand .brand-symbol {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--basin);
+  color: var(--white);
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.sidebar-brand .sidebar-logo-text {
+  font-family: var(--serif);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--white);
+  display: block;
+}
+
+.sidebar-brand .sidebar-title {
+  font-family: var(--serif);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--oil-light);
+  margin-bottom: 4px;
+}
+
+.sidebar-brand .sidebar-subtitle {
+  font-size: 10px;
+  color: var(--ink-faint);
+}
+
+.sidebar-nav { padding: 0 14px; }
+
+.sidebar-list { list-style: none; padding: 0; margin: 0; }
+
+.sidebar-list li { margin-bottom: 8px; }
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  color: var(--ink-soft);
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color .18s var(--ease), color .18s var(--ease);
+  white-space: nowrap;
+}
+
+.sidebar-link.is-active {
+  background: rgba(182, 101, 47, .08);
+  color: var(--oil);
+}
+
+.sidebar-link:hover { background: rgba(248, 249, 243, .08); color: var(--white); }
+
+.sidebar-link .sidebar-icon {
+  flex-shrink: 0;
+  width: 20px;
+  display: grid;
+  place-items: center;
+}
+
+.sidebar-link .sidebar-icon svg { width: 18px; height: 18px; }
+.sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .45);
+  z-index: 45;
+  opacity: 0;
+  visibility: hidden;
+  transition: visibility .2s, opacity .2s;
+}
+
+.sidebar-backdrop.visible { visibility: visible; opacity: 1; }
+
+@media (max-width: 760px) {
+  .sidebar { transform: translateX(-100%); transition: transform .45s var(--ease); }
+  .sidebar.is-open { transform: translateX(0); }
+  .sidebar-backdrop { left: 260px; visibility: visible; opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar { transition: width .01s ease, transform .01s ease; }
+  .sidebar-backdrop { transition: none; }
+}
+  .nav-links { gap: 14px; }
+}
+
+/* ============================================================
+   Sidebar rediseñado (referencia: verde oscuro uniforme)
+   Este bloque va al FINAL para sobreescribir las reglas legacy
+   del sidebar colapsable anterior (64px/260px, drawer móvil).
+   ============================================================ */
+
+:root {
+  --sb-bg: #0d2b24;
+  --sb-text: #d7e3de;
+  --sb-muted: #9fb8af;
+  --sb-hover: #163a33;
+  --sb-active: #2b4f45;
+}
+
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+.app-main {
+  flex: 1;
+  min-width: 0;
+}
+
+/* El layout ya no depende de padding-left del body */
+body.has-sidebar { padding-left: 0; }
+html.sidebar-expanded body.has-sidebar { padding-left: 0; }
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  width: 240px;
+  height: 100vh;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 16px;
+  background: var(--sb-bg);
+  color: var(--sb-text);
+  border-right: 1px solid rgba(215, 227, 222, .12);
+  transform: none;
+  transition: none;
+  overflow-y: auto;
+  z-index: 40;
+}
+
+/* Marca */
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  /* Separación más generosa entre el botón ☰ y la imagen del logo */
+  margin-top: 28px;
+  padding: 0 4px 10px;
+  font-weight: 700;
+  text-decoration: none;
+  color: inherit;
+  flex: none;
+}
+
+.sidebar-brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sidebar-logo {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex: none;
+}
+
+.sidebar-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: inherit;
+  line-height: 1.35;
+}
+
+.sidebar-subtitle {
+  font-size: 12px;
+  color: var(--sb-muted);
+  line-height: 1.5;
+}
+
+/* Navegación */
+.sidebar-nav {
+  flex: 1;
+  width: auto;
+  padding: 0;
+  overflow: visible;
+}
+
+.sidebar-list {
+  list-style: none;
+  margin: 0;
+  padding: 8px 0;
+  display: grid;
+  gap: 18px;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: transparent;
+  color: inherit;
+  font-size: 15px;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color .18s ease, color .18s ease;
+}
+
+.sidebar-link:hover { background: var(--sb-hover); }
+.sidebar-link.is-active { background: var(--sb-active); }
+.sidebar-link:focus-visible { outline: 2px solid var(--sb-muted); outline-offset: 2px; }
+
+.sidebar-link-label {
+  opacity: 1;
+  width: auto;
+  min-width: 0;
+  font-size: 15px;
+  color: inherit;
+}
+
+/* Iconos: trazo de una línea, heredan el color del texto */
+.sidebar-icon {
+  width: 28px;
+  height: 28px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.sidebar-icon path,
+.sidebar-icon circle,
+.sidebar-icon rect {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* El toggle colapsable ya no forma parte del nuevo diseño */
+.sidebar-toggle { display: none; }
+
+/* Responsive: el sidebar pasa a una fila superior con scroll horizontal */
+@media (max-width: 860px) {
+  .app-shell { flex-direction: column; }
+
+  .sidebar {
+    position: static;
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    align-items: center;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 12px 16px;
+    border-right: 0;
+    border-bottom: 1px solid rgba(215, 227, 222, .12);
+  }
+
+  .sidebar.sidebar-expanded { width: 100%; }
+  .sidebar-brand,
+  .sidebar-toggle { display: none; }
+
+  .sidebar-nav { flex: none; }
+
+  .sidebar-list {
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+  }
+
+  .sidebar-link {
+    white-space: nowrap;
+    width: auto;
+    padding: 8px 12px;
+  }
+}
+
+/* Overrides de especificidad contra los bloques legacy duplicados */
+.sidebar-link .sidebar-icon,
+.sidebar-link .sidebar-icon svg { width: 28px; height: 28px; }
+
+.sidebar-link .sidebar-link-label,
+.sidebar-link span { white-space: nowrap; }
+
+.sidebar-list li { margin-bottom: 0; }
+
+.sidebar-brand .sidebar-title {
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  color: inherit;
+  margin-bottom: 0;
+}
+
+.sidebar-brand .sidebar-subtitle { color: var(--sb-muted); font-size: 12px; }
+
+/* ============================================================
+   Sidebar movible: colapsable (64px) <-> expandido (240px).
+   Mismo enfoque anti-reflow: los links y la marca conservan su
+   layout a 240px y el estado colapsado solo recorta la ventana.
+   NO cambia el diseño verde de referencia ni el responsive ≤860.
+   ============================================================ */
+
+@media (min-width: 861px) {
+  .sidebar {
+    width: 64px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-gutter: stable; /* el scroll del panel nunca empuja el contenido */
+    /* Transición fluida del ancho. El layout interno está congelado a
+       208px (ver reglas de abajo), así que ningún ícono, logo ni texto
+       se re-maqueta: lo único que "viaja" es el borde de recorte. */
+    transition: width .35s cubic-bezier(.33, 1, .36, 1);
+    will-change: width;
+  }
+
+  html.sidebar-expanded .sidebar {
+    width: 240px;
+  }
+
+  /* Botón de alternar visible otra vez en desktop */
+  .sidebar-toggle {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    flex: none;
+    margin-left: 0; /* margen izquierdo fijo: no se mueve nunca */
+    padding: 0;
+    border: 1px solid rgba(215, 227, 222, .18);
+    border-radius: 8px;
+    background: rgba(215, 227, 222, .06);
+    color: inherit;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    transition: background-color .2s ease, border-color .2s ease;
+  }
+
+  .sidebar-toggle:hover {
+    background: rgba(215, 227, 222, .14);
+    border-color: rgba(215, 227, 222, .32);
+  }
+
+  .sidebar-toggle:focus-visible {
+    outline: 2px solid var(--sb-muted);
+    outline-offset: 2px;
+  }
+
+  /* Fade del texto (solo opacidad: los íconos nunca se mueven).
+     Colapsar: el texto se apaga rápido, ANTES de que el recorte lo toque.
+     Expandir: reaparece con un pequeño delay, cuando la ventana ya abrió. */
+  .sidebar-brand-text,
+  .sidebar-link-label {
+    opacity: 1;
+    transition: opacity .2s ease .15s; /* expandir: fade-in suave */
+  }
+
+  html:not(.sidebar-expanded) .sidebar-brand-text,
+  html:not(.sidebar-expanded) .sidebar-link-label {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .12s ease; /* colapsar: fade-out casi inmediato */
+  }
+
+  /* Fijar la altura del logo y de los iconos de link: garantiza que ni el
+     logo ni los íconos cambien un solo píxel vertical durante la transición. */
+  .sidebar-logo,
+  .sidebar-brand .sidebar-icon,
+  .sidebar-link .sidebar-icon {
+    flex: none;
+    align-self: center;
+  }
+
+  /* Hijos internos a ancho de panel expandido: nunca se comprimen al colapsar */
+  .sidebar-brand,
+  .sidebar-nav {
+    width: 208px; /* 240px − 32px de padding lateral */
+    flex: none;
+  }
+
+  /* Cada link ocupa su fila a 240px de ancho interno incluso colapsado.
+     IMPORTANTE: el brand es hijo directo de .sidebar, así que width:100%
+     variaría de 32px a 208px colapsando/expandiendo y re-maquetaría el
+     texto (eso es lo que empujaba los íconos hacia arriba/abajo).
+     Los dos quedan congelados al ancho interno de 208px. */
+  .sidebar-link,
+  .sidebar-brand {
+    width: 208px;
+  }
+
+  /* Iconos siempre en el mismo punto: centrados en la columna de 64px
+     colapsados, y SIN moverse al expandir (solo aparecen los nombres). */
+  .sidebar-toggle {
+    margin-left: -2px; /* botón de 36px centrado en los 64px */
+  }
+
+  .sidebar-logo {
+    margin-left: -1px; /* logo de 34px centrado en los 64px, mismo eje que los iconos */
+  }
+
+  .sidebar-link {
+    /* 16px padding del panel + 2px = icono de 28px a x=18: queda centrado
+       en la ventana de 64px y de ahí no se mueve nunca. El nombre entra a
+       la derecha por la transición de opacidad, no por reflow. */
+    padding-left: 2px;
+    gap: 15px;
+  }
+
+  /* La imagen del logo comparte el mismo eje central que los iconos
+     (32px en la ventana de 64px): sin padding-left heredado que la
+     desalinee (el .sidebar-brand de arriba trae 0 4px 20px). */
+  .sidebar-brand {
+    padding-left: 0;
+  }
+}
+
+/* La persistencia y la lógica de alternado las sigue manejando js/sidebar.js
+   (localStorage 'sidebar-expanded' + clase html.sidebar-expanded), sin cambios. */
+
+/* Respetar prefers-reduced-motion: 64px <-> 240px sin animación,
+   solo el swap del ancho (el mismo comportamiento anti-salto de antes). */
+@media (prefers-reduced-motion: reduce) and (min-width: 861px) {
+  .sidebar {
+    transition: none;
+    will-change: auto;
+  }
+
+  .sidebar-brand-text,
+  .sidebar-link-label {
+    transition: none;
+  }
+}
+
+/* ============================================================
+   Exploración de datos (gráficos complementarios del mapa)
+   ============================================================ */
+
+.exploracion-section {
+  padding-block: clamp(56px, 7vw, 96px);
+  background: var(--paper);
+  border-top: 1px solid var(--line);
+}
+
+.graficos-exploracion {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(20px, 3vw, 36px);
+}
+
+.grafico-plotly {
+  width: 100%;
+  max-width: 100%;
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.grafico-plotly .js-plotly-plot,
+.grafico-plotly .plot-container { max-width: 100%; }
+
+.grafico-plotly:has(#grafico-pozos) { grid-column: span 2; }
+.grafico-plotly:has(#grafico-dispersion) { grid-column: span 2; }
+
+.panel-block { margin-top: 22px; }
+.panel-block .ranking-list { max-height: 180px; }
+
+.panel-quality {
+  margin-top: 18px;
+  padding: 12px 14px;
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--ink-soft);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.diagrama-legend-nota {
+  flex-basis: 100%;
+  color: var(--ink-faint);
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+@media (max-width: 1000px) {
+  .graficos-exploracion { grid-template-columns: 1fr; }
+  .grafico-plotly:has(#grafico-pozos),
+  .grafico-plotly:has(#grafico-dispersion) { grid-column: auto; }
+}
+
+/* Mapa Leaflet */
+#mapa {
+  width: 100%;
+  height: 520px;
+}
+
+/* ============================================================
+   Mapa Leaflet · barra de herramientas y nota
+   ============================================================ */
+
+.map-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+  margin-bottom: 14px;
+}
+
+.map-toolbar-label {
+  color: var(--ink-soft);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.map-toolbar select {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 8px 12px;
+}
+
+.map-toolbar input[type='range'] {
+  flex: 1 1 160px;
+  accent-color: var(--basin-2);
+}
+
+.map-toolbar output {
+  min-width: 36px;
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 600;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.map-toolbar .button { flex: 0 0 auto; }
+
+.map-note {
+  margin-top: 12px;
+  color: var(--ink-faint);
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+.map-canvas {
+  width: 100%;
+  height: 520px;
+}
+
+.leaflet-container { background: var(--paper); }
+.leaflet-control-attribution { background: rgba(238, 241, 232, .85); font-size: 10px; }
+.leaflet-control-attribution a { color: var(--ink-soft); }
+.leaflet-popup-content { font-family: var(--sans); font-size: 12px; color: var(--ink); }

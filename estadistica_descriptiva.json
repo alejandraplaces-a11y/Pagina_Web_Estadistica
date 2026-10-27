@@ -1,0 +1,17 @@
+{
+  "fuente": "2023_01_producao_Terra.csv",
+  "periodos": [
+    "2023/01"
+  ],
+  "registros": 5471,
+  "pozos_unicos": 5308,
+  "estados": 9,
+  "cuencas": 12,
+  "campos": 221,
+  "operadores": 39,
+  "pozos_con_varios_registros": 143,
+  "registros_sin_identificador": 0,
+  "estados_con_oilo_cero": [
+    "Paraná"
+  ]
+}

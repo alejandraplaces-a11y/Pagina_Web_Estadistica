@@ -1,0 +1,202 @@
+[
+  {
+    "Campo":"CANTO DO AMARO",
+    "Estado":"Rio Grande do Norte",
+    "Bacia":"Potiguar",
+    "Operador":"Petrobras",
+    "Óleo (bbl\/dia)":6855.0887,
+    "Gás Natural (Mm³\/dia)":16.2647,
+    "Água (bbl\/dia)":300608.9642,
+    "Pozos":707
+  },
+  {
+    "Campo":"LESTE DO URUCU",
+    "Estado":"Amazonas",
+    "Bacia":"Solimões",
+    "Operador":"Petrobras",
+    "Óleo (bbl\/dia)":5344.3906,
+    "Gás Natural (Mm³\/dia)":4910.992,
+    "Água (bbl\/dia)":13411.3993,
+    "Pozos":32
+  },
+  {
+    "Campo":"ESTREITO",
+    "Estado":"Rio Grande do Norte",
+    "Bacia":"Potiguar",
+    "Operador":"Petrobras",
+    "Óleo (bbl\/dia)":5076.8698,
+    "Gás Natural (Mm³\/dia)":2.1562,
+    "Água (bbl\/dia)":293022.8739,
+    "Pozos":950
+  },
+  {
+    "Campo":"FAZENDA ALEGRE",
+    "Estado":"Espírito Santo",
+    "Bacia":"Espírito Santo",
+    "Operador":"Petrobras",
+    "Óleo (bbl\/dia)":3104.9742,
+    "Gás Natural (Mm³\/dia)":7.2663,
+    "Água (bbl\/dia)":12734.7198,
+    "Pozos":74
+  },
+  {
+    "Campo":"RIO URUCU",
+    "Estado":"Amazonas",
+    "Bacia":"Solimões",
+    "Operador":"Petrobras",
+    "Óleo (bbl\/dia)":2664.4579,
+    "Gás Natural (Mm³\/dia)":3612.9451,
+    "Água (bbl\/dia)":6336.2418,
+    "Pozos":26
+  },
+  {
+    "Campo":"ALTO DO RODRIGUES",
+    "Estado":"Rio Grande do Norte",
+    "Bacia":"Potiguar",
+    "Operador":"Petrobras",
+    "Óleo (bbl\/dia)":2315.1434,
+    "Gás Natural (Mm³\/dia)":1.4357,
+    "Água (bbl\/dia)":132106.5153,
+    "Pozos":474
+  },
+  {
+    "Campo":"TIÊ",
+    "Estado":"Bahia",
+    "Bacia":"Recôncavo",
+    "Operador":"SPE Tiêta",
+    "Óleo (bbl\/dia)":1873.1404,
+    "Gás Natural (Mm³\/dia)":45.9476,
+    "Água (bbl\/dia)":1563.4424,
+    "Pozos":6
+  },
+  {
+    "Campo":"MIRANGA",
+    "Estado":"Bahia",
+    "Bacia":"Recôncavo",
+    "Operador":"SPE Miranga",
+    "Óleo (bbl\/dia)":1705.803,
+    "Gás Natural (Mm³\/dia)":115.6444,
+    "Água (bbl\/dia)":27635.4325,
+    "Pozos":112
+  },
+  {
+    "Campo":"RIACHO DA FORQUILHA",
+    "Estado":"Rio Grande do Norte",
+    "Bacia":"Potiguar",
+    "Operador":"Potiguar E&P S.A.",
+    "Óleo (bbl\/dia)":1693.8888,
+    "Gás Natural (Mm³\/dia)":81.191,
+    "Água (bbl\/dia)":8711.478,
+    "Pozos":22
+  },
+  {
+    "Campo":"SABIÁ BICO-DE-OSSO",
+    "Estado":"Rio Grande do Norte",
+    "Bacia":"Potiguar",
+    "Operador":"Potiguar E&P S.A.",
+    "Óleo (bbl\/dia)":1553.3214,
+    "Gás Natural (Mm³\/dia)":59.1889,
+    "Água (bbl\/dia)":203.3213,
+    "Pozos":32
+  },
+  {
+    "Campo":"ÁGUA GRANDE",
+    "Estado":"Bahia",
+    "Bacia":"Recôncavo",
+    "Operador":"3R Rio Ventura S.A",
+    "Óleo (bbl\/dia)":1164.9891,
+    "Gás Natural (Mm³\/dia)":18.2781,
+    "Água (bbl\/dia)":34001.0672,
+    "Pozos":48
+  },
+  {
+    "Campo":"PILAR",
+    "Estado":"Alagoas",
+    "Bacia":"Alagoas",
+    "Operador":"Origem Alagoas",
+    "Óleo (bbl\/dia)":1138.7709,
+    "Gás Natural (Mm³\/dia)":195.7493,
+    "Água (bbl\/dia)":3002.9522,
+    "Pozos":76
+  },
+  {
+    "Campo":"PA-1ENV25DAM_AM-T-84_AM-T-85",
+    "Estado":"Amazonas",
+    "Bacia":"Amazonas",
+    "Operador":"Eneva",
+    "Óleo (bbl\/dia)":1102.8289,
+    "Gás Natural (Mm³\/dia)":0.0,
+    "Água (bbl\/dia)":0.0,
+    "Pozos":1
+  },
+  {
+    "Campo":"SALINA CRISTAL",
+    "Estado":"Rio Grande do Norte",
+    "Bacia":"Potiguar",
+    "Operador":"3R Macau",
+    "Óleo (bbl\/dia)":1096.2721,
+    "Gás Natural (Mm³\/dia)":11.9097,
+    "Água (bbl\/dia)":31904.6961,
+    "Pozos":90
+  },
+  {
+    "Campo":"CARMÓPOLIS",
+    "Estado":"Sergipe",
+    "Bacia":"Sergipe",
+    "Operador":"Carmo",
+    "Óleo (bbl\/dia)":1090.0114,
+    "Gás Natural (Mm³\/dia)":10.9741,
+    "Água (bbl\/dia)":58597.9056,
+    "Pozos":271
+  },
+  {
+    "Campo":"ARAÇÁS",
+    "Estado":"Bahia",
+    "Bacia":"Recôncavo",
+    "Operador":"Petrobras",
+    "Óleo (bbl\/dia)":1083.2068,
+    "Gás Natural (Mm³\/dia)":60.0139,
+    "Água (bbl\/dia)":7720.3571,
+    "Pozos":88
+  },
+  {
+    "Campo":"RIACHUELO",
+    "Estado":"Sergipe",
+    "Bacia":"Sergipe",
+    "Operador":"Carmo",
+    "Óleo (bbl\/dia)":975.0826,
+    "Gás Natural (Mm³\/dia)":2.8681,
+    "Água (bbl\/dia)":8824.9711,
+    "Pozos":105
+  },
+  {
+    "Campo":"FAZENDA POCINHO",
+    "Estado":"Rio Grande do Norte",
+    "Bacia":"Potiguar",
+    "Operador":"Petrobras",
+    "Óleo (bbl\/dia)":937.3837,
+    "Gás Natural (Mm³\/dia)":13.3454,
+    "Água (bbl\/dia)":77072.0346,
+    "Pozos":290
+  },
+  {
+    "Campo":"LORENA",
+    "Estado":"Rio Grande do Norte",
+    "Bacia":"Potiguar",
+    "Operador":"Potiguar E&P S.A.",
+    "Óleo (bbl\/dia)":921.2823,
+    "Gás Natural (Mm³\/dia)":223.3804,
+    "Água (bbl\/dia)":1271.3187,
+    "Pozos":55
+  },
+  {
+    "Campo":"SABIÁ DA MATA",
+    "Estado":"Rio Grande do Norte",
+    "Bacia":"Potiguar",
+    "Operador":"Potiguar E&P S.A.",
+    "Óleo (bbl\/dia)":877.3838,
+    "Gás Natural (Mm³\/dia)":9.3417,
+    "Água (bbl\/dia)":88.3311,
+    "Pozos":21
+  }
+]

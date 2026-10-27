@@ -1,0 +1,47 @@
+[
+  {
+    "Estado":"Alagoas",
+    "Óleo (bbl\/dia)":2122.1075,
+    "Pozos":190
+  },
+  {
+    "Estado":"Amazonas",
+    "Óleo (bbl\/dia)":9755.8718,
+    "Pozos":70
+  },
+  {
+    "Estado":"Bahia",
+    "Óleo (bbl\/dia)":11824.4913,
+    "Pozos":811
+  },
+  {
+    "Estado":"Ceará",
+    "Óleo (bbl\/dia)":631.2701,
+    "Pozos":202
+  },
+  {
+    "Estado":"Espírito Santo",
+    "Óleo (bbl\/dia)":6575.0244,
+    "Pozos":299
+  },
+  {
+    "Estado":"Maranhão",
+    "Óleo (bbl\/dia)":91.3443,
+    "Pozos":49
+  },
+  {
+    "Estado":"Paraná",
+    "Óleo (bbl\/dia)":0.0,
+    "Pozos":2
+  },
+  {
+    "Estado":"Rio Grande do Norte",
+    "Óleo (bbl\/dia)":28905.9737,
+    "Pozos":3195
+  },
+  {
+    "Estado":"Sergipe",
+    "Óleo (bbl\/dia)":3516.5571,
+    "Pozos":490
+  }
+]

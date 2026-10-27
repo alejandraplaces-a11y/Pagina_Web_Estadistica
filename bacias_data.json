@@ -1,0 +1,110 @@
+[
+  {
+    "Bacia":"Potiguar",
+    "Estado principal":"Rio Grande do Norte",
+    "Óleo (bbl\/dia)":29537.2438,
+    "Gás Natural (Mm³\/dia)":814.0035,
+    "Água (bbl\/dia)":977198.674,
+    "Pozos":3397,
+    "Campos":77
+  },
+  {
+    "Bacia":"Recôncavo",
+    "Estado principal":"Bahia",
+    "Óleo (bbl\/dia)":11824.4913,
+    "Gás Natural (Mm³\/dia)":750.6527,
+    "Água (bbl\/dia)":170618.2482,
+    "Pozos":792,
+    "Campos":65
+  },
+  {
+    "Bacia":"Solimões",
+    "Estado principal":"Amazonas",
+    "Óleo (bbl\/dia)":8653.0429,
+    "Gás Natural (Mm³\/dia)":8682.9069,
+    "Água (bbl\/dia)":21865.485,
+    "Pozos":66,
+    "Campos":7
+  },
+  {
+    "Bacia":"Espírito Santo",
+    "Estado principal":"Espírito Santo",
+    "Óleo (bbl\/dia)":6575.0244,
+    "Gás Natural (Mm³\/dia)":28.1429,
+    "Água (bbl\/dia)":43147.0082,
+    "Pozos":299,
+    "Campos":30
+  },
+  {
+    "Bacia":"Sergipe",
+    "Estado principal":"Sergipe",
+    "Óleo (bbl\/dia)":3516.5571,
+    "Gás Natural (Mm³\/dia)":37.6791,
+    "Água (bbl\/dia)":78861.8319,
+    "Pozos":490,
+    "Campos":15
+  },
+  {
+    "Bacia":"Alagoas",
+    "Estado principal":"Alagoas",
+    "Óleo (bbl\/dia)":2122.1075,
+    "Gás Natural (Mm³\/dia)":355.3569,
+    "Água (bbl\/dia)":6884.0579,
+    "Pozos":190,
+    "Campos":10
+  },
+  {
+    "Bacia":"Amazonas",
+    "Estado principal":"Amazonas",
+    "Óleo (bbl\/dia)":1102.8289,
+    "Gás Natural (Mm³\/dia)":0.0,
+    "Água (bbl\/dia)":0.0,
+    "Pozos":4,
+    "Campos":2
+  },
+  {
+    "Bacia":"Barreirinhas",
+    "Estado principal":"Maranhão",
+    "Óleo (bbl\/dia)":91.3443,
+    "Gás Natural (Mm³\/dia)":0.5809,
+    "Água (bbl\/dia)":0.9228,
+    "Pozos":3,
+    "Campos":1
+  },
+  {
+    "Bacia":"Camamu",
+    "Estado principal":"Bahia",
+    "Óleo (bbl\/dia)":0.0,
+    "Gás Natural (Mm³\/dia)":0.0,
+    "Água (bbl\/dia)":0.0,
+    "Pozos":2,
+    "Campos":1
+  },
+  {
+    "Bacia":"Paraná",
+    "Estado principal":"Paraná",
+    "Óleo (bbl\/dia)":0.0,
+    "Gás Natural (Mm³\/dia)":0.0,
+    "Água (bbl\/dia)":0.0,
+    "Pozos":2,
+    "Campos":1
+  },
+  {
+    "Bacia":"Parnaíba",
+    "Estado principal":"Maranhão",
+    "Óleo (bbl\/dia)":0.0,
+    "Gás Natural (Mm³\/dia)":0.0,
+    "Água (bbl\/dia)":0.0,
+    "Pozos":46,
+    "Campos":6
+  },
+  {
+    "Bacia":"Tucano Sul",
+    "Estado principal":"Bahia",
+    "Óleo (bbl\/dia)":0.0,
+    "Gás Natural (Mm³\/dia)":0.0,
+    "Água (bbl\/dia)":7.8242,
+    "Pozos":17,
+    "Campos":6
+  }
+]
