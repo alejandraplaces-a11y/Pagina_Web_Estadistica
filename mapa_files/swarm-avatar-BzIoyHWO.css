@@ -1,0 +1,1 @@
+@keyframes swarm-planet-turn{0%{background-position-x:0%}to{background-position-x:100%}}@media (prefers-reduced-motion:no-preference){.swarm-planet-spin{animation:7.2s steps(24,jump-none) infinite swarm-planet-turn}}

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Mapa interactivo de la producción terrestre de hidrocarburos en Brasil por Estado, enero de 2023.">
+  <title>Mapa interactivo · Terra</title>
+  <script>
+    (function () {
+      try { if (localStorage.getItem('sidebar-expanded') === '1') document.documentElement.classList.add('sidebar-expanded'); } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <link rel="stylesheet" href="css/styles.css">
+  <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script defer src="js/common.js"></script>
+  <script defer src="js/mapa.js"></script>
+  <script defer src="js/sidebar.js"></script>
+</head>
+<body class="has-sidebar">
+  <a class="skip-link" href="#mapa-titulo">Saltar al contenido</a>
+
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Navegación lateral">
+      <button class="sidebar-toggle" id="sidebar-toggle" type="button" aria-label="Alternar menú lateral" aria-expanded="false" aria-controls="sidebar">
+        <span class="sidebar-toggle-icon" aria-hidden="true">☰</span>
+      </button>
+      <a class="sidebar-brand" href="index.html" aria-label="Terra, inicio">
+        <img class="sidebar-logo" src="img/logo-universidad.png" alt="" width="34" height="34">
+        <span class="sidebar-brand-text">
+          <span class="sidebar-title">Universidad Central del Ecuador</span>
+        </span>
+      </a>
+      <nav class="sidebar-nav" aria-label="Navegación lateral">
+        <ul class="sidebar-list">
+          <li>
+            <a class="sidebar-link" href="index.html#inicio">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10.4V20h13v-9.6"/></svg>
+              <span class="sidebar-link-label">Inicio</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="introduccion.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v16H5.5C4.7 20 4 19.3 4 18.5Z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v16h5.5c.8 0 1.5-.7 1.5-1.5Z"/></svg>
+              <span class="sidebar-link-label">Introducción</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link is-active" href="mapa.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Z"/><path d="M9 4v14m6-12v14"/></svg>
+              <span class="sidebar-link-label">Mapa Web</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="Estadistica.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18 6H7l6 6-6 6h11"/></svg>
+              <span class="sidebar-link-label">Estadística Descriptiva</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <div class="app-main">
+      <div class="sidebar-backdrop" id="sidebar-backdrop" hidden></div>
+
+      <header class="site-header">
+        <div class="container header-inner">
+          <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="sidebar">
+            <span aria-hidden="true">☰</span>
+          </button>
+          <a class="brand" href="index.html" aria-label="Terra, inicio">
+            <img class="brand-mark" src="img/logo-universidad.png" alt="" aria-hidden="true" width="34" height="34">
+            <span class="brand-word">Universidad Central del Ecuador</span>
+            <span class="brand-caption">Proyecto de Estadística</span>
+          </a>
+        </div>
+      </header>
+
+      <main id="inicio" class="mapa-page">
+        <section class="map-hero" aria-labelledby="mapa-titulo">
+          <div class="container">
+            <nav class="breadcrumb" aria-label="Ruta de navegación">
+            </nav>
+            <p class="eyebrow">VISUALIZACIÓN GEOESPACIAL · BRASIL · ENERO 2023</p>
+            <h1 id="mapa-titulo">Mapa interactivo de la <span>producción terrestre</span></h1>
+            <p class="lead">Explora el óleo producido y la cantidad de pozos únicos por Estado. Cambia la métrica, filtra por valor mínimo o selecciona un Estado para ver su detalle.</p>
+          </div>
+        </section>
+
+        <section class="map-stage container" aria-label="Mapa de producción por Estado">
+          <div class="map-controls">
+            <label>Métrica
+              <select id="metrica-mapa">
+                <option value="oleo">Óleo (bbl/día)</option>
+                <option value="pozos">Pozos únicos</option>
+              </select>
+            </label>
+            <label>Valor mínimo: <output id="umbral-salida" for="umbral-mapa">0 %</output>
+              <input id="umbral-mapa" type="range" min="0" max="100" step="1" value="0">
+            </label>
+            <button type="button" id="boton-reiniciar-mapa" class="button button-secondary">Ver todo Brasil</button>
+          </div>
+
+          <div class="map-frame">
+            <div class="map-frame-bar" aria-hidden="true"><i></i><i></i><i></i><span>Brasil · producción terrestre por Estado</span></div>
+            <p id="estado-mapa" class="status" role="status">Cargando mapa…</p>
+            <div id="mapa" class="map-canvas" role="region" aria-label="Mapa interactivo de Brasil con la producción terrestre por Estado"></div>
+          </div>
+
+          <div class="legend-row">
+            <span>0</span>
+            <div class="legend-scale" aria-hidden="true"></div>
+            <span id="escala-max">—</span>
+            <span id="escala-etiqueta"></span>
+          </div>
+          <p class="map-caption">Datos obtenidos de la ANP · 2023_01_producao_Terra.csv · Agregados por Estado. Límites estatales esquemáticos.</p>
+
+          <div class="map-layout">
+            <aside class="mapa-panel" aria-labelledby="panel-titulo">
+              <p class="eyebrow">Detalle</p>
+              <h2 id="panel-titulo">Brasil · producción en tierra</h2>
+              <p id="panel-subtitulo" class="panel-subtitle">Selecciona un Estado en el mapa o en la lista.</p>
+              <dl class="mapa-datos">
+                <div><dt>Óleo</dt><dd><span id="panel-oleo">—</span> <span class="metric-unit">bbl/día</span></dd></div>
+                <div><dt>Pozos únicos</dt><dd id="panel-pozos">—</dd></div>
+                <div><dt>Participación en el total</dt><dd id="panel-participacion">—</dd></div>
+                <div><dt>Posición en el ranking</dt><dd id="panel-ranking">—</dd></div>
+              </dl>
+            </aside>
+
+            <div class="mapa-ranking">
+              <p class="eyebrow">Ranking por Estado</p>
+              <ol id="ranking-lista" class="ranking-list" aria-label="Estados ordenados por la métrica seleccionada"></ol>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="container footer-row">
+          <div class="footer-left">
+            <p>© 2026 Integrantes: <span class="footer-members">Génesis Once, Esther Places, Evelyn Rodríguez, Andrea Sarmiento, Melany Zapata</span></p>
+            <p class="footer-location">Proyecto académico · Brasil, enero de 2023</p>
+          </div>
+          <div class="footer-right">
+            <p class="footer-label">Fuente</p>
+            <p>
+              <a href="https://www.gov.br/anp/pt-br/centrais-de-conteudo/dados-abertos/producao-de-petroleo-e-gas-natural-por-poco" target="_blank" rel="noopener noreferrer">
+                ANP (Brasil) — Dados Abertos
+              </a>
+              <br>Agregación por Estado
+            </p>
+          </div>
+        </div>
+      </footer>
+    </div><!-- /app-main -->
+  </div><!-- /app-shell -->
+</body>
+</html>

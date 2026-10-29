@@ -1,0 +1,67 @@
+.chart-description {
+  margin: 8px 0 18px;
+  color: #5b6058;
+  line-height: 1.6;
+}
+
+.map-frame {
+  overflow: hidden;
+  border-radius: 8px;
+  background: #1f2427;
+}
+
+.map-frame-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  background: #2a3136;
+  color: #9aa5ab;
+  font: 12px ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.map-frame-bar i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #4a545b;
+}
+
+.map-frame-bar span {
+  margin-left: 12px;
+}
+
+.map-frame .status {
+  margin: 0;
+  padding: 16px;
+  color: #d7dde0;
+}
+
+.map-stage {
+  display: flex;
+  justify-content: center;
+  padding: 18px;
+  overflow-x: auto;
+}
+
+.mapa-svg {
+  display: block;
+  width: 100%;
+  max-width: 1000px;
+  height: auto;
+  background: #ffffff;
+  border-radius: 4px;
+}
+
+.map-caption {
+  margin-top: 12px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #6b6f66;
+}
+
+@media (max-width: 760px) {
+  .mapa-svg {
+    min-width: 760px;
+  }
+}

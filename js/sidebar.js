@@ -10,6 +10,15 @@
 
   const isMobile = () => window.matchMedia('(max-width: 760px)').matches;
 
+  // Estado inicial: el HTML restaura la clase antes de pintar, así que el
+  // botón debe reflejar ese estado desde el primer render.
+  if (toggle) {
+    toggle.setAttribute(
+      'aria-expanded',
+      String(document.documentElement.classList.contains('sidebar-expanded'))
+    );
+  }
+
   function setExpanded(expanded) {
     document.documentElement.classList.toggle('sidebar-expanded', expanded);
     if (toggle) {

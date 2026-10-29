@@ -1,0 +1,111 @@
+/* Estadística descriptiva: componentes de la página construidos sobre la
+   paleta y tokens del design system (css/styles.css). No se redefine la
+   paleta ni los componentes que ya viven en styles.css (.section,
+   .section-kicker, .status, .stat-metrics, .method-grid, .source,
+   .stat-scope, .stat-notation, .method-section…): el design system es la
+   fuente de verdad y este archivo solo aporta lo específico de la página. */
+
+/* Hero de página */
+.page-hero {
+  background: var(--basin);
+  color: var(--white);
+  padding: 64px 0 56px;
+}
+
+.page-hero .section-kicker { color: var(--oil-light); }
+.page-hero .section-kicker::before { background: var(--oil); }
+
+.page-hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(34px, 4.6vw, 56px);
+  font-weight: 500;
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+  color: var(--white);
+  animation: rise 0.85s var(--ease) both;
+  animation-delay: 0.12s;
+}
+
+.aside-meta { margin-top: 10px; color: rgba(248, 249, 243, 0.6); font-size: 13px; }
+
+.page-lead { margin-top: 18px; max-width: 680px; color: rgba(248, 249, 243, 0.78); font-size: 16px; line-height: 1.75; }
+
+/* Secciones */
+.section.cream { background: var(--paper-2); }
+.section h2 { margin-top: 16px; }
+
+.section .subsection-title { margin-top: 10px; font-family: var(--serif); font-size: clamp(22px, 2.4vw, 28px); font-weight: 500; letter-spacing: -0.02em; color: var(--ink); }
+
+.section-kicker-spaced { margin-top: 48px; }
+
+.section-intro { margin-top: 14px; max-width: 720px; color: var(--ink-soft); line-height: 1.75; }
+
+/* Indicadores de muestra */
+.sample-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 24px; }
+
+/* Notas destacadas */
+.frame-note { margin-top: 24px; padding: 20px 22px; background: var(--paper); border-left: 3px solid var(--oil); border-radius: 0 10px 10px 0; font-size: 14px; color: var(--ink-soft); line-height: 1.75; }
+.frame-note strong { color: var(--ink); }
+
+/* Tarjetas de método: el grid y la tipografía base los aporta el design system (.method-grid, .method-head);
+   aquí solo se pinta la variante de tarjeta usada en la página. */
+.method-grid article.method-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--oil);
+  border-radius: 12px;
+  padding: 28px;
+  min-width: 0;
+}
+
+.method-grid article.method-card.teal { border-top-color: var(--basin-2); background: var(--paper-2); }
+
+.method-grid article .method-card-tag { font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--oil-deep); }
+.method-grid article .method-card h4 { margin: 10px 0 12px; font-family: var(--serif); font-size: 20px; font-weight: 500; letter-spacing: -0.02em; color: var(--ink); }
+.method-grid article .method-card code { overflow-wrap: anywhere; }
+.method-grid article .method-card p { max-width: 46ch; }
+
+.method-grid article .method-card .method-symbolic {
+  margin: 16px 0 12px;
+  padding: 14px 16px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-family: Georgia, serif;
+  font-size: clamp(18px, 2.2vw, 24px);
+  color: var(--ink);
+  overflow-wrap: anywhere;
+  max-width: none;
+}
+
+.method-grid article .method-card .stat-notation { border-top: 1px solid var(--line); padding-top: 12px; margin-top: 12px; max-width: none; }
+
+/* Tablas de distribución de frecuencias */
+.table-scroll { margin-top: 18px; overflow-x: auto; background: var(--paper); border: 1px solid var(--line); border-radius: 12px; }
+.data-table { width: 100%; min-width: 640px; border-collapse: collapse; font-size: 14px; }
+.data-table caption { caption-side: top; text-align: left; padding: 16px 18px; font-size: 13px; color: var(--ink-soft); }
+.data-table th, .data-table td { padding: 12px 16px; border-top: 1px solid var(--line); text-align: left; vertical-align: top; }
+.data-table th { border-top: 0; background: var(--paper-2); font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--oil-deep); }
+.data-table tbody tr:hover { background: var(--paper-2); }
+.data-table .numero { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.tdf-subtitle { margin-top: 34px; font-family: var(--serif); font-size: 20px; font-weight: 500; color: var(--ink); }
+
+/* Gráficas */
+.chart-card { margin-top: 22px; padding: 24px 24px 12px; background: var(--paper); border: 1px solid var(--line); border-radius: 12px; }
+.chart-card .section-kicker { margin-bottom: 4px; }
+.chart-title { margin-top: 8px; font-family: var(--serif); font-size: 20px; color: var(--ink); }
+.chart-box { width: 100%; height: 380px; min-width: 0; overflow: hidden; margin-top: 10px; }
+
+/* Listas */
+.excluded-list { margin: 10px 0 0; padding-left: 18px; font-size: 13px; color: var(--ink-soft); line-height: 1.8; }
+
+/* Responsive de la página */
+@media (max-width: 860px) {
+  .chart-box { height: 320px; }
+}
+
+@media (max-width: 560px) {
+  .page-hero { padding: 44px 0 40px; }
+  .method-grid article.method-card { padding: 22px; }
+  .chart-card { padding: 18px 18px 8px; }
+}

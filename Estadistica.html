@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Estadística descriptiva de la producción terrestre de petróleo en Brasil: población, individuo y delimitación del estudio (enero de 2023).">
+  <meta name="description" content="Estadística descriptiva de la producción terrestre de petróleo en Brasil: población, muestra, variables, tablas de frecuencias y gráficas (enero de 2023).">
   <title>Estadística descriptiva · Terra</title>
   <script>
     (function () {
@@ -13,8 +13,12 @@
   <link rel="preload" href="fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/estadistica.css">
+  <script defer src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <script defer src="js/common.js"></script>
   <script defer src="js/sidebar.js"></script>
   <script defer src="js/estadistica.js"></script>
+  <script defer src="js/frecuencias.js"></script>
 </head>
 <body class="has-sidebar">
   <div class="app-shell">
@@ -37,156 +41,255 @@
             </a>
           </li>
           <li>
-            <a class="sidebar-link" href="#">
+            <a class="sidebar-link" href="introduccion.html">
               <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v16H5.5C4.7 20 4 19.3 4 18.5Z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v16h5.5c.8 0 1.5-.7 1.5-1.5Z"/></svg>
               <span class="sidebar-link-label">Introducción</span>
             </a>
           </li>
           <li>
-            <a class="sidebar-link" href="#">
+            <a class="sidebar-link" href="mapa.html">
               <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Z"/><path d="M9 4v14m6-12v14"/></svg>
               <span class="sidebar-link-label">Mapa Web</span>
             </a>
           </li>
           <li>
-            <a class="sidebar-link is-active" href="Estadistica.html">
+            <a class="sidebar-link is-active" href="Estadistica.html" aria-current="page">
               <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18 6H7l6 6-6 6h11"/></svg>
               <span class="sidebar-link-label">Estadística Descriptiva</span>
-            </a>
-          </li>
-          <li>
-            <a class="sidebar-link" href="#">
-              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 20V11m7 9V4m7 16v-6"/></svg>
-              <span class="sidebar-link-label">Descriptiva</span>
-            </a>
-          </li>
-          <li>
-            <a class="sidebar-link" href="#">
-              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 20h18"/><path d="M6 16v-4m6 4V7m6 9v-2"/></svg>
-              <span class="sidebar-link-label">Inferencial</span>
-            </a>
-          </li>
-          <li>
-            <a class="sidebar-link" href="#">
-              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>
-              <span class="sidebar-link-label">Regresión</span>
-            </a>
-          </li>
-          <li>
-            <a class="sidebar-link" href="#">
-              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="5" y="5" width="14" height="14" rx="2"/><circle cx="12" cy="12" r="2.6"/><path d="M9 2.5v2.5M15 2.5v2.5M9 19v2.5M15 19v2.5M2.5 9H5M2.5 15H5M19 9h2.5M19 15h2.5"/></svg>
-              <span class="sidebar-link-label">Machine Learning</span>
             </a>
           </li>
         </ul>
       </nav>
     </aside>
+
     <div class="app-main">
-  <div class="sidebar-backdrop" id="sidebar-backdrop" hidden></div>
+      <div class="sidebar-backdrop" id="sidebar-backdrop" hidden></div>
+      <a class="skip-link" href="#contenido">Saltar al contenido</a>
 
-  <a class="skip-link" href="#contenido">Saltar al contenido</a>
-
-  <header class="site-header">
-    <div class="container header-inner">
-      <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="sidebar">
-        <span aria-hidden="true">☰</span>
-      </button>
-      <a class="brand" href="index.html" aria-label="Terra, inicio">
-        <img class="brand-mark" src="img/logo-universidad.png" alt="" aria-hidden="true" width="34" height="34">
-        <span class="brand-word">Universidad Central del Ecuador</span>
-        <span class="brand-caption">Proyecto de Estadística</span>
-      </a>
-      <nav class="site-nav" aria-label="Navegación principal">
-        <a href="#poblacion-individuo">Población e individuo</a>
-        <a href="#muestra">Muestra</a>
-      </nav>
-    </div>
-  </header>
-
-  <main id="contenido">
-    <section class="section context-section" id="estadistica" aria-labelledby="estadistica-titulo">
-      <div class="container context-grid">
-        <div class="context-aside" data-reveal>
-          <p class="section-kicker">04 / Análisis estadístico</p>
-          <h1 id="estadistica-titulo">Estadística descriptiva.</h1>
-          <p class="aside-meta">Brasil · Enero de 2023</p>
+      <header class="site-header">
+        <div class="container header-inner">
+          <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="sidebar">
+            <span aria-hidden="true">☰</span>
+          </button>
+          <a class="brand" href="index.html" aria-label="Terra, inicio">
+            <img class="brand-mark" src="img/logo-universidad.png" alt="" aria-hidden="true" width="34" height="34">
+            <span class="brand-word">Universidad Central del Ecuador</span>
+            <span class="brand-caption">Proyecto de Estadística</span>
+          </a>
+          <nav class="site-nav" aria-label="Navegación principal">
+            <a href="index.html">Inicio</a>
+            <a href="introduccion.html">Introducción</a>
+            <a href="mapa.html">Mapa</a>
+            <a href="Estadistica.html" aria-current="page">Estadística descriptiva</a>
+          </nav>
         </div>
+      </header>
 
-        <div class="context-body">
-          <p class="status" id="estado-estadistica" role="status">Calculando la delimitación del estudio…</p>
-          <div id="contenido-estadistica" hidden>
-            <h3 class="stat-subtitle" data-reveal id="poblacion-individuo">4.1.1. Población e individuo</h3>
+      <main id="contenido">
+        <section class="page-hero" aria-labelledby="estadistica-titulo">
+          <div class="container">
+            <p class="section-kicker">04 / Análisis estadístico</p>
+            <h1 id="estadistica-titulo">Estadística descriptiva.</h1>
+            <p class="aside-meta">Brasil · Enero de 2023</p>
+            <p class="page-lead">Caracterización de la producción terrestre de petróleo por pozo: delimitación de la población, tamaño de la muestra, variables, distribuciones de frecuencias y gráficas.</p>
+          </div>
+        </section>
 
-            <dl class="stat-metrics" data-reveal>
-              <div><dt>Pozos únicos · N</dt><dd id="total-pozos">—</dd></div>
-              <div><dt>Registros · R</dt><dd id="total-registros">—</dd></div>
-              <div><dt>Estados representados</dt><dd id="total-estados">—</dd></div>
-              <div><dt>Período observado</dt><dd id="periodo-estadistica">—</dd></div>
-            </dl>
+        <section class="section" id="poblacion-individuo" aria-labelledby="poblacion-titulo">
+          <div class="container">
+            <p class="section-kicker">4.1.1</p>
+            <h2 id="poblacion-titulo">Población e individuo</h2>
+            <p id="estado-estadistica" class="status" role="status">Calculando la delimitación del estudio…</p>
 
-            <div class="stat-definitions" data-reveal>
-              <article>
-                <h4>Población de estudio</h4>
-                <p>Conjunto de pozos terrestres de hidrocarburos de Brasil representados en el archivo durante el período observado.</p>
-                <p class="stat-formula" aria-label="Población P igual al conjunto de pozos p uno hasta p N">𝒫 = {p₁, p₂, …, p<sub>N</sub>}</p>
-                <p class="stat-notation">N = |𝒫| = <span id="poblacion-n">—</span> pozos únicos.</p>
-              </article>
-              <article>
-                <h4>Individuo o unidad estadística</h4>
-                <p>Cada pozo terrestre identificado mediante <code>Nome Poço</code> durante el período observado.</p>
-                <p class="stat-formula" aria-label="Pozo p sub i pertenece a la población P">p<sub>i</sub> ∈ 𝒫</p>
-                <p class="stat-notation">i = 1, 2, …, N. Un identificador de pozo define una unidad.</p>
-              </article>
+            <div id="contenido-estadistica" hidden>
+              <dl class="stat-metrics" data-reveal>
+                <div><dt>Pozos únicos · N</dt><dd id="total-pozos"></dd></div>
+                <div><dt>Registros con Estado · R</dt><dd id="total-registros"></dd></div>
+                <div><dt>Estados representados</dt><dd id="total-estados"></dd></div>
+                <div><dt>Período observado</dt><dd id="periodo-estadistica"></dd></div>
+              </dl>
+
+              <div class="method-grid" data-reveal>
+                <article class="method-card">
+                  <p class="method-card-tag">Población</p>
+                  <h4>Población de estudio</h4>
+                  <p>Conjunto de pozos terrestres de hidrocarburos de Brasil representados en el archivo durante el período observado.</p>
+                  <p class="method-symbolic" aria-label="Población P igual al conjunto de pozos p uno hasta p N">𝒫 = {p₁, p₂, …, p<sub>N</sub>}</p>
+                  <p class="stat-notation">N = |𝒫| = <span id="poblacion-n"></span> pozos únicos.</p>
+                </article>
+                <article class="method-card teal">
+                  <p class="method-card-tag">Individuo</p>
+                  <h4>Unidad estadística</h4>
+                  <p>Cada pozo terrestre identificado mediante <code>Nome Poço</code> durante el período observado.</p>
+                  <p class="method-symbolic" aria-label="Pozo p sub i pertenece a la población P">p<sub>i</sub> ∈ 𝒫</p>
+                  <p class="stat-notation">i = 1, 2, …, N. Un identificador de pozo define una unidad.</p>
+                </article>
+              </div>
+
+              <aside class="frame-note" data-reveal aria-label="Distinción entre registros y pozos">
+                <strong>Registro ≠ individuo.</strong>
+                <span id="nota-registros"></span>
+                Antes de calcular indicadores por pozo se deben revisar y consolidar sus registros, sin eliminarlos ni sumarlos automáticamente.
+              </aside>
+              <p class="stat-scope">La población se delimita al archivo analizado; su cobertura no permite afirmar que incluya todos los pozos terrestres de Brasil.</p>
+              <p class="source">Fuente: <span id="fuente-estadistica"></span> · Conteo de identificadores únicos, sin excluir producción igual a cero.</p>
+
+              <p class="section-kicker section-kicker-spaced">4.1.2</p>
+              <h2 class="subsection-title">Muestra: método y tamaño</h2>
+              <p class="section-intro">No se extrajo una submuestra. Se incluyen todos los pozos identificados en los registros con Estado informado: el análisis es censal respecto del archivo disponible, no respecto de todos los pozos de Brasil.</p>
+
+              <dl class="stat-metrics sample-metrics" data-reveal>
+                <div><dt>Tamaño del conjunto analizado · n</dt><dd><span id="muestra-n"></span> <span class="metric-unit">pozos</span></dd></div>
+                <div><dt>Cobertura de la población del archivo</dt><dd id="muestra-cobertura"></dd></div>
+              </dl>
+
+              <div class="method-grid" data-reveal>
+                <article class="method-card">
+                  <p class="method-card-tag">Método</p>
+                  <h4>Método de inclusión</h4>
+                  <p>Inclusión exhaustiva de los identificadores únicos de <code>Nome Poço</code> presentes en los registros con Estado informado, sin excluir pozos por tener producción igual a cero. No se realizó selección aleatoria ni se aplicó una fórmula para determinar el tamaño muestral.</p>
+                </article>
+                <article class="method-card teal">
+                  <p class="method-card-tag">Notación</p>
+                  <h4>Representación simbólica</h4>
+                  <p class="method-symbolic" aria-label="El conjunto analizado A coincide con la población P del archivo">𝒜 = 𝒫; n = |𝒜| = N</p>
+                  <p class="stat-notation">n = <span id="muestra-notacion-n"></span> pozos únicos.<br>𝒜: conjunto analizado; 𝒫: población delimitada al archivo.</p>
+                  <p class="stat-notation">Cobertura = (n / N) × 100 = <span id="muestra-notacion-cobertura"></span>.</p>
+                </article>
+              </div>
+
+              <aside class="frame-note" data-reveal aria-label="Alcance del conjunto analizado">
+                <strong>Alcance de la cobertura.</strong> El 100 % se refiere únicamente a los pozos identificados en los registros con Estado del archivo, no a una cobertura nacional verificada. No se dispone de un diseño probabilístico que permita atribuir representatividad nacional o un margen de error muestral. Las filas repetidas de un mismo pozo no aumentan n; la consolidación de sus variables productivas sigue pendiente.
+              </aside>
             </div>
+          </div>
+        </section>
 
-            <aside class="stat-caution" data-reveal aria-label="Distinción entre registros y pozos">
-              <strong>Registro ≠ individuo.</strong>
-              <span id="nota-registros"></span>
-              Antes de calcular indicadores por pozo se deben revisar y consolidar sus registros, sin eliminarlos ni sumarlos automáticamente.
-            </aside>
+        <section class="section cream" id="variables" aria-labelledby="variables-titulo">
+          <div class="container">
+            <p class="section-kicker">4.1.3</p>
+            <h2 id="variables-titulo">Variables</h2>
+            <p class="section-intro">Variables seleccionadas del conjunto de datos, con su naturaleza, escala, unidad y número de valores válidos y nulos.</p>
+            <p id="estado-variables" class="status" role="status">Cargando variables…</p>
 
-            <p class="stat-scope" data-reveal>La población se delimita al archivo analizado; su cobertura no permite afirmar que incluya todos los pozos terrestres de Brasil.</p>
-
-            <h3 class="stat-subtitle" data-reveal id="muestra">4.1.2. Muestra: método y tamaño</h3>
-
-            <div class="stat-definitions" data-reveal>
-              <article>
-                <h4>Método de inclusión</h4>
-                <p>Los criterios de inclusión definen la muestra a partir de la población: se integran los registros de producción terrestre de enero de 2023 considerados en el análisis, sin excluir los registros con producción igual a cero.</p>
-              </article>
-              <article>
-                <h4>Representación simbólica</h4>
-                <p>La muestra se denota como el conjunto 𝒩 = {x₁, x₂, …, x<sub>n</sub>}.</p>
-                <p class="stat-formula" aria-label="Muestra N igual al conjunto de x uno hasta x n">𝒩 = {x₁, x₂, …, x<sub>n</sub>}</p>
-                <p class="stat-notation">n = |𝒩| es el tamaño de la muestra.</p>
-              </article>
+            <div id="contenido-variables" hidden>
+              <div class="table-scroll">
+                <table class="data-table">
+                  <caption>Variables seleccionadas del conjunto de datos, enero de 2023</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Variable</th>
+                      <th scope="col">Naturaleza</th>
+                      <th scope="col">Escala</th>
+                      <th scope="col">Unidad</th>
+                      <th scope="col" class="numero">Válidos</th>
+                      <th scope="col" class="numero">Nulos</th>
+                      <th scope="col">Observación</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tabla-variables"></tbody>
+                </table>
+              </div>
+              <p class="stat-scope">Variables excluidas por ser identificadores, constantes o no responder a los objetivos:</p>
+              <ul id="excluidas-variables" class="excluded-list"></ul>
             </div>
+          </div>
+        </section>
 
-            <p class="source" data-reveal">Fuente: <span id="fuente-estadistica"></span> · Conteo de identificadores únicos, sin excluir producción igual a cero.</p>
+        <section class="section" id="tdf" aria-labelledby="tdf-titulo">
+          <div class="container">
+            <p class="section-kicker">4.1.4</p>
+            <h2 id="tdf-titulo">Tablas de distribución de frecuencias (TDF)</h2>
+            <p id="estado-tdf" class="status" role="status">Cargando distribuciones…</p>
+
+            <div id="contenido-tdf" hidden>
+              <p class="section-intro">Unidad estadística: pozo. Cuando un mismo Nome Poço aparece en varias filas, sus volúmenes se suman para obtener un único valor por pozo.</p>
+
+              <h3 class="tdf-subtitle">a) Variable cualitativa: Estado</h3>
+              <div class="table-scroll">
+                <table class="data-table">
+                  <caption>Pozos por Estado, enero de 2023 (n = <span id="tdf-n-cualitativa"></span>)</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Estado</th>
+                      <th scope="col" class="numero">fᵢ</th>
+                      <th scope="col" class="numero">hᵢ</th>
+                      <th scope="col" class="numero">Fᵢ</th>
+                      <th scope="col" class="numero">Hᵢ</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tabla-estado"></tbody>
+                </table>
+              </div>
+
+              <h3 class="tdf-subtitle">b) Variable cuantitativa continua: óleo por pozo (bbl/día)</h3>
+              <div class="table-scroll">
+                <table class="data-table">
+                  <caption>Distribución de frecuencias del óleo por pozo (k = <span id="tdf-k"></span> clases, amplitud A = <span id="tdf-amplitud"></span>)</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Clase</th>
+                      <th scope="col">Intervalo [Lᵢ; Lᵢ₊₁)</th>
+                      <th scope="col" class="numero">Marca xᵢ</th>
+                      <th scope="col" class="numero">fᵢ</th>
+                      <th scope="col" class="numero">hᵢ</th>
+                      <th scope="col" class="numero">Fᵢ</th>
+                      <th scope="col" class="numero">Hᵢ</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tabla-oleo"></tbody>
+                </table>
+              </div>
+
+              <aside class="frame-note"><p id="nota-tdf"></p></aside>
+              <p class="source">Método: Sturges, k = ⌈1 + 3,322 · log₁₀(n)⌉; amplitud A = ⌈(máximo − mínimo) / k⌉. Fuente: <span id="fuente-tdf"></span>.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section cream" id="gdf" aria-labelledby="gdf-titulo">
+          <div class="container">
+            <p class="section-kicker">4.1.5</p>
+            <h2 id="gdf-titulo">Gráficas de distribución de frecuencias (GDF)</h2>
+            <p id="estado-gdf" class="status" role="status">Cargando gráficas…</p>
+
+            <div id="contenido-gdf" hidden>
+              <div class="chart-card">
+                <p class="section-kicker">GDF 1 · Diagrama de barras</p>
+                <h3 class="chart-title">Pozos por Estado</h3>
+                <div id="gdf-estado" class="chart-box" role="img" aria-label="Diagrama de barras de pozos por Estado"></div>
+              </div>
+              <div class="chart-card">
+                <p class="section-kicker">GDF 2 · Histograma y polígono de frecuencias</p>
+                <h3 class="chart-title">Óleo por pozo (bbl/día)</h3>
+                <div id="gdf-histograma" class="chart-box" role="img" aria-label="Histograma de frecuencias absolutas del óleo por pozo con polígono de frecuencias"></div>
+              </div>
+              <div class="chart-card">
+                <p class="section-kicker">GDF 3 · Ojiva de frecuencias relativas acumuladas</p>
+                <h3 class="chart-title">Óleo por pozo (bbl/día)</h3>
+                <div id="gdf-ojiva" class="chart-box" role="img" aria-label="Ojiva de frecuencias relativas acumuladas del óleo por pozo"></div>
+              </div>
+              <p id="nota-gdf" class="stat-scope"></p>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="container footer-row">
+          <div class="footer-left">
+            <p>© 2026 Integrantes: <span class="footer-members">Génesis Once, Esther Places, Evelyn Rodríguez, Andrea Sarmiento, Melany Zapata</span></p>
+            <p class="footer-location">Proyecto académico · Brasil, enero de 2023</p>
+          </div>
+          <div class="footer-right">
+            <p class="footer-label">Fuente</p>
+            <p>
+              ANP (Brasil) · Agregación por pozo y Estado
+            </p>
           </div>
         </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <div class="container footer-row">
-      <div class="footer-left">
-        <p>© 2026 Integrantes: <span class="footer-members">Génesis Once, Esther Places, Evelyn Rodríguez, Andrea Sarmiento, Melany Zapata</span></p>
-        <p class="footer-location">Proyecto académico · Brasil, enero de 2023</p>
-      </div>
-      <div class="footer-right">
-        <p class="footer-label">Fuente</p>
-        <p>
-          <a href="https://www.gov.br/anp/pt-br/centrais-de-conteudo/dados-abertos/producao-de-petroleo-e-gas-natural-por-poco" target="_blank" rel="noopener noreferrer">
-            ANP (Brasil) — Dados Abertos
-          </a>
-          <br>Agregación por Estado
-        </p>
-      </div>
-    </div>
-  </footer>
-  </div><!-- /app-main -->
+      </footer>
+    </div><!-- /app-main -->
   </div><!-- /app-shell -->
 </body>
 </html>

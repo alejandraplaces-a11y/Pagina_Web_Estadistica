@@ -1375,10 +1375,6 @@ h1 { animation-delay: .12s; }
     transform: translateX(0);
   }
 
-  .sidebar-backdrop {
-    left: var(--sidebar-expanded);
-  }
-
   .sidebar-name,
   .sidebar-link-label {
     opacity: 1;
@@ -1600,21 +1596,11 @@ h1 { animation-delay: .12s; }
 }
 
 .sidebar-backdrop {
+  display: none;
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, .45);
-  z-index: 45;
-  opacity: 0;
-  visibility: hidden;
-  transition: visibility .2s, opacity .2s;
-}
-
-.sidebar-backdrop.visible { visibility: visible; opacity: 1; }
-
-@media (max-width: 760px) {
-  .sidebar { transform: translateX(-100%); transition: transform .45s var(--ease); }
-  .sidebar.is-open { transform: translateX(0); }
-  .sidebar-backdrop { left: 260px; visibility: visible; opacity: 1; }
+  z-index: 55;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1662,13 +1648,13 @@ h1 { animation-delay: .12s; }
   margin-top: 16px;
   border: 1px solid var(--line);
   background: var(--paper-2);
-  min-height: 340px;
+  min-height: 280px;
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--ink-faint);
-  font-size: 13px;
+  font-size: 12px;
 }
 
 /* Objetivos */
@@ -1929,7 +1915,7 @@ h1 { animation-delay: .12s; }
 
 .diagram-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(300px, .65fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: clamp(24px, 4vw, 48px);
   align-items: start;
 }
@@ -1983,22 +1969,6 @@ h1 { animation-delay: .12s; }
 .legend-swatch-data { background: #b6652f; }
 .legend-swatch-empty { background: #e3e8e5; }
 
-.diagram-panel {
-  padding: 22px;
-  background: var(--paper);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-}
-
-.panel-title {
-  font-family: var(--serif);
-  font-size: clamp(1.4rem, 2.2vw, 1.9rem);
-  font-weight: 500;
-  letter-spacing: -.02em;
-  color: var(--ink);
-  margin-bottom: 4px;
-}
-
 .panel-subtitle {
   color: var(--ink-soft);
   font-size: 13px;
@@ -2006,72 +1976,11 @@ h1 { animation-delay: .12s; }
   margin-bottom: 18px;
 }
 
-.panel-metrics {
-  margin: 0 0 20px;
-  padding: 0;
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-}
-
-.panel-metrics > div {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 12px;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--line);
-}
-
-.panel-metrics > div:last-child { border-bottom: 0; }
-
-.panel-metrics dt {
-  color: var(--ink-faint);
-  font-size: 11px;
-  font-weight: 500;
-}
-
-.panel-metrics dd {
-  margin: 0;
-  color: var(--ink);
-  font-family: var(--serif);
-  font-size: 1.1rem;
-  font-weight: 500;
-  font-variant-numeric: tabular-nums;
-}
-
 .metric-unit {
   color: var(--ink-faint);
   font-family: var(--sans);
   font-size: 10px;
   font-weight: 400;
-}
-
-.panel-ranking {
-  margin-bottom: 20px;
-}
-
-.panel-ranking-title {
-  color: var(--ink-faint);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  margin-bottom: 10px;
-}
-
-.ranking-track {
-  height: 6px;
-  background: rgba(23, 37, 31, .08);
-  border-radius: 999px;
-  overflow: hidden;
-  margin-bottom: 12px;
-}
-
-.ranking-progress {
-  height: 100%;
-  width: 0%;
-  background: var(--oil);
-  transition: width .4s var(--ease);
 }
 
 .ranking-list {
@@ -2114,14 +2023,6 @@ h1 { animation-delay: .12s; }
   border-color: var(--oil);
   background: rgba(182, 101, 47, .08);
 }
-
-.panel-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.panel-actions .button { flex: 1; min-width: 140px; }
 
 .mission-section {
   padding-block: clamp(72px, 9vw, 120px);
@@ -2182,22 +2083,20 @@ h1 { animation-delay: .12s; }
   background: var(--paper-3);
 }
 
-.motivation-figure img {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
+.motivation-visual {
+  display: grid;
+  place-items: center;
+  min-height: 280px;
+  background: linear-gradient(135deg, var(--basin) 0%, var(--basin-2) 100%);
 }
 
-.motivation-figcaption {
-  padding: 10px 14px;
-  color: var(--ink-faint);
-  font-size: 10px;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  background: var(--paper-2);
-  border-top: 1px solid var(--line);
+.motivation-visual span {
+  padding: 0 20px;
+  color: var(--white);
+  font-family: var(--serif);
+  font-size: clamp(1.2rem, 2.4vw, 1.8rem);
+  font-weight: 500;
+  text-align: center;
 }
 
 .motivation-content .eyebrow { margin-bottom: 10px; }
@@ -2289,7 +2188,7 @@ h1 { animation-delay: .12s; }
   .hero-actions .button { text-align: center; }
   .panel-actions { flex-direction: column; }
   .panel-actions .button { min-width: 0; }
-  #mapa { height: 360px; }
+  .map-canvas { height: 360px; }
   .diagram-map { padding: 14px; }
 }
 
@@ -2404,21 +2303,11 @@ h1 { animation-delay: .12s; }
 
 .sidebar-link .sidebar-icon svg { width: 18px; height: 18px; }
 .sidebar-backdrop {
+  display: none;
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, .45);
-  z-index: 45;
-  opacity: 0;
-  visibility: hidden;
-  transition: visibility .2s, opacity .2s;
-}
-
-.sidebar-backdrop.visible { visibility: visible; opacity: 1; }
-
-@media (max-width: 760px) {
-  .sidebar { transform: translateX(-100%); transition: transform .45s var(--ease); }
-  .sidebar.is-open { transform: translateX(0); }
-  .sidebar-backdrop { left: 260px; visibility: visible; opacity: 1; }
+  z-index: 55;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2584,8 +2473,8 @@ html.sidebar-expanded body.has-sidebar { padding-left: 0; }
 /* El toggle colapsable ya no forma parte del nuevo diseño */
 .sidebar-toggle { display: none; }
 
-/* Responsive: el sidebar pasa a una fila superior con scroll horizontal */
-@media (max-width: 860px) {
+/* Responsive: entre 761 y 860 px el sidebar pasa a una fila superior con scroll horizontal */
+@media (min-width: 761px) and (max-width: 860px) {
   .app-shell { flex-direction: column; }
 
   .sidebar {
@@ -2783,58 +2672,11 @@ html.sidebar-expanded body.has-sidebar { padding-left: 0; }
    Exploración de datos (gráficos complementarios del mapa)
    ============================================================ */
 
-.exploracion-section {
-  padding-block: clamp(56px, 7vw, 96px);
-  background: var(--paper);
-  border-top: 1px solid var(--line);
-}
-
-.graficos-exploracion {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(20px, 3vw, 36px);
-}
-
-.grafico-plotly {
-  width: 100%;
-  max-width: 100%;
-  background: var(--paper-2);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 14px;
-}
-
-.grafico-plotly .js-plotly-plot,
-.grafico-plotly .plot-container { max-width: 100%; }
-
-.grafico-plotly:has(#grafico-pozos) { grid-column: span 2; }
-.grafico-plotly:has(#grafico-dispersion) { grid-column: span 2; }
-
-.panel-block { margin-top: 22px; }
-.panel-block .ranking-list { max-height: 180px; }
-
-.panel-quality {
-  margin-top: 18px;
-  padding: 12px 14px;
-  background: var(--paper-2);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  color: var(--ink-soft);
-  font-size: 12px;
-  line-height: 1.6;
-}
-
 .diagrama-legend-nota {
   flex-basis: 100%;
   color: var(--ink-faint);
   font-size: 10px;
   line-height: 1.5;
-}
-
-@media (max-width: 1000px) {
-  .graficos-exploracion { grid-template-columns: 1fr; }
-  .grafico-plotly:has(#grafico-pozos),
-  .grafico-plotly:has(#grafico-dispersion) { grid-column: auto; }
 }
 
 /* Mapa Leaflet */
@@ -2853,14 +2695,6 @@ html.sidebar-expanded body.has-sidebar { padding-left: 0; }
   align-items: center;
   gap: 10px 14px;
   margin-bottom: 14px;
-}
-
-.map-toolbar-label {
-  color: var(--ink-soft);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: .08em;
-  text-transform: uppercase;
 }
 
 .map-toolbar select {
@@ -2890,6 +2724,18 @@ html.sidebar-expanded body.has-sidebar { padding-left: 0; }
 
 .map-toolbar .button { flex: 0 0 auto; }
 
+.map-toolbar .button-secondary {
+  background: var(--basin);
+  border-color: var(--basin);
+  color: var(--white);
+}
+
+.map-toolbar .button-secondary:hover {
+  background: var(--basin-2);
+  border-color: var(--basin-2);
+  color: var(--white);
+}
+
 .map-note {
   margin-top: 12px;
   color: var(--ink-faint);
@@ -2906,3 +2752,297 @@ html.sidebar-expanded body.has-sidebar { padding-left: 0; }
 .leaflet-control-attribution { background: rgba(238, 241, 232, .85); font-size: 10px; }
 .leaflet-control-attribution a { color: var(--ink-soft); }
 .leaflet-popup-content { font-family: var(--sans); font-size: 12px; color: var(--ink); }
+
+/* ============================================================
+   Mapa página · mapa.html (tema Terra)
+   ============================================================ */
+
+.mapa-page {
+  padding-block: clamp(40px, 6vw, 72px) clamp(56px, 8vw, 96px);
+  background: var(--paper-2);
+  border-top: 1px solid var(--line);
+}
+
+.map-hero {
+  padding-block: clamp(40px, 6vw, 72px) clamp(24px, 4vw, 48px);
+  background: var(--paper-2);
+  border-bottom: 1px solid var(--line);
+}
+
+.map-hero .eyebrow { margin-bottom: 14px; }
+
+.map-hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 4.4vw, 3.4rem);
+  font-weight: 500;
+  line-height: 1.02;
+  letter-spacing: -.04em;
+  color: var(--ink);
+  max-width: 22ch;
+}
+
+.map-hero h1 span { color: var(--basin-2); }
+
+.map-hero .lead {
+  margin: 18px 0 0;
+  color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 1.7;
+  max-width: 60ch;
+}
+
+.map-stage {
+  display: grid;
+  gap: clamp(18px, 3vw, 28px);
+}
+
+.map-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 18px;
+}
+
+.map-controls label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink-soft);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.map-controls select {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 8px 12px;
+}
+
+.map-controls input[type='range'] { accent-color: var(--basin-2); }
+
+.map-frame {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 0 -16px;
+  width: calc(100% + 32px);
+}
+
+.map-frame-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: var(--basin);
+  border-bottom: 1px solid var(--line);
+  color: #f8f9f3;
+  font-size: 10px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.map-frame-bar i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.map-frame-bar .dot-close {
+  background: #ff5f57;
+}
+
+.map-frame-bar .dot-maximize {
+  background: #fcc419;
+}
+
+.map-frame-bar .dot-minimize {
+  background: #34a853;
+}
+
+.map-frame-bar span {
+  margin-left: 8px;
+  color: #f8f9f3;
+  font-size: 10px;
+  letter-spacing: .06em;
+}
+
+.map-frame .status { margin: 14px; }
+
+.legend-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--ink-soft);
+  font-size: 11px;
+}
+
+.legend-row > span:first-child { color: var(--ink-faint); }
+
+.legend-scale {
+  position: relative;
+  flex: 1 1 120px;
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #e8f0e4, #0b5b4f);
+}
+
+.map-caption { margin: 0; color: var(--ink-faint); font-size: 10px; line-height: 1.6; }
+
+.map-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+  gap: clamp(20px, 3vw, 32px);
+  align-items: start;
+}
+
+.mapa-panel {
+  padding: 22px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.mapa-panel h2 {
+  font-family: var(--serif);
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: var(--ink);
+  margin: 0 0 6px;
+}
+
+.mapa-panel .panel-subtitle { margin-bottom: 16px; }
+
+.mapa-datos { margin: 0; }
+
+.mapa-datos > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.mapa-datos > div:last-child { border-bottom: 0; }
+
+.mapa-datos dt {
+  color: var(--ink-faint);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.mapa-datos dd {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.mapa-ranking { min-width: 0; }
+
+.mapa-ranking .eyebrow { margin-bottom: 12px; }
+
+.burbuja {
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--basin-2);
+  color: var(--white);
+  font-size: 10px;
+  font-weight: 600;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(14, 47, 41, .35);
+}
+
+.burbuja.is-active { background: var(--oil); }
+
+@media (max-width: 1000px) {
+  .map-layout { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   Sidebar · cierre de cascada
+   Reglas finales (ganan a cualquier definición anterior). El
+   escritorio conserva el panel colapsable de 64 → 240 px y el
+   móvil usa un panel fuera del lienzo con fondo oscuro.
+   ============================================================ */
+
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .45);
+  z-index: 55;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+@media (max-width: 760px) {
+  .app-shell { flex-direction: column; }
+
+  .menu-toggle { display: grid; }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: min(264px, 82vw);
+    height: 100vh;
+    height: 100dvh;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 20px 16px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    border-right: 1px solid rgba(215, 227, 222, .12);
+    border-bottom: 0;
+    transform: translateX(-100%);
+    transition: transform .3s var(--ease);
+    z-index: 60;
+  }
+
+  .sidebar.is-open { transform: translateX(0); }
+
+  .sidebar-brand { display: flex; }
+  .sidebar-nav { flex: 1; width: auto; }
+  .sidebar-list { display: grid; gap: 10px; }
+  .sidebar-link { width: 100%; padding: 12px 14px; white-space: nowrap; }
+
+  .sidebar-backdrop { display: block; }
+}
+
+/* Etiqueta del sidebar: puede ocupar dos líneas para no cortar
+   "Estadística Descriptiva" en el panel expandido. La especificidad
+   (clase + clase) gana a `.sidebar-link span { white-space: nowrap }`. */
+.sidebar-link .sidebar-link-label {
+  white-space: normal;
+  line-height: 1.3;
+}
+
+@media (max-width: 760px) {
+  /* El panel móvil se cierra con el fondo, Escape o al navegar:
+     el botón interno solo duplicaría el ☰ del header. */
+  .sidebar .sidebar-toggle { display: none; }
+}
+
+/* Burbujas del mapa: el texto nunca se parte y se ajusta en pantallas
+   estrechas para que quepa dentro del círculo. */
+.burbuja span {
+  white-space: nowrap;
+  line-height: 1;
+}
+
+@media (max-width: 560px) {
+  .burbuja { font-size: 9px; }
+}
