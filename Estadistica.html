@@ -10,8 +10,9 @@
       try { if (localStorage.getItem('sidebar-expanded') === '1') document.documentElement.classList.add('sidebar-expanded'); } catch (e) {}
     })();
   </script>
-  <link rel="preload" href="fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/estadistica.css">
   <script defer src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
@@ -19,6 +20,7 @@
   <script defer src="js/sidebar.js"></script>
   <script defer src="js/estadistica.js"></script>
   <script defer src="js/frecuencias.js"></script>
+  <script defer src="js/indicadores.js"></script>
 </head>
 <body class="has-sidebar">
   <div class="app-shell">
@@ -35,7 +37,7 @@
       <nav class="sidebar-nav" aria-label="Navegación lateral">
         <ul class="sidebar-list">
           <li>
-            <a class="sidebar-link" href="index.html#inicio">
+            <a class="sidebar-link" href="index.html">
               <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10.4V20h13v-9.6"/></svg>
               <span class="sidebar-link-label">Inicio</span>
             </a>
@@ -72,7 +74,6 @@
             <span aria-hidden="true">☰</span>
           </button>
           <a class="brand" href="index.html" aria-label="Terra, inicio">
-            <img class="brand-mark" src="img/logo-universidad.png" alt="" aria-hidden="true" width="34" height="34">
             <span class="brand-word">Universidad Central del Ecuador</span>
             <span class="brand-caption">Proyecto de Estadística</span>
           </a>
@@ -102,14 +103,14 @@
             <p id="estado-estadistica" class="status" role="status">Calculando la delimitación del estudio…</p>
 
             <div id="contenido-estadistica" hidden>
-              <dl class="stat-metrics" data-reveal>
+              <dl class="stat-metrics">
                 <div><dt>Pozos únicos · N</dt><dd id="total-pozos"></dd></div>
                 <div><dt>Registros con Estado · R</dt><dd id="total-registros"></dd></div>
                 <div><dt>Estados representados</dt><dd id="total-estados"></dd></div>
                 <div><dt>Período observado</dt><dd id="periodo-estadistica"></dd></div>
               </dl>
 
-              <div class="method-grid" data-reveal>
+              <div class="method-grid">
                 <article class="method-card">
                   <p class="method-card-tag">Población</p>
                   <h4>Población de estudio</h4>
@@ -126,7 +127,7 @@
                 </article>
               </div>
 
-              <aside class="frame-note" data-reveal aria-label="Distinción entre registros y pozos">
+              <aside class="frame-note" aria-label="Distinción entre registros y pozos">
                 <strong>Registro ≠ individuo.</strong>
                 <span id="nota-registros"></span>
                 Antes de calcular indicadores por pozo se deben revisar y consolidar sus registros, sin eliminarlos ni sumarlos automáticamente.
@@ -138,12 +139,12 @@
               <h2 class="subsection-title">Muestra: método y tamaño</h2>
               <p class="section-intro">No se extrajo una submuestra. Se incluyen todos los pozos identificados en los registros con Estado informado: el análisis es censal respecto del archivo disponible, no respecto de todos los pozos de Brasil.</p>
 
-              <dl class="stat-metrics sample-metrics" data-reveal>
+              <dl class="stat-metrics sample-metrics">
                 <div><dt>Tamaño del conjunto analizado · n</dt><dd><span id="muestra-n"></span> <span class="metric-unit">pozos</span></dd></div>
                 <div><dt>Cobertura de la población del archivo</dt><dd id="muestra-cobertura"></dd></div>
               </dl>
 
-              <div class="method-grid" data-reveal>
+              <div class="method-grid">
                 <article class="method-card">
                   <p class="method-card-tag">Método</p>
                   <h4>Método de inclusión</h4>
@@ -158,7 +159,7 @@
                 </article>
               </div>
 
-              <aside class="frame-note" data-reveal aria-label="Alcance del conjunto analizado">
+              <aside class="frame-note" aria-label="Alcance del conjunto analizado">
                 <strong>Alcance de la cobertura.</strong> El 100 % se refiere únicamente a los pozos identificados en los registros con Estado del archivo, no a una cobertura nacional verificada. No se dispone de un diseño probabilístico que permita atribuir representatividad nacional o un margen de error muestral. Las filas repetidas de un mismo pozo no aumentan n; la consolidación de sus variables productivas sigue pendiente.
               </aside>
             </div>
@@ -228,7 +229,7 @@
                   <caption>Distribución de frecuencias del óleo por pozo (k = <span id="tdf-k"></span> clases, amplitud A = <span id="tdf-amplitud"></span>)</caption>
                   <thead>
                     <tr>
-                      <th scope="col">Clase</th>
+                      <th scope="col" class="numero">Clase</th>
                       <th scope="col">Intervalo [Lᵢ; Lᵢ₊₁)</th>
                       <th scope="col" class="numero">Marca xᵢ</th>
                       <th scope="col" class="numero">fᵢ</th>
@@ -273,23 +274,88 @@
             </div>
           </div>
         </section>
+
+        <section class="section" id="indicadores" aria-labelledby="indicadores-titulo">
+          <div class="container">
+            <p class="section-kicker">4.1.6</p>
+            <h2 id="indicadores-titulo">Indicadores: centrales, dispersión y forma</h2>
+            <p id="estado-indicadores" class="status" role="status">Calculando indicadores…</p>
+
+            <div id="contenido-indicadores" hidden>
+              <p class="section-intro">Calculados sobre el óleo por pozo (n = <span id="indicadores-n"></span> pozos). Variable: <span id="indicadores-variable"></span>.</p>
+
+              <div class="table-scroll">
+                <table class="data-table">
+                  <caption>Indicadores de tendencia central, dispersión y forma del óleo por pozo, enero de 2023</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Medida</th>
+                      <th scope="col">Símbolo</th>
+                      <th scope="col">Fórmula</th>
+                      <th scope="col" class="numero">Valor</th>
+                      <th scope="col">Lectura</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cuerpo-indicadores"></tbody>
+                </table>
+              </div>
+
+              <aside class="frame-note">
+                <strong>Media frente a mediana.</strong> La distribución del óleo es muy asimétrica: unos pocos pozos producen cantidades muy altas. Por ello, la mediana describe mejor al pozo típico, mientras que la media resume el total por pozo y se eleva por los valores extremos.
+              </aside>
+              <p class="source">Asimetría G₁ y curtosis en exceso G₂ con corrección muestral. Fuente: <span id="fuente-indicadores"></span>.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section cream" id="resumen" aria-labelledby="resumen-titulo">
+          <div class="container">
+            <p class="section-kicker">4.1.7</p>
+            <h2 id="resumen-titulo">Resumen descriptivo</h2>
+            <p id="estado-resumen" class="status" role="status">Preparando el resumen…</p>
+
+            <div id="contenido-resumen" hidden>
+              <p class="section-intro">Óleo por pozo (bbl/día) según Estado. Cada fila resume los pozos de ese Estado; la última fila corresponde a todo el archivo.</p>
+
+              <div class="table-scroll">
+                <table class="data-table">
+                  <caption>Resumen descriptivo del óleo por pozo según Estado, enero de 2023</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Estado</th>
+                      <th scope="col" class="numero">n</th>
+                      <th scope="col" class="numero">Media</th>
+                      <th scope="col" class="numero">Mediana</th>
+                      <th scope="col" class="numero">Desv. estándar</th>
+                      <th scope="col" class="numero">CV</th>
+                      <th scope="col" class="numero">Mínimo</th>
+                      <th scope="col" class="numero">Máximo</th>
+                      <th scope="col" class="numero">Total (bbl/día)</th>
+                      <th scope="col" class="numero">Participación</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cuerpo-resumen"></tbody>
+                </table>
+              </div>
+              <p class="stat-scope" id="nota-resumen"></p>
+            </div>
+          </div>
+        </section>
       </main>
 
       <footer class="site-footer">
         <div class="container footer-row">
-          <div class="footer-left">
+          <div>
             <p>© 2026 Integrantes: <span class="footer-members">Génesis Once, Esther Places, Evelyn Rodríguez, Andrea Sarmiento, Melany Zapata</span></p>
             <p class="footer-location">Proyecto académico · Brasil, enero de 2023</p>
           </div>
-          <div class="footer-right">
+          <div>
             <p class="footer-label">Fuente</p>
-            <p>
-              ANP (Brasil) · Agregación por pozo y Estado
-            </p>
+            <p>ANP (Brasil) · Agregación por pozo y Estado</p>
           </div>
         </div>
       </footer>
-    </div><!-- /app-main -->
-  </div><!-- /app-shell -->
+    </div>
+  </div>
 </body>
 </html>

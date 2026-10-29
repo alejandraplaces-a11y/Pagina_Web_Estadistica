@@ -1,0 +1,352 @@
+/* Recorrido interactivo de la portada: tema oscuro verde, separado del resto del sitio. */
+.ruta-seccion {
+  padding: 64px 0 56px;
+  color: #d7e8e1;
+  background:
+    radial-gradient(1100px 480px at 85% -10%, #173a32 0%, transparent 60%),
+    #0b1a16;
+}
+
+.ruta-seccion .container {
+  width: min(1180px, calc(100% - 64px));
+  margin-inline: auto;
+}
+
+.ruta-eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #6fd3b0;
+}
+
+.ruta-seccion h2 {
+  margin: 12px 0 0;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: clamp(30px, 4vw, 48px);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: #c9f5de;
+}
+
+.ruta-intro {
+  margin-top: 16px;
+  max-width: 640px;
+  font-size: 15px;
+  line-height: 1.75;
+  color: #9fbcb1;
+}
+
+.ruta-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 28px;
+  margin-top: 40px;
+  align-items: stretch;
+}
+
+.ruta-mapa-tarjeta {
+  position: relative;
+  margin: 0;
+  padding: 14px;
+  border: 1px solid #224a40;
+  border-radius: 22px;
+  background: linear-gradient(160deg, #10261f, #0a1915);
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.35);
+}
+
+.ruta-pill {
+  display: inline-block;
+  margin: 4px 6px 12px;
+  padding: 6px 14px;
+  border: 1px solid #2f5b50;
+  border-radius: 999px;
+  background: rgba(9, 24, 20, 0.85);
+  font-size: 12px;
+  color: #b9d6cb;
+}
+
+.ruta-estado {
+  margin: 56px 12px 0;
+  font-size: 14px;
+  color: #9fbcb1;
+}
+
+.ruta-mapa {
+  height: 480px;
+  border-radius: 14px;
+  background-color: #0b1a16;
+  background-image:
+    linear-gradient(rgba(111, 211, 176, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(111, 211, 176, 0.06) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.ruta-mapa .leaflet-container {
+  background: transparent;
+  font-family: inherit;
+}
+
+.ruta-mapa .leaflet-control-zoom a {
+  background: #10261f;
+  color: #c9f5de;
+  border-color: #224a40;
+}
+
+.ruta-mapa .leaflet-control-zoom a:hover {
+  background: #173a32;
+}
+
+.ruta-etiqueta {
+  padding: 2px 6px;
+  border: 1px solid #2f5b50;
+  border-radius: 4px;
+  background: rgba(9, 24, 20, 0.85);
+  box-shadow: none;
+  font-size: 11px;
+  color: #d7e8e1;
+}
+
+.ruta-etiqueta::before {
+  display: none;
+}
+
+.ruta-crudo {
+  display: block;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #f4fff9;
+  box-shadow: 0 0 0 4px rgba(111, 211, 176, 0.35), 0 0 18px 6px rgba(111, 211, 176, 0.7);
+  animation: ruta-pulso 1.4s ease-in-out infinite;
+}
+
+@keyframes ruta-pulso {
+  50% {
+    box-shadow: 0 0 0 8px rgba(111, 211, 176, 0.15), 0 0 26px 10px rgba(111, 211, 176, 0.8);
+  }
+}
+
+.ruta-leyenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin: 14px 8px 4px;
+  padding: 0;
+  list-style: none;
+  font-size: 12px;
+  color: #9fbcb1;
+}
+
+.ruta-leyenda li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ruta-simbolo-linea {
+  width: 22px;
+  height: 3px;
+  border-radius: 2px;
+  background: #6fd3b0;
+}
+
+.ruta-simbolo-estacion {
+  width: 10px;
+  height: 10px;
+  border: 2px solid #9fe3c8;
+  border-radius: 50%;
+  background: #0b1a16;
+}
+
+.ruta-simbolo-crudo {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #f4fff9;
+  box-shadow: 0 0 8px #6fd3b0;
+}
+
+.ruta-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 28px;
+  border: 1px solid #224a40;
+  border-radius: 22px;
+  background: #0f2620;
+}
+
+.ruta-grupos {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-self: flex-start;
+  padding: 4px;
+  border: 1px solid #2a5349;
+  border-radius: 999px;
+  background: #0b1a16;
+}
+
+.ruta-grupo {
+  padding: 8px 16px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  font: inherit;
+  font-size: 13px;
+  color: #9fbcb1;
+  cursor: pointer;
+}
+
+.ruta-grupo.is-active,
+.ruta-grupo[aria-pressed="true"] {
+  background: #2b5a4e;
+  color: #e9fff5;
+}
+
+.ruta-grupo:focus-visible,
+.ruta-boton:focus-visible,
+.ruta-control input:focus-visible {
+  outline: 3px solid #6fd3b0;
+  outline-offset: 3px;
+}
+
+.ruta-titulo {
+  margin: 0;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 26px;
+  font-weight: 600;
+  color: #e2fbef;
+}
+
+.ruta-subtitulo {
+  margin-top: -10px;
+  font-size: 14px;
+  color: #7fa398;
+}
+
+.ruta-control label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 13px;
+  color: #9fbcb1;
+}
+
+.ruta-control input[type="range"] {
+  width: 100%;
+  accent-color: #6fd3b0;
+}
+
+.ruta-valor-fila {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid #224a40;
+}
+
+.ruta-valor {
+  margin: 0;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 38px;
+  font-weight: 600;
+  color: #e2fbef;
+  font-variant-numeric: tabular-nums;
+}
+
+.ruta-unidad {
+  font-size: 16px;
+  font-weight: 400;
+  color: #9fbcb1;
+}
+
+.ruta-estacion-nombre {
+  font-size: 14px;
+  text-align: right;
+  color: #9fbcb1;
+}
+
+.ruta-detalle {
+  margin-top: -8px;
+  font-size: 13px;
+  color: #7fa398;
+}
+
+.ruta-perfil {
+  margin: 0;
+  padding: 12px;
+  border: 1px solid #224a40;
+  border-radius: 12px;
+  background: #0b1a16;
+}
+
+.ruta-perfil svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.ruta-perfil text {
+  font-size: 10px;
+  fill: #7fa398;
+}
+
+.ruta-boton {
+  align-self: stretch;
+  padding: 14px 20px;
+  border: 1px solid #6fd3b0;
+  border-radius: 12px;
+  background: transparent;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: #c9f5de;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.ruta-boton:hover {
+  background: rgba(111, 211, 176, 0.12);
+}
+
+.ruta-nota {
+  margin-top: 22px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: #6f8f85;
+}
+
+.ruta-nota a {
+  color: #6fd3b0;
+}
+
+@media (max-width: 900px) {
+  .ruta-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ruta-mapa {
+    height: 420px;
+  }
+}
+
+@media (max-width: 560px) {
+  .ruta-seccion .container {
+    width: calc(100% - 32px);
+  }
+
+  .ruta-panel {
+    padding: 20px;
+  }
+
+  .ruta-valor {
+    font-size: 30px;
+  }
+
+  .ruta-pill {
+    margin: 4px 4px 10px;
+  }
+}

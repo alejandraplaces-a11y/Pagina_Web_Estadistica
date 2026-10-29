@@ -1,0 +1,151 @@
+{
+  "fuente": "2023_01_producao_Terra.csv",
+  "variable": "Óleo por pozo (bbl/día)",
+  "n": 5308,
+  "indicadores": {
+    "centrales": {
+      "media": 11.948500414468725,
+      "mediana": 4.4195,
+      "moda": 0.0,
+      "frecuencia_moda": 420
+    },
+    "dispersion": {
+      "minimo": 0.0,
+      "maximo": 1102.8289,
+      "rango": 1102.8289,
+      "q1": 1.45485,
+      "q3": 10.6372,
+      "rango_intercuartilico": 9.18235,
+      "varianza": 1087.8525739391105,
+      "desviacion_estandar": 32.982610174743755,
+      "coeficiente_variacion": 2.7603974583123687
+    },
+    "forma": {
+      "asimetria": 12.362335105190118,
+      "curtosis": 276.96117809462146,
+      "ceros": 420,
+      "porcentaje_ceros": 0.07912584777694047
+    }
+  },
+  "por_estado": [
+    {
+      "estado": "Rio Grande do Norte",
+      "n": 3195,
+      "media": 9.047253114241002,
+      "mediana": 4.2414,
+      "desviacion_estandar": 18.477492977141292,
+      "coeficiente_variacion": 2.0423318264475703,
+      "minimo": 0.0,
+      "maximo": 332.2438,
+      "total": 28905.973700000002,
+      "participacion": 0.45576742956216454
+    },
+    {
+      "estado": "Bahia",
+      "n": 811,
+      "media": 14.580137237977805,
+      "mediana": 6.3553,
+      "desviacion_estandar": 36.200710141185326,
+      "coeficiente_variacion": 2.482878559393189,
+      "minimo": 0.0,
+      "maximo": 494.1772,
+      "total": 11824.4913,
+      "participacion": 0.18643959416877132
+    },
+    {
+      "estado": "Amazonas",
+      "n": 70,
+      "media": 139.3695971428571,
+      "mediana": 94.06505,
+      "desviacion_estandar": 167.73044391006954,
+      "coeficiente_variacion": 1.2034937845026696,
+      "minimo": 0.0,
+      "maximo": 1102.8289,
+      "total": 9755.871799999997,
+      "participacion": 0.15382317370004409
+    },
+    {
+      "estado": "Espírito Santo",
+      "n": 299,
+      "media": 21.990048160535117,
+      "mediana": 12.7833,
+      "desviacion_estandar": 27.230729812439392,
+      "coeficiente_variacion": 1.238320608197192,
+      "minimo": 0.0,
+      "maximo": 154.7518,
+      "total": 6575.0244,
+      "participacion": 0.10366998881260703
+    },
+    {
+      "estado": "Sergipe",
+      "n": 490,
+      "media": 7.176647142857144,
+      "mediana": 3.7157999999999998,
+      "desviacion_estandar": 10.282127570476062,
+      "coeficiente_variacion": 1.4327202335299118,
+      "minimo": 0.0,
+      "maximo": 107.8185,
+      "total": 3516.5571000000004,
+      "participacion": 0.05544640035341829
+    },
+    {
+      "estado": "Alagoas",
+      "n": 190,
+      "media": 11.168986842105264,
+      "mediana": 2.5387500000000003,
+      "desviacion_estandar": 29.81893358513857,
+      "coeficiente_variacion": 2.669797539086181,
+      "minimo": 0.0,
+      "maximo": 296.7258,
+      "total": 2122.1075,
+      "participacion": 0.03345977861073025
+    },
+    {
+      "estado": "Ceará",
+      "n": 202,
+      "media": 3.125099504950495,
+      "mediana": 2.5465999999999998,
+      "desviacion_estandar": 2.9976408070529743,
+      "coeficiente_variacion": 0.9592145153472355,
+      "minimo": 0.0,
+      "maximo": 27.3487,
+      "total": 631.2701,
+      "participacion": 0.00995338727636255
+    },
+    {
+      "estado": "Maranhão",
+      "n": 49,
+      "media": 1.8641693877551022,
+      "mediana": 0.0,
+      "desviacion_estandar": 11.228502712298068,
+      "coeficiente_variacion": 6.023327486253716,
+      "minimo": 0.0,
+      "maximo": 77.6893,
+      "total": 91.3443,
+      "participacion": 0.0014402475159020582
+    },
+    {
+      "estado": "Paraná",
+      "n": 2,
+      "media": 0.0,
+      "mediana": 0.0,
+      "desviacion_estandar": 0.0,
+      "coeficiente_variacion": null,
+      "minimo": 0.0,
+      "maximo": 0.0,
+      "total": 0.0,
+      "participacion": 0.0
+    }
+  ],
+  "total": {
+    "n": 5308,
+    "media": 11.948500414468725,
+    "mediana": 4.4195,
+    "desviacion_estandar": 32.982610174743755,
+    "coeficiente_variacion": 2.7603974583123687,
+    "minimo": 0.0,
+    "maximo": 1102.8289,
+    "total": 63422.640199999994,
+    "participacion": 1.0
+  }
+}

@@ -6,6 +6,7 @@
   <meta name="description" content="Terra: análisis estadístico de la producción terrestre de hidrocarburos en Brasil (enero de 2023). Proyecto académico con diagrama interactivo por Estado.">
   <title>Terra · Análisis estadístico de la producción terrestre de hidrocarburos en Brasil</title>
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/ruta.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
   <script>
     (function () {
@@ -14,7 +15,7 @@
   </script>
   <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script defer src="js/common.js"></script>
-  <script defer src="js/mapa-dinamico.js"></script>
+  <script defer src="js/ruta.js"></script>
   <script defer src="js/sidebar.js"></script>
 </head>
 
@@ -101,38 +102,61 @@
       </div>
     </section>
 
-    <!-- 2. Diagrama interactivo -->
-    <section id="diagrama" class="diagram-section" aria-labelledby="diagrama-titulo">
+    <!-- 2. Recorrido interactivo -->
+    <section id="diagrama" class="ruta-seccion" aria-labelledby="diagrama-titulo">
       <div class="container">
-        <div class="section-heading">
-          <p class="eyebrow">Diagrama interactivo</p>
-          <h2 id="diagrama-titulo">La producción terrestre, de los pozos a los Estados</h2>
-          <p class="section-description">Nueve estados concentran la producción en tierra registrada en enero de 2023. Elige una métrica o toca un Estado para ver su detalle; el recorrido automático destaca cada estado de mayor a menor producción.</p>
-        </div>
+        <header>
+          <p class="ruta-eyebrow">Recorrido interactivo · enero de 2023</p>
+          <h2 id="diagrama-titulo">La producción terrestre, de oeste a este.</h2>
+          <p class="ruta-intro">Los Estados con registros se ordenan por la longitud de su centroide. Elige un grupo, mueve el control o reproduce el recorrido para ver cómo se acumula la producción de óleo a lo largo del trazado.</p>
+        </header>
 
-        <div class="diagram-layout">
-          <figure class="diagram-map">
-            <figcaption class="diagram-caption">Brasil, vista esquemática por Estado</figcaption>
+        <div class="ruta-grid">
+          <figure class="ruta-mapa-tarjeta">
+            <figcaption class="ruta-pill">Brasil · vista esquemática por Estado</figcaption>
+            <p id="estado-ruta" class="ruta-estado" role="status">Cargando recorrido…</p>
+            <div id="ruta-mapa" class="ruta-mapa" role="img" aria-label="Mapa oscuro de Brasil con el recorrido de los Estados de oeste a este y un marcador que avanza por la ruta"></div>
+            <ul class="ruta-leyenda" aria-label="Leyenda">
+              <li><span class="ruta-simbolo-linea" aria-hidden="true"></span> Recorrido</li>
+              <li><span class="ruta-simbolo-estacion" aria-hidden="true"></span> Estado</li>
+              <li><span class="ruta-simbolo-crudo" aria-hidden="true"></span> Recorrido en movimiento</li>
+            </ul>
+          </figure>
 
-            <div class="map-toolbar">
-              <button type="button" id="boton-pausa" class="button button-secondary">Pausar recorrido</button>
-              <a class="button button-secondary" href="mapa.html">Ver mapa completo</a>
+          <aside class="ruta-panel" aria-labelledby="ruta-titulo">
+            <div class="ruta-grupos" role="group" aria-label="Grupo de Estados del recorrido">
+              <button type="button" class="ruta-grupo is-active" data-grupo="todos" aria-pressed="true">Todos</button>
+              <button type="button" class="ruta-grupo" data-grupo="nordeste" aria-pressed="false">Nordeste</button>
+              <button type="button" class="ruta-grupo" data-grupo="otros" aria-pressed="false">Norte, Sudeste y Sur</button>
             </div>
 
-            <p id="estado-dinamico" class="status" role="status">Cargando mapa…</p>
-            <div id="mapa-dinamico" class="map-canvas" role="region" aria-label="Mapa interactivo de Brasil con la producción terrestre por Estado"></div>
-            <ul class="diagram-legend" aria-label="Leyenda">
-              <li><span class="legend-swatch legend-swatch-data" aria-hidden="true"></span> Estado con producción terrestre registrada</li>
-              <li><span class="legend-swatch legend-swatch-empty" aria-hidden="true"></span> Sin registros terrestres en el archivo</li>
-            </ul>
-            <p class="map-note">Límites estatales esquemáticos. Datos agregados por Estado. Fuente: ANP, 2023_01_producao_Terra.csv.</p>
-          </figure>
+            <h3 id="ruta-titulo" class="ruta-titulo">Recorrido completo</h3>
+            <p id="ruta-subtitulo" class="ruta-subtitulo"></p>
+
+            <div class="ruta-control">
+              <label for="ruta-deslizador">Posición en el recorrido</label>
+              <input id="ruta-deslizador" type="range" min="0" max="1000" value="0">
+            </div>
+
+            <div class="ruta-valor-fila">
+              <p class="ruta-valor"><span id="ruta-valor">—</span> <span class="ruta-unidad">bbl/día</span></p>
+              <p id="ruta-estacion" class="ruta-estacion-nombre">—</p>
+            </div>
+            <p id="ruta-detalle" class="ruta-detalle"></p>
+
+            <figure class="ruta-perfil">
+              <svg id="ruta-perfil" viewBox="0 0 320 110" role="img" aria-label="Producción acumulada de óleo a lo largo del recorrido"></svg>
+            </figure>
+
+            <button type="button" id="ruta-reproducir" class="ruta-boton" aria-pressed="false">Reproducir recorrido</button>
+          </aside>
         </div>
 
-        <p class="source">Fuente: ANP · <span>2023_01_producao_Terra.csv</span> · Agregación por Estado. Los límites estatales son esquemáticos.</p>
+        <p class="ruta-nota">Trazado esquemático: une los centroides de los Estados en orden oeste–este. No representa oleoductos ni altitudes; el perfil muestra la producción acumulada de óleo. Fuente: ANP, 2023_01_producao_Terra.csv. <a href="mapa.html">Ver mapa completo</a>.</p>
       </div>
     </section>
 
+    <!-- 3. Misión y visión -->
     <!-- 3. Misión y visión -->
     <section id="mision-vision" class="mission-section" aria-label="Misión y visión">
       <div class="container mission-grid">
@@ -156,12 +180,11 @@
         </div>
 
         <div class="motivation-layout">
-          <div class="motivation-figure">
-            <!-- Para la foto real: sustituye este bloque visual por un <img> con src en img/ cuando tengas la fotografía. -->
-            <div class="motivation-visual">
-              <span>Proyecto académico · Brasil, enero de 2023</span>
-            </div>
-          </div>
+          <figure class="motivation-figure">
+            <!-- Reemplaza la ruta por la imagen de tu institución o del proyecto -->
+            <img src="img/imagen-facultad.jpg" alt="Instalaciones de la institución donde se desarrolla el proyecto" loading="lazy">
+            <figcaption class="motivation-figcaption">FIGEMPA</figcaption>
+          </figure>
 
           <div class="motivation-content">
             <p class="eyebrow">Estadística aplicada al sector energético</p>
