@@ -1,0 +1,291 @@
+/* Estadística inferencial: componentes propios de estadisticaDiferencial.html.
+   Se carga después de css/estadistica.css y reutiliza su paleta y sus componentes. */
+
+.toc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+  margin: 26px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.toc-grid a {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  height: 100%;
+  padding: 14px 16px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--ink);
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.toc-grid a:hover {
+  border-color: var(--accent);
+}
+
+.toc-numero {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--accent);
+}
+
+.toc-estado {
+  flex: none;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.toc-estado.is-ready {
+  background: #dff3ea;
+  color: #0b5b4f;
+}
+
+.toc-estado.is-pending {
+  background: #eef1ef;
+  color: var(--muted);
+}
+
+.vad-domain {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 14px;
+}
+
+.vad-domain span {
+  min-width: 32px;
+  padding: 4px 6px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--bg);
+  font-family: var(--mono);
+  font-size: 12px;
+  text-align: center;
+  color: var(--ink);
+}
+
+.data-table tfoot td {
+  border-top: 2px solid var(--line);
+  font-weight: 650;
+  background: #f9fbfa;
+}
+
+.chart-box-tall {
+  height: 420px;
+}
+
+.pending-card {
+  margin-top: 20px;
+  padding: 22px 24px;
+  border: 1px dashed #b8c9c1;
+  border-radius: 12px;
+  background: var(--paper);
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.pending-card strong {
+  color: var(--ink);
+}
+
+@media (max-width: 860px) {
+  .chart-box-tall {
+    height: 340px;
+  }
+}
+
+/* Índice lateral fijo de estadisticaInferencial.html.
+   Se carga después de css/estadistica.css y usa sus variables de color. */
+
+.inferencial-cuerpo {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.inferencial-secciones {
+  min-width: 0;
+}
+
+/* Índice: en móvil y tablet es un desplegable sobre el contenido. */
+.indice-lateral {
+  position: sticky;
+  /* Altura de .site-header, que también es fija. */
+  top: 72px;
+  z-index: 5;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+
+.indice-lateral details {
+  width: min(1120px, calc(100% - 32px));
+  margin-inline: auto;
+}
+
+.indice-lateral summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 0;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  cursor: pointer;
+  list-style: none;
+}
+
+.indice-lateral summary::-webkit-details-marker {
+  display: none;
+}
+
+.indice-lateral summary::after {
+  content: "▾";
+  font-size: 14px;
+  transition: transform .2s;
+}
+
+.indice-lateral details[open] summary::after {
+  transform: rotate(180deg);
+}
+
+.indice-contenido {
+  max-height: 60vh;
+  overflow-y: auto;
+  padding-bottom: 16px;
+}
+
+.indice-grupo + .indice-grupo {
+  margin-top: 18px;
+}
+
+.indice-grupo-titulo {
+  margin: 0 0 6px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.indice-lista {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-left: 1px solid var(--line);
+}
+
+.indice-lista a {
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr);
+  gap: 6px;
+  margin-left: -1px;
+  padding: 7px 10px 7px 12px;
+  border-left: 2px solid transparent;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.indice-lista a:hover {
+  color: var(--ink);
+  background: rgba(15, 118, 110, .05);
+}
+
+.indice-lista a.is-active,
+.indice-lista a[aria-current="location"] {
+  border-left-color: var(--accent);
+  background: rgba(15, 118, 110, .08);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.indice-numero {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--accent);
+  padding-top: 1px;
+}
+
+.indice-estado {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: #dff3ea;
+  font-size: 10px;
+  font-weight: 600;
+  color: #0b5b4f;
+  vertical-align: 1px;
+}
+
+/* Escritorio: el índice pasa a una columna fija a la derecha. */
+@media (min-width: 1200px) {
+  .inferencial-cuerpo {
+    grid-template-columns: minmax(0, 1fr) 300px;
+    align-items: start;
+  }
+
+  .inferencial-secciones {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .indice-lateral {
+    grid-column: 2;
+    grid-row: 1;
+    top: 88px;
+    max-height: calc(100vh - 104px);
+    margin: 28px 24px 28px 0;
+    padding: 20px 14px 20px 18px;
+    overflow-y: auto;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+  }
+
+  .indice-lateral details {
+    width: auto;
+  }
+
+  .indice-lateral summary {
+    padding: 0 0 14px;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .indice-lateral summary::after {
+    display: none;
+  }
+
+  .indice-contenido {
+    max-height: none;
+    overflow: visible;
+    padding-bottom: 0;
+  }
+
+  /* Las secciones comparten el ancho con el índice. */
+  .inferencial-secciones .container {
+    width: calc(100% - 64px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .indice-lateral summary::after {
+    transition: none;
+  }
+}
