@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Estadística inferencial de la producción terrestre de petróleo en Brasil: variable aleatoria discreta, tabla de distribución de frecuencias y gráfica de barras (enero de 2023).">
+  <title>Estadística inferencial · Terra</title>
+  <script>
+    (function () {
+      try { if (localStorage.getItem('sidebar-expanded') === '1') document.documentElement.classList.add('sidebar-expanded'); } catch (e) {}
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/estadistica.css">
+  <link rel="stylesheet" href="css/estadisticaDiferencial.css">
+  <link rel="stylesheet" href="css/indiceLateral.css">
+  <script defer src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <script defer src="js/commonInf.js"></script>
+  <script defer src="js/sidebar.js"></script>
+  <script defer src="js/estadisticaInferencial.js"></script>
+  <script defer src="js/indiceLateral.js"></script>
+</head>
+<body class="has-sidebar">
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Navegación lateral">
+      <button class="sidebar-toggle" id="sidebar-toggle" type="button" aria-label="Alternar menú lateral" aria-expanded="false" aria-controls="sidebar">
+        <span class="sidebar-toggle-icon" aria-hidden="true">☰</span>
+      </button>
+      <a class="sidebar-brand" href="index.html" aria-label="Terra, inicio">
+        <img class="sidebar-logo" src="img/logo-universidad.png" alt="" width="34" height="34">
+        <span class="sidebar-brand-text">
+          <span class="sidebar-title">Universidad Central del Ecuador</span>
+        </span>
+      </a>
+      <nav class="sidebar-nav" aria-label="Navegación lateral">
+        <ul class="sidebar-list">
+          <li>
+            <a class="sidebar-link" href="index.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10.4V20h13v-9.6"/></svg>
+              <span class="sidebar-link-label">Inicio</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="introduccion.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v16H5.5C4.7 20 4 19.3 4 18.5Z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v16h5.5c.8 0 1.5-.7 1.5-1.5Z"/></svg>
+              <span class="sidebar-link-label">Introducción</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="mapa.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Z"/><path d="M9 4v14m6-12v14"/></svg>
+              <span class="sidebar-link-label">Mapa Web</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="Estadistica.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18 6H7l6 6-6 6h11"/></svg>
+              <span class="sidebar-link-label">Estadística Descriptiva</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link is-active" href="estadisticaInferencial.html" aria-current="page">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 20h18"/><path d="M5 20c2-9 4-14 7-14s5 5 7 14"/><path d="M12 6v14"/></svg>
+              <span class="sidebar-link-label">Estadística Inferencial</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <div class="app-main">
+      <div class="sidebar-backdrop" id="sidebar-backdrop" hidden></div>
+      <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+      <header class="site-header">
+        <div class="container header-inner">
+          <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="sidebar">
+            <span aria-hidden="true">☰</span>
+          </button>
+          <a class="brand" href="index.html" aria-label="Terra, inicio">
+            <span class="brand-word">Universidad Central del Ecuador</span>
+            <span class="brand-caption">Proyecto de Estadística</span>
+          </a>
+        </div>
+      </header>
+
+      <main id="contenido">
+        <section class="page-hero" aria-labelledby="inferencial-titulo">
+          <div class="container">
+            <p class="section-kicker">04 / Análisis estadístico · 4.2</p>
+            <h1 id="inferencial-titulo">Estadística inferencial.</h1>
+            <p class="aside-meta">Brasil · Enero de 2023</p>
+            <p class="page-lead">Modelos de probabilidad para la producción terrestre de petróleo por pozo: variables aleatorias discretas y continuas, pruebas de ajuste, estimación e intervalos de confianza.</p>
+          </div>
+        </section>
+
+        <div class="inferencial-cuerpo">
+          <aside class="indice-lateral" id="indice-lateral" aria-label="Índice de la estadística inferencial">
+            <details>
+              <summary>Contenido · 4.2</summary>
+              <nav class="indice-contenido" aria-label="Secciones 4.2.1 a 4.2.14">
+                <div class="indice-grupo">
+                  <p class="indice-grupo-titulo" id="indice-grupo-1">Variable discreta</p>
+                  <ul class="indice-lista" aria-labelledby="indice-grupo-1">
+                    <li><a href="#vad"><span class="indice-numero">4.2.1</span><span>Identificar VAD<span class="indice-estado"></span></span></a></li>
+                    <li><a href="#tdf-vad"><span class="indice-numero">4.2.2</span><span>TDF y gráfica de barras<span class="indice-estado"></span></span></a></li>
+                    <li><a href="#modelo-discreto"><span class="indice-numero">4.2.3</span><span>Modelo de probabilidad discreto</span></a></li>
+                    <li><a href="#test-ajuste-discreto"><span class="indice-numero">4.2.4</span><span>Test de ajuste</span></a></li>
+                  </ul>
+                </div>
+                <div class="indice-grupo">
+                  <p class="indice-grupo-titulo" id="indice-grupo-2">Variable continua</p>
+                  <ul class="indice-lista" aria-labelledby="indice-grupo-2">
+                    <li><a href="#vac"><span class="indice-numero">4.2.5</span><span>Identificar VAC</span></a></li>
+                    <li><a href="#histograma-relativo"><span class="indice-numero">4.2.6</span><span>Tabla e histograma (frecuencia relativa)</span></a></li>
+                    <li><a href="#histograma-densidad"><span class="indice-numero">4.2.7</span><span>Tabla e histograma (densidad de probabilidad)</span></a></li>
+                    <li><a href="#conjetura-continua"><span class="indice-numero">4.2.8</span><span>Conjetura del modelo continuo</span></a></li>
+                    <li><a href="#parametros-continuos"><span class="indice-numero">4.2.9</span><span>Cálculo de parámetros y ajuste gráfico</span></a></li>
+                    <li><a href="#test-ajuste-continuo"><span class="indice-numero">4.2.10</span><span>Test de ajuste (Pearson y chi-cuadrado)</span></a></li>
+                    <li><a href="#restricciones"><span class="indice-numero">4.2.11</span><span>Restricciones</span></a></li>
+                  </ul>
+                </div>
+                <div class="indice-grupo">
+                  <p class="indice-grupo-titulo" id="indice-grupo-3">Inferencia</p>
+                  <ul class="indice-lista" aria-labelledby="indice-grupo-3">
+                    <li><a href="#probabilidades"><span class="indice-numero">4.2.12</span><span>Cálculos de probabilidad</span></a></li>
+                    <li><a href="#estimacion"><span class="indice-numero">4.2.13</span><span>Estimación puntual y por intervalos de confianza</span></a></li>
+                    <li><a href="#tamano-muestral"><span class="indice-numero">4.2.14</span><span>Cálculo del tamaño muestral</span></a></li>
+                  </ul>
+                </div>
+              </nav>
+            </details>
+          </aside>
+          <div class="inferencial-secciones">
+        <section class="section cream" id="vad" aria-labelledby="vad-titulo">
+          <div class="container">
+            <p class="section-kicker">4.2.1</p>
+            <h2 id="vad-titulo">Identificar la variable aleatoria discreta (VAD)</h2>
+            <p id="estado-vad" class="status" role="status">Cargando la variable aleatoria…</p>
+
+            <div id="contenido-vad" hidden>
+              <dl class="stat-metrics">
+                <div><dt>Pozos analizados · n</dt><dd id="vad-n"></dd></div>
+                <div><dt>Recorrido observado · R<sub>X</sub></dt><dd id="vad-rango"></dd></div>
+                <div><dt>Media · x̄</dt><dd><span id="vad-media"></span> <span class="metric-unit">días</span></dd></div>
+                <div><dt>Varianza muestral · s²</dt><dd id="vad-varianza"></dd></div>
+              </dl>
+
+              <div class="method-grid">
+                <article class="method-card">
+                  <p class="method-card-tag">Definición</p>
+                  <h4>Días completos de producción por pozo</h4>
+                  <p>X es el número de días completos que cada pozo terrestre produjo durante enero de 2023. Se obtiene de <code>Tempo de Produção (hs por mês)</code> dividiendo las horas entre 24 y conservando la parte entera.</p>
+                  <p>Es <strong>discreta</strong> porque solo toma valores enteros y su recorrido es finito y numerable: enero tiene 31 días (744 horas).</p>
+                </article>
+                <article class="method-card teal">
+                  <p class="method-card-tag">Notación</p>
+                  <h4>Representación simbólica</h4>
+                  <p class="method-symbolic" aria-label="X de p sub i igual a la parte entera de t sub i entre 24">X(p<sub>i</sub>) = ⌊t<sub>i</sub> / 24⌋</p>
+                  <p class="stat-notation">t<sub>i</sub>: horas de producción del pozo p<sub>i</sub> en el mes; i = 1, 2, …, n con n = <span id="vad-notacion-n"></span>.</p>
+                  <p class="stat-notation">R<sub>X</sub> = {0, 1, 2, …, 31}</p>
+                  <div class="vad-domain" aria-label="Valores posibles de X de 0 a 31"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span><span>23</span><span>24</span><span>25</span><span>26</span><span>27</span><span>28</span><span>29</span><span>30</span><span>31</span></div>
+                </article>
+              </div>
+
+              <aside class="frame-note">
+                <strong>Criterio por pozo.</strong> <span id="vad-repetidos"></span> pozos aparecen en varias filas y repiten sus horas en cada una; sumarlas superaría las 744 horas del mes. Por eso se toma el máximo de horas registrado para cada pozo.
+              </aside>
+              <p class="source">Fuente: <span id="vad-fuente"></span> · Variable derivada de las horas de producción del mes.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="tdf-vad" aria-labelledby="tdf-vad-titulo">
+          <div class="container">
+            <p class="section-kicker">4.2.2</p>
+            <h2 id="tdf-vad-titulo">TDF y gráfica de barras</h2>
+            <p id="estado-tdf-vad" class="status" role="status">Construyendo la tabla de frecuencias…</p>
+
+            <div id="contenido-tdf-vad" hidden>
+              <p class="section-intro">Al ser una variable discreta, la tabla usa cada valor de X como una clase, sin agrupar en intervalos.</p>
+
+              <div class="table-scroll">
+                <table class="data-table">
+                  <caption>Tabla de distribución de frecuencias de X: días completos de producción por pozo, enero de 2023</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col" class="numero">x</th>
+                      <th scope="col" class="numero">fᵢ</th>
+                      <th scope="col" class="numero">hᵢ</th>
+                      <th scope="col" class="numero">Fᵢ</th>
+                      <th scope="col" class="numero">Hᵢ</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cuerpo-tdf-vad"></tbody>
+                  <tfoot id="pie-tdf-vad"></tfoot>
+                </table>
+              </div>
+
+              <div class="chart-card">
+                <p class="section-kicker">Gráfica de barras</p>
+                <h3 class="chart-title">Frecuencia relativa de los días completos de producción</h3>
+                <div id="grafica-vad" class="chart-box chart-box-tall" role="img" aria-label="Gráfica de barras de la frecuencia relativa de X, de 0 a 31 días"></div>
+              </div>
+
+              <aside class="frame-note"><p id="nota-tdf-vad"></p></aside>
+              <p class="source">fᵢ: frecuencia absoluta; hᵢ = fᵢ / n; Fᵢ y Hᵢ: frecuencias acumuladas. La barra más oscura marca la moda.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section cream" id="modelo-discreto" aria-labelledby="modelo-discreto-titulo">
+          <div class="container">
+            <p class="section-kicker">4.2.3</p>
+            <h2 id="modelo-discreto-titulo">Modelo de probabilidad discreto</h2>
+            <div class="pending-card"><strong>Sección pendiente.</strong> Se propondrá un modelo de probabilidad para X y se estimarán sus parámetros a partir de la TDF de 4.2.2.</div>
+          </div>
+        </section>
+
+        <section class="section" id="test-ajuste-discreto" aria-labelledby="test-ajuste-discreto-titulo">
+          <div class="container">
+            <p class="section-kicker">4.2.4</p>
+            <h2 id="test-ajuste-discreto-titulo">Test de ajuste</h2>
+            <div class="pending-card"><strong>Sección pendiente.</strong> Se evaluará el ajuste del modelo discreto con una prueba de bondad de ajuste.</div>
+          </div>
+        </section>
+
+        <section class="section cream" id="vac" aria-labelledby="vac-titulo">
+          <div class="container">
+            <p class="section-kicker">4.2.5</p>
+            <h2 id="vac-titulo">Identificar VAC</h2>
+            <div class="pending-card"><strong>Sección pendiente.</strong> Se definirá la variable aleatoria continua del estudio.</div>
+          </div>
+        </section>
+
+        <section class="section" id="histograma-relativo" aria-labelledby="histograma-relativo-titulo">
+          <div class="container">
+            <p class="section-kicker">4.2.6</p>
+            <h2 id="histograma-relativo-titulo">Tabla e histograma (frecuencia relativa)</h2>
+            <div class="pending-card"><strong>Sección pendiente.</strong> Se construirá la tabla de frecuencias relativas de la VAC y su histograma.</div>
+          </div>
+        </section>
+
+        <section class="section cream" id="histograma-densidad" aria-labelledby="histograma-densidad-titulo">
+          <div class="container">
+            <p class="section-kicker">4.2.7</p>
+            <h2 id="histograma-densidad-titulo">Tabla e histograma (densidad de probabilidad)</h2>
+            <div class="pending-card"><strong>Sección pendiente.</strong> Se expresarán las frecuencias de la VAC como densidad de probabilidad.</div>
+          </div>
+        </section>
+
+        <section class="section" id="conjetura-continua" aria-labelledby="conjetura-continua-titulo">
+          <div class="container">
+            <p class="section-kicker">4.2.8</p>
+            <h2 id="conjetura-continua-titulo">Conjetura del modelo de probabilidad continuo</h2>
+            <div class="pending-card"><strong>Sección pendiente.</strong> Se propondrá un modelo continuo coherente con la forma de la distribución.</div>
+          </div>
+        </section>
+
+        <section class="section cream" id="parametros-continuos" aria-labelledby="parametros-continuos-titulo">
+          <div class="container">
+            <p class="section-kicker">4.2.9</p>
+            <h2 id="parametros-continuos-titulo">Cálculo de parámetros y ajuste gráfico</h2>
+            <div class="pending-card"><strong>Sección pendiente.</strong> Se estimarán los parámetros del modelo continuo y se superpondrá su curva al histograma.</div>
+          </div>
+        </section>
+
+        <section class="section" id="test-ajuste-continuo" aria-labelledby="test-ajuste-continuo-titulo">
+          <div class="container">
+            <p class="section-kicker">4.2.10</p>
+            <h2 id="test-ajuste-continuo-titulo">Test de ajuste (Pearson y chi-cuadrado)</h2>
+            <div class="pending-card"><strong>Sección pendiente.</strong> Se aplicará la prueba chi-cuadrado de Pearson al modelo continuo.</div>
+          </div>
+        </section>
+
+        <section class="section cream" id="restricciones" aria-labelledby="restricciones-titulo">
+          <div class="container">
+            <p class="section-kicker">4.2.11</p>
+            <h2 id="restricciones-titulo">Restricciones</h2>
+            <div class="pending-card"><strong>Sección pendiente.</strong> Se indicarán los supuestos y límites de los modelos propuestos.</div>
+          </div>
+        </section>
+
+        <section class="section" id="probabilidades" aria-labelledby="probabilidades-titulo">
+          <div class="container">
+            <p class="section-kicker">4.2.12</p>
+            <h2 id="probabilidades-titulo">Cálculos de probabilidad</h2>
+            <div class="pending-card"><strong>Sección pendiente.</strong> Se calcularán probabilidades de interés con los modelos ajustados.</div>
+          </div>
+        </section>
+
+        <section class="section cream" id="estimacion" aria-labelledby="estimacion-titulo">
+          <div class="container">
+            <p class="section-kicker">4.2.13</p>
+            <h2 id="estimacion-titulo">Estimación puntual y por intervalos de confianza</h2>
+            <div class="pending-card"><strong>Sección pendiente.</strong> Se estimarán parámetros con sus intervalos de confianza.</div>
+          </div>
+        </section>
+
+        <section class="section" id="tamano-muestral" aria-labelledby="tamano-muestral-titulo">
+          <div class="container">
+            <p class="section-kicker">4.2.14</p>
+            <h2 id="tamano-muestral-titulo">Cálculo del tamaño muestral</h2>
+            <div class="pending-card"><strong>Sección pendiente.</strong> Se calculará el tamaño de muestra necesario para un error y nivel de confianza dados.</div>
+          </div>
+        </section>
+          </div>
+        </div>
+      </main>
+
+      <footer class="site-footer">
+        <div class="container footer-row">
+          <div>
+            <p>© 2026 Integrantes: <span class="footer-members">Génesis Once, Esther Places, Evelyn Rodríguez, Andrea Sarmiento, Melany Zapata</span></p>
+            <p class="footer-location">Proyecto académico · Brasil, enero de 2023</p>
+          </div>
+          <div>
+            <p class="footer-label">Fuente</p>
+            <p>ANP (Brasil) · Agregación por pozo y Estado</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+</body>
+</html>
