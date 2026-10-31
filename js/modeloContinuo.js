@@ -58,9 +58,9 @@
 
   function layout(ejeX, ejeY, extra = {}) {
     return {
-      font: { family: 'system-ui, sans-serif', color: '#334155' },
-      paper_bgcolor: '#ffffff',
-      plot_bgcolor: '#f8fafc',
+      font: { family: 'Archivo, sans-serif', color: '#17251f' },
+      paper_bgcolor: 'transparent',
+      plot_bgcolor: 'transparent',
       margin: { t: 30, r: 20, b: 80, l: 70 },
       xaxis: ejeX,
       yaxis: { title: { text: ejeY }, rangemode: 'tozero', automargin: true },
@@ -112,7 +112,7 @@
         y: m.clases.map(c => c.densidad_t),
         width: m.clases.map(c => c.t_ls - c.t_li),
         customdata: m.clases.map(c => [volumen(c.li), volumen(c.ls)]),
-        marker: { color: 'rgba(15, 118, 110, 0.35)', line: { color: '#0f766e', width: 1 } },
+        marker: { color: 'rgba(182, 101, 47, 0.35)', line: { color: '#b6652f', width: 1 } },
         hovertemplate: '[%{customdata[0]}; %{customdata[1]}) bbl/día<br>Densidad: %{y:.4f}<extra></extra>'
       },
       {
@@ -121,7 +121,7 @@
         name: 'Lognormal ajustada',
         x: xs,
         y: curva,
-        line: { color: '#b45309', width: 2.5 },
+        line: { color: '#8f4a20', width: 2.5 },
         hoverinfo: 'skip'
       }
     ], layout(ejeLog(m), 'Densidad de log₁₀(y)', { bargap: 0 }), { responsive: true, displaylogo: false });
@@ -181,7 +181,7 @@
         name: 'Ajuste perfecto (y = x)',
         x: [0, maximo],
         y: [0, maximo],
-        line: { color: '#94a3b8', dash: 'dash', width: 1.5 },
+        line: { color: '#7d8b81', dash: 'dash', width: 1.5 },
         hoverinfo: 'skip'
       },
       {
@@ -191,7 +191,7 @@
         x: esp,
         y: obs,
         customdata: m.clases.map(c => [c.clase, volumen(c.li), volumen(c.ls)]),
-        marker: { color: '#0f766e', size: 9, line: { color: '#ffffff', width: 1 } },
+        marker: { color: '#b6652f', size: 9, line: { color: '#ffffff', width: 1 } },
         hovertemplate: 'Clase %{customdata[0]}: [%{customdata[1]}; %{customdata[2]})<br>Esperada: %{x:.4f}<br>Observada: %{y:.4f}<extra></extra>'
       }
     ], layout(

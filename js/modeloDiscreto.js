@@ -59,6 +59,10 @@
   }
 
   function graficarModelo(modelo) {
+    const COLOR_INK = '#17251f';
+    const COLOR_OIL = '#b6652f';
+    const COLOR_OIL_DEEP = '#8f4a20';
+    const COLOR_WELL = '#6f9a83';
     const x = modelo.tabla.map(f => f.x);
     return Plotly.newPlot('grafica-modelo-discreto', [
       {
@@ -66,7 +70,7 @@
         name: 'Observada (hᵢ)',
         x,
         y: modelo.tabla.map(f => f.p_observada),
-        marker: { color: 'rgba(15, 118, 110, 0.35)', line: { color: '#0f766e', width: 1 } },
+        marker: { color: 'rgba(182, 101, 47, 0.35)', line: { color: COLOR_OIL, width: 1 } },
         hovertemplate: 'x = %{x}<br>Observada: %{y:.4f}<extra></extra>'
       },
       {
@@ -75,7 +79,7 @@
         name: `Binomial B(31; ${fmt.cuatro.format(modelo.binomial.p)})`,
         x,
         y: modelo.tabla.map(f => f.p_binomial),
-        line: { color: '#b45309', width: 2 },
+        line: { color: COLOR_OIL_DEEP, width: 2 },
         marker: { size: 5 },
         hovertemplate: 'x = %{x}<br>Binomial: %{y:.4f}<extra></extra>'
       },
@@ -85,14 +89,14 @@
         name: 'Beta-binomial',
         x,
         y: modelo.tabla.map(f => f.p_betabinomial),
-        line: { color: '#1d4f91', width: 2, dash: 'dot' },
+        line: { color: COLOR_WELL, width: 2, dash: 'dot' },
         marker: { size: 5 },
         hovertemplate: 'x = %{x}<br>Beta-binomial: %{y:.4f}<extra></extra>'
       }
     ], {
-      font: { family: 'system-ui, sans-serif', color: '#334155' },
-      paper_bgcolor: '#ffffff',
-      plot_bgcolor: '#f8fafc',
+      font: { family: 'Archivo, sans-serif', color: COLOR_INK },
+      paper_bgcolor: 'transparent',
+      plot_bgcolor: 'transparent',
       margin: { t: 30, r: 20, b: 90, l: 70 },
       xaxis: { title: { text: 'Días completos de producción (x)' }, dtick: 1, range: [-0.6, 31.6], automargin: true },
       yaxis: { title: { text: 'P(X = x)' }, rangemode: 'tozero', automargin: true },

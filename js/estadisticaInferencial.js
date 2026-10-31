@@ -59,6 +59,9 @@ function renderTdf(vad) {
 }
 
 function graficarBarrasVad(vad) {
+  const COLOR_INK = '#17251f';
+  const COLOR_OIL = '#b6652f';
+  const COLOR_WELL = '#6f9a83';
   const x = vad.tdf.map(fila => fila.x);
   return Plotly.newPlot('grafica-vad', [{
     type: 'bar',
@@ -66,15 +69,15 @@ function graficarBarrasVad(vad) {
     y: vad.tdf.map(fila => fila.hi),
     customdata: vad.tdf.map(fila => fila.fi),
     marker: {
-      color: x.map(valor => (valor === vad.moda ? '#0b5b4f' : '#0f766e')),
-      line: { color: '#ffffff', width: 1 }
+      color: x.map(valor => (valor === vad.moda ? COLOR_OIL : COLOR_WELL)),
+      line: { color: '#f8f9f3', width: 1 }
     },
     hovertemplate: 'x = %{x} días<br>fᵢ = %{customdata:,.0f} pozos<br>hᵢ = %{y:.2%}<extra></extra>'
   }], {
     title: { text: 'Distribución de frecuencias relativas de X', font: { size: 15 } },
-    font: { family: 'system-ui, sans-serif', color: '#334155' },
-    paper_bgcolor: '#ffffff',
-    plot_bgcolor: '#f8fafc',
+    font: { family: 'Archivo, sans-serif', color: COLOR_INK },
+    paper_bgcolor: 'transparent',
+    plot_bgcolor: 'transparent',
     bargap: 0.25,
     margin: { t: 50, r: 20, b: 60, l: 70 },
     xaxis: { title: { text: 'Días completos de producción (x)' }, dtick: 1, tickangle: 0, automargin: true },

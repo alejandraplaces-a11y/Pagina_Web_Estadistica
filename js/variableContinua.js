@@ -52,9 +52,9 @@
 
   function layoutBase(ejeY, vac) {
     return {
-      font: { family: 'system-ui, sans-serif', color: '#334155' },
-      paper_bgcolor: '#ffffff',
-      plot_bgcolor: '#f8fafc',
+      font: { family: 'Archivo, sans-serif', color: '#17251f' },
+      paper_bgcolor: 'transparent',
+      plot_bgcolor: 'transparent',
       margin: { t: 30, r: 20, b: 70, l: 70 },
       xaxis: ejeLogaritmico(vac),
       yaxis: { title: { text: ejeY }, rangemode: 'tozero', automargin: true },
@@ -141,7 +141,7 @@
       y: vac.clases.map(c => c.hi),
       width: anchos,
       customdata: intervalos.map((iv, i) => [...iv, vac.clases[i].fi]),
-      marker: { color: '#0f766e', line: { color: '#ffffff', width: 1 } },
+      marker: { color: '#b6652f', line: { color: '#ffffff', width: 1 } },
       hovertemplate: '[%{customdata[0]}; %{customdata[1]}) bbl/día<br>fᵢ = %{customdata[2]:,.0f}<br>hᵢ = %{y:.2%}<extra></extra>'
     }], {
       ...layoutBase('Frecuencia relativa (hᵢ)', vac),
@@ -154,7 +154,7 @@
       y: vac.clases.map(c => c.densidad_t),
       width: anchos,
       customdata: intervalos,
-      marker: { color: '#1d4f91', line: { color: '#ffffff', width: 1 } },
+      marker: { color: '#6f9a83', line: { color: '#ffffff', width: 1 } },
       hovertemplate: '[%{customdata[0]}; %{customdata[1]}) bbl/día<br>g = %{y:.4f}<extra></extra>'
     }], layoutBase('Densidad g(t) = hᵢ / Δt', vac),
     { responsive: true, displaylogo: false });
