@@ -100,6 +100,11 @@ def main():
     salida_vac.write_text(json.dumps(vac, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"Generado {salida_vac}: n={vac['n']}, k={vac['k']}.")
 
+    continuo = construir_modelo_continuo(args.csv, vac)
+    salida_continuo = BASE / "data" / "modelo_continuo.json"
+    salida_continuo.write_text(json.dumps(continuo, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(f"Generado {salida_continuo}: mu={continuo['mu']:.4f}, sigma={continuo['sigma']:.4f}.")
+
 
 # Columnas de la tabla 4.1.3. "Unnamed: 13" es la subcolumna «Gás Total» del encabezado partido del CSV.
 VARIABLES_TABLA = [
@@ -465,6 +470,137 @@ def construir_vac(csv_path):
         "k": int(k),
         "amplitud_log10": float(amplitud),
         "clases": clases,
+    }
+
+
+def construir_modelo_continuo(csv_path, vac):
+    # Lognormal para Y = óleo por pozo productor; ln(Y) ~ N(mu, sigma). Requiere scipy.
+    import numpy as np
+    from scipy import stats
+
+    datos = pd.read_csv(csv_path, sep=";", decimal=",", thousands=".", encoding="utf-8-sig",
+                        on_bad_lines="skip", low_memory=False)
+    datos = datos[datos["Estado"].notna() & datos["Estado"].astype(str).str.strip().ne("")].copy()
+    datos["Nome Poço"] = datos["Nome Poço"].astype(str).str.strip()
+    oleo = datos.groupby("Nome Poço")["Óleo (bbl/dia)"].sum()
+    y = oleo[oleo > 0].to_numpy()
+    n = len(y)
+    ln_y = np.log(y)
+    mu = float(ln_y.mean())
+    sigma = float(ln_y.std(ddof=0))
+    s_ln = float(ln_y.std(ddof=1))
+
+    # Probabilidad de cada clase de 4.2.6; las colas abiertas se suman a las clases extremas.
+    bordes = np.array([c["t_li"] for c in vac["clases"]] + [vac["clases"][-1]["t_ls"]]) * np.log(10)
+    observadas = np.array([c["fi"] for c in vac["clases"]], dtype=float)
+
+    def probabilidades(cdf):
+        acumulada = cdf(np.exp(bordes))
+        prob = np.diff(acumulada)
+        prob[0] += acumulada[0]
+        prob[-1] += 1 - acumulada[-1]
+        return prob
+
+    p_logn = probabilidades(lambda v: stats.norm.cdf(np.log(v), mu, sigma))
+    candidatos = []
+    for nombre, distribucion in (("Gamma", stats.gamma), ("Weibull", stats.weibull_min)):
+        parametros = distribucion.fit(y, floc=0)
+        prob = probabilidades(lambda v, d=distribucion, a=parametros: d.cdf(v, *a))
+        candidatos.append({
+            "modelo": nombre,
+            "parametros": [float(v) for v in parametros if v != 0],
+            "pearson_r": float(np.corrcoef(observadas / n, prob)[0, 1]),
+            "chi_cuadrado": float(_chi_cuadrado(observadas, n * prob, 2)["estadistico"]),
+        })
+    prueba = _chi_cuadrado(observadas, n * p_logn, 2)
+    r = float(np.corrcoef(observadas / n, p_logn)[0, 1])
+    candidatos.insert(0, {"modelo": "Lognormal", "parametros": [mu, sigma], "pearson_r": r,
+                          "chi_cuadrado": prueba["estadistico"]})
+
+    clases = [{
+        **{k: c[k] for k in ("clase", "li", "ls", "t_li", "t_ls", "fi", "hi", "densidad_t")},
+        "p_modelo": float(pm),
+        "esperada": float(n * pm),
+    } for c, pm in zip(vac["clases"], p_logn)]
+
+    def prob_modelo(a=None, b=None):
+        izq = stats.norm.cdf(np.log(a), mu, sigma) if a else 0.0
+        der = stats.norm.cdf(np.log(b), mu, sigma) if b else 1.0
+        return float(der - izq)
+
+    def prob_empirica(a=None, b=None):
+        mascara = np.ones(n, dtype=bool)
+        if a: mascara &= y >= a
+        if b: mascara &= y < b
+        return float(mascara.mean())
+
+    eventos = [
+        ("P(Y < 1)", None, 1.0), ("P(1 ≤ Y < 10)", 1.0, 10.0), ("P(Y ≥ 10)", 10.0, None),
+        ("P(Y ≥ 100)", 100.0, None), ("P(Y ≥ ȳ)", float(y.mean()), None),
+    ]
+    probabilidades_evento = [{"evento": e, "a": a, "b": b, "modelo": prob_modelo(a, b),
+                              "empirica": prob_empirica(a, b)} for e, a, b in eventos]
+
+    confianza = 0.95
+    z = float(stats.norm.ppf(0.975))
+    t = float(stats.t.ppf(0.975, n - 1))
+    media_y, s_y = float(y.mean()), float(y.std(ddof=1))
+    e_mu = t * s_ln / np.sqrt(n)
+    chi_inf, chi_sup = stats.chi2.ppf(0.975, n - 1), stats.chi2.ppf(0.025, n - 1)
+    proporcion = float((y >= 10).mean())
+    e_p = z * np.sqrt(proporcion * (1 - proporcion) / n)
+    e_media = t * s_y / np.sqrt(n)
+    intervalos = [
+        {"parametro": "μ (media de ln Y)", "simbolo": "μ", "estimacion": mu,
+         "inferior": mu - e_mu, "superior": mu + e_mu, "metodo": "x̄ ± t·s/√n"},
+        {"parametro": "σ (desviación de ln Y)", "simbolo": "σ", "estimacion": s_ln,
+         "inferior": float(np.sqrt((n - 1) * s_ln ** 2 / chi_inf)),
+         "superior": float(np.sqrt((n - 1) * s_ln ** 2 / chi_sup)), "metodo": "√((n−1)s² / χ²)"},
+        {"parametro": "Mediana de Y (bbl/día)", "simbolo": "e^μ", "estimacion": float(np.exp(mu)),
+         "inferior": float(np.exp(mu - e_mu)), "superior": float(np.exp(mu + e_mu)), "metodo": "exp(IC de μ)"},
+        {"parametro": "Media de Y (bbl/día)", "simbolo": "E[Y]", "estimacion": media_y,
+         "inferior": media_y - e_media, "superior": media_y + e_media, "metodo": "ȳ ± t·s/√n"},
+        {"parametro": "Proporción de pozos con Y ≥ 10", "simbolo": "p", "estimacion": proporcion,
+         "inferior": proporcion - e_p, "superior": proporcion + e_p, "metodo": "p̂ ± z·√(p̂(1−p̂)/n)"},
+    ]
+
+    # Tamaño de muestra para un muestreo futuro sobre esta población (corrección por población finita).
+    def tamano(n0):
+        return int(np.ceil(n0 / (1 + (n0 - 1) / n)))
+    tamanos = []
+    for error in (1.0, 2.0, 5.0):
+        n0 = (z * s_y / error) ** 2
+        tamanos.append({"objetivo": "Media de Y", "error": error, "unidad": "bbl/día",
+                        "n0": float(n0), "n": tamano(n0)})
+    for error in (0.05, 0.03, 0.02):
+        n0 = z ** 2 * proporcion * (1 - proporcion) / error ** 2
+        tamanos.append({"objetivo": "Proporción Y ≥ 10", "error": error, "unidad": "proporción",
+                        "n0": float(n0), "n": tamano(n0)})
+
+    return {
+        "fuente": vac["fuente"],
+        "variable": vac["variable"],
+        "n": int(n),
+        "mu": mu,
+        "sigma": sigma,
+        "s_ln": s_ln,
+        "media_teorica": float(np.exp(mu + sigma ** 2 / 2)),
+        "media_observada": media_y,
+        "desviacion_observada": s_y,
+        "mediana_teorica": float(np.exp(mu)),
+        "mediana_observada": float(np.median(y)),
+        "pearson_r": r,
+        "pearson_r2": r ** 2,
+        "candidatos": candidatos,
+        "prueba": prueba,
+        "clases": clases,
+        "probabilidades": probabilidades_evento,
+        "confianza": confianza,
+        "z": z,
+        "t": t,
+        "intervalos": intervalos,
+        "tamanos": tamanos,
+        "poblacion": int(n),
     }
 
 

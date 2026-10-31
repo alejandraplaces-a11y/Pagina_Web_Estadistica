@@ -20,6 +20,7 @@
   <script defer src="js/estadisticaInferencial.js"></script>
   <script defer src="js/modeloDiscreto.js"></script>
   <script defer src="js/variableContinua.js"></script>
+  <script defer src="js/modeloContinuo.js"></script>
   <script defer src="js/indiceLateral.js"></script>
 </head>
 <body class="has-sidebar">
@@ -123,18 +124,18 @@
                     <li><a href="#vac"><span class="indice-numero">4.2.5</span><span>Identificar VAC<span class="indice-estado">Listo</span></span></a></li>
                     <li><a href="#histograma-relativo"><span class="indice-numero">4.2.6</span><span>Tabla e histograma (frecuencia relativa)<span class="indice-estado">Listo</span></span></a></li>
                     <li><a href="#histograma-densidad"><span class="indice-numero">4.2.7</span><span>Tabla e histograma (densidad de probabilidad)<span class="indice-estado">Listo</span></span></a></li>
-                    <li><a href="#conjetura-continua"><span class="indice-numero">4.2.8</span><span>Conjetura del modelo continuo</span></a></li>
-                    <li><a href="#parametros-continuos"><span class="indice-numero">4.2.9</span><span>Cálculo de parámetros y ajuste gráfico</span></a></li>
-                    <li><a href="#test-ajuste-continuo"><span class="indice-numero">4.2.10</span><span>Test de ajuste (Pearson y chi-cuadrado)</span></a></li>
-                    <li><a href="#restricciones"><span class="indice-numero">4.2.11</span><span>Restricciones</span></a></li>
+                    <li><a href="#conjetura-continua"><span class="indice-numero">4.2.8</span><span>Conjetura del modelo continuo<span class="indice-estado">Listo</span></span></a></li>
+                    <li><a href="#parametros-continuos"><span class="indice-numero">4.2.9</span><span>Cálculo de parámetros y ajuste gráfico<span class="indice-estado">Listo</span></span></a></li>
+                    <li><a href="#test-ajuste-continuo"><span class="indice-numero">4.2.10</span><span>Test de ajuste (Pearson y chi-cuadrado)<span class="indice-estado">Listo</span></span></a></li>
+                    <li><a href="#restricciones"><span class="indice-numero">4.2.11</span><span>Restricciones<span class="indice-estado">Listo</span></span></a></li>
                   </ul>
                 </div>
                 <div class="indice-grupo">
                   <p class="indice-grupo-titulo" id="indice-grupo-3">Inferencia</p>
                   <ul class="indice-lista" aria-labelledby="indice-grupo-3">
-                    <li><a href="#probabilidades"><span class="indice-numero">4.2.12</span><span>Cálculos de probabilidad</span></a></li>
-                    <li><a href="#estimacion"><span class="indice-numero">4.2.13</span><span>Estimación puntual y por intervalos de confianza</span></a></li>
-                    <li><a href="#tamano-muestral"><span class="indice-numero">4.2.14</span><span>Cálculo del tamaño muestral</span></a></li>
+                    <li><a href="#probabilidades"><span class="indice-numero">4.2.12</span><span>Cálculos de probabilidad<span class="indice-estado">Listo</span></span></a></li>
+                    <li><a href="#estimacion"><span class="indice-numero">4.2.13</span><span>Estimación puntual y por intervalos de confianza<span class="indice-estado">Listo</span></span></a></li>
+                    <li><a href="#tamano-muestral"><span class="indice-numero">4.2.14</span><span>Cálculo del tamaño muestral<span class="indice-estado">Listo</span></span></a></li>
                   </ul>
                 </div>
               </nav>
@@ -497,7 +498,41 @@
           <div class="container">
             <p class="section-kicker">4.2.8</p>
             <h2 id="conjetura-continua-titulo">Conjetura del modelo de probabilidad continuo</h2>
-            <div class="pending-card"><strong>Sección pendiente.</strong> Se propondrá un modelo continuo coherente con la forma de la distribución.</div>
+            <p id="estado-mc-conjetura" class="status" role="status">Evaluando modelos…</p>
+
+            <div id="contenido-mc-conjetura" hidden>
+              <div class="method-grid">
+                <article class="method-card">
+                  <p class="method-card-tag">Evidencia</p>
+                  <h4>Forma de la distribución</h4>
+                  <p>Y solo toma valores positivos, tiene una cola larga hacia la derecha y su media (<span id="mc-media-obs"></span> bbl/día) casi triplica su mediana (<span id="mc-mediana-obs"></span> bbl/día). En escala logarítmica, el histograma de 4.2.7 tiene forma de campana simétrica.</p>
+                </article>
+                <article class="method-card teal">
+                  <p class="method-card-tag">Conjetura</p>
+                  <h4>Modelo lognormal</h4>
+                  <p>Si ln Y sigue una distribución normal, Y sigue una lognormal. Es el modelo habitual para volúmenes de producción que resultan de muchos factores multiplicativos.</p>
+                  <p class="method-symbolic" aria-label="Y sigue una lognormal de parámetros mu y sigma">Y ~ LN(μ, σ) ⇔ ln Y ~ N(μ, σ)</p>
+                  <p class="stat-notation">f(y) = 1 / (yσ√(2π)) · exp(−(ln y − μ)² / (2σ²)), y &gt; 0.</p>
+                </article>
+              </div>
+
+              <h3 class="tdf-subtitle">Comparación con otros modelos de cola derecha</h3>
+              <div class="table-scroll">
+                <table class="data-table">
+                  <caption>Modelos candidatos ajustados por máxima verosimilitud sobre las 14 clases de 4.2.6</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Modelo</th>
+                      <th scope="col" class="numero">Parámetros</th>
+                      <th scope="col" class="numero">r de Pearson</th>
+                      <th scope="col" class="numero">χ²</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cuerpo-candidatos"></tbody>
+                </table>
+              </div>
+              <p class="source">Lognormal: μ ; σ. Gamma: forma ; escala. Weibull: forma ; escala. Mayor r y menor χ² indican mejor ajuste.</p>
+            </div>
           </div>
         </section>
 
@@ -505,7 +540,36 @@
           <div class="container">
             <p class="section-kicker">4.2.9</p>
             <h2 id="parametros-continuos-titulo">Cálculo de parámetros y ajuste gráfico</h2>
-            <div class="pending-card"><strong>Sección pendiente.</strong> Se estimarán los parámetros del modelo continuo y se superpondrá su curva al histograma.</div>
+            <p id="estado-mc-parametros" class="status" role="status">Calculando parámetros…</p>
+
+            <div id="contenido-mc-parametros" hidden>
+              <dl class="stat-metrics">
+                <div><dt>μ̂ = media de ln y</dt><dd id="mc-mu"></dd></div>
+                <div><dt>σ̂ = desviación de ln y</dt><dd id="mc-sigma"></dd></div>
+                <div><dt>Mediana teórica · e^μ̂</dt><dd><span id="mc-mediana-teo"></span> <span class="metric-unit">bbl/día</span></dd></div>
+                <div><dt>Media teórica · e^(μ̂+σ̂²/2)</dt><dd><span id="mc-media-teo"></span> <span class="metric-unit">bbl/día</span></dd></div>
+              </dl>
+
+              <div class="method-grid">
+                <article class="method-card">
+                  <p class="method-card-tag">Estimadores</p>
+                  <h4>Máxima verosimilitud</h4>
+                  <p class="method-symbolic" aria-label="mu gorro igual a la media de los logaritmos">μ̂ = (1/n) Σ ln yᵢ</p>
+                  <p class="method-symbolic" aria-label="sigma gorro igual a la raíz de la media de los cuadrados de las desviaciones">σ̂ = √[(1/n) Σ (ln yᵢ − μ̂)²]</p>
+                </article>
+                <article class="method-card teal">
+                  <p class="method-card-tag">Modelo ajustado</p>
+                  <h4>Y ~ LN(<span id="mc-mu-2"></span>; <span id="mc-sigma-2"></span>)</h4>
+                  <p>La media teórica supera a la mediana por la asimetría del modelo. La curva se superpone al histograma de densidad de 4.2.7, en la escala log₁₀ con μ/ln 10 y σ/ln 10.</p>
+                </article>
+              </div>
+
+              <div class="chart-card">
+                <p class="section-kicker">Ajuste gráfico</p>
+                <h3 class="chart-title">Histograma de densidad y curva lognormal</h3>
+                <div id="grafica-ajuste-continuo" class="chart-box chart-box-tall" role="img" aria-label="Histograma de densidad del logaritmo del óleo por pozo con la curva lognormal ajustada"></div>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -513,7 +577,63 @@
           <div class="container">
             <p class="section-kicker">4.2.10</p>
             <h2 id="test-ajuste-continuo-titulo">Test de ajuste (Pearson y chi-cuadrado)</h2>
-            <div class="pending-card"><strong>Sección pendiente.</strong> Se aplicará la prueba chi-cuadrado de Pearson al modelo continuo.</div>
+            <p id="estado-mc-test-continuo" class="status" role="status">Calculando las pruebas…</p>
+
+            <div id="contenido-mc-test-continuo" hidden>
+              <div class="method-grid">
+                <article class="method-card">
+                  <p class="method-card-tag">Pearson</p>
+                  <h4>Correlación entre frecuencias observadas y esperadas</h4>
+                  <p class="method-symbolic" aria-label="r igual a covarianza entre observadas y esperadas sobre el producto de sus desviaciones">r = cov(hᵢ, pᵢ) / (s<sub>h</sub> · s<sub>p</sub>)</p>
+                  <p class="stat-notation">Un valor cercano a 1 indica que el modelo reproduce la forma de la distribución. R² = r² es la proporción de variación explicada.</p>
+                </article>
+                <article class="method-card teal">
+                  <p class="method-card-tag">Chi-cuadrado</p>
+                  <h4>Prueba de bondad de ajuste</h4>
+                  <p><strong>H₀:</strong> Y sigue una lognormal. <strong>H₁:</strong> no la sigue. α = 0,05.</p>
+                  <p class="method-symbolic" aria-label="Chi cuadrado igual a la suma de observadas menos esperadas al cuadrado entre esperadas">χ² = Σ (Oᵢ − Eᵢ)² / Eᵢ</p>
+                  <p class="stat-notation">gl = k − 1 − 2, porque se estiman μ y σ.</p>
+                </article>
+              </div>
+
+              <dl class="stat-metrics test-metrics">
+                <div><dt>r de Pearson</dt><dd id="pearson-r"></dd></div>
+                <div><dt>R² = r²</dt><dd id="pearson-r2"></dd></div>
+                <div><dt>χ² · gl</dt><dd><span id="prueba-continua-chi"></span> <span class="metric-unit">· gl <span id="prueba-continua-gl"></span></span></dd></div>
+                <div><dt>Valor crítico · valor p</dt><dd><span id="prueba-continua-critico"></span> <span class="metric-unit">· p <span id="prueba-continua-p"></span></span></dd></div>
+              </dl>
+              <div class="decision-row">
+                <p class="test-decision" id="pearson-decision"></p>
+                <p class="test-decision" id="prueba-continua-decision"></p>
+              </div>
+
+              <div class="chart-card">
+                <p class="section-kicker">Pearson</p>
+                <h3 class="chart-title">Frecuencia observada frente a probabilidad esperada</h3>
+                <div id="grafica-pearson" class="chart-box chart-box-tall" role="img" aria-label="Diagrama de dispersión de las frecuencias observadas frente a las probabilidades esperadas por el modelo lognormal"></div>
+              </div>
+
+              <h3 class="tdf-subtitle">Tabla de la prueba chi-cuadrado</h3>
+              <div class="table-scroll">
+                <table class="data-table">
+                  <caption>Clases agrupadas para que Eᵢ ≥ 5 · <span id="prueba-continua-clases"></span> clases</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Intervalo (bbl/día)</th>
+                      <th scope="col" class="numero">Oᵢ</th>
+                      <th scope="col" class="numero">Eᵢ</th>
+                      <th scope="col" class="numero">(Oᵢ − Eᵢ)² / Eᵢ</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cuerpo-prueba-continua"></tbody>
+                  <tfoot id="pie-prueba-continua"></tfoot>
+                </table>
+              </div>
+
+              <aside class="frame-note">
+                <strong>Interpretación.</strong> Pearson indica que el modelo lognormal reproduce casi toda la forma de la distribución. La prueba chi-cuadrado, en cambio, rechaza H₀: con n = 4.888 pozos detecta desviaciones pequeñas, sobre todo en la cola izquierda (pozos con producción muy baja). El lognormal es el mejor de los modelos evaluados y sirve como aproximación, pero no como ajuste exacto.
+              </aside>
+            </div>
           </div>
         </section>
 
@@ -521,7 +641,42 @@
           <div class="container">
             <p class="section-kicker">4.2.11</p>
             <h2 id="restricciones-titulo">Restricciones</h2>
-            <div class="pending-card"><strong>Sección pendiente.</strong> Se indicarán los supuestos y límites de los modelos propuestos.</div>
+            <p id="estado-mc-restricciones" class="status" role="status">Cargando restricciones…</p>
+
+            <div id="contenido-mc-restricciones" hidden>
+              <div class="restriction-grid">
+                <article class="method-card">
+                  <p class="method-card-tag">Dominio</p>
+                  <h4>Solo pozos productores</h4>
+                  <p>El modelo describe Y &gt; 0. Los pozos con óleo igual a cero quedan fuera y deben tratarse aparte: la proporción de pozos sin producción no la estima la lognormal.</p>
+                </article>
+                <article class="method-card">
+                  <p class="method-card-tag">Ajuste</p>
+                  <h4>Aproximación, no ajuste exacto</h4>
+                  <p>La prueba chi-cuadrado rechaza H₀ (χ² = <span id="rs-chi"></span> frente a <span id="rs-critico"></span>). Las probabilidades del modelo deben leerse como aproximaciones, con más cautela en la cola izquierda.</p>
+                </article>
+                <article class="method-card">
+                  <p class="method-card-tag">Independencia</p>
+                  <h4>Pozos del mismo campo</h4>
+                  <p>Los estimadores suponen pozos independientes. Pozos del mismo campo u operador pueden estar correlacionados, lo que haría los intervalos de confianza algo más estrechos de lo real.</p>
+                </article>
+                <article class="method-card">
+                  <p class="method-card-tag">Período</p>
+                  <h4>Un solo mes</h4>
+                  <p>Los parámetros corresponden a enero de 2023. No deben extrapolarse a otros meses ni usarse para pronosticar sin datos adicionales.</p>
+                </article>
+                <article class="method-card">
+                  <p class="method-card-tag">Colas</p>
+                  <h4>Valores extremos</h4>
+                  <p>Por encima de unos 300 bbl/día hay muy pocos pozos (n = <span id="rs-n"></span> en total); las probabilidades de producción muy alta tienen poca base empírica.</p>
+                </article>
+                <article class="method-card">
+                  <p class="method-card-tag">Inferencia</p>
+                  <h4>Archivo censal</h4>
+                  <p>El archivo incluye todos los pozos registrados, no una muestra aleatoria. Los intervalos de 4.2.13 se interpretan como si el mes fuera una muestra de un proceso de producción más amplio.</p>
+                </article>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -529,7 +684,43 @@
           <div class="container">
             <p class="section-kicker">4.2.12</p>
             <h2 id="probabilidades-titulo">Cálculos de probabilidad</h2>
-            <div class="pending-card"><strong>Sección pendiente.</strong> Se calcularán probabilidades de interés con los modelos ajustados.</div>
+            <p id="estado-mc-probabilidades" class="status" role="status">Calculando probabilidades…</p>
+
+            <div id="contenido-mc-probabilidades" hidden>
+              <div class="method-grid">
+                <article class="method-card">
+                  <p class="method-card-tag">Método</p>
+                  <h4>Probabilidad con el modelo lognormal</h4>
+                  <p class="method-symbolic" aria-label="Probabilidad de que Y esté entre a y b igual a Phi de z b menos Phi de z a">P(a ≤ Y &lt; b) = Φ((ln b − μ)/σ) − Φ((ln a − μ)/σ)</p>
+                  <p class="stat-notation">Φ es la función de distribución normal estándar. ȳ = <span id="prob-media"></span> bbl/día.</p>
+                </article>
+                <article class="method-card teal calculator-card">
+                  <p class="method-card-tag">Calculadora</p>
+                  <h4>Calcula P(a ≤ Y &lt; b)</h4>
+                  <div class="calculator-fields">
+                    <label>a (bbl/día)<input id="calc-prob-a" type="number" min="0" step="any" value="5" inputmode="decimal"></label>
+                    <label>b (bbl/día)<input id="calc-prob-b" type="number" min="0" step="any" value="50" inputmode="decimal"></label>
+                  </div>
+                  <p class="calculator-result" id="calc-prob-resultado" role="status" aria-live="polite"></p>
+                </article>
+              </div>
+
+              <div class="table-scroll">
+                <table class="data-table">
+                  <caption>Probabilidades del modelo lognormal frente a las proporciones observadas</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Evento</th>
+                      <th scope="col" class="numero">Modelo</th>
+                      <th scope="col" class="numero">Observada</th>
+                      <th scope="col" class="numero">Diferencia</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cuerpo-probabilidades"></tbody>
+                </table>
+              </div>
+              <p class="source">pp: puntos porcentuales. Las diferencias pequeñas confirman que el modelo sirve como aproximación.</p>
+            </div>
           </div>
         </section>
 
@@ -537,7 +728,30 @@
           <div class="container">
             <p class="section-kicker">4.2.13</p>
             <h2 id="estimacion-titulo">Estimación puntual y por intervalos de confianza</h2>
-            <div class="pending-card"><strong>Sección pendiente.</strong> Se estimarán parámetros con sus intervalos de confianza.</div>
+            <p id="estado-mc-estimacion" class="status" role="status">Calculando intervalos…</p>
+
+            <div id="contenido-mc-estimacion" hidden>
+              <p class="section-intro">Nivel de confianza: <span id="ic-confianza"></span>. Valores críticos: t<sub>0,025; n−1</sub> = <span id="ic-t"></span> y z<sub>0,025</sub> = <span id="ic-z"></span>.</p>
+
+              <div class="table-scroll">
+                <table class="data-table">
+                  <caption>Estimación puntual e intervalos de confianza para los parámetros de Y</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Parámetro</th>
+                      <th scope="col">Método</th>
+                      <th scope="col" class="numero">Estimación puntual</th>
+                      <th scope="col" class="numero">Intervalo de confianza</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cuerpo-intervalos"></tbody>
+                </table>
+              </div>
+
+              <aside class="frame-note">
+                <strong>Lectura.</strong> Con una confianza del 95 %, la producción del pozo productor típico (mediana) está entre <span id="ic-mediana-rango"></span> bbl/día, y la producción media por pozo, entre <span id="ic-media-rango"></span> bbl/día. El intervalo de la media es más ancho porque los pocos pozos de producción muy alta aumentan la variabilidad. Aquí σ se estima con n − 1 en el denominador.
+              </aside>
+            </div>
           </div>
         </section>
 
@@ -545,7 +759,54 @@
           <div class="container">
             <p class="section-kicker">4.2.14</p>
             <h2 id="tamano-muestral-titulo">Cálculo del tamaño muestral</h2>
-            <div class="pending-card"><strong>Sección pendiente.</strong> Se calculará el tamaño de muestra necesario para un error y nivel de confianza dados.</div>
+            <p id="estado-mc-tamano" class="status" role="status">Calculando tamaños de muestra…</p>
+
+            <div id="contenido-mc-tamano" hidden>
+              <div class="method-grid">
+                <article class="method-card">
+                  <p class="method-card-tag">Fórmulas</p>
+                  <h4>Población finita</h4>
+                  <p class="method-symbolic" aria-label="n cero igual a z por s entre E al cuadrado">Media: n₀ = (z · s / E)²</p>
+                  <p class="method-symbolic" aria-label="n cero igual a z al cuadrado por p por uno menos p entre E al cuadrado">Proporción: n₀ = z² · p̂(1 − p̂) / E²</p>
+                  <p class="method-symbolic" aria-label="n igual a n cero entre uno más n cero menos uno entre N">n = n₀ / (1 + (n₀ − 1) / N)</p>
+                  <p class="stat-notation">N = <span id="tm-poblacion"></span> pozos productores; s = <span id="tm-s"></span> bbl/día; confianza del 95 % (z = 1,96).</p>
+                </article>
+                <article class="method-card teal calculator-card">
+                  <p class="method-card-tag">Calculadora</p>
+                  <h4>Tamaño para estimar la media de Y</h4>
+                  <div class="calculator-fields">
+                    <label>Error E (bbl/día)<input id="calc-tm-error" type="number" min="0.1" step="0.1" value="3" inputmode="decimal"></label>
+                    <label>Confianza
+                      <select id="calc-tm-confianza">
+                        <option value="0.90">90 %</option>
+                        <option value="0.95" selected>95 %</option>
+                        <option value="0.99">99 %</option>
+                      </select>
+                    </label>
+                  </div>
+                  <p class="calculator-result" id="calc-tm-resultado" role="status" aria-live="polite"></p>
+                </article>
+              </div>
+
+              <div class="table-scroll">
+                <table class="data-table">
+                  <caption>Tamaño de muestra necesario para un muestreo aleatorio simple de los pozos productores</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Objetivo</th>
+                      <th scope="col" class="numero">Error máximo E</th>
+                      <th scope="col" class="numero">n₀ (población infinita)</th>
+                      <th scope="col" class="numero">n (corregido)</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cuerpo-tamanos"></tbody>
+                </table>
+              </div>
+
+              <aside class="frame-note">
+                <strong>Uso.</strong> El estudio ya analiza todos los pozos del archivo. Este cálculo sirve para planificar un muestreo futuro: por ejemplo, cuántos pozos medir en otro mes para estimar la media con un error dado. La gran dispersión de Y exige muestras grandes para errores pequeños.
+              </aside>
+            </div>
           </div>
         </section>
           </div>
