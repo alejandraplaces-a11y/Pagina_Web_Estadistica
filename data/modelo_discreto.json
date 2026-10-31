@@ -1,0 +1,658 @@
+{
+  "fuente": "2023_01_producao_Terra.csv",
+  "variable": "Días completos de producción por pozo",
+  "n": 5308,
+  "ensayos": 31,
+  "media_observada": 24.002637528259232,
+  "varianza_observada": 106.67683494904925,
+  "binomial": {
+    "p": 0.7742786299438462,
+    "media": 24.002637528259232,
+    "varianza": 5.417908227839926,
+    "prueba": {
+      "estadistico": 656868.9897449227,
+      "grados_libertad": 13,
+      "alfa": 0.05,
+      "valor_critico": 22.362032494826934,
+      "p_valor": 0.0,
+      "rechaza": true,
+      "grupos": [
+        {
+          "desde": 0,
+          "hasta": 16,
+          "observada": 1087.0,
+          "esperada": 7.430974596472315,
+          "aporte": 156839.35740595884
+        },
+        {
+          "desde": 17,
+          "hasta": 17,
+          "observada": 50.0,
+          "esperada": 16.208653649522333,
+          "aporte": 70.44725076296456
+        },
+        {
+          "desde": 18,
+          "hasta": 18,
+          "observada": 80.0,
+          "esperada": 43.24412042700187,
+          "aporte": 31.24111832648521
+        },
+        {
+          "desde": 19,
+          "hasta": 19,
+          "observada": 55.0,
+          "esperada": 101.49424441133996,
+          "aporte": 21.298890157951547
+        },
+        {
+          "desde": 20,
+          "hasta": 20,
+          "observada": 59.0,
+          "esperada": 208.8898126671344,
+          "aporte": 107.55410067407023
+        },
+        {
+          "desde": 21,
+          "hasta": 21,
+          "observada": 36.0,
+          "esperada": 375.3317002178996,
+          "aporte": 306.78464597027704
+        },
+        {
+          "desde": 22,
+          "hasta": 22,
+          "observada": 62.0,
+          "esperada": 585.2173060387624,
+          "aporte": 467.7858062528443
+        },
+        {
+          "desde": 23,
+          "hasta": 23,
+          "observada": 101.0,
+          "esperada": 785.5185209742292,
+          "aporte": 596.5048474931104
+        },
+        {
+          "desde": 24,
+          "hasta": 24,
+          "observada": 91.0,
+          "esperada": 898.172533190123,
+          "aporte": 725.3923653426245
+        },
+        {
+          "desde": 25,
+          "hasta": 25,
+          "observada": 128.0,
+          "esperada": 862.665433574225,
+          "aporte": 625.6577327464745
+        },
+        {
+          "desde": 26,
+          "hasta": 26,
+          "observada": 44.0,
+          "esperada": 682.8807874350687,
+          "aporte": 597.7158357123408
+        },
+        {
+          "desde": 27,
+          "hasta": 27,
+          "observada": 65.0,
+          "esperada": 433.7861979348147,
+          "aporte": 313.52601911887854
+        },
+        {
+          "desde": 28,
+          "hasta": 28,
+          "observada": 107.0,
+          "esperada": 212.5701529038479,
+          "aporte": 52.43001913435648
+        },
+        {
+          "desde": 29,
+          "hasta": 29,
+          "observada": 242.0,
+          "esperada": 75.43104720430178,
+          "aporte": 367.8222305506221
+        },
+        {
+          "desde": 30,
+          "hasta": 31,
+          "observada": 3101.0,
+          "esperada": 19.1585147752545,
+          "aporte": 495745.4714767209
+        }
+      ]
+    }
+  },
+  "betabinomial": {
+    "alfa": 0.5777904410335907,
+    "beta": 0.21094899826389468,
+    "media": 22.7090250336597,
+    "varianza": 107.93657248497578,
+    "prueba": {
+      "estadistico": 3444.5423244890044,
+      "grados_libertad": 29,
+      "alfa": 0.05,
+      "valor_critico": 42.55696780429269,
+      "p_valor": 0.0,
+      "rechaza": true,
+      "grupos": [
+        {
+          "desde": 0,
+          "hasta": 0,
+          "observada": 356.0,
+          "esperada": 197.9924605405101,
+          "aporte": 126.09764259651709
+        },
+        {
+          "desde": 1,
+          "hasta": 1,
+          "observada": 50.0,
+          "esperada": 117.38600744424267,
+          "aporte": 38.68326471050993
+        },
+        {
+          "desde": 2,
+          "hasta": 2,
+          "observada": 60.0,
+          "esperada": 95.1067288849284,
+          "aporte": 12.958940208016953
+        },
+        {
+          "desde": 3,
+          "hasta": 3,
+          "observada": 42.0,
+          "esperada": 84.00746913035138,
+          "aporte": 21.005602013784216
+        },
+        {
+          "desde": 4,
+          "hasta": 4,
+          "observada": 71.0,
+          "esperada": 77.31916444164457,
+          "aporte": 0.5164546141814959
+        },
+        {
+          "desde": 5,
+          "hasta": 5,
+          "observada": 47.0,
+          "esperada": 72.9212449473229,
+          "aporte": 9.21420006068863
+        },
+        {
+          "desde": 6,
+          "hasta": 6,
+          "observada": 70.0,
+          "esperada": 69.91158880433154,
+          "aporte": 0.00011180606324658125
+        },
+        {
+          "desde": 7,
+          "hasta": 7,
+          "observada": 60.0,
+          "esperada": 67.83586405289775,
+          "aporte": 0.9051372207423405
+        },
+        {
+          "desde": 8,
+          "hasta": 8,
+          "observada": 45.0,
+          "esperada": 66.44010491140432,
+          "aporte": 6.91868411744667
+        },
+        {
+          "desde": 9,
+          "hasta": 9,
+          "observada": 43.0,
+          "esperada": 65.57283390908692,
+          "aporte": 7.7704866529585
+        },
+        {
+          "desde": 10,
+          "hasta": 10,
+          "observada": 32.0,
+          "esperada": 65.14061657901996,
+          "aporte": 16.860455502525067
+        },
+        {
+          "desde": 11,
+          "hasta": 11,
+          "observada": 47.0,
+          "esperada": 65.08587192951427,
+          "aporte": 5.025649250040451
+        },
+        {
+          "desde": 12,
+          "hasta": 12,
+          "observada": 42.0,
+          "esperada": 65.37509642200779,
+          "aporte": 8.357848211971792
+        },
+        {
+          "desde": 13,
+          "hasta": 13,
+          "observada": 32.0,
+          "esperada": 65.99246756526982,
+          "aporte": 17.509389992624325
+        },
+        {
+          "desde": 14,
+          "hasta": 14,
+          "observada": 17.0,
+          "esperada": 66.93651862797077,
+          "aporte": 37.25404224473137
+        },
+        {
+          "desde": 15,
+          "hasta": 15,
+          "observada": 38.0,
+          "esperada": 68.21879543988804,
+          "aporte": 13.38598244002206
+        },
+        {
+          "desde": 16,
+          "hasta": 16,
+          "observada": 35.0,
+          "esperada": 69.86402358088306,
+          "aporte": 17.398083848422495
+        },
+        {
+          "desde": 17,
+          "hasta": 17,
+          "observada": 50.0,
+          "esperada": 71.91169013203253,
+          "aporte": 6.676552359716337
+        },
+        {
+          "desde": 18,
+          "hasta": 18,
+          "observada": 80.0,
+          "esperada": 74.41925075407511,
+          "aporte": 0.41850410787944947
+        },
+        {
+          "desde": 19,
+          "hasta": 19,
+          "observada": 55.0,
+          "esperada": 77.4675260758475,
+          "aporte": 6.516146229771866
+        },
+        {
+          "desde": 20,
+          "hasta": 20,
+          "observada": 59.0,
+          "esperada": 81.16938138242087,
+          "aporte": 6.055010676546449
+        },
+        {
+          "desde": 21,
+          "hasta": 21,
+          "observada": 36.0,
+          "esperada": 85.68370941631719,
+          "aporte": 28.80910500001021
+        },
+        {
+          "desde": 22,
+          "hasta": 22,
+          "observada": 62.0,
+          "esperada": 91.23850748140727,
+          "aporte": 9.369841126725136
+        },
+        {
+          "desde": 23,
+          "hasta": 23,
+          "observada": 101.0,
+          "esperada": 98.17048326745014,
+          "aporte": 0.08155368776140283
+        },
+        {
+          "desde": 24,
+          "hasta": 24,
+          "observada": 91.0,
+          "esperada": 106.99669269293163,
+          "aporte": 2.391608288739162
+        },
+        {
+          "desde": 25,
+          "hasta": 25,
+          "observada": 128.0,
+          "esperada": 118.55319398938425,
+          "aporte": 0.7527603500096074
+        },
+        {
+          "desde": 26,
+          "hasta": 26,
+          "observada": 44.0,
+          "esperada": 134.2880488306423,
+          "aporte": 60.70481947299181
+        },
+        {
+          "desde": 27,
+          "hasta": 27,
+          "observada": 65.0,
+          "esperada": 156.95765271577642,
+          "aporte": 53.87574130143306
+        },
+        {
+          "desde": 28,
+          "hasta": 28,
+          "observada": 107.0,
+          "esperada": 192.57970405334024,
+          "aporte": 38.03041333903363
+        },
+        {
+          "desde": 29,
+          "hasta": 29,
+          "observada": 242.0,
+          "esperada": 257.50383097098273,
+          "aporte": 0.9334570824458521
+        },
+        {
+          "desde": 30,
+          "hasta": 30,
+          "observada": 1507.0,
+          "esperada": 419.30719136492587,
+          "aporte": 2821.5009671198723
+        },
+        {
+          "desde": 31,
+          "hasta": 31,
+          "observada": 1594.0,
+          "esperada": 1960.6462796611786,
+          "aporte": 68.56386885482173
+        }
+      ]
+    }
+  },
+  "tabla": [
+    {
+      "x": 0,
+      "observada": 356,
+      "p_observada": 0.06706857573474001,
+      "p_binomial": 9.135935118639345e-21,
+      "esperada_binomial": 4.8493543609737644e-17,
+      "p_betabinomial": 0.037300764985024513,
+      "esperada_betabinomial": 197.9924605405101
+    },
+    {
+      "x": 1,
+      "observada": 50,
+      "p_observada": 0.009419743782969104,
+      "p_binomial": 9.714921501665572e-19,
+      "esperada_binomial": 5.1566803330840856e-15,
+      "p_betabinomial": 0.022114922276609394,
+      "esperada_betabinomial": 117.38600744424267
+    },
+    {
+      "x": 2,
+      "observada": 60,
+      "p_observada": 0.011303692539562924,
+      "p_binomial": 4.998677866732563e-17,
+      "esperada_binomial": 2.653298211661644e-13,
+      "p_betabinomial": 0.017917620362646648,
+      "esperada_betabinomial": 95.1067288849284
+    },
+    {
+      "x": 3,
+      "observada": 42,
+      "p_observada": 0.007912584777694047,
+      "p_binomial": 1.657511264550368e-15,
+      "esperada_binomial": 8.798069792233353e-12,
+      "p_betabinomial": 0.015826576701271924,
+      "esperada_betabinomial": 84.00746913035138
+    },
+    {
+      "x": 4,
+      "observada": 71,
+      "p_observada": 0.013376036171816126,
+      "p_binomial": 3.979963817778061e-14,
+      "esperada_binomial": 2.1125647944765946e-10,
+      "p_betabinomial": 0.014566534371070946,
+      "esperada_betabinomial": 77.31916444164457
+    },
+    {
+      "x": 5,
+      "observada": 47,
+      "p_observada": 0.008854559155990958,
+      "p_binomial": 7.372206286431252e-13,
+      "esperada_binomial": 3.913167096837709e-09,
+      "p_betabinomial": 0.013737988874778242,
+      "esperada_betabinomial": 72.9212449473229
+    },
+    {
+      "x": 6,
+      "observada": 70,
+      "p_observada": 0.013187641296156745,
+      "p_binomial": 1.0958324882592736e-11,
+      "esperada_binomial": 5.8166788476802244e-08,
+      "p_betabinomial": 0.013170985079941888,
+      "esperada_betabinomial": 69.91158880433154
+    },
+    {
+      "x": 7,
+      "observada": 60,
+      "p_observada": 0.011303692539562924,
+      "p_binomial": 1.3424889997380853e-10,
+      "esperada_binomial": 7.125931610609757e-07,
+      "p_betabinomial": 0.012779929173492417,
+      "esperada_betabinomial": 67.83586405289775
+    },
+    {
+      "x": 8,
+      "observada": 45,
+      "p_observada": 0.008477769404672193,
+      "p_binomial": 1.3815181210001924e-09,
+      "esperada_binomial": 7.333098186269021e-06,
+      "p_betabinomial": 0.012516975303580315,
+      "esperada_betabinomial": 66.44010491140432
+    },
+    {
+      "x": 9,
+      "observada": 43,
+      "p_observada": 0.008100979653353428,
+      "p_binomial": 1.2110623635583124e-08,
+      "esperada_binomial": 6.428319025767522e-05,
+      "p_betabinomial": 0.012353585890935744,
+      "esperada_betabinomial": 65.57283390908692
+    },
+    {
+      "x": 10,
+      "observada": 32,
+      "p_observada": 0.006028636021100226,
+      "p_binomial": 9.13931789567939e-08,
+      "esperada_binomial": 0.000485114993902662,
+      "p_betabinomial": 0.012272158360779948,
+      "esperada_betabinomial": 65.14061657901996
+    },
+    {
+      "x": 11,
+      "observada": 47,
+      "p_observada": 0.008854559155990958,
+      "p_binomial": 5.985011492051494e-07,
+      "esperada_binomial": 0.0031768440999809327,
+      "p_betabinomial": 0.012261844749343307,
+      "esperada_betabinomial": 65.08587192951427
+    },
+    {
+      "x": 12,
+      "observada": 42,
+      "p_observada": 0.007912584777694047,
+      "p_binomial": 3.4216716662013958e-06,
+      "esperada_binomial": 0.01816223320419701,
+      "p_betabinomial": 0.012316333161644271,
+      "esperada_betabinomial": 65.37509642200779
+    },
+    {
+      "x": 13,
+      "observada": 32,
+      "p_observada": 0.006028636021100226,
+      "p_binomial": 1.715430697526136e-05,
+      "esperada_binomial": 0.0910550614246873,
+      "p_betabinomial": 0.01243264272141481,
+      "esperada_betabinomial": 65.99246756526982
+    },
+    {
+      "x": 14,
+      "observada": 17,
+      "p_observada": 0.003202712886209495,
+      "p_binomial": 7.56558024816394e-05,
+      "esperada_binomial": 0.40158099957254195,
+      "p_betabinomial": 0.012610497103988464,
+      "esperada_betabinomial": 66.93651862797077
+    },
+    {
+      "x": 15,
+      "observada": 38,
+      "p_observada": 0.007159005275056519,
+      "p_binomial": 0.0002941199610622078,
+      "esperada_binomial": 1.561188753318199,
+      "p_betabinomial": 0.012852071484530526,
+      "esperada_betabinomial": 68.21879543988804
+    },
+    {
+      "x": 16,
+      "observada": 35,
+      "p_observada": 0.0065938206480783725,
+      "p_binomial": 0.0010089022604892466,
+      "esperada_binomial": 5.3552531986769205,
+      "p_betabinomial": 0.013162024035584599,
+      "esperada_betabinomial": 69.86402358088306
+    },
+    {
+      "x": 17,
+      "observada": 50,
+      "p_observada": 0.009419743782969104,
+      "p_binomial": 0.003053627288907749,
+      "esperada_binomial": 16.208653649522333,
+      "p_betabinomial": 0.01354779392088028,
+      "esperada_betabinomial": 71.91169013203253
+    },
+    {
+      "x": 18,
+      "observada": 80,
+      "p_observada": 0.015071590052750565,
+      "p_binomial": 0.00814697069084436,
+      "esperada_binomial": 43.24412042700187,
+      "p_betabinomial": 0.014020205492478356,
+      "esperada_betabinomial": 74.41925075407511
+    },
+    {
+      "x": 19,
+      "observada": 55,
+      "p_observada": 0.010361718161266013,
+      "p_binomial": 0.019120995556017324,
+      "esperada_binomial": 101.49424441133996,
+      "p_betabinomial": 0.014594484942699227,
+      "esperada_betabinomial": 77.4675260758475
+    },
+    {
+      "x": 20,
+      "observada": 59,
+      "p_observada": 0.011115297663903541,
+      "p_binomial": 0.0393537702839364,
+      "esperada_binomial": 208.8898126671344,
+      "p_betabinomial": 0.015291895512890142,
+      "esperada_betabinomial": 81.16938138242087
+    },
+    {
+      "x": 21,
+      "observada": 36,
+      "p_observada": 0.006782215523737754,
+      "p_binomial": 0.07071056899357565,
+      "esperada_binomial": 375.3317002178996,
+      "p_betabinomial": 0.0161423717815217,
+      "esperada_betabinomial": 85.68370941631719
+    },
+    {
+      "x": 22,
+      "observada": 62,
+      "p_observada": 0.011680482290881688,
+      "p_binomial": 0.1102519416048912,
+      "esperada_binomial": 585.2173060387624,
+      "p_betabinomial": 0.017188867272307323,
+      "esperada_betabinomial": 91.23850748140727
+    },
+    {
+      "x": 23,
+      "observada": 101,
+      "p_observada": 0.019027882441597588,
+      "p_binomial": 0.1479876640870816,
+      "esperada_binomial": 785.5185209742292,
+      "p_betabinomial": 0.018494815988592716,
+      "esperada_betabinomial": 98.17048326745014
+    },
+    {
+      "x": 24,
+      "observada": 91,
+      "p_observada": 0.01714393368500377,
+      "p_binomial": 0.16921110271102544,
+      "esperada_binomial": 898.172533190123,
+      "p_betabinomial": 0.02015762861584997,
+      "esperada_betabinomial": 106.99669269293163
+    },
+    {
+      "x": 25,
+      "observada": 128,
+      "p_observada": 0.024114544084400905,
+      "p_binomial": 0.16252174709386302,
+      "esperada_binomial": 862.665433574225,
+      "p_betabinomial": 0.02233481424065265,
+      "esperada_betabinomial": 118.55319398938425
+    },
+    {
+      "x": 26,
+      "observada": 44,
+      "p_observada": 0.008289374529012811,
+      "p_binomial": 0.12865124103901068,
+      "esperada_binomial": 682.8807874350687,
+      "p_betabinomial": 0.025299180261989886,
+      "esperada_betabinomial": 134.2880488306423
+    },
+    {
+      "x": 27,
+      "observada": 65,
+      "p_observada": 0.012245666917859834,
+      "p_binomial": 0.08172309682268551,
+      "esperada_binomial": 433.7861979348147,
+      "p_betabinomial": 0.029570017467177172,
+      "esperada_betabinomial": 156.95765271577642
+    },
+    {
+      "x": 28,
+      "observada": 107,
+      "p_observada": 0.02015825169555388,
+      "p_binomial": 0.04004712752521626,
+      "esperada_binomial": 212.5701529038479,
+      "p_betabinomial": 0.03628102939964963,
+      "esperada_betabinomial": 192.57970405334024
+    },
+    {
+      "x": 29,
+      "observada": 242,
+      "p_observada": 0.04559155990957046,
+      "p_binomial": 0.014210822758911413,
+      "esperada_binomial": 75.43104720430178,
+      "p_betabinomial": 0.04851240221759283,
+      "esperada_betabinomial": 257.50383097098273
+    },
+    {
+      "x": 30,
+      "observada": 1507,
+      "p_observada": 0.2839110776186888,
+      "p_binomial": 0.0032497695051816712,
+      "esperada_binomial": 17.24977653350431,
+      "p_betabinomial": 0.07899532618027993,
+      "esperada_betabinomial": 419.30719136492587
+    },
+    {
+      "x": 31,
+      "observada": 1594,
+      "p_observada": 0.300301431801055,
+      "p_binomial": 0.0003595965037208343,
+      "esperada_binomial": 1.9087382417501886,
+      "p_betabinomial": 0.36937571206879777,
+      "esperada_betabinomial": 1960.6462796611786
+    }
+  ]
+}

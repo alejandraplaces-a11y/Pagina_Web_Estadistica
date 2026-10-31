@@ -13,14 +13,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css">
-  <link rel="stylesheet" href="css/estadistica.css">
   <link rel="stylesheet" href="css/estadisticaInferencial.css">
-  <link rel="stylesheet" href="css/indiceLateral.css">
   <script defer src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
   <script defer src="js/commonInf.js"></script>
   <script defer src="js/sidebar.js"></script>
   <script defer src="js/estadisticaInferencial.js"></script>
+  <script defer src="js/modeloDiscreto.js"></script>
+  <script defer src="js/variableContinua.js"></script>
   <script defer src="js/indiceLateral.js"></script>
 </head>
 <body class="has-sidebar">
@@ -84,6 +83,13 @@
             <span class="brand-word">Universidad Central del Ecuador</span>
             <span class="brand-caption">Proyecto de Estadística</span>
           </a>
+          <nav class="site-nav" aria-label="Navegación principal">
+            <a href="index.html">Inicio</a>
+            <a href="introduccion.html">Introducción</a>
+            <a href="mapa.html">Mapa</a>
+            <a href="Estadistica.html">Estadística descriptiva</a>
+            <a href="estadisticaInferencial.html" aria-current="page">Estadística inferencial</a>
+          </nav>
         </div>
       </header>
 
@@ -105,18 +111,18 @@
                 <div class="indice-grupo">
                   <p class="indice-grupo-titulo" id="indice-grupo-1">Variable discreta</p>
                   <ul class="indice-lista" aria-labelledby="indice-grupo-1">
-                    <li><a href="#vad"><span class="indice-numero">4.2.1</span><span>Identificar VAD<span class="indice-estado"></span></span></a></li>
-                    <li><a href="#tdf-vad"><span class="indice-numero">4.2.2</span><span>TDF y gráfica de barras<span class="indice-estado"></span></span></a></li>
-                    <li><a href="#modelo-discreto"><span class="indice-numero">4.2.3</span><span>Modelo de probabilidad discreto</span></a></li>
-                    <li><a href="#test-ajuste-discreto"><span class="indice-numero">4.2.4</span><span>Test de ajuste</span></a></li>
+                    <li><a href="#vad"><span class="indice-numero">4.2.1</span><span>Identificar VAD<span class="indice-estado">Listo</span></span></a></li>
+                    <li><a href="#tdf-vad"><span class="indice-numero">4.2.2</span><span>TDF y gráfica de barras<span class="indice-estado">Listo</span></span></a></li>
+                    <li><a href="#modelo-discreto"><span class="indice-numero">4.2.3</span><span>Modelo de probabilidad discreto<span class="indice-estado">Listo</span></span></a></li>
+                    <li><a href="#test-ajuste-discreto"><span class="indice-numero">4.2.4</span><span>Test de ajuste<span class="indice-estado">Listo</span></span></a></li>
                   </ul>
                 </div>
                 <div class="indice-grupo">
                   <p class="indice-grupo-titulo" id="indice-grupo-2">Variable continua</p>
                   <ul class="indice-lista" aria-labelledby="indice-grupo-2">
-                    <li><a href="#vac"><span class="indice-numero">4.2.5</span><span>Identificar VAC</span></a></li>
-                    <li><a href="#histograma-relativo"><span class="indice-numero">4.2.6</span><span>Tabla e histograma (frecuencia relativa)</span></a></li>
-                    <li><a href="#histograma-densidad"><span class="indice-numero">4.2.7</span><span>Tabla e histograma (densidad de probabilidad)</span></a></li>
+                    <li><a href="#vac"><span class="indice-numero">4.2.5</span><span>Identificar VAC<span class="indice-estado">Listo</span></span></a></li>
+                    <li><a href="#histograma-relativo"><span class="indice-numero">4.2.6</span><span>Tabla e histograma (frecuencia relativa)<span class="indice-estado">Listo</span></span></a></li>
+                    <li><a href="#histograma-densidad"><span class="indice-numero">4.2.7</span><span>Tabla e histograma (densidad de probabilidad)<span class="indice-estado">Listo</span></span></a></li>
                     <li><a href="#conjetura-continua"><span class="indice-numero">4.2.8</span><span>Conjetura del modelo continuo</span></a></li>
                     <li><a href="#parametros-continuos"><span class="indice-numero">4.2.9</span><span>Cálculo de parámetros y ajuste gráfico</span></a></li>
                     <li><a href="#test-ajuste-continuo"><span class="indice-numero">4.2.10</span><span>Test de ajuste (Pearson y chi-cuadrado)</span></a></li>
@@ -216,7 +222,62 @@
           <div class="container">
             <p class="section-kicker">4.2.3</p>
             <h2 id="modelo-discreto-titulo">Modelo de probabilidad discreto</h2>
-            <div class="pending-card"><strong>Sección pendiente.</strong> Se propondrá un modelo de probabilidad para X y se estimarán sus parámetros a partir de la TDF de 4.2.2.</div>
+            <p id="estado-modelo-discreto" class="status" role="status">Calculando el modelo…</p>
+
+            <div id="contenido-modelo-discreto" hidden>
+              <div class="method-grid">
+                <article class="method-card">
+                  <p class="method-card-tag">Conjetura</p>
+                  <h4>Modelo binomial</h4>
+                  <p>Cada uno de los 31 días de enero se trata como un ensayo con dos resultados: el pozo produce el día completo o no. Si los días fueran independientes y con la misma probabilidad p, X seguiría una distribución binomial.</p>
+                  <p class="method-symbolic" aria-label="X sigue una binomial de 31 ensayos y probabilidad p">X ~ B(n = 31; p)</p>
+                  <p class="stat-notation">P(X = x) = C(31, x) · pˣ · (1 − p)³¹⁻ˣ, x = 0, 1, …, 31.</p>
+                  <p class="stat-notation">p̂ = x̄ / 31 = <span id="md-p-formula"></span>.</p>
+                </article>
+                <article class="method-card teal">
+                  <p class="method-card-tag">Alternativa</p>
+                  <h4>Modelo beta-binomial</h4>
+                  <p>Si la probabilidad de producir cambia de un pozo a otro, la varianza crece por encima de la binomial. La beta-binomial modela esa sobredispersión con dos parámetros, estimados por máxima verosimilitud.</p>
+                  <p class="method-symbolic" aria-label="X sigue una beta binomial de 31 ensayos y parámetros alfa y beta">X ~ BB(31; α, β)</p>
+                  <p class="stat-notation">α̂ = <span id="md-alfa"></span>; β̂ = <span id="md-beta"></span>. Varianza teórica: <span id="md-var-bb"></span>.</p>
+                </article>
+              </div>
+
+              <dl class="stat-metrics">
+                <div><dt>Probabilidad estimada · p̂</dt><dd id="md-p"></dd></div>
+                <div><dt>Media observada · x̄</dt><dd id="md-media-obs"></dd></div>
+                <div><dt>Varianza observada · s²</dt><dd id="md-var-obs"></dd></div>
+                <div><dt>Varianza binomial · np̂(1 − p̂)</dt><dd id="md-var-binom"></dd></div>
+              </dl>
+
+              <aside class="frame-note">
+                <strong>Sobredispersión.</strong> La varianza observada es <span id="md-razon"></span> veces la que predice la binomial. Esto anticipa un mal ajuste del modelo binomial: los pozos no comparten una misma probabilidad diaria de producir.
+              </aside>
+
+              <div class="chart-card">
+                <p class="section-kicker">Ajuste gráfico</p>
+                <h3 class="chart-title">Probabilidades observadas y teóricas</h3>
+                <div id="grafica-modelo-discreto" class="chart-box chart-box-tall" role="img" aria-label="Comparación de la distribución observada de X con los modelos binomial y beta-binomial"></div>
+              </div>
+
+              <div class="table-scroll">
+                <table class="data-table">
+                  <caption>Probabilidades observadas y teóricas de X, con frecuencias esperadas para n pozos</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col" class="numero">x</th>
+                      <th scope="col" class="numero">fᵢ</th>
+                      <th scope="col" class="numero">hᵢ</th>
+                      <th scope="col" class="numero">P binomial</th>
+                      <th scope="col" class="numero">E binomial</th>
+                      <th scope="col" class="numero">P beta-binomial</th>
+                      <th scope="col" class="numero">E beta-binomial</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cuerpo-modelo-discreto"></tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -224,15 +285,114 @@
           <div class="container">
             <p class="section-kicker">4.2.4</p>
             <h2 id="test-ajuste-discreto-titulo">Test de ajuste</h2>
-            <div class="pending-card"><strong>Sección pendiente.</strong> Se evaluará el ajuste del modelo discreto con una prueba de bondad de ajuste.</div>
+            <p id="estado-test-discreto" class="status" role="status">Calculando la prueba…</p>
+
+            <div id="contenido-test-discreto" hidden>
+              <div class="method-grid">
+                <article class="method-card">
+                  <p class="method-card-tag">Hipótesis</p>
+                  <h4>Prueba chi-cuadrado de bondad de ajuste</h4>
+                  <p><strong>H₀:</strong> X sigue el modelo propuesto.<br><strong>H₁:</strong> X no sigue el modelo propuesto.</p>
+                  <p>Nivel de significancia α = 0,05. Se rechaza H₀ si χ² supera el valor crítico.</p>
+                </article>
+                <article class="method-card teal">
+                  <p class="method-card-tag">Estadístico</p>
+                  <h4>Cálculo</h4>
+                  <p class="method-symbolic" aria-label="Chi cuadrado igual a la suma de observadas menos esperadas al cuadrado entre esperadas">χ² = Σ (Oᵢ − Eᵢ)² / Eᵢ</p>
+                  <p class="stat-notation">gl = k − 1 − m, con k clases tras agrupar y m parámetros estimados (1 en la binomial, 2 en la beta-binomial).</p>
+                </article>
+              </div>
+
+              <h3 class="tdf-subtitle">a) Modelo binomial</h3>
+              <div class="table-scroll">
+                <table class="data-table">
+                  <caption>Frecuencias observadas (O) y esperadas (E) agrupadas para que E ≥ 5 · <span id="prueba-binomial-clases"></span> clases</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col" class="numero">x</th>
+                      <th scope="col" class="numero">Oᵢ</th>
+                      <th scope="col" class="numero">Eᵢ</th>
+                      <th scope="col" class="numero">(Oᵢ − Eᵢ)² / Eᵢ</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cuerpo-prueba-binomial"></tbody>
+                  <tfoot id="pie-prueba-binomial"></tfoot>
+                </table>
+              </div>
+              <dl class="stat-metrics test-metrics">
+                <div><dt>Estadístico · χ²</dt><dd id="prueba-binomial-chi"></dd></div>
+                <div><dt>Grados de libertad · gl</dt><dd id="prueba-binomial-gl"></dd></div>
+                <div><dt>Valor crítico · χ²<sub>0,05; gl</sub></dt><dd id="prueba-binomial-critico"></dd></div>
+                <div><dt>Valor p</dt><dd id="prueba-binomial-p"></dd></div>
+              </dl>
+              <p class="test-decision" id="prueba-binomial-decision"></p>
+
+
+              <h3 class="tdf-subtitle">b) Modelo beta-binomial</h3>
+              <div class="table-scroll">
+                <table class="data-table">
+                  <caption>Frecuencias observadas (O) y esperadas (E) agrupadas para que E ≥ 5 · <span id="prueba-betabinomial-clases"></span> clases</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col" class="numero">x</th>
+                      <th scope="col" class="numero">Oᵢ</th>
+                      <th scope="col" class="numero">Eᵢ</th>
+                      <th scope="col" class="numero">(Oᵢ − Eᵢ)² / Eᵢ</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cuerpo-prueba-betabinomial"></tbody>
+                  <tfoot id="pie-prueba-betabinomial"></tfoot>
+                </table>
+              </div>
+              <dl class="stat-metrics test-metrics">
+                <div><dt>Estadístico · χ²</dt><dd id="prueba-betabinomial-chi"></dd></div>
+                <div><dt>Grados de libertad · gl</dt><dd id="prueba-betabinomial-gl"></dd></div>
+                <div><dt>Valor crítico · χ²<sub>0,05; gl</sub></dt><dd id="prueba-betabinomial-critico"></dd></div>
+                <div><dt>Valor p</dt><dd id="prueba-betabinomial-p"></dd></div>
+              </dl>
+              <p class="test-decision" id="prueba-betabinomial-decision"></p>
+
+              <aside class="frame-note">
+                <strong>Conclusión.</strong> Con α = 0,05, ambos modelos se rechazan. La distribución de X tiene dos picos (0 días y 30–31 días) que ninguno de los dos reproduce: muchos pozos producen todo el mes y un grupo no completa ningún día. Con n = 5.308, la prueba detecta incluso diferencias pequeñas; aun así, la beta-binomial describe la dispersión mucho mejor que la binomial.
+              </aside>
+            </div>
           </div>
         </section>
 
         <section class="section cream" id="vac" aria-labelledby="vac-titulo">
           <div class="container">
             <p class="section-kicker">4.2.5</p>
-            <h2 id="vac-titulo">Identificar VAC</h2>
-            <div class="pending-card"><strong>Sección pendiente.</strong> Se definirá la variable aleatoria continua del estudio.</div>
+            <h2 id="vac-titulo">Identificar la variable aleatoria continua (VAC)</h2>
+            <p id="estado-vac" class="status" role="status">Cargando la variable continua…</p>
+
+            <div id="contenido-vac" hidden>
+              <dl class="stat-metrics">
+                <div><dt>Pozos productores · n</dt><dd id="vac-n"></dd></div>
+                <div><dt>Mediana</dt><dd><span id="vac-mediana"></span> <span class="metric-unit">bbl/día</span></dd></div>
+                <div><dt>Media · ȳ</dt><dd><span id="vac-media"></span> <span class="metric-unit">bbl/día</span></dd></div>
+                <div><dt>Máximo</dt><dd><span id="vac-max"></span> <span class="metric-unit">bbl/día</span></dd></div>
+              </dl>
+
+              <div class="method-grid">
+                <article class="method-card">
+                  <p class="method-card-tag">Definición</p>
+                  <h4>Óleo por pozo productor</h4>
+                  <p>Y es el volumen de óleo (bbl/día) de cada pozo terrestre con producción positiva en enero de 2023. Cuando un pozo aparece en varias filas, sus volúmenes se suman.</p>
+                  <p>Es <strong>continua</strong> porque se mide en una escala real: entre dos valores cualesquiera puede existir otro.</p>
+                </article>
+                <article class="method-card teal">
+                  <p class="method-card-tag">Notación</p>
+                  <h4>Representación simbólica</h4>
+                  <p class="method-symbolic" aria-label="Y de p sub i igual al óleo del pozo, mayor que cero">Y(p<sub>i</sub>) = óleo<sub>i</sub> &gt; 0</p>
+                  <p class="stat-notation">R<sub>Y</sub> = (0; +∞). Recorrido observado: <span id="vac-min"></span> a <span id="vac-max-2"></span> bbl/día.</p>
+                </article>
+              </div>
+
+              <aside class="frame-note">
+                <strong>Pozos excluidos.</strong> <span id="vac-excluidos"></span> pozos con óleo igual a cero se dejan fuera: forman un grupo aparte que un modelo continuo no puede describir. La asimetría de Y es <span id="vac-asimetria"></span>; en escala log₁₀ baja a <span id="vac-asimetria-log"></span>, por lo que las tablas siguientes usan clases de igual ancho en log₁₀(y).
+              </aside>
+              <p class="source">Fuente: <span id="vac-fuente"></span> · Óleo por pozo, filas repetidas sumadas.</p>
+            </div>
           </div>
         </section>
 
@@ -240,7 +400,40 @@
           <div class="container">
             <p class="section-kicker">4.2.6</p>
             <h2 id="histograma-relativo-titulo">Tabla e histograma (frecuencia relativa)</h2>
-            <div class="pending-card"><strong>Sección pendiente.</strong> Se construirá la tabla de frecuencias relativas de la VAC y su histograma.</div>
+            <p id="estado-histograma-relativo" class="status" role="status">Construyendo la tabla…</p>
+
+            <div id="contenido-histograma-relativo" hidden>
+              <p class="section-intro">Sturges: k = ⌈1 + 3,322 · log₁₀(n)⌉ = <span id="hr-k"></span> clases de igual ancho en t = log₁₀(y), con amplitud A = <span id="hr-amplitud"></span>. Los límites se expresan en bbl/día.</p>
+
+              <div class="table-scroll">
+                <table class="data-table">
+                  <caption>Distribución de frecuencias relativas de Y, óleo por pozo productor</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col" class="numero">Clase</th>
+                      <th scope="col">Intervalo [Lᵢ; Lᵢ₊₁) bbl/día</th>
+                      <th scope="col">Intervalo en log₁₀</th>
+                      <th scope="col" class="numero">Marca yᵢ</th>
+                      <th scope="col" class="numero">fᵢ</th>
+                      <th scope="col" class="numero">hᵢ</th>
+                      <th scope="col" class="numero">Fᵢ</th>
+                      <th scope="col" class="numero">Hᵢ</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cuerpo-histograma-relativo"></tbody>
+                  <tfoot id="pie-histograma-relativo"></tfoot>
+                </table>
+              </div>
+
+              <div class="chart-card">
+                <p class="section-kicker">Histograma</p>
+                <h3 class="chart-title">Frecuencia relativa del óleo por pozo productor</h3>
+                <div id="grafica-histograma-relativo" class="chart-box chart-box-tall" role="img" aria-label="Histograma de frecuencias relativas del óleo por pozo productor en escala logarítmica"></div>
+              </div>
+
+              <aside class="frame-note"><p id="nota-histograma-relativo"></p></aside>
+              <p class="source">Marca de clase yᵢ = √(Lᵢ · Lᵢ₊₁), punto medio en escala logarítmica.</p>
+            </div>
           </div>
         </section>
 
@@ -248,7 +441,55 @@
           <div class="container">
             <p class="section-kicker">4.2.7</p>
             <h2 id="histograma-densidad-titulo">Tabla e histograma (densidad de probabilidad)</h2>
-            <div class="pending-card"><strong>Sección pendiente.</strong> Se expresarán las frecuencias de la VAC como densidad de probabilidad.</div>
+            <p id="estado-histograma-densidad" class="status" role="status">Construyendo la tabla…</p>
+
+            <div id="contenido-histograma-densidad" hidden>
+              <p class="section-intro">La densidad divide la frecuencia relativa entre el ancho de la clase, de modo que el área total del histograma es 1. Se presenta en t = log₁₀(y), donde las clases tienen igual ancho, y en la escala original de y.</p>
+
+              <div class="method-grid">
+                <article class="method-card">
+                  <p class="method-card-tag">Escala log₁₀</p>
+                  <h4>Densidad de t = log₁₀(y)</h4>
+                  <p class="method-symbolic" aria-label="g sub i igual a h sub i entre delta t">gᵢ = hᵢ / Δt</p>
+                  <p class="stat-notation">Es la escala del histograma; Σ gᵢ · Δt = 1.</p>
+                </article>
+                <article class="method-card teal">
+                  <p class="method-card-tag">Escala original</p>
+                  <h4>Densidad de y (bbl/día)</h4>
+                  <p class="method-symbolic" aria-label="f sub i igual a h sub i entre delta y">fᵢ = hᵢ / Δy</p>
+                  <p class="stat-notation">Las clases tienen anchos distintos en bbl/día; Σ fᵢ · Δy = 1.</p>
+                </article>
+              </div>
+
+              <div class="table-scroll">
+                <table class="data-table">
+                  <caption>Densidad de probabilidad empírica del óleo por pozo productor</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col" class="numero">Clase</th>
+                      <th scope="col">Intervalo bbl/día</th>
+                      <th scope="col" class="numero">hᵢ</th>
+                      <th scope="col" class="numero">Δt</th>
+                      <th scope="col" class="numero">gᵢ = hᵢ / Δt</th>
+                      <th scope="col" class="numero">Δy (bbl/día)</th>
+                      <th scope="col" class="numero">fᵢ = hᵢ / Δy</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cuerpo-histograma-densidad"></tbody>
+                  <tfoot id="pie-histograma-densidad"></tfoot>
+                </table>
+              </div>
+
+              <div class="chart-card">
+                <p class="section-kicker">Histograma de densidad</p>
+                <h3 class="chart-title">Densidad de probabilidad empírica</h3>
+                <div id="grafica-histograma-densidad" class="chart-box chart-box-tall" role="img" aria-label="Histograma de densidad de probabilidad del logaritmo del óleo por pozo productor"></div>
+              </div>
+
+              <aside class="frame-note">
+                <strong>Forma de la distribución.</strong> En escala logarítmica el histograma tiene forma de campana, con un único pico. Esta forma servirá en 4.2.8 para conjeturar un modelo continuo, como el lognormal.
+              </aside>
+            </div>
           </div>
         </section>
 

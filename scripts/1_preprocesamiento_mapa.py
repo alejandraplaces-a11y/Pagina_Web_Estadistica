@@ -90,6 +90,16 @@ def main():
     salida_vad.write_text(json.dumps(vad, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"Generado {salida_vad}: n={vad['n']}, media={vad['media']:.4f}.")
 
+    modelo = construir_modelo_discreto(vad)
+    salida_modelo = BASE / "data" / "modelo_discreto.json"
+    salida_modelo.write_text(json.dumps(modelo, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(f"Generado {salida_modelo}: chi2 binomial={modelo['binomial']['prueba']['estadistico']:.2f}.")
+
+    vac = construir_vac(args.csv)
+    salida_vac = BASE / "data" / "vac_oleo.json"
+    salida_vac.write_text(json.dumps(vac, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(f"Generado {salida_vac}: n={vac['n']}, k={vac['k']}.")
+
 
 # Columnas de la tabla 4.1.3. "Unnamed: 13" es la subcolumna «Gás Total» del encabezado partido del CSV.
 VARIABLES_TABLA = [
@@ -304,6 +314,157 @@ def construir_vad(csv_path):
         "mes_completo": int(conteo.loc[31]),
         "pozos_varias_filas": int(datos["Nome Poço"].duplicated(keep=False).groupby(datos["Nome Poço"]).any().sum()),
         "tdf": tdf,
+    }
+
+
+def _chi_cuadrado(observadas, esperadas, parametros):
+    # Se agrupan celdas adyacentes hasta que cada frecuencia esperada sea >= 5.
+    from scipy import stats
+
+    grupos, o, e, desde = [], 0.0, 0.0, 0
+    for i, (oi, ei) in enumerate(zip(observadas, esperadas)):
+        o += oi
+        e += ei
+        if e >= 5:
+            grupos.append({"desde": desde, "hasta": i, "observada": o, "esperada": e})
+            o, e, desde = 0.0, 0.0, i + 1
+    if e > 0:
+        grupos[-1]["hasta"] = len(observadas) - 1
+        grupos[-1]["observada"] += o
+        grupos[-1]["esperada"] += e
+    for g in grupos:
+        g["aporte"] = (g["observada"] - g["esperada"]) ** 2 / g["esperada"]
+    estadistico = sum(g["aporte"] for g in grupos)
+    gl = len(grupos) - 1 - parametros
+    return {
+        "estadistico": float(estadistico),
+        "grados_libertad": int(gl),
+        "alfa": 0.05,
+        "valor_critico": float(stats.chi2.ppf(0.95, gl)),
+        "p_valor": float(stats.chi2.sf(estadistico, gl)),
+        "rechaza": bool(estadistico > stats.chi2.ppf(0.95, gl)),
+        "grupos": [{k: (int(v) if k in ("desde", "hasta") else float(v)) for k, v in g.items()} for g in grupos],
+    }
+
+
+def construir_modelo_discreto(vad):
+    # Requiere scipy. Modelos para X = días completos de producción (0..31).
+    import numpy as np
+    from scipy import optimize, stats
+
+    ensayos = 31
+    x = np.arange(ensayos + 1)
+    f = np.array([fila["fi"] for fila in vad["tdf"]], dtype=float)
+    n = f.sum()
+    media = vad["media"]
+    varianza = vad["varianza"]
+
+    p = media / ensayos
+    binom = stats.binom.pmf(x, ensayos, p)
+
+    # Beta-binomial por máxima verosimilitud, partiendo de momentos.
+    q = media / ensayos
+    rho = (varianza / (ensayos * q * (1 - q)) - 1) / (ensayos - 1)
+    suma = (1 - rho) / rho
+    inicio = np.log([q * suma, (1 - q) * suma])
+    nll = lambda t: -(f * stats.betabinom.logpmf(x, ensayos, *np.exp(t))).sum()
+    alfa_bb, beta_bb = np.exp(optimize.minimize(nll, inicio, method="Nelder-Mead").x)
+    betabinom = stats.betabinom.pmf(x, ensayos, alfa_bb, beta_bb)
+
+    tabla = [{
+        "x": int(xi),
+        "observada": int(fi),
+        "p_observada": float(fi / n),
+        "p_binomial": float(pb),
+        "esperada_binomial": float(n * pb),
+        "p_betabinomial": float(pbb),
+        "esperada_betabinomial": float(n * pbb),
+    } for xi, fi, pb, pbb in zip(x, f, binom, betabinom)]
+
+    return {
+        "fuente": vad["fuente"],
+        "variable": vad["variable"],
+        "n": int(n),
+        "ensayos": ensayos,
+        "media_observada": media,
+        "varianza_observada": varianza,
+        "binomial": {
+            "p": float(p),
+            "media": float(ensayos * p),
+            "varianza": float(ensayos * p * (1 - p)),
+            "prueba": _chi_cuadrado(f, n * binom, 1),
+        },
+        "betabinomial": {
+            "alfa": float(alfa_bb),
+            "beta": float(beta_bb),
+            "media": float(ensayos * alfa_bb / (alfa_bb + beta_bb)),
+            "varianza": float(stats.betabinom.var(ensayos, alfa_bb, beta_bb)),
+            "prueba": _chi_cuadrado(f, n * betabinom, 2),
+        },
+        "tabla": tabla,
+    }
+
+
+def construir_vac(csv_path):
+    # VAC = óleo por pozo productor (x > 0); clases de igual ancho en log10(x) por su asimetría.
+    import numpy as np
+    from scipy import stats
+
+    datos = pd.read_csv(csv_path, sep=";", decimal=",", thousands=".", encoding="utf-8-sig",
+                        on_bad_lines="skip", low_memory=False)
+    datos = datos[datos["Estado"].notna() & datos["Estado"].astype(str).str.strip().ne("")].copy()
+    datos["Nome Poço"] = datos["Nome Poço"].astype(str).str.strip()
+    oleo = datos.groupby("Nome Poço")["Óleo (bbl/dia)"].sum()
+    x = oleo[oleo > 0].to_numpy()
+    t = np.log10(x)
+    n = len(x)
+    k = math.ceil(1 + 3.322 * math.log10(n))
+    amplitud = (t.max() - t.min()) / k
+    bordes = t.min() + amplitud * np.arange(k + 1)
+    bordes[-1] = t.max()
+    indice = np.minimum(((t - t.min()) / amplitud).astype(int), k - 1)
+    conteo = np.bincount(indice, minlength=k)
+
+    clases, acumulada = [], 0
+    for i in range(k):
+        fi = int(conteo[i])
+        acumulada += fi
+        li, ls = 10 ** bordes[i], 10 ** bordes[i + 1]
+        hi = fi / n
+        clases.append({
+            "clase": i + 1,
+            "t_li": float(bordes[i]),
+            "t_ls": float(bordes[i + 1]),
+            "li": float(li),
+            "ls": float(ls),
+            "marca": float(math.sqrt(li * ls)),
+            "fi": fi,
+            "hi": hi,
+            "Fi": acumulada,
+            "Hi": acumulada / n,
+            "densidad_t": hi / (bordes[i + 1] - bordes[i]),
+            "densidad_x": hi / (ls - li),
+        })
+
+    return {
+        "fuente": Path(csv_path).name,
+        "variable": "Óleo por pozo productor",
+        "simbolo": "Y",
+        "unidad": "bbl/día",
+        "n": int(n),
+        "excluidos_cero": int((oleo == 0).sum()),
+        "minimo": float(x.min()),
+        "maximo": float(x.max()),
+        "media": float(x.mean()),
+        "mediana": float(np.median(x)),
+        "desviacion_estandar": float(x.std(ddof=1)),
+        "asimetria": float(stats.skew(x, bias=False)),
+        "asimetria_log10": float(stats.skew(t, bias=False)),
+        "media_log10": float(t.mean()),
+        "desviacion_log10": float(t.std(ddof=1)),
+        "k": int(k),
+        "amplitud_log10": float(amplitud),
+        "clases": clases,
     }
 
 

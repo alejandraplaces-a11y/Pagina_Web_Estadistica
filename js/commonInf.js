@@ -11,7 +11,7 @@ async function leerJSON(ruta) {
   if (!respuesta.ok) {
     const ayuda = ruta === 'map_data.json'
       ? ' Ejecuta python 1_preprocesamiento_mapa.py y publica el JSON generado junto a index.html.'
-      : ' Coloca el archivo JSON junto a index.html.';
+      : ' Coloca el archivo JSON en la carpeta data/ junto a estadisticaInferencial.html.';
     throw new Error(`${ruta}: HTTP ${respuesta.status}.${ayuda}`);
   }
   try {
@@ -29,4 +29,3 @@ function mostrarError(id, mensaje, error) {
   estado.setAttribute('role', 'alert');
   console.error(error);
 }
-
