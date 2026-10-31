@@ -350,3 +350,11 @@
     margin: 4px 4px 10px;
   }
 }
+
+/* Leaflet usa z-index de 400 a 1000 en sus capas; este contexto las mantiene
+   dentro del mapa para que no tapen la barra superior al desplazarse. */
+.ruta-mapa {
+  position: relative;
+  z-index: 0;
+  isolation: isolate;
+}
