@@ -1,6 +1,6 @@
 const COLOR_MIN = [213, 235, 226];
 const COLOR_MAX = [11, 91, 79];
-const COLOR_SIN_DATOS = '#e6e9e7';
+const COLOR_SIN_DATOS = '#EDEAE4';
 const NS = 'http://www.w3.org/2000/svg';
 const LADO = { ancho: 1000, alto: 720 };
 const MAPA = { izq: 50, der: 700, arriba: 36, abajo: 690 };
@@ -65,8 +65,8 @@ function centroideDelMayor(poligonos) {
 }
 
 function rejilla(p) {
-  const lineas = crear('g', { fill: 'none', stroke: '#b9c4bf', 'stroke-width': 0.8, 'stroke-dasharray': '3 4' });
-  const etiquetas = crear('g', { 'font-size': 10, fill: '#5f6b66', 'font-family': 'system-ui, sans-serif' });
+  const lineas = crear('g', { fill: 'none', stroke: '#D8D2C5', 'stroke-width': 0.8, 'stroke-dasharray': '3 4' });
+  const etiquetas = crear('g', { 'font-size': 10, fill: '#2C3531', 'font-family': 'system-ui, sans-serif' });
 
   for (let lon = Math.ceil(p.minX / 5) * 5; lon <= p.maxX; lon += 5) {
     const x = p.x(lon);
@@ -82,10 +82,10 @@ function rejilla(p) {
 }
 
 function leyenda(p, oleoMaximo) {
-  const grupo = crear('g', { 'font-family': 'system-ui, sans-serif', fill: '#1f2d2a' });
+  const grupo = crear('g', { 'font-family': 'system-ui, sans-serif', fill: '#0B221E' });
   const dibujarTexto = (atributos, texto) => grupo.appendChild(crear('text', atributos, texto));
 
-  grupo.appendChild(crear('rect', { x: 740, y: 36, width: 240, height: 330, rx: 4, fill: '#ffffff', stroke: '#c9d3ce' }));
+  grupo.appendChild(crear('rect', { x: 740, y: 36, width: 240, height: 330, rx: 4, fill: '#ffffff', stroke: '#D8D2C5' }));
   dibujarTexto({ x: 756, y: 60, 'font-size': 12, 'font-weight': 700, 'letter-spacing': '0.08em' }, 'LEYENDA');
 
   const defs = crear('defs');
@@ -95,11 +95,11 @@ function leyenda(p, oleoMaximo) {
   defs.appendChild(gradiente);
   grupo.appendChild(defs);
   grupo.appendChild(crear('rect', { x: 756, y: 72, width: 208, height: 10, rx: 2, fill: 'url(#gradiente-ubicacion)' }));
-  dibujarTexto({ x: 756, y: 96, 'font-size': 10, fill: '#5f6b66' }, '0 bbl/día');
-  dibujarTexto({ x: 964, y: 96, 'font-size': 10, fill: '#5f6b66', 'text-anchor': 'end' }, `${formatoEntero.format(oleoMaximo)} bbl/día`);
+  dibujarTexto({ x: 756, y: 96, 'font-size': 10, fill: '#2C3531' }, '0 bbl/día');
+  dibujarTexto({ x: 964, y: 96, 'font-size': 10, fill: '#2C3531', 'text-anchor': 'end' }, `${formatoEntero.format(oleoMaximo)} bbl/día`);
   dibujarTexto({ x: 756, y: 114, 'font-size': 11 }, 'Estado con registros (óleo total)');
 
-  grupo.appendChild(crear('rect', { x: 756, y: 124, width: 18, height: 12, fill: COLOR_SIN_DATOS, stroke: '#c9d3ce' }));
+  grupo.appendChild(crear('rect', { x: 756, y: 124, width: 18, height: 12, fill: COLOR_SIN_DATOS, stroke: '#D8D2C5' }));
   dibujarTexto({ x: 782, y: 134, 'font-size': 11 }, 'Sin registros terrestres');
 
   dibujarTexto({ x: 756, y: 170, 'font-size': 12, 'font-weight': 700, 'letter-spacing': '0.08em' }, 'SIMBOLOGÍA');
@@ -107,22 +107,22 @@ function leyenda(p, oleoMaximo) {
   const posiciones = [778, 836, 904];
   muestras.forEach((valor, i) => {
     const r = radioDe(valor, oleoMaximo);
-    grupo.appendChild(crear('circle', { cx: posiciones[i], cy: 222 - r, r, fill: 'rgba(15,118,110,0.78)', stroke: '#ffffff', 'stroke-width': 1.5 }));
-    dibujarTexto({ x: posiciones[i], y: 240, 'font-size': 10, 'text-anchor': 'middle', fill: '#5f6b66' }, formatoEntero.format(valor));
+    grupo.appendChild(crear('circle', { cx: posiciones[i], cy: 222 - r, r, fill: 'rgba(140,109,70,0.78)', stroke: '#ffffff', 'stroke-width': 1.5 }));
+    dibujarTexto({ x: posiciones[i], y: 240, 'font-size': 10, 'text-anchor': 'middle', fill: '#2C3531' }, formatoEntero.format(valor));
   });
   dibujarTexto({ x: 756, y: 262, 'font-size': 11 }, 'Tamaño: óleo total del estado (bbl/día)');
 
   dibujarTexto({ x: 756, y: 296, 'font-size': 12, 'font-weight': 700, 'letter-spacing': '0.08em' }, 'ESCALA');
   const pxPorKm = p.escala / KM_POR_GRADO;
   const barra = 500 * pxPorKm;
-  grupo.appendChild(crear('rect', { x: 756, y: 308, width: barra / 2, height: 6, fill: '#1f2d2a' }));
-  grupo.appendChild(crear('rect', { x: 756 + barra / 2, y: 308, width: barra / 2, height: 6, fill: '#ffffff', stroke: '#1f2d2a', 'stroke-width': 0.8 }));
-  dibujarTexto({ x: 756, y: 328, 'font-size': 10, fill: '#5f6b66' }, '0');
-  dibujarTexto({ x: 756 + barra / 2, y: 328, 'font-size': 10, fill: '#5f6b66', 'text-anchor': 'middle' }, '250');
-  dibujarTexto({ x: 756 + barra + 6, y: 328, 'font-size': 10, fill: '#5f6b66' }, '500 km');
+  grupo.appendChild(crear('rect', { x: 756, y: 308, width: barra / 2, height: 6, fill: '#0B221E' }));
+  grupo.appendChild(crear('rect', { x: 756 + barra / 2, y: 308, width: barra / 2, height: 6, fill: '#ffffff', stroke: '#0B221E', 'stroke-width': 0.8 }));
+  dibujarTexto({ x: 756, y: 328, 'font-size': 10, fill: '#2C3531' }, '0');
+  dibujarTexto({ x: 756 + barra / 2, y: 328, 'font-size': 10, fill: '#2C3531', 'text-anchor': 'middle' }, '250');
+  dibujarTexto({ x: 756 + barra + 6, y: 328, 'font-size': 10, fill: '#2C3531' }, '500 km');
 
-  grupo.appendChild(crear('path', { d: 'M950 350 L956 340 L962 350 L956 346 Z', fill: '#1f2d2a' }));
-  dibujarTexto({ x: 956, y: 364, 'font-size': 10, 'text-anchor': 'middle', fill: '#5f6b66' }, 'N');
+  grupo.appendChild(crear('path', { d: 'M950 350 L956 340 L962 350 L956 346 Z', fill: '#0B221E' }));
+  dibujarTexto({ x: 956, y: 364, 'font-size': 10, 'text-anchor': 'middle', fill: '#2C3531' }, 'N');
   return grupo;
 }
 
@@ -133,7 +133,7 @@ function dibujarMapa(svg, geojson, datos) {
 
   const estados = crear('g', { stroke: '#ffffff', 'stroke-width': 0.9, 'stroke-linejoin': 'round' });
   const burbujas = crear('g');
-  const etiquetas = crear('g', { 'font-family': 'system-ui, sans-serif', 'font-size': 11, 'font-weight': 600, fill: '#1f2d2a', stroke: '#ffffff', 'stroke-width': 3, 'paint-order': 'stroke' });
+  const etiquetas = crear('g', { 'font-family': 'system-ui, sans-serif', 'font-size': 11, 'font-weight': 600, fill: '#0B221E', stroke: '#ffffff', 'stroke-width': 3, 'paint-order': 'stroke' });
 
   const [lineasRejilla, etiquetasRejilla] = rejilla(p);
   svg.appendChild(lineasRejilla);
@@ -157,7 +157,7 @@ function dibujarMapa(svg, geojson, datos) {
     const r = conBurbuja ? radioDe(d['Óleo (bbl/dia)'], oleoMaximo) : 0;
 
     if (conBurbuja) {
-      const burbuja = crear('circle', { cx, cy, r, fill: 'rgba(15,118,110,0.78)', stroke: '#ffffff', 'stroke-width': 1.5 });
+      const burbuja = crear('circle', { cx, cy, r, fill: 'rgba(140,109,70,0.78)', stroke: '#ffffff', 'stroke-width': 1.5 });
       burbuja.appendChild(crear('title', {}, `${nombre}: ${formatoDecimal.format(d['Óleo (bbl/dia)'])} bbl/día`));
       burbujas.appendChild(burbuja);
     }

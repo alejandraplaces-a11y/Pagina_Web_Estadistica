@@ -17,9 +17,9 @@
   const gdfOjiva = $('#gdf-ojiva');
   const notaGdf = $('#nota-gdf');
 
-  const COLOR_INK = '#17251f';
-  const COLOR_MUTED = '#7d8b81';
-  const COLOR_OIL = '#b6652f';
+  const COLOR_INK = '#2C3531';
+  const COLOR_MUTED = '#2C3531';
+  const COLOR_OIL = '#8C6D46';
 
   function mostrarError(id, mensaje, error) {
     const estado = id ? $(id) : estadoTdf;
@@ -174,8 +174,8 @@
       ],
       {
         ...layoutPlotly({ height: 360 }),
-        yaxis: { grid: { color: 'rgba(23, 37, 31, 0.08)' }, tickfont: { color: COLOR_MUTED, size: 11 }, automargin: true },
-        xaxis: { grid: { color: 'rgba(23, 37, 31, 0.08)' }, tickfont: { color: COLOR_MUTED, size: 11 } },
+        yaxis: { grid: { color: 'rgba(11, 34, 30, 0.08)' }, tickfont: { color: COLOR_MUTED, size: 11 }, automargin: true },
+        xaxis: { grid: { color: 'rgba(11, 34, 30, 0.08)' }, tickfont: { color: COLOR_MUTED, size: 11 } },
       },
       { responsive: true }
     );
@@ -215,8 +215,8 @@
       ],
       {
         ...layoutPlotly({ height: 360 }),
-        xaxis: { grid: { color: 'rgba(23, 37, 31, 0.08)' }, tickfont: { color: COLOR_MUTED, size: 11 } },
-        yaxis: { grid: { color: 'rgba(23, 37, 31, 0.08)' }, tickfont: { color: COLOR_MUTED, size: 11 } },
+        xaxis: { grid: { color: 'rgba(11, 34, 30, 0.08)' }, tickfont: { color: COLOR_MUTED, size: 11 } },
+        yaxis: { grid: { color: 'rgba(11, 34, 30, 0.08)' }, tickfont: { color: COLOR_MUTED, size: 11 } },
       },
       { responsive: true }
     );
@@ -238,8 +238,8 @@
         },
       ],
       {
-        ...layoutPlotly({ height: 360, yaxis: { grid: { color: 'rgba(23, 37, 31, 0.08)' }, tickfont: { color: COLOR_MUTED, size: 11 }, scale: 0.9 } }),
-        xaxis: { grid: { color: 'rgba(23, 37, 31, 0.08)' }, tickfont: { color: COLOR_MUTED, size: 11 } },
+        ...layoutPlotly({ height: 360, yaxis: { grid: { color: 'rgba(11, 34, 30, 0.08)' }, tickfont: { color: COLOR_MUTED, size: 11 }, scale: 0.9 } }),
+        xaxis: { grid: { color: 'rgba(11, 34, 30, 0.08)' }, tickfont: { color: COLOR_MUTED, size: 11 } },
       },
       { responsive: true }
     );

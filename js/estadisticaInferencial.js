@@ -59,9 +59,9 @@ function renderTdf(vad) {
 }
 
 function graficarBarrasVad(vad) {
-  const COLOR_INK = '#17251f';
-  const COLOR_OIL = '#b6652f';
-  const COLOR_WELL = '#6f9a83';
+  const COLOR_INK = '#2C3531';
+  const COLOR_OIL = '#8C6D46';
+  const COLOR_WELL = '#2C3531';
   const x = vad.tdf.map(fila => fila.x);
   return Plotly.newPlot('grafica-vad', [{
     type: 'bar',

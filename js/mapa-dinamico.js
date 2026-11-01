@@ -39,13 +39,13 @@ function abreviar(oleo) {
 function estiloEstado(feature) {
   const nombre = feature.properties.name;
   const fila = dinamico.datos.find(f => f.Estado === nombre);
-  if (!fila) return { fillColor: '#e3e8e5', fillOpacity: 1, color: '#ffffff', weight: 0.8 };
+  if (!fila) return { fillColor: '#EDEAE4', fillOpacity: 1, color: '#ffffff', weight: 0.8 };
 
   const activo = nombre === dinamico.activo;
   return {
     fillColor: colorEscala(Math.sqrt(fila['Óleo (bbl/dia)'] / maximoOleo())),
     fillOpacity: 0.9,
-    color: activo ? '#0f172a' : '#ffffff',
+    color: activo ? '#0B221E' : '#ffffff',
     weight: activo ? 2.5 : 0.8
   };
 }

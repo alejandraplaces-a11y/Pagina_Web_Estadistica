@@ -59,10 +59,10 @@
   }
 
   function graficarModelo(modelo) {
-    const COLOR_INK = '#17251f';
-    const COLOR_OIL = '#b6652f';
-    const COLOR_OIL_DEEP = '#8f4a20';
-    const COLOR_WELL = '#6f9a83';
+    const COLOR_INK = '#2C3531';
+    const COLOR_OIL = '#8C6D46';
+    const COLOR_OIL_DEEP = '#0B221E';
+    const COLOR_WELL = '#8C6D46';
     const x = modelo.tabla.map(f => f.x);
     return Plotly.newPlot('grafica-modelo-discreto', [
       {
@@ -70,7 +70,7 @@
         name: 'Observada (hᵢ)',
         x,
         y: modelo.tabla.map(f => f.p_observada),
-        marker: { color: 'rgba(182, 101, 47, 0.35)', line: { color: COLOR_OIL, width: 1 } },
+        marker: { color: 'rgba(140, 109, 70, 0.35)', line: { color: COLOR_OIL, width: 1 } },
         hovertemplate: 'x = %{x}<br>Observada: %{y:.4f}<extra></extra>'
       },
       {

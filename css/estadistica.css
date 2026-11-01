@@ -10,6 +10,18 @@
   background: var(--basin);
   color: var(--white);
   padding: 64px 0 56px;
+  position: relative;
+  overflow: hidden;
+}
+
+.page-hero .container { position: relative; z-index: 1; }
+.page-hero .hero-overlay {
+  background: linear-gradient(
+    to right,
+    rgba(14, 47, 41, .88) 0%,
+    rgba(14, 47, 41, .6) 55%,
+    rgba(14, 47, 41, .28) 100%
+  );
 }
 
 .page-hero .section-kicker { color: var(--oil-light); }

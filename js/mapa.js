@@ -1,6 +1,6 @@
 const METRICAS = {
-  oleo: { campo: 'Óleo (bbl/dia)', etiqueta: 'Óleo (bbl/día)', unidad: 'bbl/día', colores: ['#e7f3ee', '#0b5b4f'] },
-  pozos: { campo: 'Pozos', etiqueta: 'Pozos únicos', unidad: 'pozos', colores: ['#e8f0e4', '#2e7d5b'] }
+  oleo: { campo: 'Óleo (bbl/dia)', etiqueta: 'Óleo (bbl/día)', unidad: 'bbl/día', colores: ['#EDEAE4', '#8C6D46'] },
+  pozos: { campo: 'Pozos', etiqueta: 'Pozos únicos', unidad: 'pozos', colores: ['#F5F0E6', '#0B221E'] }
 };
 
 const formatoNumero = new Intl.NumberFormat('es-CO', { maximumFractionDigits: 2 });
@@ -51,14 +51,14 @@ function estiloEstado(feature) {
   const nombre = feature.properties.name;
   const fila = filaDe(nombre);
   const seleccionado = nombre === estado.seleccion;
-  if (!fila) return { fillColor: '#e3e8e5', fillOpacity: 1, color: '#ffffff', weight: 0.8 };
+  if (!fila) return { fillColor: '#EDEAE4', fillOpacity: 1, color: '#ffffff', weight: 0.8 };
 
   const valor = valorDe(fila, estado.metrica);
   const oculto = valor < (estado.umbral / 100) * maximo();
   return {
-    fillColor: oculto ? '#eef2f0' : mezclar(METRICAS[estado.metrica].colores, Math.sqrt(valor / maximo())),
+    fillColor: oculto ? '#EDEAE4' : mezclar(METRICAS[estado.metrica].colores, Math.sqrt(valor / maximo())),
     fillOpacity: oculto ? 0.6 : 0.9,
-    color: seleccionado ? '#0f172a' : '#ffffff',
+    color: seleccionado ? '#0B221E' : '#ffffff',
     weight: seleccionado ? 2.5 : 0.8
   };
 }

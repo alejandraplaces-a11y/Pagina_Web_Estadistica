@@ -1,11 +1,37 @@
 @import url("styles.css");
 
+:root {
+  --paper: #F5F0E6;
+  --paper-2: #EDEAE4;
+  --paper-3: #EDEAE4;
+  --white: #F5F0E6;
+  --ink: #0B221E;
+  --ink-soft: #2C3531;
+  --ink-faint: #2C3531;
+  --line: #D8D2C5;
+  --oil: #8C6D46;
+  --oil-deep: #8C6D46;
+  --oil-light: #8C6D46;
+  --basin-2: #8C6D46;
+}
+
+body { color: var(--ink-soft); }
+
 /* Estadística inferencial: componentes de la página construidos sobre la
    paleta y los tokens del design system (css/styles.css). El design system es
    la fuente de verdad: este archivo solo aporta lo específico de la inferencial. */
 
 /* Hero de página */
-.page-hero { background: var(--basin); color: var(--white); padding: 64px 0 56px; }
+.page-hero { background: var(--basin); color: var(--white); padding: 64px 0 56px; position: relative; overflow: hidden; }
+.page-hero .container { position: relative; z-index: 1; }
+.page-hero .hero-overlay {
+  background: linear-gradient(
+    to right,
+    rgba(14, 47, 41, .88) 0%,
+    rgba(14, 47, 41, .6) 55%,
+    rgba(14, 47, 41, .28) 100%
+  );
+}
 .page-hero .section-kicker { color: var(--oil-light); }
 .page-hero .section-kicker::before { background: var(--oil); }
 .page-hero h1 { font-family: var(--serif); font-size: clamp(34px, 4.6vw, 56px); font-weight: 500; line-height: 1.02; letter-spacing: -0.04em; color: var(--white); animation: rise 0.85s var(--ease) both; animation-delay: 0.12s; }
@@ -13,8 +39,11 @@
 .page-hero .page-lead { margin-top: 18px; max-width: 680px; color: rgba(248, 249, 243, 0.78); font-size: 16px; line-height: 1.75; }
 
 /* Secciones */
-.section.cream { background: var(--paper-2); }
-.section h2 { margin-top: 16px; }
+.section { background: var(--paper-2); }
+.section.cream { background: var(--paper); }
+.section.cream .method-card, .section.cream .method-card.teal, .section.cream .chart-card, .section.cream .table-scroll, .section.cream .frame-note, .section.cream .pending-card { background: var(--paper-2); }
+.section.cream .data-table th, .section.cream .data-table tfoot td, .section.cream .data-table tbody tr:hover, .section.cream .calculator-fields input, .section.cream .calculator-fields select, .section.cream .calculator-result, .section.cream .vad-domain span, .section.cream .test-decision.is-accept { background: var(--paper); }
+.section h2 { margin-top: 16px; color: var(--ink); }
 .subsection-title { margin-top: 10px; font-family: var(--serif); font-size: clamp(22px, 2.4vw, 28px); font-weight: 500; letter-spacing: -0.02em; color: var(--ink); }
 .section-intro { margin-top: 14px; max-width: 720px; color: var(--ink-soft); line-height: 1.75; }
 
@@ -52,10 +81,10 @@
 /* Pruebas de ajuste y decisiones */
 .test-metrics { margin-top: 18px; }
 .test-decision { display: inline-block; margin-top: 16px; padding: 8px 16px; border-radius: 999px; font-size: 14px; font-weight: 650; }
-.test-decision.is-reject { background: #fdecea; color: #a13224; }
-.test-decision.is-accept { background: #dff3ea; color: #0b5b4f; }
+.test-decision.is-reject { background: var(--basin); color: var(--white); }
+.test-decision.is-accept { background: var(--paper-2); color: var(--ink); border: 1px solid var(--line); }
 .decision-row { display: flex; flex-wrap: wrap; gap: 10px; }
-.data-table tbody tr.is-best td { background: #eef7f2; font-weight: 650; }
+.data-table tbody tr.is-best td { background: rgba(140, 109, 70, 0.08); font-weight: 650; }
 
 /* Modelo continuo: restricciones */
 .restriction-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin-top: 8px; }
@@ -63,16 +92,16 @@
 /* Calculadoras */
 .calculator-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 6px; }
 .calculator-fields label { display: grid; gap: 6px; font-size: 13px; color: var(--ink-soft); }
-.calculator-fields input, .calculator-fields select { width: 100%; padding: 9px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); color: var(--ink); font: inherit; }
+.calculator-fields input, .calculator-fields select { width: 100%; padding: 9px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper-2); color: var(--ink); font: inherit; }
 .calculator-fields input:focus-visible, .calculator-fields select:focus-visible { outline: 3px solid var(--oil-deep); outline-offset: 2px; }
-.calculator-result { margin-top: 14px !important; padding: 12px 14px; border-radius: 8px; background: var(--paper); font-weight: 650; color: var(--ink) !important; }
+.calculator-result { margin-top: 14px !important; padding: 12px 14px; border-radius: 8px; background: var(--paper-2); font-weight: 650; color: var(--ink) !important; }
 
 /* Dominio de X (0 a 31 días) */
 .vad-domain { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
 .vad-domain span { min-width: 32px; padding: 4px 6px; border: 1px solid var(--line); border-radius: 6px; background: var(--paper-2); font-family: var(--sans); font-size: 12px; text-align: center; color: var(--ink); }
 
 /* Tarjeta pendiente */
-.pending-card { margin-top: 20px; padding: 22px 24px; border: 1px dashed #b8c9c1; border-radius: 12px; background: var(--paper); color: var(--ink-soft); font-size: 14px; line-height: 1.7; }
+.pending-card { margin-top: 20px; padding: 22px 24px; border: 1px dashed var(--line); border-radius: 12px; background: var(--paper); color: var(--ink-soft); font-size: 14px; line-height: 1.7; }
 .pending-card strong { color: var(--ink); }
 
 /* ============================================================
@@ -93,17 +122,17 @@
 .indice-grupo-titulo { margin: 0 0 6px; font-family: var(--sans); font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); }
 .indice-lista { margin: 0; padding: 0; list-style: none; border-left: 1px solid var(--line); }
 .indice-lista a { display: grid; grid-template-columns: 46px minmax(0, 1fr); gap: 6px; margin-left: -1px; padding: 7px 10px 7px 12px; border-left: 2px solid transparent; font-size: 13px; line-height: 1.4; color: var(--ink-soft); text-decoration: none; }
-.indice-lista a:hover { color: var(--ink); background: rgba(23, 37, 31, 0.05); }
-.indice-lista a.is-active, .indice-lista a[aria-current="location"] { border-left-color: var(--oil); background: rgba(182, 101, 47, 0.08); color: var(--ink); font-weight: 600; }
+.indice-lista a:hover { color: var(--ink); background: rgba(11, 34, 30, 0.05); }
+.indice-lista a.is-active, .indice-lista a[aria-current="location"] { border-left-color: var(--oil); background: rgba(140, 109, 70, 0.08); color: var(--ink); font-weight: 600; }
 .indice-numero { font-family: var(--sans); font-size: 11px; color: var(--oil-deep); padding-top: 1px; }
-.indice-estado { display: inline-block; margin-left: 6px; padding: 1px 6px; border-radius: 999px; background: #dff3ea; font-size: 10px; font-weight: 600; color: #0b5b4f; vertical-align: 1px; }
+.indice-estado { display: inline-block; margin-left: 6px; padding: 1px 6px; border-radius: 999px; background: var(--paper); font-size: 10px; font-weight: 600; color: var(--ink-soft); vertical-align: 1px; }
 
 /* Escritorio: el índice pasa a una columna fija a la derecha. */
 @media (min-width: 1200px) {
   .inferencial-cuerpo { grid-template-columns: minmax(0, 1fr) 300px; align-items: start; }
 
   .inferencial-secciones { grid-column: 1; grid-row: 1; }
-  .indice-lateral { grid-column: 2; grid-row: 1; top: 88px; max-height: calc(100vh - 104px); margin: 28px 24px 28px 0; padding: 20px 14px 20px 18px; overflow-y: auto; background: var(--paper); border: 1px solid var(--line); border-radius: 12px; }
+  .indice-lateral { grid-column: 2; grid-row: 1; top: 88px; max-height: calc(100vh - 104px); margin: 28px 24px 28px 0; padding: 20px 14px 20px 18px; overflow-y: auto; background: var(--paper-2); border: 1px solid var(--line); border-radius: 12px; }
   .indice-lateral details { width: auto; }
   .indice-lateral summary { cursor: default; pointer-events: none; }
   .indice-lateral summary::after { display: none; }
