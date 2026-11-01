@@ -68,6 +68,15 @@
   }
 
   function showError() {
+    const contenido = $('#planteamiento-contenido');
+    const estado = $('#estado-planteamiento');
+
+    if (contenido && $('#problema')?.children.length) {
+      contenido.hidden = false;
+      if (estado) estado.hidden = true;
+      return;
+    }
+
     const message = 'No se pudieron cargar los datos. Abre la página desde un servidor local (por ejemplo, python3 -m http.server) y vuelve a intentarlo.';
 
     ['#estado-planteamiento'].forEach((selector) => {
@@ -82,32 +91,38 @@
     if (!data) throw new Error('El archivo de contexto está vacío.');
 
     const problem = $('#problema');
-    problem.replaceChildren();
+    if (problem && !problem.children.length) {
+      String(data.problema || '')
+        .split(/\n{2,}/)
+        .forEach((paragraph) => {
+          const trimmed = paragraph.trim();
+          if (!trimmed) return;
+          const p = document.createElement('p');
+          p.textContent = trimmed;
+          problem.append(p);
+        });
+    }
 
-    String(data.problema || '')
-      .split(/\n{2,}/)
-      .forEach((paragraph) => {
-        const trimmed = paragraph.trim();
-        if (!trimmed) return;
-        const p = document.createElement('p');
-        p.textContent = trimmed;
-        problem.append(p);
-      });
-
+    const generalEl = $('#objetivo-general');
     const general = String(data.objetivos?.general || '');
-    setText('#objetivo-general', general ? general.charAt(0).toLowerCase() + general.slice(1) : '');
+    if (generalEl && !generalEl.textContent.trim()) {
+      setText('#objetivo-general', general ? general.charAt(0).toLowerCase() + general.slice(1) : '');
+    }
 
     const list = $('#objetivos-especificos');
-    list.replaceChildren();
+    if (list && !list.children.length) {
+      list.replaceChildren();
+      (data.objetivos?.especificos || []).forEach((item) => {
+        const li = document.createElement('li');
+        li.textContent = String(item).replace(/^\s*\d+[.)]\s*/, '');
+        list.append(li);
+      });
+    }
 
-    (data.objetivos?.especificos || []).forEach((item) => {
-      const li = document.createElement('li');
-      li.textContent = String(item).replace(/^\s*\d+[.)]\s*/, '');
-      list.append(li);
-    });
-
-    $('#estado-planteamiento').hidden = true;
-    $('#planteamiento-contenido').hidden = false;
+    const estado = $('#estado-planteamiento');
+    if (estado) estado.hidden = true;
+    const contenido = $('#planteamiento-contenido');
+    if (contenido) contenido.hidden = false;
   }
 
   function renderData(rows) {

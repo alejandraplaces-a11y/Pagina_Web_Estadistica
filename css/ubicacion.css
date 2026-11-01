@@ -4,6 +4,20 @@
   line-height: 1.6;
 }
 
+/* Introducción: los fondos de sección alternan empezando por el crema. */
+.context-section { background: var(--paper); }
+.method-section { background: var(--paper-2); }
+
+.context-grid {
+  align-items: center;
+}
+
+@media (min-width: 1001px) {
+  .context-body {
+    transform: translateY(70px);
+  }
+}
+
 .map-frame {
   overflow: hidden;
   border-radius: 8px;
