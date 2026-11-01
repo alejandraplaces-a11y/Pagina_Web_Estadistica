@@ -9,9 +9,9 @@ async function leerJSON(ruta) {
     throw new Error(`No se pudo descargar ${ruta}. Comprueba la conexión y que el servidor esté activo.`);
   }
   if (!respuesta.ok) {
-    const ayuda = ruta === 'map_data.json'
-      ? ' Ejecuta python 1_preprocesamiento_mapa.py y publica el JSON generado junto a index.html.'
-      : ' Coloca el archivo JSON junto a index.html.';
+    const ayuda = ruta === 'data/map_data.json'
+      ? ' Ejecuta .venv/bin/python scripts/1_preprocesamiento_mapa.py data/2023_01_producao_Terra.csv y coloca el JSON generado en data/.'
+      : ' Coloca el archivo JSON en la carpeta data/.';
     throw new Error(`${ruta}: HTTP ${respuesta.status}.${ayuda}`);
   }
   try {

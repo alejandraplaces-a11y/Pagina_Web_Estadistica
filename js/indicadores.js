@@ -148,7 +148,7 @@ function renderResumen(datos) {
 
 async function cargarIndicadoresYResumen() {
   try {
-    const datos = await leerJSON('indicadores_descriptivos.json');
+    const datos = await leerJSON('data/indicadores_descriptivos.json');
     document.getElementById('indicadores-n').textContent = formatosIndicadores.entero.format(datos.n);
     document.getElementById('indicadores-variable').textContent = datos.variable;
     document.getElementById('fuente-indicadores').textContent = datos.fuente;
@@ -161,7 +161,7 @@ async function cargarIndicadoresYResumen() {
     document.getElementById('contenido-resumen').hidden = false;
     document.getElementById('estado-resumen').hidden = true;
   } catch (error) {
-    mostrarError('estado-indicadores', `No se pudieron calcular los indicadores. ${error.message} Genera indicadores_descriptivos.json con 1_preprocesamiento_mapa.py.`, error);
+    mostrarError('estado-indicadores', `No se pudieron calcular los indicadores. ${error.message} Genera data/indicadores_descriptivos.json con scripts/1_preprocesamiento_mapa.py.`, error);
     mostrarError('estado-resumen', 'No se pudo cargar el resumen descriptivo.', error);
   }
 }

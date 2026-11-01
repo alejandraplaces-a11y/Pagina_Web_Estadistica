@@ -1,19 +1,21 @@
 # AGENTS.md — Terra (producción terrestre de Brasil)
 
-Static, no-framework site: `index.html`, `css/styles.css`, `js/main.js`, self-hosted fonts in `fonts/`, JSON in `data/`, one pandas script in `scripts/`, and images in `img/`. There is no `package.json`, build, test, lint, or CI — don't invent commands. `proyecto.md` is the graded Spanish outline the site must eventually cover (4.1 descriptive, 4.2 inferential, 4.3 regression/ML/time series); today only the planteamiento, Ubicación Geográfica (cuadro vacío para mapa), y Objetivos están built.
+Static, no-framework site: five HTML pages at the repo root (`index.html`, `introduccion.html`, `mapa.html`, `Estadistica.html`, `estadisticaInferencial.html`), `css/`, `js/`, self-hosted fonts in `fonts/`, JSON in `data/`, one pandas script in `scripts/`, images in `img/`, videos in `video/`. There is no `package.json`, build, test, lint, or CI — don't invent commands. `proyecto.md` is the graded Spanish outline the site must eventually cover (4.1 descriptive, 4.2 inferential, 4.3 regression/ML/time series); today the planteamiento, the map page, and both statistics pages are built.
 
 ## Preview
 
 - Serve from the repo root over HTTP: `python3 -m http.server 8000` → `http://localhost:8000/`. `file://` fails because the page fetches local JSON.
-- Manual check: "Cargando planteamiento…" disappears, the planteamiento text renders, `img/logo-universidad.png` replaces the "T" brand mark (34×34 px), the map placeholder box appears in Ubicación Geográfica, and Objetivos shows 1 general + 3 específicos.
+- Manual check: on `introduccion.html` the "Cargando planteamiento…" status disappears and the planteamiento text plus 1 objetivo general and 3 específicos render from `data/contexto.json`; on `mapa.html` the Leaflet map and the Estado ranking load; on `Estadistica.html` and `estadisticaInferencial.html` the Plotly tables/charts fill in.
 
 ## Sections (current)
 
-- `#planteamiento` — Planteamiento del problema (replaced old `#contexto`). Inner content div is `#planteamiento-contenido` (kept separate from section `#planteamiento` to avoid the old duplicate-ID bug).
-- `#ubicacion` — Ubicación Geográfica. Left empty with a `.map-placeholder` box (`#mapa-geografico` figure). No table/chart renders here.
-- `#objetivos` — Objetivos del estudio. Two blocks: `Objetivo general` (`#objetivo-general`) and `Objetivos específicos` (`#objetivos-especificos`, an ordered list of 3 items).
-- `#inicio` — Full-bleed background video (`video/video-inicio.mp4`), autoplay muted loop.
-- Collapsible sidebar (`js/sidebar.js`, `.sidebar`): fixed left rail, collapsed 64px (logo only), expanded 240px (logo + name). State persisted in `localStorage('sidebar-expanded')`. Mobile becomes an off-canvas drawer opened by `.menu-toggle`. Included on `index.html` and `Estadistica.html`.
+- `introduccion.html` — `#planteamiento` (inner content div `#planteamiento-contenido`) and `#objetivos` (`#objetivo-general`, `#objetivos-especificos`). Both are fed by `js/main.js` from `data/contexto.json`.
+- `index.html` — `#hero` (video hero), `#diagrama` (interactive west→east route, `js/ruta.js`), `#mision-vision`, `#motivacion`.
+- `mapa.html` — Leaflet map of production per Estado (`js/mapa.js`), ranking panel and metric/threshold controls.
+- `Estadistica.html` — descriptive statistics (población/muestra, variables, TDF, GDF, indicadores, resumen) via `js/estadistica.js`, `js/frecuencias.js`, `js/indicadores.js`.
+- `estadisticaInferencial.html` — inferential statistics via `js/estadisticaInferencial.js`, `js/modeloDiscreto.js`, `js/variableContinua.js`, `js/modeloContinuo.js`, plus the `js/indiceLateral.js` side index.
+- `#inicio` — Full-bleed background video: `video/video-completo.mp4` on `index.html`, `video/video-descriptiva.mp4` on `Estadistica.html`, `video/video-inferencial.mp4` on `estadisticaInferencial.html`; autoplay muted loop.
+- Collapsible sidebar (`js/sidebar.js`, `.sidebar`): fixed left rail, collapsed 64px (logo only), expanded 240px (logo + name). State persisted in `localStorage('sidebar-expanded')`. Mobile becomes an off-canvas drawer opened by `.menu-toggle`. Included on all five pages.
 - Footer with self-hosted logo.
 
 ## Data pipeline
@@ -21,11 +23,13 @@ Static, no-framework site: `index.html`, `css/styles.css`, `js/main.js`, self-ho
 - Source: `data/2023_01_producao_Terra.csv` — `;`-separated, `,` decimal, `.` thousands, `utf-8-sig`, and a second subheader row. Keep those read options.
 - Regenerate with the bundled venv: `.venv/bin/python scripts/1_preprocesamiento_mapa.py data/2023_01_producao_Terra.csv`. Passing the CSV is required — the script's default path is `scripts/`, not `data/`.
 - The script writes `scripts/map_data.json`, but the site reads `data/map_data.json`. Copy the result (or change `BASE`/`salida`) after each run or the page keeps stale numbers.
+- `data/` is the single source of truth for runtime JSON. Every `leerJSON()`/`fetch()` in `js/` uses the `data/...` prefix, so don't re-add copies at the repo root or under `js/`.
 - `data/contexto.json` is hand-written copy (`problema`, `objetivos.general`, `objetivos.especificos`), not generated by the script. `js/main.js` injects `#problema`, `#objetivo-general`, and `#objetivos-especificos` from it.
 
 ## Page wiring
 
-- `js/main.js` fetches both JSON files. `renderContext()` fills `#problema`, `#objetivo-general`, `#objetivos-especificos`; `renderData()` early-returns because the data table/balance chart were removed (Ubicación Geográfica is empty).
+- `js/main.js` fetches only `data/contexto.json`. `renderContext()` fills `#problema`, `#objetivo-general`, `#objetivos-especificos`; `initReveals()` handles the scroll reveals. The old table/balance-chart renderers were removed with the data table.
+- `js/common.js` is the shared `leerJSON()`/`mostrarError()` helper loaded by every page (it replaced the duplicated `js/commonInf.js`).
 - The `<section id="planteamiento">` and the inner `<div id="planteamiento-contenido">` are intentionally different IDs. Don't collapse them.
 - Motion: hero entrance, stat count-up, `IntersectionObserver` reveals (`.will-reveal`). `prefers-reduced-motion` disables all and shows final values — preserve that path.
 - Responsive breakpoints are 1000, 760, 560, and 520px. No horizontal scroll.
@@ -34,5 +38,5 @@ Static, no-framework site: `index.html`, `css/styles.css`, `js/main.js`, self-ho
 
 ## Repo state
 
-- Only `proyecto.md` is committed; `index.html`, `css/`, `js/`, `fonts/`, `data/`, `scripts/`, `img/`, `.agents/` are untracked working files — don't remove them with `git clean`/`checkout`.
+- All site files are tracked. Deleted working files (root-level JSON copies, `mapa_files/`, duplicate helper scripts) were only duplicates — don't recreate them.
 - `.venv/` is a local Python 3.14 env with pandas/numpy; use `.venv/bin/python`, don't edit or commit it. `.agents/skills/frontend-design/` is vendored and pinned by `skills-lock.json`.

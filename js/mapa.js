@@ -215,11 +215,11 @@ async function iniciar() {
     if (!window.L) throw new Error('No se cargó Leaflet desde unpkg.com. Comprueba la conexión a Internet.');
 
     const [datos, geojson] = await Promise.all([
-      leerJSON('map_data.json'),
+      leerJSON('data/map_data.json'),
       leerJSON('data/brasil-estados.geojson')
     ]);
     if (!Array.isArray(datos) || datos.length === 0) {
-      throw new Error('map_data.json no contiene datos por Estado.');
+      throw new Error('data/map_data.json no contiene datos por Estado.');
     }
     estado.datos = datos;
 
