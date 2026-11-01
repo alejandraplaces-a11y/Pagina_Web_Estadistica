@@ -22,6 +22,8 @@
   <script defer src="js/frecuencias.js"></script>
   <script defer src="js/indicadores.js"></script>
 </head>
+
+
 <body class="has-sidebar">
   <div class="app-shell">
     <aside class="sidebar" id="sidebar" aria-label="Navegación lateral">
@@ -97,7 +99,12 @@
 
       <main id="contenido">
         <section class="page-hero" aria-labelledby="estadistica-titulo">
-          <div class="container">
+          <video class="hero-video" autoplay muted loop playsinline preload="auto" aria-hidden="true" tabindex="-1">
+            <source src="video/video-descriptiva.mp4" type="video/mp4">
+            Tu navegador no puede reproducir el video.
+          </video>
+          <div class="hero-overlay" aria-hidden="true"></div>
+          <div class="container hero-content">
             <p class="section-kicker">04 / Análisis estadístico</p>
             <h1 id="estadistica-titulo">Estadística descriptiva.</h1>
             <p class="aside-meta">Brasil · Enero de 2023</p>
