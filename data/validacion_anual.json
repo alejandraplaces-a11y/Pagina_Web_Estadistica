@@ -1,0 +1,130 @@
+{
+  "fuente": "ANP · 2023_MM_producao_Terra.csv (enero a diciembre de 2023)",
+  "ic_media": [
+    12.016841144220434,
+    13.933502636466963
+  ],
+  "ic_mediana": [
+    4.545736645612478,
+    4.9265552333375
+  ],
+  "anual": {
+    "observaciones": 63583,
+    "media": 13.577140430618249,
+    "mediana": 5.5011,
+    "media_en_ic": true,
+    "mediana_en_ic": false
+  },
+  "meses": [
+    {
+      "mes": "01",
+      "pozos": 5308,
+      "productores": 4888,
+      "media": 12.975171890343699,
+      "mediana": 4.9852,
+      "media_en_ic": true,
+      "mediana_en_ic": false
+    },
+    {
+      "mes": "02",
+      "pozos": 4958,
+      "productores": 4648,
+      "media": 13.556336402753871,
+      "mediana": 5.27965,
+      "media_en_ic": true,
+      "mediana_en_ic": false
+    },
+    {
+      "mes": "03",
+      "pozos": 5130,
+      "productores": 4796,
+      "media": 13.71798490408674,
+      "mediana": 5.2543,
+      "media_en_ic": true,
+      "mediana_en_ic": false
+    },
+    {
+      "mes": "04",
+      "pozos": 5268,
+      "productores": 4930,
+      "media": 13.307992961460446,
+      "mediana": 5.1525,
+      "media_en_ic": true,
+      "mediana_en_ic": false
+    },
+    {
+      "mes": "05",
+      "pozos": 5566,
+      "productores": 5221,
+      "media": 13.170088718636277,
+      "mediana": 5.3224,
+      "media_en_ic": true,
+      "mediana_en_ic": false
+    },
+    {
+      "mes": "06",
+      "pozos": 6092,
+      "productores": 5485,
+      "media": 13.452979270738377,
+      "mediana": 5.3086,
+      "media_en_ic": true,
+      "mediana_en_ic": false
+    },
+    {
+      "mes": "07",
+      "pozos": 6366,
+      "productores": 5609,
+      "media": 13.934612996969157,
+      "mediana": 5.6957,
+      "media_en_ic": false,
+      "mediana_en_ic": false
+    },
+    {
+      "mes": "08",
+      "pozos": 6437,
+      "productores": 5517,
+      "media": 13.538618524560452,
+      "mediana": 5.7458,
+      "media_en_ic": true,
+      "mediana_en_ic": false
+    },
+    {
+      "mes": "09",
+      "pozos": 6554,
+      "productores": 5477,
+      "media": 14.777369746211427,
+      "mediana": 6.2137,
+      "media_en_ic": false,
+      "mediana_en_ic": false
+    },
+    {
+      "mes": "10",
+      "pozos": 6668,
+      "productores": 5635,
+      "media": 13.915423229813664,
+      "mediana": 5.6276,
+      "media_en_ic": true,
+      "mediana_en_ic": false
+    },
+    {
+      "mes": "11",
+      "pozos": 6846,
+      "productores": 5660,
+      "media": 13.304172897526502,
+      "mediana": 5.62805,
+      "media_en_ic": true,
+      "mediana_en_ic": false
+    },
+    {
+      "mes": "12",
+      "pozos": 6942,
+      "productores": 5717,
+      "media": 13.186961255903446,
+      "mediana": 5.7507,
+      "media_en_ic": true,
+      "mediana_en_ic": false
+    }
+  ],
+  "meses_media_en_ic": 10,
+  "meses_mediana_en_ic": 0
+}

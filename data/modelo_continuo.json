@@ -10,6 +10,7 @@
   "desviacion_observada": 34.17632450986574,
   "mediana_teorica": 4.732316838591453,
   "mediana_observada": 4.9852,
+  "mediana_observada_en_ic": false,
   "pearson_r": 0.9927633840037078,
   "pearson_r2": 0.9855791366184934,
   "candidatos": [
@@ -372,43 +373,49 @@
       "error": 1.0,
       "unidad": "bbl/día",
       "n0": 4486.90517632903,
-      "n": 2340
+      "n": 4487,
+      "cubre": true
     },
     {
       "objetivo": "Media de Y",
       "error": 2.0,
       "unidad": "bbl/día",
       "n0": 1121.7262940822575,
-      "n": 913
+      "n": 1122,
+      "cubre": true
     },
     {
       "objetivo": "Media de Y",
       "error": 5.0,
       "unidad": "bbl/día",
       "n0": 179.47620705316115,
-      "n": 174
+      "n": 180,
+      "cubre": true
     },
     {
       "objetivo": "Proporción Y ≥ 10",
       "error": 0.05,
       "unidad": "proporción",
       "n0": 316.3138752225586,
-      "n": 298
+      "n": 317,
+      "cubre": true
     },
     {
       "objetivo": "Proporción Y ≥ 10",
       "error": 0.03,
       "unidad": "proporción",
       "n0": 878.6496533959962,
-      "n": 745
+      "n": 879,
+      "cubre": true
     },
     {
       "objetivo": "Proporción Y ≥ 10",
       "error": 0.02,
       "unidad": "proporción",
       "n0": 1976.9617201409912,
-      "n": 1408
+      "n": 1977,
+      "cubre": true
     }
   ],
-  "poblacion": 4888
+  "muestra": 4888
 }

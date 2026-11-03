@@ -1,0 +1,290 @@
+{
+  "fuente": "2023_01_producao_Terra.csv",
+  "unidad": "pozo",
+  "n": 5308,
+  "registros": 5471,
+  "variables": [
+    {
+      "columna": "Estado",
+      "traduccion": "Estado",
+      "descripcion": "Unidad federativa donde se ubica el pozo",
+      "tipo": "Cualitativa",
+      "subtipo": "Nominal",
+      "dominio": "27 unidades federativas de Brasil",
+      "rango": "9 estados",
+      "escala": "Nominal",
+      "instrumento": "Registro administrativo de la ANP",
+      "unidad": "—",
+      "validos": 5308,
+      "nulos": 0,
+      "ceros": null
+    },
+    {
+      "columna": "Bacia",
+      "traduccion": "Cuenca",
+      "descripcion": "Cuenca sedimentaria del pozo",
+      "tipo": "Cualitativa",
+      "subtipo": "Nominal",
+      "dominio": "Cuencas sedimentarias terrestres",
+      "rango": "12 cuencas",
+      "escala": "Nominal",
+      "instrumento": "Registro administrativo de la ANP",
+      "unidad": "—",
+      "validos": 5308,
+      "nulos": 0,
+      "ceros": null
+    },
+    {
+      "columna": "Campo",
+      "traduccion": "Campo",
+      "descripcion": "Campo de producción (el de mayor óleo si el pozo aporta a varios)",
+      "tipo": "Cualitativa",
+      "subtipo": "Nominal",
+      "dominio": "Campos con contrato de concesión",
+      "rango": "221 campos",
+      "escala": "Nominal",
+      "instrumento": "Registro administrativo de la ANP",
+      "unidad": "—",
+      "validos": 5308,
+      "nulos": 0,
+      "ceros": null
+    },
+    {
+      "columna": "Operador",
+      "traduccion": "Operador",
+      "descripcion": "Empresa que opera el pozo",
+      "tipo": "Cualitativa",
+      "subtipo": "Nominal",
+      "dominio": "Empresas autorizadas por la ANP",
+      "rango": "39 operadores",
+      "escala": "Nominal",
+      "instrumento": "Registro administrativo de la ANP",
+      "unidad": "—",
+      "validos": 5308,
+      "nulos": 0,
+      "ceros": null
+    },
+    {
+      "columna": "Tipo Instalação",
+      "traduccion": "Tipo de instalación de destino",
+      "descripcion": "Tipo de instalación que recibe la producción",
+      "tipo": "Cualitativa",
+      "subtipo": "Nominal",
+      "dominio": "Tipos de instalación de la ANP",
+      "rango": "2 categorías observadas",
+      "escala": "Nominal",
+      "instrumento": "Registro administrativo de la ANP",
+      "unidad": "—",
+      "validos": 5128,
+      "nulos": 180,
+      "ceros": null
+    },
+    {
+      "columna": "— (derivada de Grau API)",
+      "traduccion": "Clase de crudo",
+      "descripcion": "Pesado < 22,3°; mediano 22,3°–31,1°; ligero > 31,1°",
+      "tipo": "Cualitativa",
+      "subtipo": "Ordinal",
+      "dominio": "{Pesado < Mediano < Ligero}",
+      "rango": "Pesado < Mediano < Ligero",
+      "escala": "Ordinal",
+      "instrumento": "Clasificación a partir del grado API",
+      "unidad": "—",
+      "validos": 4435,
+      "nulos": 873,
+      "ceros": null
+    },
+    {
+      "columna": "Tempo de Produção (hs por mês)",
+      "traduccion": "Tiempo de producción",
+      "descripcion": "Horas en que el pozo produjo durante el mes",
+      "tipo": "Cuantitativa",
+      "subtipo": "Discreta",
+      "dominio": "{0, 1, …, 744}",
+      "rango": "0 – 744",
+      "escala": "Razón",
+      "instrumento": "Medición fiscal del operador declarada a la ANP",
+      "unidad": "h/mes",
+      "validos": 5308,
+      "nulos": 0,
+      "ceros": 109
+    },
+    {
+      "columna": "— (derivada de Tempo de Produção)",
+      "traduccion": "Días completos de producción",
+      "descripcion": "⌊horas / 24⌋",
+      "tipo": "Cuantitativa",
+      "subtipo": "Discreta",
+      "dominio": "{0, 1, …, 31}",
+      "rango": "0 – 31",
+      "escala": "Razón",
+      "instrumento": "Cálculo a partir de las horas",
+      "unidad": "días",
+      "validos": 5308,
+      "nulos": 0,
+      "ceros": 356
+    },
+    {
+      "columna": "Óleo (bbl/dia)",
+      "traduccion": "Óleo",
+      "descripcion": "Volumen medio diario de petróleo (sin condensado)",
+      "tipo": "Cuantitativa",
+      "subtipo": "Continua",
+      "dominio": "[0; +∞)",
+      "rango": "0,0000 – 1102,8289",
+      "escala": "Razón",
+      "instrumento": "Medición fiscal del operador declarada a la ANP",
+      "unidad": "bbl/día",
+      "validos": 5308,
+      "nulos": 0,
+      "ceros": 420
+    },
+    {
+      "columna": "Condensado (bbl/dia)",
+      "traduccion": "Condensado",
+      "descripcion": "Volumen medio diario de condensado",
+      "tipo": "Cuantitativa",
+      "subtipo": "Continua",
+      "dominio": "[0; +∞)",
+      "rango": "0,0000 – 722,7292",
+      "escala": "Razón",
+      "instrumento": "Medición fiscal del operador declarada a la ANP",
+      "unidad": "bbl/día",
+      "validos": 5308,
+      "nulos": 0,
+      "ceros": 5209
+    },
+    {
+      "columna": "Gás Natural · Associado",
+      "traduccion": "Gas natural asociado",
+      "descripcion": "Gas producido junto con el petróleo",
+      "tipo": "Cuantitativa",
+      "subtipo": "Continua",
+      "dominio": "[0; +∞)",
+      "rango": "0,0000 – 550,6889",
+      "escala": "Razón",
+      "instrumento": "Medición fiscal del operador declarada a la ANP",
+      "unidad": "Mm³/día",
+      "validos": 5308,
+      "nulos": 0,
+      "ceros": 466
+    },
+    {
+      "columna": "Gás Natural · Não Associado",
+      "traduccion": "Gas natural no asociado",
+      "descripcion": "Gas de yacimientos de gas",
+      "tipo": "Cuantitativa",
+      "subtipo": "Continua",
+      "dominio": "[0; +∞)",
+      "rango": "0,0000 – 499,6123",
+      "escala": "Razón",
+      "instrumento": "Medición fiscal del operador declarada a la ANP",
+      "unidad": "Mm³/día",
+      "validos": 5308,
+      "nulos": 0,
+      "ceros": 5081
+    },
+    {
+      "columna": "Gás Natural · Gás Total",
+      "traduccion": "Gas natural total",
+      "descripcion": "Gas asociado + no asociado",
+      "tipo": "Cuantitativa",
+      "subtipo": "Continua",
+      "dominio": "[0; +∞)",
+      "rango": "0,0000 – 550,6889",
+      "escala": "Razón",
+      "instrumento": "Medición fiscal del operador declarada a la ANP",
+      "unidad": "Mm³/día",
+      "validos": 5308,
+      "nulos": 0,
+      "ceros": 239
+    },
+    {
+      "columna": "Água (bbl/dia)",
+      "traduccion": "Agua",
+      "descripcion": "Volumen medio diario de agua producida",
+      "tipo": "Cuantitativa",
+      "subtipo": "Continua",
+      "dominio": "[0; +∞)",
+      "rango": "0,0000 – 5074,2289",
+      "escala": "Razón",
+      "instrumento": "Medición fiscal del operador declarada a la ANP",
+      "unidad": "bbl/día",
+      "validos": 5308,
+      "nulos": 0,
+      "ceros": 353
+    },
+    {
+      "columna": "Grau API",
+      "traduccion": "Grado API",
+      "descripcion": "Densidad del crudo; 141,5/densidad relativa − 131,5. El cero no indica ausencia",
+      "tipo": "Cuantitativa",
+      "subtipo": "Continua",
+      "dominio": "(−∞; +∞), en la práctica 10°–70°",
+      "rango": "13,20 – 64,64",
+      "escala": "Intervalo",
+      "instrumento": "Análisis de laboratorio de la corriente",
+      "unidad": "°API",
+      "validos": 4435,
+      "nulos": 873,
+      "ceros": 0
+    }
+  ],
+  "excluidas": [
+    {
+      "variable": "Nome Poço",
+      "motivo": "identificador del pozo: define la unidad estadística",
+      "valores_distintos": 5308
+    },
+    {
+      "variable": "Nome Poço · Operador",
+      "motivo": "código del pozo usado por el operador; duplica el identificador",
+      "valores_distintos": 5308
+    },
+    {
+      "variable": "Número do Contrato",
+      "motivo": "código del contrato de concesión",
+      "valores_distintos": 201
+    },
+    {
+      "variable": "Período",
+      "motivo": "constante: 2023/01",
+      "valores_distintos": 1
+    },
+    {
+      "variable": "Data de atualização",
+      "motivo": "constante: fecha de publicación del archivo",
+      "valores_distintos": 1
+    },
+    {
+      "variable": "Período da Carga",
+      "motivo": "fecha de la carga administrativa; no describe la producción",
+      "valores_distintos": 11
+    },
+    {
+      "variable": "Instalação Destino",
+      "motivo": "nombre propio de la instalación; casi un valor por pozo",
+      "valores_distintos": 319
+    },
+    {
+      "variable": "Corrente",
+      "motivo": "nombre de la corriente de crudo; se resume en la clase API",
+      "valores_distintos": 39
+    },
+    {
+      "variable": "Petróleo (bbl/dia)",
+      "motivo": "redundante: óleo + condensado",
+      "valores_distintos": 4932
+    },
+    {
+      "variable": "Volume Gás Royalties",
+      "motivo": "base de cálculo de regalías, derivada del gas",
+      "valores_distintos": 2277
+    },
+    {
+      "variable": "Fração de Destilados y composición del gas",
+      "motivo": "análisis de laboratorio por corriente, con muchos nulos",
+      "valores_distintos": null
+    }
+  ]
+}
