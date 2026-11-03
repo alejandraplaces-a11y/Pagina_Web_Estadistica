@@ -26,22 +26,24 @@ Es un sitio **estático, sin frameworks ni paso de compilación**: HTML, CSS y J
 | [`index.html`](index.html) | Portada con video de fondo, recorrido interactivo oeste→este por los Estados productores y las secciones de misión, visión y motivación. |
 | [`introduccion.html`](introduccion.html) | Planteamiento del problema y objetivos (general + 3 específicos), cargados desde `data/contexto.json`. |
 | [`mapa.html`](mapa.html) | Mapa Leaflet interactivo de Brasil: óleo producido y pozos únicos por Estado, con métrica conmutable, umbral mínimo, panel de detalle y ranking. |
-| [`Estadistica.html`](Estadistica.html) | Estadística descriptiva: población e individuo, muestra, variables, TDF, GDF, indicadores y resumen descriptivo. |
-| [`estadisticaInferencial.html`](estadisticaInferencial.html) | Estadística inferencial: VAD, modelo discreto, VAC, modelos continuos, tests de ajuste, probabilidades, estimación y tamaño muestral. |
+| [`Estadistica.html`](Estadistica.html) | Estadística descriptiva: resumen en cifras, población y muestra, variables, TDF y GDF (nominal, ordinal, discreta y continua), indicadores de óleo, gas y agua, y resumen por Estado. |
+| [`estadisticaInferencial.html`](estadisticaInferencial.html) | Estadística inferencial: resumen y veredicto por modelo, VAD, modelo discreto, VAC, modelos continuos, tests de ajuste, probabilidades, estimación, tamaño muestral, segunda VAC (agua) y VAD (pozos por campo), χ² en submuestras y validación con 2023 completo. |
+| [`conclusiones.html`](conclusiones.html) | Conclusiones descriptivas e inferenciales, limitaciones y trabajo futuro. |
+| [`herramientas.html`](herramientas.html) | Herramientas, fuente de datos y pasos para reproducir el análisis. |
+| [`equipo.html`](equipo.html) | Integrantes del proyecto. |
 
-Las cinco páginas comparten una **barra lateral colapsable** (estado persistido en `localStorage`), cabecera, pie con la fuente de datos y un diseño responsive con soporte de `prefers-reduced-motion`.
+Las ocho páginas comparten una **barra lateral colapsable** (estado persistido en `localStorage`), cabecera, pie con la fuente de datos y un diseño responsive con soporte de `prefers-reduced-motion`.
 
 ## Contenido estadístico
 
 ### 4.1 Estadística descriptiva (`Estadistica.html`)
 
-- Población e individuo, con notación simbólica y conteo de registros.
-- Muestra: método y tamaño, con cobertura respecto a la población del archivo.
-- Tabla de variables (naturaleza, escala, unidad, valores válidos y nulos, observación) y listado de variables excluidas por ser identificadores.
-- Tablas de distribución de frecuencias (cualitativa por Estado y cuantitativa por clases con método de Sturges).
-- Gráficas de distribución de frecuencias: barras, histograma con polígono y ojiva.
-- Indicadores centrales, de dispersión y de forma (asimetría y curtosis con corrección muestral).
-- Resumen descriptivo consolidado en tabla.
+- Población: pozos terrestres de Brasil (N no fijado). Muestra: pozos con reporte en enero de 2023, n = 5.308. Los 143 pozos repetidos aportan a varios campos: sus volúmenes se suman y sus horas toman el máximo.
+- Tabla de variables con traducción, descripción, tipo, subtipo, dominio, rango observado, escala, instrumento, unidad, válidos, nulos y ceros calculados desde los datos.
+- TDF con hᵢ = fᵢ / n para Estado (nominal), clase de crudo por API (ordinal), días de producción (discreta) y óleo (continua: clase {0} + clases de igual ancho en log₁₀).
+- GDF: barras, bastones, histograma con polígono en escala log₁₀ y ojiva sobre los límites superiores de clase.
+- Indicadores de óleo, gas y agua (clase modal, atípicos con 1,5·RIC, CV solo en escala de razón) y de días, grado API y clase de crudo.
+- Resumen descriptivo del óleo por Estado.
 
 ### 4.2 Estadística inferencial (`estadisticaInferencial.html`)
 
@@ -50,7 +52,8 @@ Las cinco páginas comparten una **barra lateral colapsable** (estado persistido
 - Variable aleatoria continua: **óleo por pozo productor** (n = 4 888, excluye ceros).
 - Histogramas de frecuencia relativa y de densidad de probabilidad.
 - Conjetura del modelo continuo y comparación de candidatos (**lognormal**, gamma, Weibull) con parámetros estimados, ajuste gráfico y chi-cuadrado.
-- Restricciones del modelo, cálculos de probabilidad, estimación puntual y por intervalos de confianza, y cálculo del tamaño muestral.
+- Restricciones del modelo, cálculos de probabilidad, estimación puntual y por intervalos de confianza (sin corrección por población finita), y cálculo del tamaño muestral.
+- Segunda VAC (agua por pozo: gamma frente a lognormal y Weibull), segunda VAD (pozos por campo: Poisson frente a binomial negativa), χ² en submuestras aleatorias de n = 300 y validación de los intervalos de enero con los 12 meses de 2023.
 
 ### 4.3 Relación entre variables — pendiente
 
@@ -78,7 +81,7 @@ Todos los JSON de ejecución viven en [`data/`](data). El CSV original se conser
 - **JavaScript vanilla** (ES2020) organizado en módulos por página; sin bundler ni dependencias de instalación.
 - **Leaflet 1.9.4** (CDN) y teselas de OpenStreetMap para el mapa interactivo.
 - **Plotly 2.35.2** (CDN) para las gráficas estadísticas.
-- **Python 3 + pandas** para el preprocesamiento y el cálculo de los JSON.
+- **Python 3 + pandas, NumPy y SciPy** para el preprocesamiento, los modelos y el cálculo de los JSON.
 - **Fuentes autoalojadas** Archivo y Fraunces (subconjuntos latinos, SIL OFL 1.1) en [`fonts/`](fonts).
 
 ## Estructura del repositorio
@@ -90,12 +93,16 @@ Todos los JSON de ejecución viven en [`data/`](data). El CSV original se conser
 ├── mapa.html                   # Mapa Leaflet por Estado
 ├── Estadistica.html            # 4.1 Estadística descriptiva
 ├── estadisticaInferencial.html # 4.2 Estadística inferencial
+├── conclusiones.html           # Conclusiones
+├── herramientas.html           # Herramientas y reproducibilidad
+├── equipo.html                 # Integrantes
 ├── css/
 │   ├── styles.css              # Base compartida + fuentes
 │   ├── ruta.css                # Recorrido de la portada
 │   ├── ubicacion.css           # Ajustes de introduccion.html
 │   ├── estadistica.css         # Página descriptiva
-│   └── estadisticaInferencial.css
+│   ├── estadisticaInferencial.css
+│   └── paginas.css             # Conclusiones, herramientas y equipo
 ├── js/
 │   ├── common.js               # leerJSON() y mostrarError()
 │   ├── sidebar.js              # Barra lateral colapsable
@@ -109,10 +116,12 @@ Todos los JSON de ejecución viven en [`data/`](data). El CSV original se conser
 │   ├── modeloDiscreto.js
 │   ├── variableContinua.js
 │   ├── modeloContinuo.js
+│   ├── inferencialAmpliacion.js # 4.2.15 a 4.2.18
 │   └── indiceLateral.js        # Índice lateral de la página inferencial
 ├── data/                       # CSV de origen, GeoJSON y JSON de ejecución
 ├── scripts/
-│   └── 1_preprocesamiento_mapa.py
+│   ├── 1_preprocesamiento_mapa.py   # Mapa, VAD, VAC y modelos
+│   └── 2_descriptiva_inferencial.py # Descriptiva, ampliación y validación anual
 ├── img/                        # Logo y fotografía institucional
 ├── video/                      # Videos de los hero (uno por sección)
 ├── fonts/                      # Archivo y Fraunces (woff2)
@@ -136,11 +145,13 @@ Abre <http://localhost:8000/>. Requisitos: un navegador moderno y conexión a In
 
 ```bash
 python3 -m venv .venv
-.venv/bin/pip install pandas
+.venv/bin/pip install pandas numpy scipy
 .venv/bin/python scripts/1_preprocesamiento_mapa.py data/2023_01_producao_Terra.csv
+cp scripts/data/*.json data/
+.venv/bin/python scripts/2_descriptiva_inferencial.py data/2023_01_producao_Terra.csv --anual datos_2023/
 ```
 
-> **Nota:** el script escribe sus salidas junto a `scripts/` (y en `scripts/data/`). El sitio lee siempre desde `data/`, así que tras ejecutarlo hay que copiar los JSON generados a `data/` para que las cifras se actualicen.
+> **Nota:** el script 1 escribe en `scripts/` y `scripts/data/`; solo se copian a `data/` los JSON de `scripts/data/`. No sobrescribas `data/map_data.json` ni `data/estadistica_descriptiva.json`: tienen campos que el script ya no genera. El script 2 escribe directamente en `data/`; con `--anual` descarga de la ANP los 12 CSV de 2023 si la carpeta no los tiene.
 
 ## Accesibilidad
 

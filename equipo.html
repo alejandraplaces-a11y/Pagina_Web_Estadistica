@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Integrantes del proyecto de Estadística de la Universidad Central del Ecuador sobre la producción terrestre de petróleo en Brasil.">
+  <title>Equipo · Producción terrestre de petróleo en Brasil</title>
+  <script>
+    (function () {
+      try { if (localStorage.getItem('sidebar-expanded') === '1') document.documentElement.classList.add('sidebar-expanded'); } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/estadistica.css">
+  <link rel="stylesheet" href="css/paginas.css">
+  <script defer src="js/sidebar.js"></script>
+</head>
+
+<body class="has-sidebar">
+<div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Navegación lateral">
+      <button class="sidebar-toggle" id="sidebar-toggle" type="button" aria-label="Alternar menú lateral" aria-expanded="false" aria-controls="sidebar">
+        <span class="sidebar-toggle-icon" aria-hidden="true">☰</span>
+      </button>
+      <a class="sidebar-brand" href="index.html" aria-label="Terra, inicio">
+        <img class="sidebar-logo" src="img/logo-universidad.png" alt="" width="34" height="34">
+        <span class="sidebar-brand-text">
+          <span class="sidebar-title">Universidad Central del Ecuador</span>
+        </span>
+      </a>
+      <nav class="sidebar-nav" aria-label="Navegación lateral">
+        <ul class="sidebar-list">
+          <li>
+            <a class="sidebar-link" href="index.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10.4V20h13v-9.6"/></svg>
+              <span class="sidebar-link-label">Inicio</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="introduccion.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v16H5.5C4.7 20 4 19.3 4 18.5Z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v16h5.5c.8 0 1.5-.7 1.5-1.5Z"/></svg>
+              <span class="sidebar-link-label">Introducción</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="mapa.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Z"/><path d="M9 4v14m6-12v14"/></svg>
+              <span class="sidebar-link-label">Mapa Web</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="Estadistica.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18 6H7l6 6-6 6h11"/></svg>
+              <span class="sidebar-link-label">Estadística Descriptiva</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="estadisticaInferencial.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 20h18"/><path d="M5 20c2-9 4-14 7-14s5 5 7 14"/><path d="M12 6v14"/></svg>
+              <span class="sidebar-link-label">Estadística Inferencial</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="conclusiones.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5 9.5 17 19 7"/></svg>
+              <span class="sidebar-link-label">Conclusiones</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="herramientas.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.7 6.3a4 4 0 0 0 5 5L12 19a2.1 2.1 0 0 1-3-3l7.7-7.7"/><path d="M4 4l5 5"/></svg>
+              <span class="sidebar-link-label">Herramientas</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link is-active" href="equipo.html" aria-current="page">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 5.5a3 3 0 0 1 0 5"/><path d="M18 14.5c1.8.8 3 2.6 3 4.5"/></svg>
+              <span class="sidebar-link-label">Equipo</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <div class="app-main">
+      <div class="sidebar-backdrop" id="sidebar-backdrop" hidden></div>
+      <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+      <header class="site-header">
+        <div class="container header-inner">
+          <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="sidebar">
+            <span aria-hidden="true">☰</span>
+          </button>
+          <a class="brand" href="index.html" aria-label="Terra, inicio">
+            <img class="brand-mark" src="img/logo-universidad.png" alt="" aria-hidden="true" width="34" height="34">
+            <span class="brand-word">Universidad Central del Ecuador</span>
+            <span class="brand-caption">Proyecto de Estadística</span>
+          </a>
+          <nav class="site-nav" aria-label="Navegación principal">
+            <a href="#proyecto">Proyecto</a>
+            <a href="#integrantes">Integrantes</a>
+          </nav>
+        </div>
+      </header>
+
+      <main id="contenido">
+        <section class="page-hero" aria-labelledby="equipo-titulo">
+          <div class="container hero-content">
+            <p class="section-kicker">07 / Equipo</p>
+            <h1 id="equipo-titulo">Equipo.</h1>
+            <p class="aside-meta">Brasil · Enero de 2023</p>
+            <p class="page-lead">Estudiantes de Ingeniería en Petróleos · FIGEMPA · Universidad Central del Ecuador · Asignatura de Estadística, 2026.</p>
+          </div>
+        </section>
+
+        <section class="section" id="proyecto" aria-labelledby="proyecto-titulo">
+          <div class="container">
+            <p class="section-kicker">Proyecto</p>
+            <h2 id="proyecto-titulo" class="subsection-title">Sobre el proyecto</h2>
+            <p class="stat-scope">Proyecto de Estadística de la Universidad Central del Ecuador: estadística descriptiva e inferencial de la producción terrestre de petróleo por pozo en Brasil, con datos de la ANP de enero de 2023.</p>
+          </div>
+        </section>
+
+        <section class="section cream" id="integrantes" aria-labelledby="integrantes-titulo">
+          <div class="container">
+            <p class="section-kicker">Integrantes</p>
+            <h2 id="integrantes-titulo" class="subsection-title">Integrantes</h2>
+            <ul class="member-grid">
+              <li class="member-card"><span class="member-avatar" aria-hidden="true">GO</span><span class="member-name">Génesis Once</span></li>
+              <li class="member-card"><span class="member-avatar" aria-hidden="true">EP</span><span class="member-name">Esther Places</span></li>
+              <li class="member-card"><span class="member-avatar" aria-hidden="true">ER</span><span class="member-name">Evelyn Rodríguez</span></li>
+              <li class="member-card"><span class="member-avatar" aria-hidden="true">AS</span><span class="member-name">Andrea Sarmiento</span></li>
+              <li class="member-card"><span class="member-avatar" aria-hidden="true">MZ</span><span class="member-name">Melany Zapata</span></li>
+            </ul>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="container footer-row">
+          <div>
+            <p>© 2026 Integrantes: <span class="footer-members">Génesis Once, Esther Places, Evelyn Rodríguez, Andrea Sarmiento, Melany Zapata</span></p>
+            <p class="footer-location">Proyecto académico · Brasil, enero de 2023</p>
+          </div>
+          <div>
+            <p class="footer-label">Fuente</p>
+            <p>ANP (Brasil) · Agregación por pozo y Estado</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+</body>
+</html>

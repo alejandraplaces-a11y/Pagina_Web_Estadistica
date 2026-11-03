@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Conclusiones descriptivas e inferenciales del análisis de la producción terrestre de petróleo en Brasil (enero de 2023), con limitaciones y trabajo futuro.">
+  <title>Conclusiones · Producción terrestre de petróleo en Brasil</title>
+  <script>
+    (function () {
+      try { if (localStorage.getItem('sidebar-expanded') === '1') document.documentElement.classList.add('sidebar-expanded'); } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/estadistica.css">
+  <link rel="stylesheet" href="css/paginas.css">
+  <script defer src="js/sidebar.js"></script>
+</head>
+
+<body class="has-sidebar">
+<div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Navegación lateral">
+      <button class="sidebar-toggle" id="sidebar-toggle" type="button" aria-label="Alternar menú lateral" aria-expanded="false" aria-controls="sidebar">
+        <span class="sidebar-toggle-icon" aria-hidden="true">☰</span>
+      </button>
+      <a class="sidebar-brand" href="index.html" aria-label="Terra, inicio">
+        <img class="sidebar-logo" src="img/logo-universidad.png" alt="" width="34" height="34">
+        <span class="sidebar-brand-text">
+          <span class="sidebar-title">Universidad Central del Ecuador</span>
+        </span>
+      </a>
+      <nav class="sidebar-nav" aria-label="Navegación lateral">
+        <ul class="sidebar-list">
+          <li>
+            <a class="sidebar-link" href="index.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10.4V20h13v-9.6"/></svg>
+              <span class="sidebar-link-label">Inicio</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="introduccion.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v16H5.5C4.7 20 4 19.3 4 18.5Z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v16h5.5c.8 0 1.5-.7 1.5-1.5Z"/></svg>
+              <span class="sidebar-link-label">Introducción</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="mapa.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Z"/><path d="M9 4v14m6-12v14"/></svg>
+              <span class="sidebar-link-label">Mapa Web</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="Estadistica.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18 6H7l6 6-6 6h11"/></svg>
+              <span class="sidebar-link-label">Estadística Descriptiva</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="estadisticaInferencial.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 20h18"/><path d="M5 20c2-9 4-14 7-14s5 5 7 14"/><path d="M12 6v14"/></svg>
+              <span class="sidebar-link-label">Estadística Inferencial</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link is-active" href="conclusiones.html" aria-current="page">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5 9.5 17 19 7"/></svg>
+              <span class="sidebar-link-label">Conclusiones</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="herramientas.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.7 6.3a4 4 0 0 0 5 5L12 19a2.1 2.1 0 0 1-3-3l7.7-7.7"/><path d="M4 4l5 5"/></svg>
+              <span class="sidebar-link-label">Herramientas</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="equipo.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 5.5a3 3 0 0 1 0 5"/><path d="M18 14.5c1.8.8 3 2.6 3 4.5"/></svg>
+              <span class="sidebar-link-label">Equipo</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <div class="app-main">
+      <div class="sidebar-backdrop" id="sidebar-backdrop" hidden></div>
+      <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+      <header class="site-header">
+        <div class="container header-inner">
+          <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="sidebar">
+            <span aria-hidden="true">☰</span>
+          </button>
+          <a class="brand" href="index.html" aria-label="Terra, inicio">
+            <img class="brand-mark" src="img/logo-universidad.png" alt="" aria-hidden="true" width="34" height="34">
+            <span class="brand-word">Universidad Central del Ecuador</span>
+            <span class="brand-caption">Proyecto de Estadística</span>
+          </a>
+          <nav class="site-nav" aria-label="Navegación principal">
+            <a href="#resumen-cifras">Resumen</a>
+            <a href="#descriptivas">Descriptivas</a>
+            <a href="#inferenciales">Inferenciales</a>
+            <a href="#limitaciones">Limitaciones</a>
+          </nav>
+        </div>
+      </header>
+
+      <main id="contenido">
+        <section class="page-hero" aria-labelledby="conclusiones-titulo">
+          <div class="container hero-content">
+            <p class="section-kicker">05 / Cierre</p>
+            <h1 id="conclusiones-titulo">Conclusiones.</h1>
+            <p class="aside-meta">Brasil · Enero de 2023</p>
+            <p class="page-lead">Síntesis de los hallazgos descriptivos e inferenciales sobre la producción de óleo, agua y gas por pozo, y de lo que queda pendiente.</p>
+          </div>
+        </section>
+
+        <section class="section" id="resumen-cifras" aria-labelledby="resumen-cifras-titulo">
+          <div class="container">
+            <p class="section-kicker">Resumen</p>
+            <h2 id="resumen-cifras-titulo" class="subsection-title">Resumen en cifras</h2>
+            <dl class="stat-metrics">
+              <div><dt>Muestra · n</dt><dd>5.308 <span class="metric-unit">pozos</span></dd></div>
+              <div><dt>Media del óleo</dt><dd>11,95 <span class="metric-unit">bbl/día</span></dd></div>
+              <div><dt>Mediana del óleo</dt><dd>4,42 <span class="metric-unit">bbl/día</span></dd></div>
+              <div><dt>Modelo continuo elegido</dt><dd>Lognormal</dd></div>
+            </dl>
+            <p class="stat-scope">Población: pozos terrestres de Brasil. Muestra: pozos con reporte en enero de 2023, es decir, 5.308 pozos (5.471 registros; 143 pozos aparecen en dos o más filas porque aportan a varios campos y sus volúmenes se suman). Participan 9 estados; Rio Grande do Norte concentra 3.195 pozos (60,2 %).</p>
+          </div>
+        </section>
+
+        <section class="section cream" id="descriptivas" aria-labelledby="descriptivas-titulo">
+          <div class="container">
+            <p class="section-kicker">4.1</p>
+            <h2 id="descriptivas-titulo" class="subsection-title">Conclusiones descriptivas (4.1)</h2>
+            <div class="method-grid">
+              <article class="method-card">
+                <p class="method-card-tag">Óleo</p>
+                <h4>Distribución muy asimétrica</h4>
+                <ul class="lista-simple">
+                  <li>Media 11,95 frente a mediana 4,42 bbl/día; coeficiente de variación de 276 %.</li>
+                  <li>420 pozos (7,9 %) no producen óleo.</li>
+                  <li>539 valores atípicos altos (&gt; 24,41 bbl/día, criterio Q₃ + 1,5·RIC).</li>
+                  <li>Clase modal 4,31–13,07 bbl/día (1.613 pozos) en clases log₁₀.</li>
+                </ul>
+              </article>
+              <article class="method-card">
+                <p class="method-card-tag">Agua y gas</p>
+                <h4>Pocos pozos concentran el volumen</h4>
+                <ul class="lista-simple">
+                  <li>Agua: media 244,65 y mediana 99,88 bbl/día; 290 atípicos altos.</li>
+                  <li>Gas natural total: mediana 0,0057 y media 3,79 Mm³/día; unos pocos pozos de gas concentran el volumen y hay 993 atípicos altos.</li>
+                </ul>
+              </article>
+              <article class="method-card">
+                <p class="method-card-tag">Crudo</p>
+                <h4>Predomina el crudo mediano</h4>
+                <ul class="lista-simple">
+                  <li>De 4.435 pozos con grado API, 74,3 % es mediano (22,3°–31,1°), 15,1 % ligero y 10,6 % pesado.</li>
+                  <li>873 pozos no tienen dato de API.</li>
+                </ul>
+              </article>
+            </div>
+            <p class="frame-note">Detalle de tablas, gráficas e indicadores en <a href="Estadistica.html">Estadística descriptiva</a>. Como la media se eleva por pocos pozos de alta producción, la <strong>mediana</strong> describe mejor al pozo típico.</p>
+          </div>
+        </section>
+
+        <section class="section" id="inferenciales" aria-labelledby="inferenciales-titulo">
+          <div class="container">
+            <p class="section-kicker">4.2</p>
+            <h2 id="inferenciales-titulo" class="subsection-title">Conclusiones inferenciales (4.2)</h2>
+            <div class="method-grid">
+              <article class="method-card">
+                <p class="method-card-tag">Discreta · X</p>
+                <h4>Días completos de producción</h4>
+                <ul class="lista-simple">
+                  <li>Distribución con dos picos: 356 pozos con 0 días y 1.594 con 31 días; media 24,0 días.</li>
+                  <li>Binomial (χ² = 656.869, gl 13) y beta-binomial (χ² = 3.444,5, gl 29) se rechazan; la beta-binomial capta la sobredispersión mucho mejor.</li>
+                </ul>
+              </article>
+              <article class="method-card">
+                <p class="method-card-tag">Discreta · pozos por campo</p>
+                <h4>221 campos</h4>
+                <ul class="lista-simple">
+                  <li>La binomial negativa (χ² = 45,4, gl 19) ajusta mucho mejor que Poisson (χ² = 3.134,9, gl 17).</li>
+                  <li>Ambas se rechazan con α = 0,05.</li>
+                </ul>
+              </article>
+              <article class="method-card">
+                <p class="method-card-tag">Continua · Y</p>
+                <h4>Óleo por pozo productor (n = 4.888)</h4>
+                <ul class="lista-simple">
+                  <li>La lognormal es el mejor modelo (r = 0,993; χ² = 130,5, gl 6) frente a gamma (1.495,5) y Weibull (764,8), pero se rechaza.</li>
+                  <li>En una submuestra aleatoria de n = 300 (semilla 2023) no se rechaza (χ² = 5,74, gl 3, p = 0,125) y solo el 27,8 % de 500 submuestras la rechaza: el rechazo con n completo se debe en buena parte a la sensibilidad del χ² a un n grande.</li>
+                  <li>La binomial y la beta-binomial se rechazan en el 100 % de las submuestras.</li>
+                </ul>
+              </article>
+              <article class="method-card">
+                <p class="method-card-tag">Continua · agua</p>
+                <h4>Agua por pozo productor (n = 4.955)</h4>
+                <ul class="lista-simple">
+                  <li>El mejor modelo es la gamma (r = 0,996; χ² = 75,9, gl 11), no la lognormal (χ² = 1.929,9).</li>
+                  <li>También se rechaza.</li>
+                </ul>
+              </article>
+              <article class="method-card">
+                <p class="method-card-tag">Intervalos de confianza</p>
+                <h4>IC del 95 % y validación con 2023</h4>
+                <ul class="lista-simple">
+                  <li>Media de Y: [12,02; 13,93] bbl/día.</li>
+                  <li>Con todo 2023 (12 archivos ANP, 63.583 pozo-mes productores): la media anual, 13,58, cae dentro del IC; 10 de 12 medias mensuales caen dentro (julio y septiembre no).</li>
+                  <li>El IC de la mediana lognormal e<sup>μ</sup> [4,55; 4,93] no contiene la mediana observada de enero (4,99) ni ninguna mediana mensual (4,99 a 6,21): la lognormal subestima la mediana por la desviación en la cola izquierda que detecta el χ².</li>
+                </ul>
+              </article>
+            </div>
+            <p class="frame-note">Ajustes, pruebas e intervalos completos en <a href="estadisticaInferencial.html">Estadística inferencial</a>.</p>
+          </div>
+        </section>
+
+        <section class="section cream" id="limitaciones" aria-labelledby="limitaciones-titulo">
+          <div class="container">
+            <p class="section-kicker">Alcance</p>
+            <h2 id="limitaciones-titulo" class="subsection-title">Limitaciones y trabajo futuro</h2>
+            <div class="method-grid">
+              <article class="method-card">
+                <p class="method-card-tag">Limitaciones</p>
+                <h4>Alcance de los resultados</h4>
+                <ul class="lista-simple">
+                  <li>Un solo mes como muestra: no es probabilística, es un corte temporal.</li>
+                  <li>Posible dependencia entre pozos del mismo campo u operador.</li>
+                </ul>
+              </article>
+              <article class="method-card">
+                <p class="method-card-tag">Trabajo futuro</p>
+                <h4>Pendiente</h4>
+                <ul class="lista-simple">
+                  <li>Modelo de mezcla (pozos parados vs. activos) para los días completos de producción.</li>
+                  <li>Regresión, machine learning y series temporales (sección 4.3 del proyecto).</li>
+                </ul>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <div class="container"><p class="source"><span>Fuente: ANP (Brasil), producción de petróleo y gas natural por pozo, enero de 2023; validación con los 12 archivos mensuales de 2023.</span></p></div>
+      </main>
+
+      <footer class="site-footer">
+        <div class="container footer-row">
+          <div>
+            <p>© 2026 Integrantes: <span class="footer-members">Génesis Once, Esther Places, Evelyn Rodríguez, Andrea Sarmiento, Melany Zapata</span></p>
+            <p class="footer-location">Proyecto académico · Brasil, enero de 2023</p>
+          </div>
+          <div>
+            <p class="footer-label">Fuente</p>
+            <p>ANP (Brasil) · Agregación por pozo y Estado</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+</body>
+</html>

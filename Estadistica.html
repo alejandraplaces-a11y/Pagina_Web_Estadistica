@@ -60,9 +60,27 @@
             </a>
           </li>
           <li>
-            <a class="sidebar-link" href="estadisticaInferencial.html" aria-current="page">
+            <a class="sidebar-link" href="estadisticaInferencial.html">
               <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 20h18"/><path d="M5 20c2-9 4-14 7-14s5 5 7 14"/><path d="M12 6v14"/></svg>
               <span class="sidebar-link-label">Estadística Inferencial</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="conclusiones.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5 9.5 17 19 7"/></svg>
+              <span class="sidebar-link-label">Conclusiones</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="herramientas.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.7 6.3a4 4 0 0 0 5 5L12 19a2.1 2.1 0 0 1-3-3l7.7-7.7"/><path d="M4 4l5 5"/></svg>
+              <span class="sidebar-link-label">Herramientas</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="equipo.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 5.5a3 3 0 0 1 0 5"/><path d="M18 14.5c1.8.8 3 2.6 3 4.5"/></svg>
+              <span class="sidebar-link-label">Equipo</span>
             </a>
           </li>
         </ul>
@@ -84,7 +102,7 @@
             <span class="brand-caption">Proyecto de Estadística</span>
           </a>
           <nav class="site-nav" aria-label="Navegación principal">
-            <a href="#poblacion-individuo" aria-current="page">Población e individuo</a>
+            <a href="#poblacion-individuo">Población y muestra</a>
             <a href="#variables">Variables</a>
             <a href="#tdf">TDF</a>
             <a href="#gdf">GDF</a>
@@ -105,7 +123,22 @@
             <p class="section-kicker">04 / Análisis estadístico</p>
             <h1 id="estadistica-titulo">Estadística descriptiva.</h1>
             <p class="aside-meta">Brasil · Enero de 2023</p>
-            <p class="page-lead">Caracterización de la producción terrestre de petróleo por pozo: delimitación de la población, tamaño de la muestra, variables, distribuciones de frecuencias y gráficas.</p>
+            <p class="page-lead">Caracterización de la producción terrestre de petróleo por pozo: población y muestra, variables, distribuciones de frecuencias, gráficas e indicadores.</p>
+          </div>
+        </section>
+
+        <section class="section resumen-clave" id="resumen-inicial" aria-labelledby="resumen-inicial-titulo">
+          <div class="container">
+            <p class="section-kicker">En cifras</p>
+            <h2 id="resumen-inicial-titulo" class="subsection-title">Resumen de la descriptiva</h2>
+            <dl class="stat-metrics resumen-metrics">
+              <div><dt>Muestra · n</dt><dd>5.308 <span class="metric-unit">pozos</span></dd></div>
+              <div><dt>Media del óleo</dt><dd>11,95 <span class="metric-unit">bbl/día</span></dd></div>
+              <div><dt>Mediana del óleo</dt><dd>4,42 <span class="metric-unit">bbl/día</span></dd></div>
+              <div><dt>Pozos sin óleo</dt><dd>420 <span class="metric-unit">(7,9 %)</span></dd></div>
+            </dl>
+            <p class="stat-scope">5.471 registros de enero de 2023 (ANP) consolidados en 5.308 pozos de 9 estados. La mediana describe mejor al pozo típico: la media se eleva por 539 pozos atípicos de producción alta. Rio Grande do Norte reúne el 60,2 % de los pozos y el 74,3 % de los pozos con grado API produce crudo mediano.</p>
+            <noscript><p class="status status-error">Las tablas y gráficas de esta página se generan con JavaScript. Las cifras clave están en este resumen; para ver el resto, activa JavaScript y abre la página desde un servidor (python3 -m http.server).</p></noscript>
           </div>
         </section>
 
@@ -113,67 +146,66 @@
           <div class="container">
             <p class="section-kicker">4.1.1</p>
             <h2 id="poblacion-titulo">Población e individuo</h2>
-            <p id="estado-estadistica" class="status" role="status">Calculando la delimitación del estudio…</p>
+            <p id="estado-estadistica" class="status" role="status" hidden>Calculando la delimitación del estudio…</p>
 
-            <div id="contenido-estadistica" hidden>
+            <div id="contenido-estadistica">
               <dl class="stat-metrics">
-                <div><dt>Pozos únicos · N</dt><dd id="total-pozos"></dd></div>
-                <div><dt>Registros con Estado · R</dt><dd id="total-registros"></dd></div>
-                <div><dt>Estados representados</dt><dd id="total-estados"></dd></div>
-                <div><dt>Período observado</dt><dd id="periodo-estadistica"></dd></div>
+                <div><dt>Pozos de la muestra · n</dt><dd id="total-pozos">5.308</dd></div>
+                <div><dt>Registros del archivo · R</dt><dd id="total-registros">5.471</dd></div>
+                <div><dt>Estados representados</dt><dd id="total-estados">9</dd></div>
+                <div><dt>Período observado</dt><dd id="periodo-estadistica">Enero 2023</dd></div>
               </dl>
 
               <div class="method-grid">
                 <article class="method-card">
                   <p class="method-card-tag">Población</p>
                   <h4>Población de estudio</h4>
-                  <p>Conjunto de pozos terrestres de hidrocarburos de Brasil representados en el archivo durante el período observado.</p>
-                  <p class="method-symbolic" aria-label="Población P igual al conjunto de pozos p uno hasta p N">𝒫 = {p₁, p₂, …, p<sub>N</sub>}</p>
-                  <p class="stat-notation">N = |𝒫| = <span id="poblacion-n"></span> pozos únicos.</p>
+                  <p>Pozos terrestres de petróleo y gas natural de Brasil. Su tamaño N no es fijo: cambia cada mes con los pozos que entran o salen de producción, por eso no se usa como marco finito.</p>
+                  <p class="method-symbolic" aria-label="Población P igual al conjunto de pozos terrestres de Brasil">𝒫 = {pozos terrestres de Brasil}</p>
+                  <p class="stat-notation">N = |𝒫| no se fija; el archivo no garantiza cobertura nacional.</p>
                 </article>
                 <article class="method-card teal">
                   <p class="method-card-tag">Individuo</p>
                   <h4>Unidad estadística</h4>
-                  <p>Cada pozo terrestre identificado mediante <code>Nome Poço</code> durante el período observado.</p>
+                  <p>Cada pozo terrestre identificado mediante <code>Nome Poço</code>.</p>
                   <p class="method-symbolic" aria-label="Pozo p sub i pertenece a la población P">p<sub>i</sub> ∈ 𝒫</p>
-                  <p class="stat-notation">i = 1, 2, …, N. Un identificador de pozo define una unidad.</p>
+                  <p class="stat-notation">Un identificador de pozo define una unidad, aunque aparezca en varias filas.</p>
                 </article>
               </div>
 
               <aside class="frame-note" aria-label="Distinción entre registros y pozos">
                 <strong>Registro ≠ individuo.</strong>
-                <span id="nota-registros"></span>
-                Antes de calcular indicadores por pozo se deben revisar y consolidar sus registros, sin eliminarlos ni sumarlos automáticamente.
+                <span id="nota-registros">5.471 registros corresponden a 5.308 pozos únicos; 143 pozos aparecen en más de un registro.</span>
+                <strong>Criterio de consolidación:</strong> cada fila repetida de un pozo corresponde a un campo distinto al que aporta (mismo contrato y mismo Estado), así que sus volúmenes de óleo, gas y agua son partes del total del pozo y se <strong>suman</strong>. Las horas de producción, en cambio, se repiten en cada fila: se toma el <strong>máximo</strong> para no superar las 744 h de enero. Este criterio se aplica igual en toda la descriptiva y la inferencial.
               </aside>
-              <p class="stat-scope">La población se delimita al archivo analizado; su cobertura no permite afirmar que incluya todos los pozos terrestres de Brasil.</p>
-              <p class="source">Fuente: <span id="fuente-estadistica"></span> · Conteo de identificadores únicos, sin excluir producción igual a cero.</p>
+              <p class="source">Fuente: <span id="fuente-estadistica">2023_01_producao_Terra.csv</span> · Conteo de identificadores únicos, sin excluir producción igual a cero.</p>
 
               <p class="section-kicker section-kicker-spaced">4.1.2</p>
               <h2 class="subsection-title">Muestra: método y tamaño</h2>
-              <p class="section-intro">No se extrajo una submuestra. Se incluyen todos los pozos identificados en los registros con Estado informado: el análisis es censal respecto del archivo disponible, no respecto de todos los pozos de Brasil.</p>
+              <p class="section-intro">La muestra son los pozos terrestres con producción reportada a la ANP en enero de 2023. Es la misma definición que se usa en la estadística inferencial (4.2), donde los intervalos de confianza y el tamaño muestral se calculan sobre esta muestra.</p>
 
               <dl class="stat-metrics sample-metrics">
-                <div><dt>Tamaño del conjunto analizado · n</dt><dd><span id="muestra-n"></span> <span class="metric-unit">pozos</span></dd></div>
-                <div><dt>Cobertura de la población del archivo</dt><dd id="muestra-cobertura"></dd></div>
+                <div><dt>Tamaño de la muestra · n</dt><dd><span id="muestra-n">5.308</span> <span class="metric-unit">pozos</span></dd></div>
+                <div><dt>Pozos productores de óleo · n<sub>Y</sub></dt><dd><span id="muestra-productores">4.888</span> <span class="metric-unit">pozos</span></dd></div>
               </dl>
 
               <div class="method-grid">
                 <article class="method-card">
                   <p class="method-card-tag">Método</p>
-                  <h4>Método de inclusión</h4>
-                  <p>Inclusión exhaustiva de los identificadores únicos de <code>Nome Poço</code> presentes en los registros con Estado informado, sin excluir pozos por tener producción igual a cero. No se realizó selección aleatoria ni se aplicó una fórmula para determinar el tamaño muestral.</p>
+                  <h4>Muestreo por corte temporal</h4>
+                  <p>Muestreo no probabilístico: se toman todos los pozos de un mes cerrado, sin excluir los que tienen producción igual a cero. Enero de 2023 se eligió porque es un corte publicado y cerrado (actualizado el 13/03/2023), con un valor por pozo y mes que permite tratar a los pozos como observaciones independientes.</p>
                 </article>
                 <article class="method-card teal">
                   <p class="method-card-tag">Notación</p>
                   <h4>Representación simbólica</h4>
-                  <p class="method-symbolic" aria-label="El conjunto analizado A coincide con la población P del archivo">𝒜 = 𝒫; n = |𝒜| = N</p>
-                  <p class="stat-notation">n = <span id="muestra-notacion-n"></span> pozos únicos.<br>𝒜: conjunto analizado; 𝒫: población delimitada al archivo.</p>
-                  <p class="stat-notation">Cobertura = (n / N) × 100 = <span id="muestra-notacion-cobertura"></span>.</p>
+                  <p class="method-symbolic" aria-label="La muestra S es un subconjunto de la población P">𝒮 ⊂ 𝒫; n = |𝒮| = <span id="muestra-notacion-n">5.308</span></p>
+                  <p class="stat-notation">𝒮: pozos con reporte en enero de 2023; 𝒫: pozos terrestres de Brasil.</p>
+                  <p class="stat-notation">Como N no se fija, en 4.2 no se aplica corrección por población finita.</p>
                 </article>
               </div>
 
-              <aside class="frame-note" aria-label="Alcance del conjunto analizado">
-                <strong>Alcance de la cobertura.</strong> El 100 % se refiere únicamente a los pozos identificados en los registros con Estado del archivo, no a una cobertura nacional verificada. No se dispone de un diseño probabilístico que permita atribuir representatividad nacional o un margen de error muestral. Las filas repetidas de un mismo pozo no aumentan n; la consolidación de sus variables productivas sigue pendiente.
+              <aside class="frame-note" aria-label="Tamaños muestrales usados">
+                <strong>Tamaños muestrales.</strong> Todas las variables por pozo usan n = 5.308. Solo el análisis continuo del óleo (4.2.5 a 4.2.14) usa n = 4.888, porque excluye los 420 pozos con óleo igual a cero; esos pozos sí se incluyen en esta página. Al no ser una muestra aleatoria, la representatividad nacional no está garantizada; en 4.2.18 los resultados de enero se contrastan con los 12 meses de 2023.
               </aside>
             </div>
           </div>
@@ -183,28 +215,35 @@
           <div class="container">
             <p class="section-kicker">4.1.3</p>
             <h2 id="variables-titulo">Variables</h2>
-            <p class="section-intro">Variables seleccionadas del conjunto de datos, con su naturaleza, escala, unidad y número de valores válidos y nulos.</p>
+            <p class="section-intro">Variables del archivo por pozo (n = 5.308): tipo, subtipo, dominio, rango observado, escala, instrumento y unidad. Válidos, nulos y ceros se calculan desde los datos.</p>
             <p id="estado-variables" class="status" role="status">Cargando variables…</p>
 
             <div id="contenido-variables" hidden>
               <div class="table-scroll">
-                <table class="data-table">
-                  <caption>Variables seleccionadas del conjunto de datos, enero de 2023</caption>
+                <table class="data-table tabla-variables">
+                  <caption>Variables del conjunto de datos por pozo, enero de 2023</caption>
                   <thead>
                     <tr>
-                      <th scope="col">Variable</th>
-                      <th scope="col">Naturaleza</th>
+                      <th scope="col">Variable (CSV)</th>
+                      <th scope="col">Traducción</th>
+                      <th scope="col">Descripción</th>
+                      <th scope="col">Tipo</th>
+                      <th scope="col">Subtipo</th>
+                      <th scope="col">Dominio</th>
+                      <th scope="col">Rango observado</th>
                       <th scope="col">Escala</th>
+                      <th scope="col">Instrumento</th>
                       <th scope="col">Unidad</th>
                       <th scope="col" class="numero">Válidos</th>
                       <th scope="col" class="numero">Nulos</th>
-                      <th scope="col">Observación</th>
+                      <th scope="col" class="numero">Ceros</th>
                     </tr>
                   </thead>
                   <tbody id="tabla-variables"></tbody>
                 </table>
               </div>
-              <p class="stat-scope">Variables excluidas por ser identificadores, constantes o no responder a los objetivos:</p>
+              <p class="source">Nulos: pozos sin dato. Ceros: pozos con valor 0 (no son nulos). La escala de razón tiene cero absoluto (0 bbl/día = sin producción); el grado API es de intervalo porque su cero no indica ausencia.</p>
+              <p class="stat-scope">Columnas del archivo que no se analizan:</p>
               <ul id="excluidas-variables" class="excluded-list"></ul>
             </div>
           </div>
@@ -214,49 +253,109 @@
           <div class="container">
             <p class="section-kicker">4.1.4</p>
             <h2 id="tdf-titulo">Tablas de distribución de frecuencias (TDF)</h2>
+            <p class="section-intro">Una tabla por tipo de variable: nominal, ordinal, discreta y continua. En todas, hᵢ = fᵢ / n, Fᵢ = Σ fⱼ y Hᵢ = Fᵢ / n. Abre cada tarjeta para ver la tabla completa.</p>
             <p id="estado-tdf" class="status" role="status">Cargando distribuciones…</p>
 
             <div id="contenido-tdf" hidden>
-              <p class="section-intro">Unidad estadística: pozo. Cuando un mismo Nome Poço aparece en varias filas, sus volúmenes se suman para obtener un único valor por pozo.</p>
+              <details class="var-card">
+                <summary>
+                  <span class="var-card-tipo">Cualitativa nominal</span>
+                  <span class="var-card-titulo">a) Estado</span>
+                  <span class="var-card-preview" id="preview-estado"></span>
+                </summary>
+                <div class="table-scroll">
+                  <table class="data-table">
+                    <caption>Pozos por Estado, enero de 2023 (n = <span id="tdf-n-cualitativa"></span>)</caption>
+                    <thead>
+                      <tr>
+                        <th scope="col">Estado</th>
+                        <th scope="col" class="numero">fᵢ</th>
+                        <th scope="col" class="numero">hᵢ</th>
+                        <th scope="col" class="numero">Fᵢ</th>
+                        <th scope="col" class="numero">Hᵢ</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tabla-estado"></tbody>
+                  </table>
+                </div>
+                <p class="source">Estados ordenados de mayor a menor frecuencia; Fᵢ y Hᵢ acumulan en ese orden.</p>
+              </details>
 
-              <h3 class="tdf-subtitle">a) Variable cualitativa: Estado</h3>
-              <div class="table-scroll">
-                <table class="data-table">
-                  <caption>Pozos por Estado, enero de 2023 (n = <span id="tdf-n-cualitativa"></span>)</caption>
-                  <thead>
-                    <tr>
-                      <th scope="col">Estado</th>
-                      <th scope="col" class="numero">fᵢ</th>
-                      <th scope="col" class="numero">hᵢ</th>
-                      <th scope="col" class="numero">Fᵢ</th>
-                      <th scope="col" class="numero">Hᵢ</th>
-                    </tr>
-                  </thead>
-                  <tbody id="tabla-estado"></tbody>
-                </table>
-              </div>
+              <details class="var-card">
+                <summary>
+                  <span class="var-card-tipo">Cualitativa ordinal</span>
+                  <span class="var-card-titulo">b) Clase de crudo por grado API</span>
+                  <span class="var-card-preview" id="preview-api"></span>
+                </summary>
+                <div class="table-scroll">
+                  <table class="data-table">
+                    <caption>Pozos por clase de crudo (n = <span id="tdf-n-api"></span> pozos con grado API)</caption>
+                    <thead>
+                      <tr>
+                        <th scope="col">Clase</th>
+                        <th scope="col">Criterio</th>
+                        <th scope="col" class="numero">fᵢ</th>
+                        <th scope="col" class="numero">hᵢ</th>
+                        <th scope="col" class="numero">Fᵢ</th>
+                        <th scope="col" class="numero">Hᵢ</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tabla-api"></tbody>
+                  </table>
+                </div>
+                <p class="source">Orden natural: pesado &lt; mediano &lt; ligero. <span id="nota-api"></span></p>
+              </details>
 
-              <h3 class="tdf-subtitle">b) Variable cuantitativa continua: óleo por pozo (bbl/día)</h3>
-              <div class="table-scroll">
-                <table class="data-table">
-                  <caption>Distribución de frecuencias del óleo por pozo (k = <span id="tdf-k"></span> clases, amplitud A = <span id="tdf-amplitud"></span>)</caption>
-                  <thead>
-                    <tr>
-                      <th scope="col" class="numero">Clase</th>
-                      <th scope="col">Intervalo [Lᵢ; Lᵢ₊₁)</th>
-                      <th scope="col" class="numero">Marca xᵢ</th>
-                      <th scope="col" class="numero">fᵢ</th>
-                      <th scope="col" class="numero">hᵢ</th>
-                      <th scope="col" class="numero">Fᵢ</th>
-                      <th scope="col" class="numero">Hᵢ</th>
-                    </tr>
-                  </thead>
-                  <tbody id="tabla-oleo"></tbody>
-                </table>
-              </div>
+              <details class="var-card">
+                <summary>
+                  <span class="var-card-tipo">Cuantitativa discreta</span>
+                  <span class="var-card-titulo">c) Días completos de producción</span>
+                  <span class="var-card-preview" id="preview-dias"></span>
+                </summary>
+                <div class="table-scroll">
+                  <table class="data-table">
+                    <caption>Días completos de producción por pozo, X = ⌊horas / 24⌋ (n = <span id="tdf-n-dias"></span>)</caption>
+                    <thead>
+                      <tr>
+                        <th scope="col" class="numero">x</th>
+                        <th scope="col" class="numero">fᵢ</th>
+                        <th scope="col" class="numero">hᵢ</th>
+                        <th scope="col" class="numero">Fᵢ</th>
+                        <th scope="col" class="numero">Hᵢ</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tabla-dias"></tbody>
+                  </table>
+                </div>
+                <p class="source">Variable discreta: cada valor de 0 a 31 es una clase. Su modelo de probabilidad se estudia en 4.2.1 a 4.2.4.</p>
+              </details>
 
-              <aside class="frame-note"><p id="nota-tdf"></p></aside>
-              <p class="source">Método: Sturges, k = ⌈1 + 3,322 · log₁₀(n)⌉; amplitud A = ⌈(máximo − mínimo) / k⌉. Fuente: <span id="fuente-tdf"></span>.</p>
+              <details class="var-card">
+                <summary>
+                  <span class="var-card-tipo">Cuantitativa continua</span>
+                  <span class="var-card-titulo">d) Óleo por pozo (bbl/día)</span>
+                  <span class="var-card-preview" id="preview-oleo"></span>
+                </summary>
+                <div class="table-scroll">
+                  <table class="data-table">
+                    <caption>Distribución de frecuencias del óleo por pozo: clase 0 y k = <span id="tdf-k"></span> clases de igual ancho en log₁₀ (A = <span id="tdf-amplitud"></span>)</caption>
+                    <thead>
+                      <tr>
+                        <th scope="col" class="numero">Clase</th>
+                        <th scope="col">Intervalo [Lᵢ; Lᵢ₊₁) bbl/día</th>
+                        <th scope="col" class="numero">Marca xᵢ</th>
+                        <th scope="col" class="numero">fᵢ</th>
+                        <th scope="col" class="numero">hᵢ</th>
+                        <th scope="col" class="numero">Fᵢ</th>
+                        <th scope="col" class="numero">Hᵢ</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tabla-oleo"></tbody>
+                  </table>
+                </div>
+                <aside class="frame-note"><p id="nota-tdf"></p></aside>
+                <p class="source">Clases: Sturges sobre los pozos con óleo &gt; 0, k = ⌈1 + 3,322 · log₁₀(n<sub>Y</sub>)⌉, con igual ancho A en t = log₁₀(x); son las mismas clases de 4.2.6. Marca xᵢ = √(Lᵢ · Lᵢ₊₁). Fuente: <span id="fuente-tdf"></span>.</p>
+              </details>
             </div>
           </div>
         </section>
@@ -269,19 +368,31 @@
 
             <div id="contenido-gdf" hidden>
               <div class="chart-card">
-                <p class="section-kicker">GDF 1 · Diagrama de barras</p>
+                <p class="section-kicker">GDF 1 · Diagrama de barras (nominal)</p>
                 <h3 class="chart-title">Pozos por Estado</h3>
                 <div id="gdf-estado" class="chart-box" role="img" aria-label="Diagrama de barras de pozos por Estado"></div>
               </div>
-              <div class="chart-card">
-                <p class="section-kicker">GDF 2 · Histograma y polígono de frecuencias</p>
-                <h3 class="chart-title">Óleo por pozo (bbl/día)</h3>
-                <div id="gdf-histograma" class="chart-box" role="img" aria-label="Histograma de frecuencias absolutas del óleo por pozo con polígono de frecuencias"></div>
+              <div class="chart-grid">
+                <div class="chart-card">
+                  <p class="section-kicker">GDF 2 · Diagrama de barras (ordinal)</p>
+                  <h3 class="chart-title">Pozos por clase de crudo</h3>
+                  <div id="gdf-api" class="chart-box" role="img" aria-label="Diagrama de barras de pozos por clase de crudo, en orden pesado, mediano y ligero"></div>
+                </div>
+                <div class="chart-card">
+                  <p class="section-kicker">GDF 3 · Diagrama de bastones (discreta)</p>
+                  <h3 class="chart-title">Días completos de producción</h3>
+                  <div id="gdf-dias" class="chart-box" role="img" aria-label="Diagrama de bastones de los días completos de producción por pozo, con picos en 0 y 31 días"></div>
+                </div>
               </div>
               <div class="chart-card">
-                <p class="section-kicker">GDF 3 · Ojiva de frecuencias relativas acumuladas</p>
-                <h3 class="chart-title">Óleo por pozo (bbl/día)</h3>
-                <div id="gdf-ojiva" class="chart-box" role="img" aria-label="Ojiva de frecuencias relativas acumuladas del óleo por pozo"></div>
+                <p class="section-kicker">GDF 4 · Histograma y polígono de frecuencias (continua)</p>
+                <h3 class="chart-title">Óleo por pozo productor (bbl/día, escala log₁₀)</h3>
+                <div id="gdf-histograma" class="chart-box" role="img" aria-label="Histograma de frecuencias absolutas del óleo por pozo en clases log10, con polígono de frecuencias"></div>
+              </div>
+              <div class="chart-card">
+                <p class="section-kicker">GDF 5 · Ojiva de frecuencias relativas acumuladas</p>
+                <h3 class="chart-title">Óleo por pozo (bbl/día, escala log₁₀)</h3>
+                <div id="gdf-ojiva" class="chart-box" role="img" aria-label="Ojiva de frecuencias relativas acumuladas del óleo por pozo sobre los límites superiores de clase"></div>
               </div>
               <p id="nota-gdf" class="stat-scope"></p>
             </div>
@@ -295,28 +406,45 @@
             <p id="estado-indicadores" class="status" role="status">Calculando indicadores…</p>
 
             <div id="contenido-indicadores" hidden>
-              <p class="section-intro">Calculados sobre el óleo por pozo (n = <span id="indicadores-n"></span> pozos). Variable: <span id="indicadores-variable"></span>.</p>
+              <p class="section-intro">Variables continuas de producción por pozo (n = <span id="indicadores-n"></span>). Los ceros se incluyen. Atípicos: valores fuera de [Q₁ − 1,5·RIC; Q₃ + 1,5·RIC].</p>
 
               <div class="table-scroll">
                 <table class="data-table">
-                  <caption>Indicadores de tendencia central, dispersión y forma del óleo por pozo, enero de 2023</caption>
+                  <caption>Indicadores del óleo, el gas natural total y el agua por pozo, enero de 2023</caption>
                   <thead>
                     <tr>
                       <th scope="col">Medida</th>
                       <th scope="col">Símbolo</th>
                       <th scope="col">Fórmula</th>
-                      <th scope="col" class="numero">Valor</th>
-                      <th scope="col">Lectura</th>
+                      <th scope="col" class="numero">Óleo (bbl/día)</th>
+                      <th scope="col" class="numero">Gas (Mm³/día)</th>
+                      <th scope="col" class="numero">Agua (bbl/día)</th>
                     </tr>
                   </thead>
                   <tbody id="cuerpo-indicadores"></tbody>
                 </table>
               </div>
 
+              <h3 class="tdf-subtitle">Otras variables</h3>
+              <div class="table-scroll">
+                <table class="data-table">
+                  <caption>Indicadores de la variable discreta, la continua de intervalo y la ordinal</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Medida</th>
+                      <th scope="col" class="numero">Días de producción (razón)</th>
+                      <th scope="col" class="numero">Grado API (intervalo)</th>
+                      <th scope="col" class="numero">Clase de crudo (ordinal)</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cuerpo-indicadores-otras"></tbody>
+                </table>
+              </div>
+
               <aside class="frame-note">
-                <strong>Media frente a mediana.</strong> La distribución del óleo es muy asimétrica: unos pocos pozos producen cantidades muy altas. Por ello, la mediana describe mejor al pozo típico, mientras que la media resume el total por pozo y se eleva por los valores extremos.
+                <strong>Media frente a mediana.</strong> La distribución del óleo es muy asimétrica: unos pocos pozos producen cantidades muy altas. Por ello, la mediana describe mejor al pozo típico, mientras que la media resume el total por pozo y se eleva por los valores extremos. <span id="nota-indicadores"></span>
               </aside>
-              <p class="source">Asimetría G₁ y curtosis en exceso G₂ con corrección muestral. Fuente: <span id="fuente-indicadores"></span>.</p>
+              <p class="source">Varianza con n − 1; asimetría G₁ y curtosis en exceso G₂ con corrección muestral. La moda de una variable continua se reporta como clase modal (clases de 4.1.4). El CV solo se calcula en escala de razón. Fuente: <span id="fuente-indicadores"></span>.</p>
             </div>
           </div>
         </section>
@@ -328,7 +456,7 @@
             <p id="estado-resumen" class="status" role="status">Preparando el resumen…</p>
 
             <div id="contenido-resumen" hidden>
-              <p class="section-intro">Óleo por pozo (bbl/día) según Estado. Cada fila resume los pozos de ese Estado; la última fila corresponde a todo el archivo.</p>
+              <p class="section-intro">Óleo por pozo (bbl/día) según Estado. Cada fila resume los pozos de ese Estado; la última fila corresponde a toda la muestra.</p>
 
               <div class="table-scroll">
                 <table class="data-table">

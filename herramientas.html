@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Herramientas, fuente de datos y pasos para reproducir el análisis de la producción terrestre de petróleo en Brasil.">
+  <title>Herramientas · Producción terrestre de petróleo en Brasil</title>
+  <script>
+    (function () {
+      try { if (localStorage.getItem('sidebar-expanded') === '1') document.documentElement.classList.add('sidebar-expanded'); } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/estadistica.css">
+  <link rel="stylesheet" href="css/paginas.css">
+  <script defer src="js/sidebar.js"></script>
+</head>
+
+<body class="has-sidebar">
+<div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Navegación lateral">
+      <button class="sidebar-toggle" id="sidebar-toggle" type="button" aria-label="Alternar menú lateral" aria-expanded="false" aria-controls="sidebar">
+        <span class="sidebar-toggle-icon" aria-hidden="true">☰</span>
+      </button>
+      <a class="sidebar-brand" href="index.html" aria-label="Terra, inicio">
+        <img class="sidebar-logo" src="img/logo-universidad.png" alt="" width="34" height="34">
+        <span class="sidebar-brand-text">
+          <span class="sidebar-title">Universidad Central del Ecuador</span>
+        </span>
+      </a>
+      <nav class="sidebar-nav" aria-label="Navegación lateral">
+        <ul class="sidebar-list">
+          <li>
+            <a class="sidebar-link" href="index.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10.4V20h13v-9.6"/></svg>
+              <span class="sidebar-link-label">Inicio</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="introduccion.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v16H5.5C4.7 20 4 19.3 4 18.5Z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v16h5.5c.8 0 1.5-.7 1.5-1.5Z"/></svg>
+              <span class="sidebar-link-label">Introducción</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="mapa.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Z"/><path d="M9 4v14m6-12v14"/></svg>
+              <span class="sidebar-link-label">Mapa Web</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="Estadistica.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18 6H7l6 6-6 6h11"/></svg>
+              <span class="sidebar-link-label">Estadística Descriptiva</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="estadisticaInferencial.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 20h18"/><path d="M5 20c2-9 4-14 7-14s5 5 7 14"/><path d="M12 6v14"/></svg>
+              <span class="sidebar-link-label">Estadística Inferencial</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="conclusiones.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5 9.5 17 19 7"/></svg>
+              <span class="sidebar-link-label">Conclusiones</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link is-active" href="herramientas.html" aria-current="page">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.7 6.3a4 4 0 0 0 5 5L12 19a2.1 2.1 0 0 1-3-3l7.7-7.7"/><path d="M4 4l5 5"/></svg>
+              <span class="sidebar-link-label">Herramientas</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="equipo.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 5.5a3 3 0 0 1 0 5"/><path d="M18 14.5c1.8.8 3 2.6 3 4.5"/></svg>
+              <span class="sidebar-link-label">Equipo</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <div class="app-main">
+      <div class="sidebar-backdrop" id="sidebar-backdrop" hidden></div>
+      <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+      <header class="site-header">
+        <div class="container header-inner">
+          <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="sidebar">
+            <span aria-hidden="true">☰</span>
+          </button>
+          <a class="brand" href="index.html" aria-label="Terra, inicio">
+            <img class="brand-mark" src="img/logo-universidad.png" alt="" aria-hidden="true" width="34" height="34">
+            <span class="brand-word">Universidad Central del Ecuador</span>
+            <span class="brand-caption">Proyecto de Estadística</span>
+          </a>
+          <nav class="site-nav" aria-label="Navegación principal">
+            <a href="#herramientas-lista">Herramientas</a>
+            <a href="#datos">Datos</a>
+            <a href="#reproducir">Reproducir</a>
+          </nav>
+        </div>
+      </header>
+
+      <main id="contenido">
+        <section class="page-hero" aria-labelledby="herramientas-titulo">
+          <div class="container hero-content">
+            <p class="section-kicker">06 / Recursos</p>
+            <h1 id="herramientas-titulo">Herramientas.</h1>
+            <p class="aside-meta">Brasil · Enero de 2023</p>
+            <p class="page-lead">Software, fuente de datos y comandos usados para producir y reproducir el análisis.</p>
+          </div>
+        </section>
+
+        <section class="section" id="herramientas-lista" aria-labelledby="herramientas-lista-titulo">
+          <div class="container">
+            <p class="section-kicker">Software</p>
+            <h2 id="herramientas-lista-titulo" class="subsection-title">Herramientas utilizadas</h2>
+            <div class="method-grid">
+              <article class="method-card">
+                <p class="method-card-tag">Lenguaje</p>
+                <h4>Python 3 con pandas, NumPy y SciPy</h4>
+                <p>Procesan el CSV y calculan la estadística descriptiva e inferencial. Los scripts <code>scripts/1_preprocesamiento_mapa.py</code> y <code>scripts/2_descriptiva_inferencial.py</code> generan los JSON de <code>data/</code>.</p>
+              </article>
+              <article class="method-card">
+                <p class="method-card-tag">Lenguaje</p>
+                <h4>JavaScript sin frameworks</h4>
+                <p>Lee los JSON de <code>data/</code> y arma tablas, gráficas, mapa e interacción de la página.</p>
+              </article>
+              <article class="method-card">
+                <p class="method-card-tag">Gráficas</p>
+                <h4>Plotly.js 2.35.2</h4>
+                <p>Gráficas interactivas: histogramas, ajustes de modelos y comparaciones.</p>
+              </article>
+              <article class="method-card">
+                <p class="method-card-tag">Mapa</p>
+                <h4>Leaflet 1.9.4</h4>
+                <p>Mapa web de la producción por Estado.</p>
+              </article>
+              <article class="method-card">
+                <p class="method-card-tag">Interfaz</p>
+                <h4>HTML5 y CSS3</h4>
+                <p>Sitio estático con fuentes autoalojadas Archivo y Fraunces.</p>
+              </article>
+              <article class="method-card">
+                <p class="method-card-tag">Publicación</p>
+                <h4>Git, GitHub y GitHub Pages</h4>
+                <p>Git y GitHub para el control de versiones; GitHub Pages para la publicación.</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="section cream" id="datos" aria-labelledby="datos-titulo">
+          <div class="container">
+            <p class="section-kicker">Datos</p>
+            <h2 id="datos-titulo" class="subsection-title">Fuente de datos</h2>
+            <div class="method-grid">
+              <article class="method-card">
+                <p class="method-card-tag">Fuente de datos</p>
+                <h4>ANP — Dados abertos</h4>
+                <p>«Produção de petróleo e gás natural por poço», archivo <code>2023_01_producao_Terra.csv</code> (publicado el 13/03/2023). Para la validación anual se usaron los 12 archivos mensuales de 2023.</p>
+                <p><a href="https://www.gov.br/anp/pt-br/centrais-de-conteudo/dados-abertos/producao-de-petroleo-e-gas-natural-por-poco" target="_blank" rel="noopener noreferrer">Abrir la fuente en gov.br/anp</a></p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="reproducir" aria-labelledby="reproducir-titulo">
+          <div class="container">
+            <p class="section-kicker">Reproducibilidad</p>
+            <h2 id="reproducir-titulo" class="subsection-title">Reproducir el análisis</h2>
+            <p>Desde la raíz del repositorio:</p>
+            <pre class="code-block" tabindex="0"><code>python3 -m venv .venv &amp;&amp; .venv/bin/pip install pandas numpy scipy
+.venv/bin/python scripts/1_preprocesamiento_mapa.py data/2023_01_producao_Terra.csv
+.venv/bin/python scripts/2_descriptiva_inferencial.py data/2023_01_producao_Terra.csv --anual datos_2023/
+python3 -m http.server 8000</code></pre>
+            <p class="frame-note">El último comando sirve el sitio en <code>http://localhost:8000/</code>; abrirlo con <code>file://</code> no funciona porque las páginas leen JSON locales.</p>
+          </div>
+        </section>
+
+        <div class="container"><p class="source"><span>Fuente: ANP (Brasil), Dados abertos.</span></p></div>
+      </main>
+
+      <footer class="site-footer">
+        <div class="container footer-row">
+          <div>
+            <p>© 2026 Integrantes: <span class="footer-members">Génesis Once, Esther Places, Evelyn Rodríguez, Andrea Sarmiento, Melany Zapata</span></p>
+            <p class="footer-location">Proyecto académico · Brasil, enero de 2023</p>
+          </div>
+          <div>
+            <p class="footer-label">Fuente</p>
+            <p>ANP (Brasil) · Agregación por pozo y Estado</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+</body>
+</html>
