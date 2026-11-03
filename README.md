@@ -28,11 +28,12 @@ Es un sitio **estático, sin frameworks ni paso de compilación**: HTML, CSS y J
 | [`mapa.html`](mapa.html) | Mapa Leaflet interactivo de Brasil: óleo producido y pozos únicos por Estado, con métrica conmutable, umbral mínimo, panel de detalle y ranking. |
 | [`Estadistica.html`](Estadistica.html) | Estadística descriptiva: resumen en cifras, población y muestra, variables, TDF y GDF (nominal, ordinal, discreta y continua), indicadores de óleo, gas y agua, y resumen por Estado. |
 | [`estadisticaInferencial.html`](estadisticaInferencial.html) | Estadística inferencial: resumen y veredicto por modelo, VAD, modelo discreto, VAC, modelos continuos, tests de ajuste, probabilidades, estimación, tamaño muestral, segunda VAC (agua) y VAD (pozos por campo), χ² en submuestras y validación con 2023 completo. |
+| [`regresion.html`](regresion.html) | 4.3.1 Regresión clásica: galería de modelos, x e y, pares, dispersión, modelos lineal, potencial, exponencial, logarítmico y polinómico, parámetros paso a paso, Pearson, determinación y no determinación, restricciones, tripletas y regresión múltiple con plano 3D. |
 | [`conclusiones.html`](conclusiones.html) | Conclusiones descriptivas e inferenciales, limitaciones y trabajo futuro. |
 | [`herramientas.html`](herramientas.html) | Herramientas, fuente de datos y pasos para reproducir el análisis. |
 | [`equipo.html`](equipo.html) | Integrantes del proyecto. |
 
-Las ocho páginas comparten una **barra lateral colapsable** (estado persistido en `localStorage`), cabecera, pie con la fuente de datos y un diseño responsive con soporte de `prefers-reduced-motion`.
+Las nueve páginas comparten una **barra lateral colapsable** (estado persistido en `localStorage`), cabecera, pie con la fuente de datos y un diseño responsive con soporte de `prefers-reduced-motion`.
 
 ## Contenido estadístico
 
@@ -55,9 +56,10 @@ Las ocho páginas comparten una **barra lateral colapsable** (estado persistido 
 - Restricciones del modelo, cálculos de probabilidad, estimación puntual y por intervalos de confianza (sin corrección por población finita), y cálculo del tamaño muestral.
 - Segunda VAC (agua por pozo: gamma frente a lognormal y Weibull), segunda VAD (pozos por campo: Poisson frente a binomial negativa), χ² en submuestras aleatorias de n = 300 y validación de los intervalos de enero con los 12 meses de 2023.
 
-### 4.3 Relación entre variables — pendiente
+### 4.3 Relación entre variables
 
-Regresión clásica, machine learning multivariable y serie de tiempo están planificadas en [`proyecto.md`](proyecto.md) y aún no se publican en el sitio.
+- **4.3.1 Regresión clásica** (`regresion.html`): unidad = campo con óleo > 0 (n = 165). x = pozos del campo, y = óleo del campo (bbl/día). El modelo potencial ŷ = 8,818·x^1,057 tiene el mayor r (0,801). La regresión múltiple con x₂ = gas natural total da ŷ = 118,67 + 6,346·x₁ + 0,689·x₂ (R² = 0,781).
+- Machine learning multivariable (4.3.2) y serie de tiempo (4.3.3) siguen pendientes.
 
 ## Datos
 
@@ -93,6 +95,7 @@ Todos los JSON de ejecución viven en [`data/`](data). El CSV original se conser
 ├── mapa.html                   # Mapa Leaflet por Estado
 ├── Estadistica.html            # 4.1 Estadística descriptiva
 ├── estadisticaInferencial.html # 4.2 Estadística inferencial
+├── regresion.html              # 4.3.1 Regresión clásica
 ├── conclusiones.html           # Conclusiones
 ├── herramientas.html           # Herramientas y reproducibilidad
 ├── equipo.html                 # Integrantes
@@ -102,7 +105,8 @@ Todos los JSON de ejecución viven en [`data/`](data). El CSV original se conser
 │   ├── ubicacion.css           # Ajustes de introduccion.html
 │   ├── estadistica.css         # Página descriptiva
 │   ├── estadisticaInferencial.css
-│   └── paginas.css             # Conclusiones, herramientas y equipo
+│   ├── paginas.css             # Conclusiones, herramientas y equipo
+│   └── regresion.css           # Regresión clásica
 ├── js/
 │   ├── common.js               # leerJSON() y mostrarError()
 │   ├── sidebar.js              # Barra lateral colapsable
@@ -117,11 +121,13 @@ Todos los JSON de ejecución viven en [`data/`](data). El CSV original se conser
 │   ├── variableContinua.js
 │   ├── modeloContinuo.js
 │   ├── inferencialAmpliacion.js # 4.2.15 a 4.2.18
+│   ├── regresion.js            # 4.3.1 Regresión clásica
 │   └── indiceLateral.js        # Índice lateral de la página inferencial
 ├── data/                       # CSV de origen, GeoJSON y JSON de ejecución
 ├── scripts/
 │   ├── 1_preprocesamiento_mapa.py   # Mapa, VAD, VAC y modelos
-│   └── 2_descriptiva_inferencial.py # Descriptiva, ampliación y validación anual
+│   ├── 2_descriptiva_inferencial.py # Descriptiva, ampliación y validación anual
+│   └── 3_regresion.py               # 4.3.1 Regresión clásica
 ├── img/                        # Logo y fotografía institucional
 ├── video/                      # Videos de los hero (uno por sección)
 ├── fonts/                      # Archivo y Fraunces (woff2)
@@ -149,6 +155,7 @@ python3 -m venv .venv
 .venv/bin/python scripts/1_preprocesamiento_mapa.py data/2023_01_producao_Terra.csv
 cp scripts/data/*.json data/
 .venv/bin/python scripts/2_descriptiva_inferencial.py data/2023_01_producao_Terra.csv --anual datos_2023/
+.venv/bin/python scripts/3_regresion.py data/2023_01_producao_Terra.csv
 ```
 
 > **Nota:** el script 1 escribe en `scripts/` y `scripts/data/`; solo se copian a `data/` los JSON de `scripts/data/`. No sobrescribas `data/map_data.json` ni `data/estadistica_descriptiva.json`: tienen campos que el script ya no genera. El script 2 escribe directamente en `data/`; con `--anual` descarga de la ANP los 12 CSV de 2023 si la carpeta no los tiene.
