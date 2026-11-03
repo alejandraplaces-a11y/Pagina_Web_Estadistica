@@ -1,6 +1,6 @@
 # AGENTS.md — Terra (producción terrestre de Brasil)
 
-Static, no-framework site: five HTML pages at the repo root (`index.html`, `introduccion.html`, `mapa.html`, `Estadistica.html`, `estadisticaInferencial.html`), `css/`, `js/`, self-hosted fonts in `fonts/`, JSON in `data/`, one pandas script in `scripts/`, images in `img/`, videos in `video/`. There is no `package.json`, build, test, lint, or CI — don't invent commands. `proyecto.md` is the graded Spanish outline the site must eventually cover (4.1 descriptive, 4.2 inferential, 4.3 regression/ML/time series); today the planteamiento, the map page, and both statistics pages are built.
+Static, no-framework site: nine HTML pages at the repo root (`index.html`, `introduccion.html`, `mapa.html`, `Estadistica.html`, `estadisticaInferencial.html`, `regresion.html`, `conclusiones.html`, `herramientas.html`, `equipo.html`), `css/`, `js/`, self-hosted fonts in `fonts/`, JSON in `data/`, three pandas/scipy scripts in `scripts/`, images in `img/`, videos in `video/`. There is no `package.json`, build, test, lint, or CI — don't invent commands. `proyecto.md` is the graded Spanish outline the site must eventually cover (4.1 descriptive, 4.2 inferential, 4.3 regression/ML/time series); today the planteamiento, the map page, both statistics pages, and 4.3.1 (classical regression) are built; 4.3.2 ML and 4.3.3 time series are pending.
 
 ## Preview
 
@@ -12,17 +12,22 @@ Static, no-framework site: five HTML pages at the repo root (`index.html`, `intr
 - `introduccion.html` — `#planteamiento` (inner content div `#planteamiento-contenido`) and `#objetivos` (`#objetivo-general`, `#objetivos-especificos`). Both are fed by `js/main.js` from `data/contexto.json`.
 - `index.html` — `#hero` (video hero), `#diagrama` (interactive west→east route, `js/ruta.js`), `#mision-vision`, `#motivacion`.
 - `mapa.html` — Leaflet map of production per Estado (`js/mapa.js`), ranking panel and metric/threshold controls.
-- `Estadistica.html` — descriptive statistics (población/muestra, variables, TDF, GDF, indicadores, resumen) via `js/estadistica.js`, `js/frecuencias.js`, `js/indicadores.js`.
-- `estadisticaInferencial.html` — inferential statistics via `js/estadisticaInferencial.js`, `js/modeloDiscreto.js`, `js/variableContinua.js`, `js/modeloContinuo.js`, plus the `js/indiceLateral.js` side index.
+- `Estadistica.html` — descriptive statistics (static key-figures summary, población/muestra, variables, TDF/GDF for nominal, ordinal, discrete and continuous variables, indicadores for óleo/gas/agua, resumen) via `js/estadistica.js`, `js/frecuencias.js`, `js/indicadores.js`. Óleo classes are a `{0}` class plus Sturges classes of equal width in log10 (same as 4.2.6); the ogive uses upper class limits.
+- `estadisticaInferencial.html` — inferential statistics via `js/estadisticaInferencial.js`, `js/modeloDiscreto.js`, `js/variableContinua.js`, `js/modeloContinuo.js`, `js/inferencialAmpliacion.js` (4.2.15–4.2.18), plus the `js/indiceLateral.js` side index. Population = onshore wells of Brazil (no fixed N), sample = January 2023 wells; no finite-population correction anywhere.
+- `regresion.html` — 4.3.1 classical regression via `js/regresion.js` + `css/regresion.css` (on top of `estadisticaInferencial.css`, reuses `js/indiceLateral.js`). Unit = Campo with óleo > 0 (n = 165); x = wells per field, y = field óleo, x₂ = field total gas. Model gallery cards hold static numbers in the HTML — update them if `data/regresion.json` changes.
+- `conclusiones.html`, `herramientas.html`, `equipo.html` — static pages (no JSON).
 - `#inicio` — Full-bleed background video: `video/video-completo.mp4` on `index.html`, `video/video-descriptiva.mp4` on `Estadistica.html`, `video/video-inferencial.mp4` on `estadisticaInferencial.html`; autoplay muted loop.
-- Collapsible sidebar (`js/sidebar.js`, `.sidebar`): fixed left rail, collapsed 64px (logo only), expanded 240px (logo + name). State persisted in `localStorage('sidebar-expanded')`. Mobile becomes an off-canvas drawer opened by `.menu-toggle`. Included on all five pages.
+- Collapsible sidebar (`js/sidebar.js`, `.sidebar`): fixed left rail, collapsed 64px (logo only), expanded 240px (logo + name). State persisted in `localStorage('sidebar-expanded')`. Mobile becomes an off-canvas drawer opened by `.menu-toggle`. Included on all nine pages.
 - Footer with self-hosted logo.
 
 ## Data pipeline
 
 - Source: `data/2023_01_producao_Terra.csv` — `;`-separated, `,` decimal, `.` thousands, `utf-8-sig`, and a second subheader row. Keep those read options.
-- Regenerate with the bundled venv: `.venv/bin/python scripts/1_preprocesamiento_mapa.py data/2023_01_producao_Terra.csv`. Passing the CSV is required — the script's default path is `scripts/`, not `data/`.
-- The script writes `scripts/map_data.json`, but the site reads `data/map_data.json`. Copy the result (or change `BASE`/`salida`) after each run or the page keeps stale numbers.
+- Create the venv if missing: `python3 -m venv .venv && .venv/bin/pip install pandas numpy scipy`.
+- `.venv/bin/python scripts/1_preprocesamiento_mapa.py data/2023_01_producao_Terra.csv` writes VAD/VAC/model JSON to `scripts/data/` (copy those to `data/`). Its `scripts/map_data.json` and `scripts/estadistica_descriptiva.json` lack fields present in `data/` — don't copy them over.
+- `.venv/bin/python scripts/2_descriptiva_inferencial.py data/2023_01_producao_Terra.csv --anual <dir>` writes straight to `data/`: `variables_estadistica.json`, `distribucion_frecuencias.json`, `indicadores_descriptivos.json`, `inferencial_ampliacion.json`, `validacion_anual.json` (downloads the 12 monthly ANP ZIPs into `<dir>` if absent; April+ files rename `Nome Poço` → `Nome Poço ANP`, Oct–Dec are Latin-1). Run it after script 1 because it reads `data/vac_oleo.json` and `data/modelo_continuo.json`.
+- `.venv/bin/python scripts/3_regresion.py data/2023_01_producao_Terra.csv` writes `data/regresion.json` (reuses the reader from script 2).
+- Repeated wells (143) are one row per Campo with the same contract: volumes are summed, production hours take the max.
 - `data/` is the single source of truth for runtime JSON. Every `leerJSON()`/`fetch()` in `js/` uses the `data/...` prefix, so don't re-add copies at the repo root or under `js/`.
 - `data/contexto.json` is hand-written copy (`problema`, `objetivos.general`, `objetivos.especificos`), not generated by the script. `js/main.js` injects `#problema`, `#objetivo-general`, and `#objetivos-especificos` from it.
 
@@ -39,4 +44,4 @@ Static, no-framework site: five HTML pages at the repo root (`index.html`, `intr
 ## Repo state
 
 - All site files are tracked. Deleted working files (root-level JSON copies, `mapa_files/`, duplicate helper scripts) were only duplicates — don't recreate them.
-- `.venv/` is a local Python 3.14 env with pandas/numpy; use `.venv/bin/python`, don't edit or commit it. `.agents/skills/frontend-design/` is vendored and pinned by `skills-lock.json`.
+- `.venv/` is a local, git-ignored env with pandas/numpy/scipy; use `.venv/bin/python`, don't edit or commit it. `.agents/skills/frontend-design/` is vendored and pinned by `skills-lock.json`.
