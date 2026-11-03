@@ -121,3 +121,52 @@
   .method-grid article.method-card { padding: 22px; }
   .chart-card { padding: 18px 18px 8px; }
 }
+
+/* Revisión: tarjetas blancas sobre el fondo tierra claro (#F5F0E6) para que resalten. */
+.section, .section.cream { background: var(--paper); }
+.method-grid article.method-card,
+.method-grid article.method-card.teal,
+.section.cream .method-card,
+.section.cream .method-card.teal,
+.chart-card,
+.section.cream .chart-card,
+.table-scroll,
+.section.cream .table-scroll,
+.var-card { background: #FFFFFF; }
+.section + .section { border-top: 1px solid var(--line); }
+
+/* Encabezados de fila: sin mayúsculas, a diferencia de los de columna. */
+.data-table tbody th { background: transparent; text-transform: none; letter-spacing: 0; font-size: 14px; font-weight: 600; color: var(--ink); }
+.data-table tbody th[scope="colgroup"] { background: var(--paper-2); color: var(--oil-deep); font-size: 12px; letter-spacing: 0.06em; }
+.data-table .fila-total th, .data-table .fila-total td { font-weight: 650; border-top: 2px solid var(--line); }
+.tabla-variables { min-width: 1280px; font-size: 13px; }
+.tabla-variables td, .tabla-variables th { padding: 10px 12px; }
+
+/* Resumen inicial con las cifras clave. */
+.resumen-clave { padding-top: 48px; padding-bottom: 48px; }
+.resumen-metrics { margin-top: 20px; }
+
+/* Tarjetas desplegables por variable o modelo (elemento details). */
+.var-card { margin-top: 16px; border: 1px solid var(--line); border-left: 3px solid var(--oil); border-radius: 12px; padding: 0 20px; }
+.var-card > summary { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; align-items: baseline; padding: 18px 28px 18px 0; cursor: pointer; list-style: none; position: relative; }
+.var-card > summary::-webkit-details-marker { display: none; }
+.var-card > summary::after { content: "+"; position: absolute; right: 0; top: 16px; font-size: 22px; line-height: 1; color: var(--oil-deep); }
+.var-card[open] > summary::after { content: "−"; }
+.var-card > summary:focus-visible { outline: 2px solid var(--oil); outline-offset: 4px; border-radius: 6px; }
+.var-card-tipo { grid-column: 1 / -1; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--oil-deep); }
+.var-card-titulo { font-family: var(--serif); font-size: 20px; color: var(--ink); }
+.var-card-preview { font-size: 14px; color: var(--ink-soft); }
+.var-card[open] { padding-bottom: 18px; }
+.var-card .table-scroll { margin-top: 4px; }
+.var-card-veredicto { font-variant-numeric: tabular-nums; }
+
+.chart-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 22px; }
+
+@media (max-width: 1000px) {
+  .chart-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 560px) {
+  .var-card { padding: 0 14px; }
+  .var-card > summary { grid-template-columns: minmax(0, 1fr); }
+}

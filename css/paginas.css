@@ -1,0 +1,12 @@
+/* Estilos de conclusiones, herramientas y equipo */
+.lista-simple { margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.7; color: var(--ink-soft); }
+.lista-simple li + li { margin-top: 8px; }
+.method-grid article.method-card { background: #FFFFFF; }
+.section.cream .method-grid article.method-card { background: #FFFFFF; }
+.stat-scope { overflow-wrap: anywhere; }
+.code-block { margin: 16px 0; padding: 18px 20px; background: #FFFFFF; border: 1px solid var(--line); border-radius: 10px; overflow-x: auto; max-width: 100%; font-size: 13px; line-height: 1.7; color: var(--ink); }
+.member-grid { list-style: none; margin: 24px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+.member-card { display: flex; align-items: center; gap: 14px; min-width: 0; padding: 20px; background: #FFFFFF; border: 1px solid var(--line); border-top: 3px solid var(--oil); border-radius: 12px; }
+.member-avatar { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--oil-deep); color: #FFFFFF; font-size: 14px; font-weight: 600; letter-spacing: 0.04em; }
+.member-name { font-family: var(--serif); font-size: 18px; color: var(--ink); overflow-wrap: anywhere; }
+@media (max-width: 560px) { .member-grid { grid-template-columns: 1fr; } .code-block { padding: 14px; font-size: 12px; } }
