@@ -4,21 +4,8 @@
   const $ = (selector, root = document) => (root || document).querySelector(selector);
   const $$ = (selector, root = document) => Array.from((root || document).querySelectorAll(selector));
 
-  const estado = $('#estado-estadistica');
-  const contenido = $('#contenido-estadistica');
-  const estadoVariables = $('#estado-variables');
-  const contenidoVariables = $('#contenido-variables');
-  const tablaVariables = $('#tabla-variables');
-  const excluidasVariables = $('#excluidas-variables');
-
   const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  function mostrarError(message) {
-    if (estado) {
-      estado.textContent = message;
-      estado.classList.add('status-error');
-    }
-  }
+  const entero = new Intl.NumberFormat('es-EC', { maximumFractionDigits: 0 });
 
   function set(id, value) {
     const node = typeof id === 'string' ? $(id) : id;
@@ -30,8 +17,7 @@
     const node = typeof id === 'string' ? $(id) : id;
     if (!node) return;
 
-    const formatear = new Intl.NumberFormat('es-EC', { maximumFractionDigits: 0 });
-    const pintar = (valor) => { node.textContent = Number.isFinite(valor) ? formatear.format(valor) : '—'; };
+    const pintar = (valor) => { node.textContent = Number.isFinite(valor) ? entero.format(valor) : '—'; };
 
     if (REDUCED || !('requestAnimationFrame' in window)) {
       pintar(objetivo);
@@ -79,49 +65,50 @@
     });
   }
 
-  // Variables de producción consolidadas por pozo (Óleo, Gas Natural y Agua).
+  const COLUMNAS_VARIABLES = [
+    { clave: 'columna', encabezado: true },
+    { clave: 'traduccion' },
+    { clave: 'descripcion' },
+    { clave: 'tipo' },
+    { clave: 'subtipo' },
+    { clave: 'dominio' },
+    { clave: 'rango' },
+    { clave: 'escala' },
+    { clave: 'instrumento' },
+    { clave: 'unidad' },
+    { clave: 'validos', numero: true },
+    { clave: 'nulos', numero: true },
+    { clave: 'ceros', numero: true },
+  ];
+
   function renderVariables(datos) {
-    const validos = Array.isArray(datos) ? datos.length : 0;
-
-    if (tablaVariables) {
-      tablaVariables.replaceChildren();
-
-      const variables = [
-        { variable: 'Óleo (bbl/día)', naturaleza: 'Cuantitativa', escala: 'Continua', unidad: 'bbl/día', fija: 'Consolidado por pozo (sumatoria de registros repetidos).' },
-        { variable: 'Gás Natural (Mm³/día)', naturaleza: 'Cuantitativa', escala: 'Continua', unidad: 'Mm³/día', fija: 'Consolidado por pozo (sumatoria de registros repetidos).' },
-        { variable: 'Água (bbl/día)', naturaleza: 'Cuantitativa', escala: 'Continua', unidad: 'bbl/día', fija: 'Consolidado por pozo (sumatoria de registros repetidos).' },
-      ];
-
-      variables.forEach((fila) => {
+    const tbody = $('#tabla-variables');
+    if (tbody) {
+      tbody.replaceChildren();
+      datos.variables.forEach((variable) => {
         const tr = document.createElement('tr');
-        const celdas = [
-          { tipo: 'texto', texto: fila.variable },
-          { tipo: 'texto', texto: fila.naturaleza },
-          { tipo: 'texto', texto: fila.escala },
-          { tipo: 'texto', texto: fila.unidad },
-          { tipo: 'numero', texto: String(validos) },
-          { tipo: 'numero', texto: '0' },
-          { tipo: 'texto', texto: fila.fija },
-        ].map((celda, index) => {
-          const esNumero = celda.tipo === 'numero';
-          const td = document.createElement(esNumero ? 'td' : 'th');
-          if (esNumero) td.className = 'numero';
-          if (index === 0) td.scope = 'row';
-          td.textContent = celda.texto;
-          return td;
+        COLUMNAS_VARIABLES.forEach((columna) => {
+          const celda = document.createElement(columna.encabezado ? 'th' : 'td');
+          if (columna.encabezado) celda.scope = 'row';
+          if (columna.numero) celda.className = 'numero';
+          const valor = variable[columna.clave];
+          celda.textContent = valor === null || valor === undefined
+            ? '—'
+            : columna.numero ? entero.format(valor) : String(valor);
+          tr.appendChild(celda);
         });
-
-        tr.append(...celdas);
-        tablaVariables.appendChild(tr);
+        tbody.appendChild(tr);
       });
     }
 
-    if (excluidasVariables) {
-      excluidasVariables.replaceChildren();
-      ['Nome Poço', 'Estado', 'Bacia', 'Campo', 'Operador'].forEach((identificador) => {
+    const lista = $('#excluidas-variables');
+    if (lista) {
+      lista.replaceChildren();
+      datos.excluidas.forEach((excluida) => {
         const li = document.createElement('li');
-        li.textContent = `${identificador}: identificador u contexto, no responde al objetivo del análisis.`;
-        excluidasVariables.appendChild(li);
+        const distintos = excluida.valores_distintos ? ` (${entero.format(excluida.valores_distintos)} valores distintos)` : '';
+        li.textContent = `${excluida.variable}: ${excluida.motivo}${distintos}.`;
+        lista.appendChild(li);
       });
     }
   }
@@ -134,37 +121,27 @@
       const estados = Number(estadistica.estados) || 0;
       const varios = Number(estadistica.pozos_con_varios_registros) || 0;
 
-      const intFmt = new Intl.NumberFormat('es-EC', { maximumFractionDigits: 0 });
-
-      set('#total-pozos', intFmt.format(pozos));
-      set('#total-registros', intFmt.format(registros));
-      set('#total-estados', intFmt.format(estados));
-      set('#periodo-estadistica', 'Enero 2023');
-      set('#poblacion-n', intFmt.format(pozos));
-      set('#nota-registros', `${intFmt.format(registros)} registros corresponden a ${intFmt.format(pozos)} pozos únicos; ${intFmt.format(varios)} pozos aparecen en más de un registro.`);
-      set('#fuente-estadistica', '2023_01_producao_Terra.csv');
-
-      if (estado) estado.hidden = true;
-      if (contenido) contenido.hidden = false;
+      set('#muestra-n', entero.format(pozos));
+      set('#muestra-notacion-n', entero.format(pozos));
+      set('#nota-registros', `${entero.format(registros)} registros corresponden a ${entero.format(pozos)} pozos únicos; ${entero.format(varios)} pozos aparecen en más de un registro.`);
+      set('#fuente-estadistica', estadistica.fuente || '2023_01_producao_Terra.csv');
 
       animarContador('#total-pozos', pozos);
       animarContador('#total-registros', registros);
       animarContador('#total-estados', estados);
-
-      initReveals();
-
-      // Variables del conjunto analizado (producción consolidada por pozo).
-      try {
-        const datos = await leerJSON('data/distribucion_pozos.json');
-        renderVariables(datos);
-        if (estadoVariables) estadoVariables.hidden = true;
-        if (contenidoVariables) contenidoVariables.hidden = false;
-      } catch (error) {
-        console.error('No se pudieron cargar las variables del conjunto:', error);
-      }
     } catch (error) {
-      mostrarError('No se pudieron cargar los datos. Abre la página desde un servidor local (por ejemplo, python3 -m http.server) y vuelve a intentarlo.');
+      // Las cifras de 4.1.1 y 4.1.2 ya están escritas en el HTML; solo se registra el error.
       console.error('No se pudieron cargar los datos de estadística:', error);
+    }
+
+    initReveals();
+
+    try {
+      renderVariables(await leerJSON('data/variables_estadistica.json'));
+      $('#estado-variables').hidden = true;
+      $('#contenido-variables').hidden = false;
+    } catch (error) {
+      mostrarError('estado-variables', `No se pudo cargar la tabla de variables. ${error.message}`, error);
     }
   }
 

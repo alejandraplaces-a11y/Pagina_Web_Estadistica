@@ -240,6 +240,9 @@
     const rango = i => `${fmt.dos.format(i.inferior)} y ${fmt.dos.format(i.superior)}`;
     texto('ic-mediana-rango', rango(porSimbolo['e^μ']));
     texto('ic-media-rango', rango(porSimbolo['E[Y]']));
+    const mediana = porSimbolo['e^μ'];
+    texto('ic-mediana-rango-2', `[${fmt.dos.format(mediana.inferior)}; ${fmt.dos.format(mediana.superior)}]`);
+    texto('ic-mediana-observada', fmt.dos.format(m.mediana_observada));
     m.intervalos.forEach(i => {
       const esProporcion = i.simbolo === 'p';
       const f = esProporcion ? fmt.porcentaje.format : fmt.cuatro.format;
@@ -254,15 +257,15 @@
 
   // 4.2.14
   function renderTamanos(m) {
-    texto('tm-poblacion', fmt.entero.format(m.poblacion));
+    texto('tm-muestra', fmt.entero.format(m.muestra));
     texto('tm-s', fmt.dos.format(m.desviacion_observada));
     m.tamanos.forEach(t => {
       const esMedia = t.unidad === 'bbl/día';
       fila('cuerpo-tamanos', [
         [t.objetivo, false],
         [esMedia ? `± ${fmt.dos.format(t.error)} bbl/día` : `± ${fmt.porcentaje.format(t.error)}`, true],
-        [fmt.entero.format(Math.ceil(t.n0)), true],
-        [fmt.entero.format(t.n), true]
+        [fmt.entero.format(t.n), true],
+        [t.cubre ? `Sí (${fmt.entero.format(t.n)} ≤ ${fmt.entero.format(m.muestra)})` : `No (faltan ${fmt.entero.format(t.n - m.muestra)})`, false]
       ]);
     });
 
@@ -277,8 +280,9 @@
       }
       const z = Z_CONFIANZA[nivel.value];
       const n0 = (z * m.desviacion_observada / e) ** 2;
-      const n = Math.ceil(n0 / (1 + (n0 - 1) / m.poblacion));
-      salida.textContent = `n₀ = ${fmt.entero.format(Math.ceil(n0))} → n = ${fmt.entero.format(n)} pozos (${fmt.porcentaje.format(n / m.poblacion)} de la población)`;
+      const n = Math.ceil(n0);
+      const cubre = n <= m.muestra ? 'la muestra de enero alcanza' : 'la muestra de enero no alcanza';
+      salida.textContent = `n = ⌈n₀⌉ = ${fmt.entero.format(n)} pozos productores (${cubre}: n = ${fmt.entero.format(m.muestra)})`;
     };
     error.addEventListener('input', calcular);
     nivel.addEventListener('change', calcular);

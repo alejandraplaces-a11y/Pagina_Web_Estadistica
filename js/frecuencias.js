@@ -1,146 +1,100 @@
 (() => {
   'use strict';
 
-  const $ = (selector, root = document) => (root || document).querySelector(selector);
-
-  const estadoTdf = $('#estado-tdf');
-  const contenidoTdf = $('#contenido-tdf');
-  const fuenteTdf = $('#fuente-tdf');
-  const tdfK = $('#tdf-k');
-  const tdfAmplitud = $('#tdf-amplitud');
-  const tdfNcualitativa = $('#tdf-n-cualitativa');
-
-  const estadoGdf = $('#estado-gdf');
-  const contenidoGdf = $('#contenido-gdf');
-  const gdfEstado = $('#gdf-estado');
-  const gdfHistograma = $('#gdf-histograma');
-  const gdfOjiva = $('#gdf-ojiva');
-  const notaGdf = $('#nota-gdf');
+  const $ = (selector) => document.querySelector(selector);
 
   const COLOR_INK = '#2C3531';
-  const COLOR_MUTED = '#2C3531';
   const COLOR_OIL = '#8C6D46';
+  const COLOR_OIL_DEEP = '#5E4529';
+  const GRID = 'rgba(11, 34, 30, 0.08)';
 
-  function mostrarError(id, mensaje, error) {
-    const estado = id ? $(id) : estadoTdf;
-    if (!estado) return;
-    estado.hidden = false;
-    estado.textContent = mensaje;
-    estado.className = 'status status-error';
-    estado.setAttribute('role', 'alert');
-    console.error(error);
-  }
+  const fmt = {
+    entero: new Intl.NumberFormat('es-EC', { maximumFractionDigits: 0 }),
+    cuatro: new Intl.NumberFormat('es-EC', { minimumFractionDigits: 4, maximumFractionDigits: 4 }),
+    pct: new Intl.NumberFormat('es-EC', { style: 'percent', minimumFractionDigits: 1, maximumFractionDigits: 1 }),
+    sig: new Intl.NumberFormat('es-EC', { maximumSignificantDigits: 3 }),
+    dos: new Intl.NumberFormat('es-EC', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+  };
+  const volumen = (v) => (v < 100 ? fmt.sig.format(v) : fmt.dos.format(v));
 
-  // Agrupa los pozos consolidados por Estado: un registro por Estado con su n.
-  function gruposPorEstado(datos) {
-    const grupos = new Map();
-    datos.forEach((fila) => {
-      const estado = String(fila.Estado ?? '').trim();
-      if (!estado) return;
-      const grupo = grupos.get(estado) || { estado, n: 0 };
-      grupo.n += 1;
-      grupos.set(estado, grupo);
+  const CRITERIO_API = {
+    Pesado: 'API < 22,3°',
+    Mediano: '22,3° ≤ API ≤ 31,1°',
+    Ligero: 'API > 31,1°',
+  };
+
+  function celdas(tr, valores) {
+    valores.forEach(([texto, numero, encabezado]) => {
+      const td = document.createElement(encabezado ? 'th' : 'td');
+      if (encabezado) td.scope = 'row';
+      if (numero) td.className = 'numero';
+      td.textContent = texto;
+      tr.appendChild(td);
     });
-    return [...grupos.values()].sort((a, b) => b.n - a.n);
   }
 
-  function valoresPorPozo(datos) {
-    const valores = datos.map((fila) => Number(fila['Óleo (bbl/dia)'])).filter((valor) => Number.isFinite(valor));
-    return valores.length ? valores : [0];
+  function frecuencias(fila) {
+    return [
+      [fmt.entero.format(fila.fi), true],
+      [fmt.cuatro.format(fila.hi), true],
+      [fmt.entero.format(fila.Fi), true],
+      [fmt.cuatro.format(fila.Hi), true],
+    ];
   }
 
-  // k = ⌈1 + 3,322 · log₁₀(n)⌉ (Sturges); A = ⌈(máximo − mínimo) / k⌉.
-  function distribucionCuantitativa(valores) {
-    const n = valores.length;
-    const max = valores.length ? Math.max(...valores) : 0;
-    const min = valores.length ? Math.min(...valores) : 0;
-    const k = Math.ceil(1 + 3.322 * Math.log10(n || 1));
-    const amplitud = Math.ceil((max - min) / k) || 1;
-
-    const clases = [];
-    for (let i = 1; i <= k; i += 1) {
-      const limiteInferior = min + (i - 1) * amplitud;
-      const f = valores.filter((valor) => valor >= limiteInferior && valor < limiteInferior + amplitud).length;
-      clases.push({ clase: i, limiteInferior, amplitud, f, marca: limiteInferior + amplitud / 2 });
-    }
-
-    let acumulada = 0;
-    const filas = clases.map((clase) => {
-      acumulada += clase.f;
-      return { ...clase, F: acumulada, H: n ? acumulada / n : 0 };
-    });
-
-    return { n, k, amplitud, clases, filas };
-  }
-
-  function renderTablaEstado(datos) {
-    const tbody = document.getElementById('tabla-estado');
-    if (!tbody) return;
-
-    const grupos = gruposPorEstado(datos);
-    const filas = [];
-    let acumulada = 0;
-    grupos.forEach((grupo) => {
-      acumulada += grupo.n;
-      filas.push({ etiqueta: grupo.estado, f: grupo.n, F: acumulada, H: datos.length ? acumulada / datos.length : 0 });
-    });
-
+  function renderTabla(id, filas, columnasIniciales) {
+    const tbody = document.getElementById(id);
     tbody.replaceChildren();
     filas.forEach((fila) => {
       const tr = document.createElement('tr');
-
-      const tdEstado = document.createElement('th');
-      tdEstado.scope = 'row';
-      tdEstado.className = 'state-cell';
-      tdEstado.textContent = fila.etiqueta;
-
-      const celdas = [
-        { clase: 'numero', texto: String(fila.f) },
-        { clase: 'numero', texto: '1' },
-        { clase: 'numero', texto: String(fila.F) },
-        { clase: 'numero', texto: fila.H.toFixed(4) },
-      ].map((celda) => {
-        const td = document.createElement('td');
-        td.className = celda.clase;
-        td.textContent = celda.texto;
-        return td;
-      });
-
-      tr.append(tdEstado, ...celdas);
+      celdas(tr, [...columnasIniciales(fila), ...frecuencias(fila)]);
       tbody.appendChild(tr);
     });
+    const total = filas.reduce((suma, fila) => suma + fila.fi, 0);
+    const pie = document.createElement('tr');
+    pie.className = 'fila-total';
+    const vacias = columnasIniciales(filas[0]).length - 1;
+    celdas(pie, [['Total', false, true], ...Array(vacias).fill(['', false]),
+      [fmt.entero.format(total), true], [fmt.cuatro.format(filas.reduce((s, f) => s + f.hi, 0)), true], ['', true], ['', true]]);
+    tbody.appendChild(pie);
   }
 
-  function renderTablaOleo(distribucion) {
-    const tbody = document.getElementById('tabla-oleo');
-    if (!tbody) return;
+  function intervalo(fila) {
+    return fila.cero ? '{0} · sin producción' : `[${volumen(fila.li)}; ${volumen(fila.ls)})`;
+  }
 
-    tbody.replaceChildren();
-    distribucion.filas.forEach((fila) => {
-      const tr = document.createElement('tr');
+  function renderTablas(d) {
+    renderTabla('tabla-estado', d.estado.filas, (f) => [[f.categoria, false, true]]);
+    renderTabla('tabla-api', d.clase_api.filas, (f) => [[f.categoria, false, true], [CRITERIO_API[f.categoria], false]]);
+    renderTabla('tabla-dias', d.dias.filas, (f) => [[f.categoria, true, true]]);
+    renderTabla('tabla-oleo', d.oleo.filas, (f) => [
+      [String(f.clase), true],
+      [intervalo(f), false],
+      [f.cero ? '0' : volumen(f.marca), true],
+    ]);
 
-      const tdClase = document.createElement('td');
-      tdClase.textContent = String(fila.clase);
+    $('#tdf-n-cualitativa').textContent = fmt.entero.format(d.estado.n);
+    $('#tdf-n-api').textContent = fmt.entero.format(d.clase_api.n);
+    $('#tdf-n-dias').textContent = fmt.entero.format(d.dias.n);
+    $('#tdf-k').textContent = String(d.oleo.k);
+    $('#tdf-amplitud').textContent = `${fmt.cuatro.format(d.oleo.amplitud_log10)} en log₁₀`;
+    $('#fuente-tdf').textContent = d.fuente;
+    $('#nota-api').textContent = `${fmt.entero.format(d.clase_api.nulos)} pozos sin grado API no se clasifican; hᵢ se calcula sobre los ${fmt.entero.format(d.clase_api.n)} pozos con dato.`;
 
-      const tdIntervalo = document.createElement('td');
-      tdIntervalo.textContent = `[${fila.limiteInferior.toFixed(4)}; ${(fila.limiteInferior + fila.amplitud).toFixed(4)})`;
+    const estado = d.estado.filas[0];
+    const api = d.clase_api.filas.reduce((a, b) => (b.fi > a.fi ? b : a));
+    const dias = d.dias.filas;
+    const oleo = d.oleo;
+    const modal = oleo.filas.find((f) => f.clase === oleo.clase_modal);
+    $('#preview-estado').textContent = `${d.estado.filas.length} estados · moda: ${estado.categoria} (${fmt.pct.format(estado.hi)})`;
+    $('#preview-api').textContent = `moda y mediana: ${api.categoria} (${fmt.pct.format(api.hi)}) · ${fmt.entero.format(d.clase_api.nulos)} sin dato`;
+    $('#preview-dias').textContent = `0 días: ${fmt.entero.format(dias[0].fi)} pozos · 31 días: ${fmt.entero.format(dias[31].fi)} pozos`;
+    $('#preview-oleo').textContent = `${oleo.k + 1} clases · clase modal ${intervalo(modal)} bbl/día (${fmt.pct.format(modal.hi)})`;
 
-      const celdas = [
-        { clase: 'numero', texto: fila.marca.toFixed(4) },
-        { clase: 'numero', texto: String(fila.f) },
-        { clase: 'numero', texto: String(fila.amplitud) },
-        { clase: 'numero', texto: String(fila.F) },
-        { clase: 'numero', texto: fila.H.toFixed(4) },
-      ].map((celda) => {
-        const td = document.createElement('td');
-        td.className = celda.clase;
-        td.textContent = celda.texto;
-        return td;
-      });
-
-      tr.append(tdClase, tdIntervalo, ...celdas);
-      tbody.appendChild(tr);
-    });
+    const primera = oleo.filas[1];
+    $('#nota-tdf').textContent = `La clase 0 reúne los ${fmt.entero.format(oleo.ceros)} pozos sin óleo (${fmt.pct.format(oleo.filas[0].hi)}); no tienen logaritmo, por eso van aparte. `
+      + `Los ${fmt.entero.format(oleo.positivos)} pozos productores se reparten en ${oleo.k} clases de igual ancho en log₁₀, desde ${volumen(primera.li)} hasta ${volumen(oleo.filas[oleo.filas.length - 1].ls)} bbl/día. `
+      + 'Con clases de igual ancho en bbl/día (Sturges lineal, A = 79) el 98 % de los pozos caía en la primera clase y 7 clases quedaban vacías; la escala log₁₀ reparte los pozos y muestra la forma de la distribución.';
   }
 
   function layoutPlotly(extra = {}) {
@@ -148,149 +102,156 @@
       paper_bgcolor: 'transparent',
       plot_bgcolor: 'transparent',
       font: { family: 'Archivo, sans-serif', color: COLOR_INK, size: 11 },
-      margin: { t: 12, r: 16, b: 40, l: 8 },
+      margin: { t: 12, r: 16, b: 56, l: 56 },
+      showlegend: false,
       ...extra,
     };
   }
 
-  function renderGraficaBarras(datos) {
-    const grupos = gruposPorEstado(datos);
-    const nombres = grupos.map((grupo) => grupo.estado);
-    const conteos = grupos.map((grupo) => grupo.n);
-
-    Plotly.newPlot(
-      gdfEstado,
-      [
-        {
-          type: 'bar',
-          orientation: 'h',
-          y: nombres,
-          x: conteos,
-          marker: { color: COLOR_OIL },
-          text: conteos.map((valor) => String(valor)),
-          textPosition: 'end',
-          textFont: { size: 10, color: COLOR_INK },
-        },
-      ],
-      {
-        ...layoutPlotly({ height: 360 }),
-        yaxis: { grid: { color: 'rgba(11, 34, 30, 0.08)' }, tickfont: { color: COLOR_MUTED, size: 11 }, automargin: true },
-        xaxis: { grid: { color: 'rgba(11, 34, 30, 0.08)' }, tickfont: { color: COLOR_MUTED, size: 11 } },
-      },
-      { responsive: true }
-    );
+  function ejeLog(oleo, titulo) {
+    const desde = Math.floor(oleo.filas[1].t_li);
+    const hasta = Math.ceil(oleo.filas[oleo.filas.length - 1].t_ls);
+    const tickvals = [];
+    for (let t = desde; t <= hasta; t += 1) tickvals.push(t);
+    return {
+      title: { text: titulo },
+      tickvals,
+      ticktext: tickvals.map((t) => (t < 0 ? fmt.sig.format(10 ** t) : fmt.entero.format(10 ** t))),
+      gridcolor: GRID,
+      zeroline: false,
+      automargin: true,
+    };
   }
 
-  function renderGraficaHistograma(valores, distribucion) {
-    const { k, amplitud, filas } = distribucion;
-    const inicio = distribucion.clases[0] ? distribucion.clases[0].limiteInferior : 0;
-    const fin = inicio + amplitud * k;
-
-    const bordes = [];
-    const acumuladas = [];
-    let acumulada = 0;
-    for (let i = 1; i <= k; i += 1) {
-      acumulada += filas[i - 1].f;
-      bordes.push(filas[i - 1].limiteInferior + amplitud);
-      acumuladas.push(acumulada);
-    }
-
-    Plotly.newPlot(
-      gdfHistograma,
-      [
-        {
-          type: 'histogram',
-          x: valores,
-          xbins: { start: inicio, end: fin, size: amplitud },
-          marker: { color: COLOR_OIL, opacity: 0.85 },
-        },
-        {
-          type: 'scatter',
-          x: bordes,
-          y: acumuladas,
-          mode: 'lines',
-          line: { color: COLOR_OIL, width: 2 },
-          showlegend: false,
-        },
-      ],
-      {
-        ...layoutPlotly({ height: 360 }),
-        xaxis: { grid: { color: 'rgba(11, 34, 30, 0.08)' }, tickfont: { color: COLOR_MUTED, size: 11 } },
-        yaxis: { grid: { color: 'rgba(11, 34, 30, 0.08)' }, tickfont: { color: COLOR_MUTED, size: 11 } },
-      },
-      { responsive: true }
-    );
+  function barras(id, x, y, opciones = {}) {
+    const horizontal = opciones.orientation === 'h';
+    Plotly.newPlot(id, [{
+      type: 'bar',
+      orientation: opciones.orientation || 'v',
+      x: horizontal ? y : x,
+      y: horizontal ? x : y,
+      marker: { color: opciones.colores || COLOR_OIL },
+      text: y.map((v) => fmt.entero.format(v)),
+      textposition: 'outside',
+      cliponaxis: false,
+      hovertemplate: opciones.hover || '%{x}: %{y} pozos<extra></extra>',
+      width: opciones.width,
+    }], layoutPlotly({
+      height: opciones.height || 360,
+      xaxis: { gridcolor: GRID, automargin: true, title: { text: opciones.tituloX || '' }, ...(opciones.xaxis || {}) },
+      yaxis: { gridcolor: GRID, automargin: true, title: { text: opciones.tituloY || '' }, ...(opciones.yaxis || {}) },
+    }), { responsive: true, displaylogo: false });
   }
 
-  function renderGraficaOjiva(distribucion) {
-    const puntos = distribucion.filas.map((fila) => ({ x: fila.marca, y: fila.H }));
+  function renderGraficas(d) {
+    const estados = [...d.estado.filas].reverse();
+    barras('gdf-estado', estados.map((f) => f.categoria), estados.map((f) => f.fi), {
+      orientation: 'h', tituloY: '', tituloX: 'Pozos (fᵢ)', hover: '%{y}: %{x} pozos<extra></extra>', height: 380,
+    });
 
-    Plotly.newPlot(
-      gdfOjiva,
-      [
-        {
-          type: 'scatter',
-          mode: 'lines+markers',
-          x: puntos.map((punto) => punto.x),
-          y: puntos.map((punto) => punto.y),
-          line: { color: COLOR_OIL, width: 2 },
-          marker: { color: COLOR_OIL, size: 5 },
-        },
-      ],
+    barras('gdf-api', d.clase_api.filas.map((f) => f.categoria), d.clase_api.filas.map((f) => f.fi), {
+      tituloX: 'Clase de crudo (orden pesado → ligero)', tituloY: 'Pozos (fᵢ)',
+      xaxis: { categoryorder: 'array', categoryarray: ['Pesado', 'Mediano', 'Ligero'] },
+    });
+
+    const dias = d.dias.filas;
+    const maximo = Math.max(...dias.map((f) => f.fi));
+    Plotly.newPlot('gdf-dias', [{
+      type: 'bar',
+      x: dias.map((f) => Number(f.categoria)),
+      y: dias.map((f) => f.fi),
+      width: 0.35,
+      marker: { color: dias.map((f) => (f.fi === maximo ? COLOR_OIL_DEEP : COLOR_OIL)) },
+      hovertemplate: 'x = %{x} días: %{y} pozos<extra></extra>',
+    }], layoutPlotly({
+      height: 360,
+      xaxis: { title: { text: 'Días completos de producción (x)' }, dtick: 5, gridcolor: GRID },
+      yaxis: { title: { text: 'Pozos (fᵢ)' }, gridcolor: GRID, automargin: true },
+    }), { responsive: true, displaylogo: false });
+
+    const oleo = d.oleo;
+    const clases = oleo.filas.filter((f) => !f.cero);
+    const A = oleo.amplitud_log10;
+    const centros = clases.map((f) => (f.t_li + f.t_ls) / 2);
+    const etiqueta = (f) => `[${volumen(f.li)}; ${volumen(f.ls)}) bbl/día`;
+    Plotly.newPlot('gdf-histograma', [
       {
-        ...layoutPlotly({ height: 360, yaxis: { grid: { color: 'rgba(11, 34, 30, 0.08)' }, tickfont: { color: COLOR_MUTED, size: 11 }, scale: 0.9 } }),
-        xaxis: { grid: { color: 'rgba(11, 34, 30, 0.08)' }, tickfont: { color: COLOR_MUTED, size: 11 } },
+        type: 'bar',
+        x: centros,
+        y: clases.map((f) => f.fi),
+        width: clases.map((f) => f.t_ls - f.t_li),
+        marker: { color: COLOR_OIL, opacity: 0.85, line: { color: '#FFFFFF', width: 1 } },
+        customdata: clases.map(etiqueta),
+        hovertemplate: '%{customdata}<br>fᵢ = %{y}<extra></extra>',
+        name: 'Histograma',
       },
-      { responsive: true }
-    );
+      {
+        type: 'scatter',
+        mode: 'lines+markers',
+        // El polígono se cierra en cero media clase antes de la primera y después de la última.
+        x: [centros[0] - A, ...centros, centros[centros.length - 1] + A],
+        y: [0, ...clases.map((f) => f.fi), 0],
+        line: { color: COLOR_OIL_DEEP, width: 2 },
+        marker: { size: 5, color: COLOR_OIL_DEEP },
+        hoverinfo: 'skip',
+        name: 'Polígono de frecuencias',
+      },
+    ], layoutPlotly({
+      height: 380,
+      showlegend: true,
+      legend: { orientation: 'h', y: -0.28 },
+      margin: { t: 12, r: 16, b: 80, l: 56 },
+      bargap: 0,
+      xaxis: ejeLog(oleo, 'Óleo por pozo (bbl/día, escala log₁₀)'),
+      yaxis: { title: { text: 'Pozos (fᵢ)' }, gridcolor: GRID, automargin: true, rangemode: 'tozero' },
+    }), { responsive: true, displaylogo: false });
+
+    // Ojiva: Hᵢ sobre el límite superior de cada clase. Arranca en H₀ (pozos con óleo = 0),
+    // que quedan por debajo del límite inferior de la primera clase positiva.
+    const cero = oleo.filas[0];
+    Plotly.newPlot('gdf-ojiva', [{
+      type: 'scatter',
+      mode: 'lines+markers',
+      x: [clases[0].t_li, ...clases.map((f) => f.t_ls)],
+      y: [cero.Hi, ...clases.map((f) => f.Hi)],
+      customdata: [`Lᵢ = ${volumen(clases[0].li)}`, ...clases.map((f) => `Lᵢ₊₁ = ${volumen(f.ls)}`)],
+      line: { color: COLOR_OIL, width: 2 },
+      marker: { color: COLOR_OIL, size: 6 },
+      hovertemplate: '%{customdata} bbl/día<br>Hᵢ = %{y:.4f}<extra></extra>',
+    }], layoutPlotly({
+      height: 360,
+      xaxis: ejeLog(oleo, 'Límite superior de clase (bbl/día, escala log₁₀)'),
+      yaxis: { title: { text: 'Hᵢ' }, range: [0, 1.05], gridcolor: GRID, tickformat: '.0%' },
+    }), { responsive: true, displaylogo: false });
+
+    $('#nota-gdf').textContent = `GDF 4 y 5 usan las clases log₁₀ de 4.1.4. Los ${fmt.entero.format(oleo.ceros)} pozos con óleo = 0 no tienen posición en escala logarítmica: no aparecen en el histograma y la ojiva parte de H₀ = ${fmt.cuatro.format(cero.Hi)}. La ojiva se grafica sobre los límites superiores de clase. Muestra: ${fmt.entero.format(d.n)} pozos. Fuente: ${d.fuente}.`;
   }
 
   async function cargar() {
+    let datos;
     try {
-      const [estadistica, datos] = await Promise.all([
-        leerJSON('data/estadistica_descriptiva.json'),
-        leerJSON('data/distribucion_pozos.json'),
-      ]);
-
-      if (!Array.isArray(datos) || !datos.length) {
-        throw new Error('distribucion_pozos.json no contiene pozos consolidados.');
-      }
-
-      const valores = valoresPorPozo(datos);
-      const distribucion = distribucionCuantitativa(valores);
-
-      renderTablaEstado(datos);
-      renderTablaOleo(distribucion);
-
-      if (tdfNcualitativa) tdfNcualitativa.textContent = String(distribucion.n);
-      if (tdfK) tdfK.textContent = String(distribucion.k);
-      if (tdfAmplitud) tdfAmplitud.textContent = String(distribucion.amplitud);
-      if (fuenteTdf) fuenteTdf.textContent = estadistica?.fuente || '2023_01_producao_Terra.csv';
-      if (contenidoTdf) contenidoTdf.hidden = false;
-      if (estadoTdf) estadoTdf.hidden = true;
-
-      if (typeof Plotly === 'undefined') {
-        mostrarError('estado-gdf', 'No se pudo cargar la librería de gráficas (Plotly).', new Error('Plotly no disponible'));
-        return;
-      }
-
-      renderGraficaBarras(datos);
-      renderGraficaHistograma(valores, distribucion);
-      renderGraficaOjiva(distribucion);
-
-      if (contenidoGdf) contenidoGdf.hidden = false;
-      if (estadoGdf) estadoGdf.hidden = true;
-      if (notaGdf) {
-        notaGdf.textContent = `Frecuencias absolutas y acumuladas del óleo por pozo (bbl/día) sobre ${distribucion.k} clases de amplitud ${distribucion.amplitud}. Población analizada: ${distribucion.n} pozos. Fuente: ${estadistica?.fuente || '2023_01_producao_Terra.csv'}.`;
-      }
+      datos = await leerJSON('data/distribucion_frecuencias.json');
+      renderTablas(datos);
+      $('#contenido-tdf').hidden = false;
+      $('#estado-tdf').hidden = true;
     } catch (error) {
-      mostrarError('estado-tdf', 'No se pudieron cargar las tablas de distribución de frecuencias.', error);
-      console.error('No se pudieron renderizar las tablas de frecuencias:', error);
+      mostrarError('estado-tdf', `No se pudieron cargar las tablas de distribución de frecuencias. ${error.message}`, error);
+      mostrarError('estado-gdf', 'No se pudieron cargar las gráficas.', error);
+      return;
     }
+
+    if (typeof Plotly === 'undefined') {
+      mostrarError('estado-gdf', 'No se pudo cargar la librería de gráficas (Plotly). Comprueba la conexión a Internet.', new Error('Plotly no disponible'));
+      return;
+    }
+    // Se muestra antes de dibujar para que Plotly mida el ancho real de los contenedores.
+    $('#contenido-gdf').hidden = false;
+    $('#estado-gdf').hidden = true;
+    renderGraficas(datos);
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => cargar(), { once: true });
+    document.addEventListener('DOMContentLoaded', cargar, { once: true });
   } else {
     cargar();
   }
