@@ -1,4 +1,4 @@
-"""Requiere pandas. Ejecutar: python 1_preprocesamiento_mapa.py [ruta_csv]."""
+"""Requiere pandas y scipy. Ejecutar: python 1_preprocesamiento_mapa.py data/2023_01_producao_Terra.csv."""
 
 import argparse
 import math
@@ -69,20 +69,7 @@ def main():
         json.dumps(descriptiva, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
     print(f"Generado {salida_descriptiva}: {descriptiva['pozos_unicos']} pozos únicos.")
-    variables = construir_variables(args.csv)
-    salida_variables = BASE / "variables_estadistica.json"
-    salida_variables.write_text(json.dumps(variables, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(f"Generado {salida_variables}: {len(variables['variables'])} variables.")
-
-    frecuencias = construir_frecuencias(args.csv)
-    salida_frecuencias = BASE / "distribucion_frecuencias.json"
-    salida_frecuencias.write_text(json.dumps(frecuencias, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(f"Generado {salida_frecuencias}: k={frecuencias['cuantitativa']['k']}, A={frecuencias['cuantitativa']['amplitud']}.")
-
-    indicadores = construir_indicadores(args.csv)
-    salida_indicadores = BASE / "indicadores_descriptivos.json"
-    salida_indicadores.write_text(json.dumps(indicadores, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(f"Generado {salida_indicadores}: n={indicadores['n']}, media={indicadores['indicadores']['centrales']['media']:.4f}.")
+    # Variables, TDF e indicadores de la descriptiva: scripts/2_descriptiva_inferencial.py.
 
     vad = construir_vad(args.csv)
     salida_vad = BASE / "data" / "vad_dias_produccion.json"
@@ -104,184 +91,6 @@ def main():
     salida_continuo = BASE / "data" / "modelo_continuo.json"
     salida_continuo.write_text(json.dumps(continuo, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"Generado {salida_continuo}: mu={continuo['mu']:.4f}, sigma={continuo['sigma']:.4f}.")
-
-
-# Columnas de la tabla 4.1.3. "Unnamed: 13" es la subcolumna «Gás Total» del encabezado partido del CSV.
-VARIABLES_TABLA = [
-    ("Estado", "Estado", "Cualitativa", "Nominal", "—"),
-    ("Bacia", "Bacia", "Cualitativa", "Nominal", "—"),
-    ("Campo", "Campo", "Cualitativa", "Nominal", "—"),
-    ("Operador", "Operador", "Cualitativa", "Nominal", "—"),
-    ("Tipo Instalação", "Tipo de instalación", "Cualitativa", "Nominal", "—"),
-    ("Óleo (bbl/dia)", "Óleo", "Cuantitativa", "Continua", "bbl/día"),
-    ("Unnamed: 13", "Gás total", "Cuantitativa", "Continua", "Mm³/día"),
-    ("Água (bbl/dia)", "Agua", "Cuantitativa", "Continua", "bbl/día"),
-    ("Condensado (bbl/dia)", "Condensado", "Cuantitativa", "Continua", "bbl/día"),
-    ("Tempo de Produção (hs por mês)", "Tiempo de producción", "Cuantitativa", "Discreta", "h/mes"),
-    ("Grau API", "Grado API", "Cuantitativa", "Continua", "°API"),
-]
-VARIABLES_EXCLUIDAS = [
-    ("Nome Poço", "identificador de pozo; define la unidad estadística"),
-    ("Número do Contrato", "código identificador del contrato"),
-    ("Instalação Destino", "código de la instalación de destino; no responde a los objetivos"),
-    ("Corrente", "clasificación del crudo con valores nulos; no se analiza en esta fase"),
-    ("Período", "constante: un único valor"),
-    ("Data de atualização", "constante: fecha de actualización del archivo"),
-]
-
-
-def numerico(serie):
-    # Formato brasileño: punto como separador de miles y coma decimal.
-    return pd.to_numeric(serie.str.replace(".", "", regex=False).str.replace(",", ".", regex=False), errors="coerce")
-
-
-def construir_variables(csv_path):
-    texto = pd.read_csv(csv_path, sep=";", encoding="utf-8-sig", on_bad_lines="skip", dtype=str, low_memory=False)
-    texto = texto[texto["Estado"].notna() & texto["Estado"].str.strip().ne("")]
-    variables = []
-    for columna, nombre, naturaleza, escala, unidad in VARIABLES_TABLA:
-        serie = texto[columna].str.strip()
-        base = {"variable": nombre, "naturaleza": naturaleza, "escala": escala, "unidad": unidad}
-        if naturaleza == "Cualitativa":
-            variables.append({**base, "validos": int(serie.notna().sum()), "nulos": int(serie.isna().sum()),
-                              "categorias": int(serie.nunique()), "minimo": None, "maximo": None, "ceros": None})
-        else:
-            num = numerico(serie)
-            variables.append({**base, "validos": int(num.notna().sum()), "nulos": int(num.isna().sum()),
-                              "categorias": None, "minimo": float(num.min()), "maximo": float(num.max()),
-                              "ceros": int((num == 0).sum())})
-    excluidas = [{"variable": columna, "motivo": motivo, "valores_distintos": int(texto[columna].nunique())}
-                 for columna, motivo in VARIABLES_EXCLUIDAS]
-    return {"fuente": Path(csv_path).name, "total_registros": len(texto), "variables": variables, "excluidas": excluidas}
-
-
-def construir_frecuencias(csv_path):
-    # Unidad estadística: pozo. Las filas repetidas se suman para obtener un valor por pozo.
-    datos = pd.read_csv(csv_path, sep=";", decimal=",", thousands=".", encoding="utf-8-sig",
-                        on_bad_lines="skip", low_memory=False)
-    datos = datos[datos["Estado"].notna() & datos["Estado"].astype(str).str.strip().ne("")].copy()
-    datos["Nome Poço"] = datos["Nome Poço"].astype(str).str.strip()
-    pozos = datos.groupby("Nome Poço", as_index=False).agg(
-        estado=("Estado", "first"), oleo=("Óleo (bbl/dia)", "sum"))
-    n = len(pozos)
-
-    cualitativa = pozos["estado"].value_counts().rename_axis("categoria").reset_index(name="fi")
-    cualitativa = cualitativa.sort_values(["fi", "categoria"], ascending=[False, True]).reset_index(drop=True)
-    cualitativa["hi"] = cualitativa["fi"] / n
-    cualitativa["Fi"] = cualitativa["fi"].cumsum()
-    cualitativa["Hi"] = cualitativa["hi"].cumsum()
-
-    oleo = pozos["oleo"]
-    k = math.ceil(1 + 3.322 * math.log10(n))
-    amplitud = math.ceil((oleo.max() - oleo.min()) / k)
-    limites = [oleo.min() + amplitud * i for i in range(k + 1)]
-    clases = pd.cut(oleo, bins=limites, right=False, include_lowest=True)
-    frecuencias = clases.value_counts(sort=False).values
-    cuantitativa = []
-    acumulada = 0
-    for i in range(k):
-        fi = int(frecuencias[i])
-        acumulada += fi
-        cuantitativa.append({
-            "clase": i + 1,
-            "li": round(float(limites[i]), 4),
-            "ls": round(float(limites[i + 1]), 4),
-            "marca": round(float((limites[i] + limites[i + 1]) / 2), 4),
-            "fi": fi,
-            "hi": fi / n,
-            "Fi": acumulada,
-            "Hi": acumulada / n,
-        })
-
-    return {
-        "fuente": Path(csv_path).name,
-        "unidad": "pozo (Nome Poço); filas repetidas sumadas",
-        "n": n,
-        "cualitativa": {
-            "variable": "Estado",
-            "categorias": [{"categoria": r.categoria, "fi": int(r.fi), "hi": float(r.hi),
-                            "Fi": int(r.Fi), "Hi": float(r.Hi)} for r in cualitativa.itertuples()],
-        },
-        "cuantitativa": {
-            "variable": "Óleo por pozo (bbl/día)",
-            "k": k,
-            "amplitud": amplitud,
-            "minimo": float(oleo.min()),
-            "maximo": float(oleo.max()),
-            "ceros": int((oleo == 0).sum()),
-            "clases": cuantitativa,
-        },
-    }
-
-
-def _resumen(serie, total_global):
-    media = float(serie.mean())
-    desviacion = float(serie.std(ddof=1)) if len(serie) > 1 else 0.0
-    total = float(serie.sum())
-    return {
-        "n": int(len(serie)),
-        "media": media,
-        "mediana": float(serie.median()),
-        "desviacion_estandar": desviacion,
-        "coeficiente_variacion": desviacion / media if media else None,
-        "minimo": float(serie.min()),
-        "maximo": float(serie.max()),
-        "total": total,
-        "participacion": total / total_global if total_global else 0.0,
-    }
-
-
-def construir_indicadores(csv_path):
-    # Unidad estadística: pozo, con los volúmenes de sus filas repetidas sumados.
-    datos = pd.read_csv(csv_path, sep=";", decimal=",", thousands=".", encoding="utf-8-sig",
-                        on_bad_lines="skip", low_memory=False)
-    datos = datos[datos["Estado"].notna() & datos["Estado"].astype(str).str.strip().ne("")].copy()
-    datos["Nome Poço"] = datos["Nome Poço"].astype(str).str.strip()
-    pozos = datos.groupby("Nome Poço", as_index=False).agg(
-        estado=("Estado", "first"), oleo=("Óleo (bbl/dia)", "sum"))
-    x = pozos["oleo"]
-    total_global = float(x.sum())
-    conteo = x.value_counts()
-    resumen_total = _resumen(x, total_global)
-    ceros = int((x == 0).sum())
-    q1, q3 = float(x.quantile(0.25)), float(x.quantile(0.75))
-    minimo, maximo = float(x.min()), float(x.max())
-    indicadores = {
-        "centrales": {
-            "media": resumen_total["media"],
-            "mediana": resumen_total["mediana"],
-            "moda": float(conteo.index[0]),
-            "frecuencia_moda": int(conteo.iloc[0]),
-        },
-        "dispersion": {
-            "minimo": minimo,
-            "maximo": maximo,
-            "rango": maximo - minimo,
-            "q1": q1,
-            "q3": q3,
-            "rango_intercuartilico": q3 - q1,
-            "varianza": float(x.var(ddof=1)),
-            "desviacion_estandar": resumen_total["desviacion_estandar"],
-            "coeficiente_variacion": resumen_total["coeficiente_variacion"],
-        },
-        "forma": {
-            "asimetria": float(x.skew()),
-            "curtosis": float(x.kurt()),
-            "ceros": ceros,
-            "porcentaje_ceros": ceros / len(x),
-        },
-    }
-    por_estado = [{"estado": estado, **_resumen(grupo["oleo"], total_global)}
-                  for estado, grupo in pozos.groupby("estado")]
-    por_estado.sort(key=lambda fila: fila["total"], reverse=True)
-    return {
-        "fuente": Path(csv_path).name,
-        "variable": "Óleo por pozo (bbl/día)",
-        "n": int(len(x)),
-        "indicadores": indicadores,
-        "por_estado": por_estado,
-        "total": resumen_total,
-    }
 
 
 def construir_vad(csv_path):
@@ -564,18 +373,18 @@ def construir_modelo_continuo(csv_path, vac):
          "inferior": proporcion - e_p, "superior": proporcion + e_p, "metodo": "p̂ ± z·√(p̂(1−p̂)/n)"},
     ]
 
-    # Tamaño de muestra para un muestreo futuro sobre esta población (corrección por población finita).
-    def tamano(n0):
-        return int(np.ceil(n0 / (1 + (n0 - 1) / n)))
+    # Población = pozos terrestres de Brasil, de tamaño N no fijado; enero de 2023 es la muestra.
+    # Como en los intervalos, no se aplica corrección por población finita: n = ⌈n₀⌉.
     tamanos = []
     for error in (1.0, 2.0, 5.0):
         n0 = (z * s_y / error) ** 2
         tamanos.append({"objetivo": "Media de Y", "error": error, "unidad": "bbl/día",
-                        "n0": float(n0), "n": tamano(n0)})
+                        "n0": float(n0), "n": int(np.ceil(n0)), "cubre": bool(np.ceil(n0) <= n)})
     for error in (0.05, 0.03, 0.02):
         n0 = z ** 2 * proporcion * (1 - proporcion) / error ** 2
         tamanos.append({"objetivo": "Proporción Y ≥ 10", "error": error, "unidad": "proporción",
-                        "n0": float(n0), "n": tamano(n0)})
+                        "n0": float(n0), "n": int(np.ceil(n0)), "cubre": bool(np.ceil(n0) <= n)})
+    mediana_observada = float(np.median(y))
 
     return {
         "fuente": vac["fuente"],
@@ -588,7 +397,9 @@ def construir_modelo_continuo(csv_path, vac):
         "media_observada": media_y,
         "desviacion_observada": s_y,
         "mediana_teorica": float(np.exp(mu)),
-        "mediana_observada": float(np.median(y)),
+        "mediana_observada": mediana_observada,
+        # La mediana muestral queda fuera del IC de e^μ: la lognormal no reproduce la cola izquierda.
+        "mediana_observada_en_ic": bool(np.exp(mu - e_mu) <= mediana_observada <= np.exp(mu + e_mu)),
         "pearson_r": r,
         "pearson_r2": r ** 2,
         "candidatos": candidatos,
@@ -600,7 +411,7 @@ def construir_modelo_continuo(csv_path, vac):
         "t": t,
         "intervalos": intervalos,
         "tamanos": tamanos,
-        "poblacion": int(n),
+        "muestra": int(n),
     }
 
 
