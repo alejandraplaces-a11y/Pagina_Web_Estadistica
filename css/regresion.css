@@ -1,0 +1,70 @@
+/* Regresión clásica (4.3.1): componentes propios de la página.
+   La base (secciones, tablas, tarjetas, índice lateral) viene de estadisticaInferencial.css. */
+
+.page-hero { background: linear-gradient(120deg, #0E2F29 0%, #1F4A40 60%, #5E4529 100%); }
+
+/* Galería de modelos */
+.modelo-galeria { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 24px 0 0; padding: 0; list-style: none; }
+.modelo-tarjeta { display: flex; flex-direction: column; gap: 6px; padding: 22px 22px 18px; background: #FFFFFF; border: 1px solid var(--line); border-top: 3px solid var(--line); border-radius: 12px; transition: transform .2s var(--ease, ease), box-shadow .2s; }
+.modelo-tarjeta:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(11, 34, 30, .08); }
+.modelo-tarjeta.es-elegido { border-top-color: var(--oil); }
+.modelo-tarjeta.es-multiple { border-top-color: #1F5C52; background: linear-gradient(180deg, #FFFFFF 0%, #F7F4EE 100%); }
+.modelo-tipo { font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--oil-deep); }
+.modelo-tarjeta h3 { font-family: var(--serif); font-size: 22px; font-weight: 500; color: var(--ink); }
+.modelo-formula { font-family: Georgia, serif; font-size: 18px; color: var(--ink); }
+.modelo-ajuste { font-size: 13px; color: var(--ink-soft); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.modelo-barra { height: 8px; margin-top: 8px; border-radius: 999px; background: var(--paper-2); overflow: hidden; }
+.modelo-barra span { display: block; height: 100%; border-radius: inherit; background: var(--oil); }
+.es-multiple .modelo-barra span { background: #1F5C52; }
+.modelo-r2 { font-size: 13px; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
+.modelo-enlace { margin-top: auto; padding-top: 10px; font-size: 14px; font-weight: 600; color: var(--oil-deep); text-decoration: none; }
+.modelo-enlace:hover { text-decoration: underline; }
+.modelo-enlace:focus-visible { outline: 2px solid var(--oil); outline-offset: 3px; border-radius: 4px; }
+
+/* Cabecera de gráfica con controles */
+.chart-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px; }
+.chart-box-3d { height: 520px; }
+
+/* Control segmentado (escala, modelos, pestañas) */
+.segmentado { display: inline-flex; flex-wrap: wrap; gap: 6px; }
+.segmentado-ancho { margin-top: 10px; }
+.segmento { padding: 7px 14px; border: 1px solid var(--line); border-radius: 999px; background: #FFFFFF; color: var(--ink-soft); font: inherit; font-size: 13px; cursor: pointer; }
+.segmento:hover { border-color: var(--oil); color: var(--ink); }
+.segmento[aria-pressed="true"], .segmento[aria-selected="true"] { background: var(--oil); border-color: var(--oil); color: #FFFFFF; font-weight: 600; }
+.segmento:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.segmento .muestra-color { display: inline-block; width: 10px; height: 10px; margin-right: 6px; border-radius: 50%; vertical-align: -1px; }
+
+/* Panel del cálculo paso a paso */
+.panel-calculo { margin-top: 16px; padding: 22px 24px; background: #FFFFFF; border: 1px solid var(--line); border-left: 3px solid var(--oil); border-radius: 0 12px 12px 0; }
+.panel-calculo h3 { font-family: var(--serif); font-size: 20px; font-weight: 500; color: var(--ink); }
+.panel-calculo .pasos { margin: 12px 0 0; padding-left: 20px; line-height: 1.9; font-variant-numeric: tabular-nums; }
+.panel-calculo .pasos code { font-size: 14px; overflow-wrap: anywhere; }
+.panel-calculo .table-scroll { margin-top: 14px; }
+
+.metodo-tres { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.tabla-alta { max-height: 460px; overflow-y: auto; }
+.tabla-alta thead th { position: sticky; top: 0; z-index: 1; }
+.tabla-mini .data-table { min-width: 0; }
+.tabla-mini td, .tabla-mini th { padding: 6px 10px; font-size: 13px; }
+.ecuaciones-normales { font-family: Georgia, serif; line-height: 1.9; }
+.tabla-ordenable th button { all: unset; cursor: pointer; }
+.tabla-ordenable th button::after { content: " ↕"; opacity: .45; }
+.tabla-ordenable th button:focus-visible { outline: 2px solid var(--oil); outline-offset: 2px; }
+.lectura-fuerte { color: var(--oil-deep); font-weight: 600; }
+
+@media (max-width: 1000px) {
+  .modelo-galeria { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .metodo-tres { grid-template-columns: minmax(0, 1fr); }
+  .chart-box-3d { height: 440px; }
+}
+
+@media (max-width: 560px) {
+  .modelo-galeria { grid-template-columns: minmax(0, 1fr); }
+  .panel-calculo { padding: 18px 16px; }
+  .chart-box-3d { height: 380px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modelo-tarjeta { transition: none; }
+  .modelo-tarjeta:hover { transform: none; }
+}
