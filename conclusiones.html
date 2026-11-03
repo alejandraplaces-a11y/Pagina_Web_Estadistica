@@ -61,6 +61,12 @@
             </a>
           </li>
           <li>
+            <a class="sidebar-link" href="regresion.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 20h16"/><path d="M4 20V4"/><circle cx="8" cy="15" r="1.2"/><circle cx="12" cy="11" r="1.2"/><circle cx="17" cy="9" r="1.2"/><path d="M6 17 19 6"/></svg>
+              <span class="sidebar-link-label">Regresión</span>
+            </a>
+          </li>
+          <li>
             <a class="sidebar-link is-active" href="conclusiones.html" aria-current="page">
               <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5 9.5 17 19 7"/></svg>
               <span class="sidebar-link-label">Conclusiones</span>
@@ -100,6 +106,7 @@
             <a href="#resumen-cifras">Resumen</a>
             <a href="#descriptivas">Descriptivas</a>
             <a href="#inferenciales">Inferenciales</a>
+            <a href="#regresion-conclusion">Regresión</a>
             <a href="#limitaciones">Limitaciones</a>
           </nav>
         </div>
@@ -217,6 +224,33 @@
           </div>
         </section>
 
+        <section class="section" id="regresion-conclusion" aria-labelledby="regresion-conclusion-titulo">
+          <div class="container">
+            <p class="section-kicker">4.3.1</p>
+            <h2 id="regresion-conclusion-titulo" class="subsection-title">Conclusiones de la regresión clásica</h2>
+            <div class="method-grid">
+              <article class="method-card">
+                <p class="method-card-tag">Regresión simple · 165 campos</p>
+                <h4>Óleo del campo frente a sus pozos</h4>
+                <ul class="lista-simple">
+                  <li>El modelo potencial ŷ = 8,818·x<sup>1,057</sup> tiene la correlación más fuerte (r = 0,801; R² = 0,642; no determinación 0,358).</li>
+                  <li>b ≈ 1: el óleo crece casi en proporción al número de pozos, unos 8,8 bbl/día por pozo.</li>
+                  <li>El potencial sobreestima los campos más grandes (Estreito: 12.393 estimados frente a 5.077 bbl/día); para esos volúmenes el lineal (R² = 0,550) es más fiable.</li>
+                </ul>
+              </article>
+              <article class="method-card">
+                <p class="method-card-tag">Regresión múltiple</p>
+                <h4>y = f(pozos, gas)</h4>
+                <ul class="lista-simple">
+                  <li>ŷ = 118,67 + 6,346·x₁ + 0,689·x₂, con R² = 0,781 (ajustado 0,778).</li>
+                  <li>Añadir el gas del campo sube la variación explicada del 55 % al 78 %; ambos coeficientes son significativos (p &lt; 0,0001) y sin multicolinealidad (r(x₁, x₂) = 0,004).</li>
+                </ul>
+              </article>
+            </div>
+            <p class="frame-note">Pares, curvas, cálculos e indicadores completos en <a href="regresion.html">Regresión</a>.</p>
+          </div>
+        </section>
+
         <section class="section cream" id="limitaciones" aria-labelledby="limitaciones-titulo">
           <div class="container">
             <p class="section-kicker">Alcance</p>
@@ -235,7 +269,7 @@
                 <h4>Pendiente</h4>
                 <ul class="lista-simple">
                   <li>Modelo de mezcla (pozos parados vs. activos) para los días completos de producción.</li>
-                  <li>Regresión, machine learning y series temporales (sección 4.3 del proyecto).</li>
+                  <li>Machine learning y series temporales (secciones 4.3.2 y 4.3.3 del proyecto).</li>
                 </ul>
               </article>
             </div>

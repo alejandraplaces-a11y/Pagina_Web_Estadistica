@@ -61,6 +61,12 @@
             </a>
           </li>
           <li>
+            <a class="sidebar-link" href="regresion.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 20h16"/><path d="M4 20V4"/><circle cx="8" cy="15" r="1.2"/><circle cx="12" cy="11" r="1.2"/><circle cx="17" cy="9" r="1.2"/><path d="M6 17 19 6"/></svg>
+              <span class="sidebar-link-label">Regresión</span>
+            </a>
+          </li>
+          <li>
             <a class="sidebar-link" href="conclusiones.html">
               <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5 9.5 17 19 7"/></svg>
               <span class="sidebar-link-label">Conclusiones</span>
@@ -122,7 +128,7 @@
               <article class="method-card">
                 <p class="method-card-tag">Lenguaje</p>
                 <h4>Python 3 con pandas, NumPy y SciPy</h4>
-                <p>Procesan el CSV y calculan la estadística descriptiva e inferencial. Los scripts <code>scripts/1_preprocesamiento_mapa.py</code> y <code>scripts/2_descriptiva_inferencial.py</code> generan los JSON de <code>data/</code>.</p>
+                <p>Procesan el CSV y calculan la estadística descriptiva e inferencial. Los scripts <code>scripts/1_preprocesamiento_mapa.py</code>, <code>scripts/2_descriptiva_inferencial.py</code> y <code>scripts/3_regresion.py</code> generan los JSON de <code>data/</code>.</p>
               </article>
               <article class="method-card">
                 <p class="method-card-tag">Lenguaje</p>
@@ -176,6 +182,7 @@
             <pre class="code-block" tabindex="0"><code>python3 -m venv .venv &amp;&amp; .venv/bin/pip install pandas numpy scipy
 .venv/bin/python scripts/1_preprocesamiento_mapa.py data/2023_01_producao_Terra.csv
 .venv/bin/python scripts/2_descriptiva_inferencial.py data/2023_01_producao_Terra.csv --anual datos_2023/
+.venv/bin/python scripts/3_regresion.py data/2023_01_producao_Terra.csv
 python3 -m http.server 8000</code></pre>
             <p class="frame-note">El último comando sirve el sitio en <code>http://localhost:8000/</code>; abrirlo con <code>file://</code> no funciona porque las páginas leen JSON locales.</p>
           </div>
