@@ -87,7 +87,7 @@ body { color: var(--ink-soft); }
 .data-table tbody tr.is-best td { background: rgba(140, 109, 70, 0.08); font-weight: 650; }
 
 /* Modelo continuo: restricciones */
-.restriction-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin-top: 8px; }
+.restriction-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin-top: 24px; padding: 0 16px; }
 
 /* Calculadoras */
 .calculator-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 6px; }
@@ -108,37 +108,17 @@ body { color: var(--ink-soft); }
    Índice lateral fijo de la inferencial (sección 4.2)
    ============================================================ */
 
-.inferencial-cuerpo { display: grid; grid-template-columns: minmax(0, 1fr); }
-.inferencial-secciones { min-width: 0; }
+/* Se oculta el índice en regresión.html; el cuerpo usa una sola columna. */
+.inferencial-cuerpo { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; }
+.inferencial-secciones { min-width: 0; width: 100%; max-width: none; }
 
-.indice-lateral { position: sticky; top: 72px; z-index: 5; background: var(--paper-2); border-bottom: 1px solid var(--line); }
-.indice-lateral details { width: min(1120px, calc(100% - 32px)); margin-inline: auto; }
-.indice-lateral summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 0; font-family: var(--sans); font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--oil-deep); cursor: pointer; list-style: none; }
-.indice-lateral summary::-webkit-details-marker { display: none; }
-.indice-lateral summary::after { content: "▾"; font-size: 14px; transition: transform 0.2s; }
-.indice-lateral details[open] summary::after { transform: rotate(180deg); }
-.indice-contenido { max-height: 60vh; overflow-y: auto; padding-bottom: 16px; }
-.indice-grupo + .indice-grupo { margin-top: 18px; }
-.indice-grupo-titulo { margin: 0 0 6px; font-family: var(--sans); font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); }
-.indice-lista { margin: 0; padding: 0; list-style: none; border-left: 1px solid var(--line); }
-.indice-lista a { display: grid; grid-template-columns: 46px minmax(0, 1fr); gap: 6px; margin-left: -1px; padding: 7px 10px 7px 12px; border-left: 2px solid transparent; font-size: 13px; line-height: 1.4; color: var(--ink-soft); text-decoration: none; }
-.indice-lista a:hover { color: var(--ink); background: rgba(11, 34, 30, 0.05); }
-.indice-lista a.is-active, .indice-lista a[aria-current="location"] { border-left-color: var(--oil); background: rgba(140, 109, 70, 0.08); color: var(--ink); font-weight: 600; }
-.indice-numero { font-family: var(--sans); font-size: 11px; color: var(--oil-deep); padding-top: 1px; }
-.indice-estado { display: inline-block; margin-left: 6px; padding: 1px 6px; border-radius: 999px; background: var(--paper); font-size: 10px; font-weight: 600; color: var(--ink-soft); vertical-align: 1px; }
+.indice-lateral { display: none; }
 
-/* Escritorio: el índice pasa a una columna fija a la derecha. */
+/* Escritorio: layout de una sola columna, el contenido ocupa todo el ancho. */
 @media (min-width: 1200px) {
-  .inferencial-cuerpo { grid-template-columns: minmax(0, 1fr) 300px; align-items: start; }
+  .inferencial-cuerpo { grid-template-columns: minmax(0, 1fr); }
 
-  .inferencial-secciones { grid-column: 1; grid-row: 1; }
-  .indice-lateral { grid-column: 2; grid-row: 1; top: 88px; max-height: calc(100vh - 104px); margin: 28px 24px 28px 0; padding: 20px 14px 20px 18px; overflow-y: auto; background: var(--paper-2); border: 1px solid var(--line); border-radius: 12px; }
-  .indice-lateral details { width: auto; }
-  .indice-lateral summary { cursor: default; pointer-events: none; }
-  .indice-lateral summary::after { display: none; }
-  .indice-contenido { max-height: none; overflow: visible; padding-bottom: 0; }
-  /* Las secciones comparten el ancho con el índice. */
-  .inferencial-secciones .container { width: calc(100% - 64px); }
+  .inferencial-secciones { width: 100%; max-width: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
