@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Regresión clásica de la producción terrestre de petróleo en Brasil: óleo del campo frente a su número de pozos (modelos lineal, potencial, exponencial, logarítmico y polinómico) y regresión múltiple con el gas (enero de 2023).">
+  <meta name="description" content="Regresión clásica de la producción terrestre de petróleo en Brasil: óleo del campo frente a su número de pozos con cinco modelos simples y regresión múltiple con el gas (enero de 2023).">
   <title>Regresión clásica · Producción terrestre de petróleo en Brasil</title>
   <script>
     (function () {
@@ -15,6 +15,7 @@
   <script defer src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
   <script defer src="js/common.js"></script>
   <script defer src="js/sidebar.js"></script>
+  <script defer src="js/regresionComun.js"></script>
   <script defer src="js/regresion.js"></script>
   <script defer src="js/indiceLateral.js"></script>
 </head>
@@ -108,19 +109,30 @@
       </header>
 
       <main id="contenido">
-        <section class="page-hero" aria-labelledby="regresion-titulo">
+        <section class="page-hero" aria-labelledby="pagina-titulo">
           <video class="hero-video" autoplay muted loop playsinline preload="auto" aria-hidden="true" tabindex="-1">
-            <source src="video/video-regresion.mp4" type="video/mp4">
+            <source src="video/video-inferencial.mp4" type="video/mp4">
             Tu navegador no puede reproducir el video.
           </video>
           <div class="hero-overlay" aria-hidden="true"></div>
           <div class="container hero-content">
             <p class="section-kicker">04 / Análisis estadístico · 4.3</p>
-            <h1 id="regresion-titulo">Regresión clásica.</h1>
+            <h1 id="pagina-titulo">Regresión clásica.</h1>
             <p class="aside-meta">Brasil · Enero de 2023 · 4.3.1</p>
-            <p class="page-lead">¿Cuánto óleo produce un campo según su número de pozos? Cinco modelos de regresión simple y uno múltiple, con sus parámetros, indicadores y restricciones.</p>
+            <p class="page-lead">¿Cuánto óleo produce un campo según su número de pozos? Cinco modelos de regresión simple y una regresión múltiple, cada uno con su propia página de cálculo, indicadores y diagnóstico.</p>
           </div>
         </section>
+        <nav class="reg-subnav" aria-label="Modelos de regresión">
+          <div class="container reg-subnav-lista">
+            <a href="regresion.html" aria-current="page">Resumen</a>
+            <a href="regresion-lineal.html">Lineal</a>
+            <a href="regresion-potencial.html">Potencial</a>
+            <a href="regresion-exponencial.html">Exponencial</a>
+            <a href="regresion-logaritmica.html">Logarítmica</a>
+            <a href="regresion-polinomica.html">Polinómica</a>
+            <a href="regresion-multiple.html">Múltiple 3D</a>
+          </div>
+        </nav>
 
         <section class="section resumen-clave" id="resumen-regresion" aria-labelledby="resumen-regresion-titulo">
           <div class="container">
@@ -129,106 +141,103 @@
             <dl class="stat-metrics resumen-metrics">
               <div><dt>Campos analizados · n</dt><dd>165 <span class="metric-unit">campos</span></dd></div>
               <div><dt>Modelo simple elegido</dt><dd>Potencial <span class="metric-unit">r = 0,801</span></dd></div>
-              <div><dt>Óleo por pozo (a)</dt><dd>8,82 <span class="metric-unit">bbl/día · b = 1,06</span></dd></div>
-              <div><dt>R² múltiple (x₁, x₂)</dt><dd>0,781 <span class="metric-unit">78 % explicado</span></dd></div>
+              <div><dt>Exponente b · IC 95 %</dt><dd>1,057 <span class="metric-unit">[0,935; 1,179]</span></dd></div>
+              <div><dt>Múltiple recomendado · R²</dt><dd>0,809 <span class="metric-unit">ln y = f(ln x₁, ln x₂)</span></dd></div>
             </dl>
-            <p class="stat-scope">Unidad: campo de producción con óleo &gt; 0 en enero de 2023 (165 de 221 campos). Añadir el gas del campo a los pozos sube la variación explicada del óleo del 55 % (solo pozos, lineal) al 78 %.</p>
-            <noscript><p class="status status-error">Las tablas y gráficas de esta página se generan con JavaScript. Las cifras clave están en este resumen y en la galería de modelos; para ver el resto, activa JavaScript y abre la página desde un servidor (python3 -m http.server).</p></noscript>
+            <p class="stat-scope">Unidad: campo de producción con óleo &gt; 0 en enero de 2023 (165 de 221 campos). El óleo de un campo crece casi en proporción a sus pozos, unos 8,8 bbl/día por pozo en mediana; si además se considera el gas del campo, se explica el 80,9 % de la variación de ln y.</p>
+            <noscript><p class="status status-error">Las tablas y gráficas de esta página se generan con JavaScript. Las cifras clave y los dictámenes están en este resumen y en las tarjetas de modelos.</p></noscript>
           </div>
         </section>
 
         <section class="section" id="galeria-modelos" aria-labelledby="galeria-titulo">
           <div class="container">
-            <p class="section-kicker">Modelos</p>
-            <h2 id="galeria-titulo" class="subsection-title">Galería de modelos</h2>
-            <p class="section-intro">Cada tarjeta resume un modelo ajustado a los mismos 165 campos. La barra muestra el coeficiente de determinación R² de su forma linealizada; abre el detalle para ver el cálculo.</p>
+            <p class="section-kicker">Modelos de regresión</p>
+            <h2 id="galeria-titulo" class="subsection-title">Modelado de relaciones</h2>
+            <p class="section-intro">Cada modelo tiene su página con el cálculo de parámetros paso a paso, el ajuste gráfico, los indicadores con su prueba de significancia, el análisis de residuos, las restricciones y una calculadora.</p>
+
+            <h3 class="grupo-modelos">Regresión simple de una variable</h3>
+            <p class="stat-scope">Relación entre una variable independiente (x: pozos del campo) y una dependiente (y: óleo del campo) con cinco formas funcionales. La barra muestra R² en la forma linealizada de cada modelo.</p>
             <ul class="modelo-galeria">
-              <li class="modelo-tarjeta" data-modelo="lineal">
+              <li class="modelo-tarjeta ">
                 <p class="modelo-tipo">Simple</p>
                 <h3>Lineal</h3>
                 <p class="modelo-formula">y = a + b·x</p>
-                <p class="modelo-ajuste">y = 178,91 + 6,362·x</p>
+                <p class="modelo-ajuste">ŷ = 178,91 + 6,362·x</p>
                 <div class="modelo-barra" aria-hidden="true"><span style="width: 54.98%"></span></div>
                 <p class="modelo-r2">R² = 0,550 · r = 0,742</p>
-                <a class="modelo-enlace" href="#parametros-simples" data-ver="lineal">Ver el cálculo <span aria-hidden="true">→</span></a>
+                <p><span class="veredicto es-descartado">Depende de 2 campos</span></p>
+                <a class="modelo-enlace" href="regresion-lineal.html">Ver modelo <span aria-hidden="true">→</span></a>
               </li>
-              <li class="modelo-tarjeta es-elegido" data-modelo="potencial">
+              <li class="modelo-tarjeta es-elegido">
                 <p class="modelo-tipo">Simple · elegido</p>
                 <h3>Potencial</h3>
                 <p class="modelo-formula">y = a·xᵇ</p>
-                <p class="modelo-ajuste">y = 8,818·x<sup>1,057</sup></p>
+                <p class="modelo-ajuste">ŷ = 8,818·x<sup>1,057</sup></p>
                 <div class="modelo-barra" aria-hidden="true"><span style="width: 64.17%"></span></div>
                 <p class="modelo-r2">R² = 0,642 · r = 0,801</p>
-                <a class="modelo-enlace" href="#parametros-simples" data-ver="potencial">Ver el cálculo <span aria-hidden="true">→</span></a>
+                <p><span class="veredicto es-elegido">Elegido</span></p>
+                <a class="modelo-enlace" href="regresion-potencial.html">Ver modelo <span aria-hidden="true">→</span></a>
               </li>
-              <li class="modelo-tarjeta" data-modelo="exponencial">
+              <li class="modelo-tarjeta ">
                 <p class="modelo-tipo">Simple</p>
                 <h3>Exponencial</h3>
                 <p class="modelo-formula">y = a·e<sup>b·x</sup></p>
-                <p class="modelo-ajuste">y = 49,69·e<sup>0,00875·x</sup></p>
+                <p class="modelo-ajuste">ŷ = 49,69·e<sup>0,00875·x</sup></p>
                 <div class="modelo-barra" aria-hidden="true"><span style="width: 17.83%"></span></div>
                 <p class="modelo-r2">R² = 0,178 · r = 0,422</p>
-                <a class="modelo-enlace" href="#parametros-simples" data-ver="exponencial">Ver el cálculo <span aria-hidden="true">→</span></a>
+                <p><span class="veredicto es-descartado">Ajuste débil</span></p>
+                <a class="modelo-enlace" href="regresion-exponencial.html">Ver modelo <span aria-hidden="true">→</span></a>
               </li>
-              <li class="modelo-tarjeta" data-modelo="logaritmico">
+              <li class="modelo-tarjeta ">
                 <p class="modelo-tipo">Simple</p>
-                <h3>Logarítmico</h3>
+                <h3>Logarítmica</h3>
                 <p class="modelo-formula">y = a + b·ln x</p>
-                <p class="modelo-ajuste">y = −225,28 + 320,41·ln x</p>
+                <p class="modelo-ajuste">ŷ = −225,28 + 320,41·ln x</p>
                 <div class="modelo-barra" aria-hidden="true"><span style="width: 34.37%"></span></div>
                 <p class="modelo-r2">R² = 0,344 · r = 0,586</p>
-                <a class="modelo-enlace" href="#parametros-simples" data-ver="logaritmico">Ver el cálculo <span aria-hidden="true">→</span></a>
+                <p><span class="veredicto es-descartado">Predice óleo negativo</span></p>
+                <a class="modelo-enlace" href="regresion-logaritmica.html">Ver modelo <span aria-hidden="true">→</span></a>
               </li>
-              <li class="modelo-tarjeta" data-modelo="polinomico">
+              <li class="modelo-tarjeta ">
                 <p class="modelo-tipo">Simple</p>
-                <h3>Polinómico</h3>
+                <h3>Polinómica</h3>
                 <p class="modelo-formula">y = a + b·x + c·x²</p>
-                <p class="modelo-ajuste">y = 152,08 + 7,991·x − 0,00219·x²</p>
+                <p class="modelo-ajuste">ŷ = 152,08 + 7,991·x − 0,00219·x²</p>
                 <div class="modelo-barra" aria-hidden="true"><span style="width: 55.45%"></span></div>
                 <p class="modelo-r2">R² = 0,555 · R = 0,745</p>
-                <a class="modelo-enlace" href="#parametros-simples" data-ver="polinomico">Ver el cálculo <span aria-hidden="true">→</span></a>
+                <p><span class="veredicto es-descartado">x² no significativo</span></p>
+                <a class="modelo-enlace" href="regresion-polinomica.html">Ver modelo <span aria-hidden="true">→</span></a>
               </li>
-              <li class="modelo-tarjeta es-multiple" data-modelo="multiple">
-                <p class="modelo-tipo">Múltiple · 3D</p>
-                <h3>Lineal múltiple</h3>
+            </ul>
+
+            <h3 class="grupo-modelos">Regresión múltiple con dos variables</h3>
+            <p class="stat-scope">Modelado conjunto de dos predictores (x₁: pozos; x₂: gas natural del campo) sobre la respuesta y, con visualización tridimensional del plano de regresión.</p>
+            <ul class="modelo-galeria galeria-multiple">
+              <li class="modelo-tarjeta es-multiple">
+                <p class="modelo-tipo">Múltiple · recomendado</p>
+                <h3>Múltiple logarítmica</h3>
+                <p class="modelo-formula">ln y = b₀ + b₁·ln x₁ + b₂·ln x₂</p>
+                <p class="modelo-ajuste">ŷ = 21,14·x₁<sup>0,678</sup>·x₂<sup>0,327</sup></p>
+                <div class="modelo-barra" aria-hidden="true"><span style="width: 80.91%"></span></div>
+                <p class="modelo-r2">R² = 0,809 · ajustado 0,807</p>
+                <p><span class="veredicto es-elegido">Recomendado</span></p>
+                <a class="modelo-enlace" href="regresion-multiple.html">Ver el plano 3D <span aria-hidden="true">→</span></a>
+              </li>
+              <li class="modelo-tarjeta ">
+                <p class="modelo-tipo">Múltiple · comparación</p>
+                <h3>Múltiple lineal</h3>
                 <p class="modelo-formula">y = b₀ + b₁·x₁ + b₂·x₂</p>
-                <p class="modelo-ajuste">y = 118,67 + 6,346·x₁ + 0,689·x₂</p>
+                <p class="modelo-ajuste">ŷ = 118,67 + 6,346·x₁ + 0,689·x₂</p>
                 <div class="modelo-barra" aria-hidden="true"><span style="width: 78.12%"></span></div>
-                <p class="modelo-r2">R² = 0,781 · R = 0,884</p>
-                <a class="modelo-enlace" href="#parametros-multiple">Ver el plano 3D <span aria-hidden="true">→</span></a>
+                <p class="modelo-r2">R² = 0,781 · sin 4 campos: 0,488</p>
+                <p><span class="veredicto es-descartado">Inestable</span></p>
+                <a class="modelo-enlace" href="regresion-multiple.html#comparacion-multiple">Ver la comparación <span aria-hidden="true">→</span></a>
               </li>
             </ul>
           </div>
         </section>
 
         <div class="inferencial-cuerpo">
-          <aside class="indice-lateral" id="indice-lateral" aria-label="Índice de la regresión clásica">
-            <details>
-              <summary>Contenido · 4.3.1</summary>
-              <nav class="indice-contenido" aria-label="Pasos de la regresión clásica">
-                <div class="indice-grupo">
-                  <p class="indice-grupo-titulo" id="indice-grupo-1">Regresión simple</p>
-                  <ul class="indice-lista" aria-labelledby="indice-grupo-1">
-                    <li><a href="#identificar-xy"><span class="indice-numero">a)</span><span>Identificar x, y</span></a></li>
-                    <li><a href="#tabla-pares"><span class="indice-numero">b)</span><span>Tabla de pares de valores</span></a></li>
-                    <li><a href="#dispersion"><span class="indice-numero">c)</span><span>Gráfica de dispersión</span></a></li>
-                    <li><a href="#conjetura"><span class="indice-numero">d)</span><span>Conjetura del modelo y = f(x)</span></a></li>
-                    <li><a href="#parametros-simples"><span class="indice-numero">e)</span><span>Parámetros de regresión simple</span></a></li>
-                    <li><a href="#indicadores-regresion"><span class="indice-numero">f)</span><span>Pearson, determinación y no determinación</span></a></li>
-                    <li><a href="#restricciones-regresion"><span class="indice-numero">g)</span><span>Restricciones</span></a></li>
-                  </ul>
-                </div>
-                <div class="indice-grupo">
-                  <p class="indice-grupo-titulo" id="indice-grupo-2">Regresión múltiple</p>
-                  <ul class="indice-lista" aria-labelledby="indice-grupo-2">
-                    <li><a href="#modelo-multiple"><span class="indice-numero">h)</span><span>Modelo y = f(x₁, x₂)</span></a></li>
-                    <li><a href="#tabla-tripletas"><span class="indice-numero">i)</span><span>Tabla de tripletas de valores</span></a></li>
-                    <li><a href="#parametros-multiple"><span class="indice-numero">j)</span><span>Parámetros de regresión múltiple lineal</span></a></li>
-                  </ul>
-                </div>
-              </nav>
-            </details>
-          </aside>
           <div class="inferencial-secciones">
 
         <section class="section cream" id="identificar-xy" aria-labelledby="identificar-titulo">
@@ -236,7 +245,7 @@
             <p class="section-kicker">4.3.1 · a)</p>
             <h2 id="identificar-titulo">Identificar x, y</h2>
             <div class="method-grid">
-              <article class="method-card">
+              <article class="method-card dominio">
                 <p class="method-card-tag">Variable independiente</p>
                 <h4>x: pozos del campo</h4>
                 <p>Número de pozos distintos con producción reportada en el campo en enero de 2023. Es la variable explicativa: un campo con más pozos tiene más puntos de extracción.</p>
@@ -303,8 +312,8 @@
                     <h3 class="chart-title">Óleo del campo frente a sus pozos</h3>
                   </div>
                   <div class="segmentado" role="group" aria-label="Escala de los ejes">
-                    <button type="button" class="segmento" data-escala="lineal" aria-pressed="true">Escala lineal</button>
-                    <button type="button" class="segmento" data-escala="log" aria-pressed="false">Escala log-log</button>
+                    <button type="button" class="segmento" data-valor="linear" aria-pressed="true">Escala lineal</button>
+                    <button type="button" class="segmento" data-valor="log" aria-pressed="false">Escala log-log</button>
                   </div>
                 </div>
                 <div id="grafica-dispersion" class="chart-box chart-box-tall" role="img" aria-label="Diagrama de dispersión del óleo de cada campo frente a su número de pozos"></div>
@@ -350,232 +359,90 @@
           </div>
         </section>
 
-        <section class="section cream" id="parametros-simples" aria-labelledby="parametros-simples-titulo">
-          <div class="container">
-            <p class="section-kicker">4.3.1 · e)</p>
-            <h2 id="parametros-simples-titulo">Cálculo de parámetros de regresión simple</h2>
-            <p id="estado-parametros" class="status" role="status">Calculando parámetros…</p>
-            <div id="contenido-parametros" hidden>
-              <div class="method-grid">
-                <article class="method-card">
-                  <p class="method-card-tag">Mínimos cuadrados</p>
-                  <h4>Ecuaciones de la recta</h4>
-                  <p class="method-symbolic" aria-label="b igual a n por suma de X Y menos suma de X por suma de Y, entre n por suma de X cuadrado menos suma de X al cuadrado">b = (nΣXY − ΣX·ΣY) / (nΣX² − (ΣX)²)</p>
-                  <p class="method-symbolic" aria-label="A igual a Y media menos b por X media">A = Ȳ − b·X̄</p>
-                  <p class="stat-notation">X e Y son las variables de la forma lineal (x o ln x; y o ln y). En los modelos potencial y exponencial, a = e<sup>A</sup>.</p>
-                </article>
-                <article class="method-card teal">
-                  <p class="method-card-tag">Polinómico</p>
-                  <h4>Ecuaciones normales</h4>
-                  <p class="method-symbolic" aria-label="Sistema de ecuaciones normales del polinomio de grado dos">Σy = na + bΣx + cΣx²<br>Σxy = aΣx + bΣx² + cΣx³<br>Σx²y = aΣx² + bΣx³ + cΣx⁴</p>
-                  <p class="stat-notation">Tres ecuaciones con tres incógnitas (a, b, c).</p>
-                </article>
-              </div>
-              <p class="section-intro">Elige un modelo para ver sus sumatorias y el cálculo paso a paso:</p>
-              <div class="segmentado segmentado-ancho" role="tablist" aria-label="Modelo para el cálculo" id="pestanas-parametros"></div>
-              <div id="panel-parametros" class="panel-calculo" role="tabpanel" aria-live="polite"></div>
-              <div class="table-scroll">
-                <table class="data-table">
-                  <caption>Parámetros estimados de los cinco modelos (n = 165 campos)</caption>
-                  <thead><tr><th scope="col">Modelo</th><th scope="col">Ecuación ajustada</th><th scope="col" class="numero">a</th><th scope="col" class="numero">b</th><th scope="col" class="numero">c</th><th scope="col">Método</th></tr></thead>
-                  <tbody id="cuerpo-parametros"></tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section class="section" id="indicadores-regresion" aria-labelledby="indicadores-regresion-titulo">
+        <section class="section cream" id="comparacion" aria-labelledby="comparacion-titulo">
           <div class="container">
             <p class="section-kicker">4.3.1 · f)</p>
-            <h2 id="indicadores-regresion-titulo">Indicadores: Pearson, determinación y no determinación</h2>
-            <p id="estado-indicadores-reg" class="status" role="status">Calculando indicadores…</p>
-            <div id="contenido-indicadores-reg" hidden>
-              <div class="method-grid metodo-tres">
-                <article class="method-card">
-                  <p class="method-card-tag">Pearson</p>
-                  <h4>Correlación r</h4>
-                  <p class="method-symbolic" aria-label="r igual a la covarianza de X e Y entre el producto de sus desviaciones">r = S<sub>XY</sub> / (S<sub>X</sub>·S<sub>Y</sub>)</p>
-                  <p class="stat-notation">−1 ≤ r ≤ 1. Mide la fuerza de la relación lineal entre X e Y.</p>
-                </article>
-                <article class="method-card teal">
-                  <p class="method-card-tag">Determinación</p>
-                  <h4>R² = r²</h4>
-                  <p class="method-symbolic" aria-label="R cuadrado igual a uno menos SCE entre STC">R² = 1 − SCE / STC</p>
-                  <p class="stat-notation">Proporción de la variación de Y que explica el modelo.</p>
-                </article>
-                <article class="method-card">
-                  <p class="method-card-tag">No determinación</p>
-                  <h4>1 − R²</h4>
-                  <p class="method-symbolic" aria-label="K cuadrado igual a uno menos R cuadrado">K² = 1 − R²</p>
-                  <p class="stat-notation">Proporción de la variación que el modelo no explica (otros factores).</p>
-                </article>
-              </div>
+            <h2 id="comparacion-titulo">Indicadores y elección del modelo</h2>
+            <div class="method-grid metodo-tres">
+              <article class="method-card dominio">
+                <p class="method-card-tag">Pearson</p>
+                <h4>Correlación r</h4>
+                <p class="method-symbolic">r = S<sub>XY</sub> / (S<sub>X</sub>·S<sub>Y</sub>)</p>
+                <p class="stat-notation">−1 ≤ r ≤ 1. Fuerza de la relación lineal entre X e Y.</p>
+              </article>
+              <article class="method-card teal">
+                <p class="method-card-tag">Determinación</p>
+                <h4>R² = r²</h4>
+                <p class="method-symbolic">R² = 1 − SCE / STC</p>
+                <p class="stat-notation">Proporción de la variación de Y que explica el modelo.</p>
+              </article>
+              <article class="method-card dominio">
+                <p class="method-card-tag">No determinación</p>
+                <h4>K² = 1 − R²</h4>
+                <p class="method-symbolic">K² = 1 − R²</p>
+                <p class="stat-notation">Proporción que el modelo no explica (otros factores).</p>
+              </article>
+            </div>
+            <p id="estado-comparacion" class="status" role="status">Calculando indicadores…</p>
+            <div id="contenido-comparacion" hidden>
               <div class="table-scroll">
-                <table class="data-table">
-                  <caption>Indicadores de los cinco modelos, calculados en su forma linealizada</caption>
-                  <thead><tr><th scope="col">Modelo</th><th scope="col" class="numero">r de Pearson</th><th scope="col" class="numero">R² (determinación)</th><th scope="col" class="numero">1 − R² (no determinación)</th><th scope="col">Lectura de r</th><th scope="col" class="numero">R² en escala de y</th></tr></thead>
-                  <tbody id="cuerpo-indicadores-reg"></tbody>
+                <table class="data-table tabla-comparacion">
+                  <caption>Indicadores de los cinco modelos y criterios comunes de comparación (n = 165)</caption>
+                  <thead><tr><th scope="col">Modelo</th><th scope="col" class="numero">r</th><th scope="col" class="numero">R²</th><th scope="col" class="numero">1 − R²</th><th scope="col" class="numero">p (H₀: ρ = 0)</th><th scope="col" class="numero">R² en ln y</th><th scope="col" class="numero">Error relativo mediano</th><th scope="col" class="numero">Campos con D &gt; 1</th><th scope="col">Dictamen</th><th scope="col">Página</th></tr></thead>
+                  <tbody id="cuerpo-comparacion"></tbody>
                 </table>
               </div>
               <div class="chart-card">
                 <p class="section-kicker">Comparación</p>
-                <h3 class="chart-title">Determinación frente a no determinación</h3>
+                <h3 class="chart-title">Determinación frente a no determinación (forma linealizada)</h3>
                 <div id="grafica-indicadores" class="chart-box" role="img" aria-label="Barras apiladas con la determinación y la no determinación de cada modelo"></div>
               </div>
-              <aside class="frame-note"><p id="nota-indicadores-reg"></p></aside>
-              <p class="source">Lectura de |r|: &lt; 0,3 débil; 0,3–0,7 moderada; ≥ 0,7 fuerte. En el polinómico se reporta el coeficiente de correlación múltiple R = √R². «R² en escala de y» compara todos los modelos con la misma variable y (puede ser negativo si el modelo predice peor que la media ȳ).</p>
+              <aside class="frame-note"><strong>Criterio de elección.</strong> r, R² y 1 − R² se calculan en la forma linealizada de cada modelo, así que no se pueden comparar directamente entre sí: el lineal mide la variación de y y el potencial la de ln y. Por eso se añaden tres criterios comunes. <strong>R² en ln y</strong> mide a todos los modelos en la misma escala, la adecuada porque el óleo es muy asimétrico. El <strong>error relativo mediano</strong> |y − ŷ| / y indica cuánto se equivoca el modelo en un campo típico. Los <strong>campos con D de Cook &gt; 1</strong> muestran si el ajuste depende de unos pocos puntos. El modelo potencial es el mejor en los tres: R² en ln y = 0,642, error relativo mediano del 66 % y ningún campo influyente. Aunque el lineal tiene R² = 0,550 en bbl/día, ese valor lo producen Estreito y Canto do Amaro; sin ellos baja a 0,205.</aside>
+              <p class="source">Lectura de |r|: &lt; 0,3 débil; 0,3–0,7 moderada; ≥ 0,7 fuerte. En el polinómico, r es la correlación múltiple R = √R². «No aplica»: el modelo predice valores negativos, que no tienen logaritmo.</p>
             </div>
           </div>
         </section>
 
-        <section class="section cream" id="restricciones-regresion" aria-labelledby="restricciones-regresion-titulo">
+        <section class="section" id="restricciones-regresion" aria-labelledby="restricciones-regresion-titulo">
           <div class="container">
             <p class="section-kicker">4.3.1 · g)</p>
-            <h2 id="restricciones-regresion-titulo">Restricciones</h2>
+            <h2 id="restricciones-regresion-titulo" class="subsection-title">Restricciones generales</h2>
             <div class="restriction-grid">
-              <article class="method-card">
+              <article class="method-card dominio">
                 <p class="method-card-tag">Dominio</p>
                 <h4>Solo 1 ≤ x ≤ 950 pozos</h4>
-                <p>El modelo potencial y = 8,818·x<sup>1,057</sup> es válido para campos con óleo &gt; 0 dentro del rango observado. Fuera de él (extrapolación) no hay datos que lo respalden.</p>
+                <p>Los modelos valen para campos con óleo &gt; 0 dentro del rango observado. Fuera de él (extrapolación) no hay datos que los respalden.</p>
               </article>
-              <article class="method-card">
+              <article class="method-card escala">
                 <p class="method-card-tag">Escala</p>
-                <h4>Ajustado en logaritmos</h4>
-                <p>El potencial minimiza el error de ln y, no de y. Por eso estima bien el campo típico, pero sobreestima los campos más grandes: para Estreito (950 pozos) predice unos 12.393 bbl/día frente a 5.077 observados. Para estimar volúmenes de campos grandes conviene el modelo lineal o el múltiple.</p>
+                <h4>Mediana, no media</h4>
+                <p>El modelo potencial se ajusta en logaritmos, así que estima la mediana del óleo para x pozos. Sobreestima los campos más grandes (Estreito: 12.393 estimados frente a 5.077 bbl/día). Ningún modelo simple predice bien los volúmenes de esos pocos campos.</p>
               </article>
-              <article class="method-card">
-                <p class="method-card-tag">Varianza</p>
-                <h4>Dispersión creciente</h4>
-                <p>La dispersión de y crece con x (heterocedasticidad). En escala log se estabiliza, pero los intervalos en escala original son más anchos para campos grandes.</p>
+              <article class="method-card influencia">
+                <p class="method-card-tag">Influencia</p>
+                <h4>Campos que dominan el ajuste</h4>
+                <p>Estreito (950 pozos) y Canto do Amaro (707) tienen tanta palanca que deciden por sí solos los modelos lineal, polinómico y exponencial. En escala log-log su peso se reparte y el ajuste es estable.</p>
               </article>
-              <article class="method-card">
+              <article class="method-card causalidad">
                 <p class="method-card-tag">Causalidad</p>
                 <h4>Asociación, no causa</h4>
                 <p>Un campo no produce más solo por perforar más pozos: se perforan más pozos donde el yacimiento es más grande. r mide asociación.</p>
               </article>
-              <article class="method-card">
+              <article class="method-card periodo">
                 <p class="method-card-tag">Período</p>
                 <h4>Un solo mes</h4>
                 <p>Los parámetros corresponden a enero de 2023. La relación puede cambiar con la madurez de los campos y no sirve para pronosticar en el tiempo.</p>
               </article>
-              <article class="method-card">
+              <article class="method-card datos">
                 <p class="method-card-tag">Datos</p>
                 <h4>Campos sin óleo excluidos</h4>
-                <p>Los 56 campos de gas (y = 0) quedan fuera; el modelo no dice nada sobre la probabilidad de que un campo no produzca óleo.</p>
+                <p>Los 56 campos de gas (y = 0) quedan fuera: el logaritmo de 0 no existe y el modelo no estima la probabilidad de que un campo no produzca óleo.</p>
               </article>
-            </div>
-          </div>
-        </section>
-
-        <section class="section" id="modelo-multiple" aria-labelledby="modelo-multiple-titulo">
-          <div class="container">
-            <p class="section-kicker">4.3.1 · h)</p>
-            <h2 id="modelo-multiple-titulo">Modelo matemático y = f(x₁, x₂)</h2>
-            <div class="method-grid">
-              <article class="method-card">
-                <p class="method-card-tag">Variables</p>
-                <h4>Dos variables explicativas</h4>
-                <p><strong>x₁</strong>: pozos del campo (la x de la regresión simple).<br><strong>x₂</strong>: gas natural total del campo (Mm³/día).<br><strong>y</strong>: óleo del campo (bbl/día).</p>
-                <p class="stat-notation">El gas se elige porque el gas asociado sale del mismo yacimiento que el óleo y casi no está correlacionado con el número de pozos (r = 0,004): aporta información nueva.</p>
+              <article class="method-card consideracion">
+                <p class="method-card-tag">Consideración</p>
+                <h4>Asociación vs. causalidad</h4>
+                <p>La relación entre el número de pozos y el óleo refleja una asociación estadística: los campos más grandes tienden a tener más pozos y mayor producción. El modelo explica variación pero no determina la causa directa del volumen productivo.</p>
               </article>
-              <article class="method-card teal">
-                <p class="method-card-tag">Modelo</p>
-                <h4>Regresión lineal múltiple</h4>
-                <p class="method-symbolic" aria-label="y igual a b cero más b uno por x uno más b dos por x dos">y = b₀ + b₁·x₁ + b₂·x₂</p>
-                <p class="stat-notation">Geométricamente es un plano en el espacio (x₁, x₂, y). b₁ es el óleo extra por pozo con el gas fijo y b₂ el óleo extra por cada Mm³/día de gas con los pozos fijos.</p>
-              </article>
-            </div>
-            <p id="estado-multiple-3d" class="status" role="status">Dibujando el plano…</p>
-            <div id="contenido-multiple-3d" hidden>
-              <div class="chart-card">
-                <p class="section-kicker">Visualización 3D</p>
-                <h3 class="chart-title">Plano de regresión y campos observados</h3>
-                <div id="grafica-3d" class="chart-box chart-box-3d" role="img" aria-label="Gráfica tridimensional de los campos según pozos, gas y óleo, con el plano de regresión múltiple"></div>
-                <p class="source">Arrastra para girar la gráfica y usa la rueda para acercar. Los ejes x₁ y x₂ están recortados a los campos de hasta 300 pozos y 600 Mm³/día de gas para que se vea el plano; la estimación usa los 165 campos.</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section class="section cream" id="tabla-tripletas" aria-labelledby="tabla-tripletas-titulo">
-          <div class="container">
-            <p class="section-kicker">4.3.1 · i)</p>
-            <h2 id="tabla-tripletas-titulo">Tabla de tripletas de valores (x₁, x₂, y)</h2>
-            <p id="estado-tripletas" class="status" role="status">Cargando tripletas…</p>
-            <div id="contenido-tripletas" hidden>
-              <div class="table-scroll">
-                <table class="data-table">
-                  <caption>Los 10 campos con mayor producción de óleo, con el valor estimado por el modelo múltiple</caption>
-                  <thead><tr><th scope="col">Campo</th><th scope="col" class="numero">x₁ (pozos)</th><th scope="col" class="numero">x₂ (Mm³/día)</th><th scope="col" class="numero">y (bbl/día)</th><th scope="col" class="numero">ŷ (bbl/día)</th><th scope="col" class="numero">e = y − ŷ</th></tr></thead>
-                  <tbody id="cuerpo-tripletas-top"></tbody>
-                </table>
-              </div>
-              <details class="var-card">
-                <summary><span class="var-card-tipo">Tabla completa</span><span class="var-card-titulo">Las <span class="reg-n">165</span> tripletas (x₁ᵢ, x₂ᵢ, yᵢ)</span><span class="var-card-preview" id="preview-tripletas"></span></summary>
-                <div class="table-scroll tabla-alta">
-                  <table class="data-table">
-                    <caption>Tripletas de valores de los campos con óleo &gt; 0</caption>
-                    <thead><tr><th scope="col" class="numero">i</th><th scope="col">Campo</th><th scope="col" class="numero">x₁</th><th scope="col" class="numero">x₂</th><th scope="col" class="numero">y</th><th scope="col" class="numero">ŷ</th></tr></thead>
-                    <tbody id="cuerpo-tripletas"></tbody>
-                  </table>
-                </div>
-              </details>
-            </div>
-          </div>
-        </section>
-
-        <section class="section" id="parametros-multiple" aria-labelledby="parametros-multiple-titulo">
-          <div class="container">
-            <p class="section-kicker">4.3.1 · j)</p>
-            <h2 id="parametros-multiple-titulo">Cálculo de parámetros de regresión múltiple lineal</h2>
-            <p id="estado-multiple" class="status" role="status">Calculando la regresión múltiple…</p>
-            <div id="contenido-multiple" hidden>
-              <div class="method-grid">
-                <article class="method-card">
-                  <p class="method-card-tag">Forma matricial</p>
-                  <h4>Mínimos cuadrados</h4>
-                  <p class="method-symbolic" aria-label="b igual a la inversa de X transpuesta por X, por X transpuesta por y">b = (XᵀX)⁻¹·Xᵀy</p>
-                  <p class="stat-notation">X es la matriz n × 3 con una columna de unos, x₁ y x₂. Equivale a resolver las ecuaciones normales:</p>
-                  <p class="stat-notation ecuaciones-normales">Σy = nb₀ + b₁Σx₁ + b₂Σx₂<br>Σx₁y = b₀Σx₁ + b₁Σx₁² + b₂Σx₁x₂<br>Σx₂y = b₀Σx₂ + b₁Σx₁x₂ + b₂Σx₂²</p>
-                </article>
-                <article class="method-card teal">
-                  <p class="method-card-tag">Sumatorias</p>
-                  <h4>Valores de las ecuaciones normales</h4>
-                  <div class="table-scroll tabla-mini"><table class="data-table"><caption>Sumatorias con n = 165</caption><tbody id="cuerpo-sumas-multiple"></tbody></table></div>
-                </article>
-              </div>
-              <dl class="stat-metrics test-metrics">
-                <div><dt>R múltiple</dt><dd id="mm-R"></dd></div>
-                <div><dt>R² (determinación)</dt><dd id="mm-r2"></dd></div>
-                <div><dt>1 − R² (no determinación)</dt><dd id="mm-k2"></dd></div>
-                <div><dt>R² ajustado</dt><dd id="mm-r2a"></dd></div>
-              </dl>
-              <div class="table-scroll">
-                <table class="data-table">
-                  <caption>Coeficientes estimados, con su error estándar y prueba t (gl = <span id="mm-gl"></span>)</caption>
-                  <thead><tr><th scope="col">Coeficiente</th><th scope="col">Término</th><th scope="col" class="numero">Estimación</th><th scope="col" class="numero">Error estándar</th><th scope="col" class="numero">t</th><th scope="col" class="numero">Valor p</th><th scope="col">Interpretación</th></tr></thead>
-                  <tbody id="cuerpo-coeficientes"></tbody>
-                </table>
-              </div>
-              <div class="method-grid">
-                <article class="method-card">
-                  <p class="method-card-tag">Ecuación ajustada</p>
-                  <h4 id="mm-ecuacion"></h4>
-                  <p id="mm-lectura"></p>
-                  <p class="stat-notation">Prueba F global: F = <span id="mm-F"></span>, p <span id="mm-pF"></span>. Error estándar de la estimación: <span id="mm-se"></span> bbl/día.</p>
-                </article>
-                <article class="method-card teal calculator-card">
-                  <p class="method-card-tag">Calculadora</p>
-                  <h4>Estima el óleo de un campo</h4>
-                  <div class="calculator-fields">
-                    <label>x₁: pozos<input id="calc-x1" type="number" min="1" max="950" step="1" value="50" inputmode="numeric"></label>
-                    <label>x₂: gas (Mm³/día)<input id="calc-x2" type="number" min="0" step="any" value="20" inputmode="decimal"></label>
-                  </div>
-                  <p class="calculator-result" id="calc-resultado" role="status" aria-live="polite"></p>
-                </article>
-              </div>
-              <aside class="frame-note"><p id="nota-multiple"></p></aside>
             </div>
           </div>
         </section>

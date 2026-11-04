@@ -28,12 +28,14 @@ Es un sitio **estático, sin frameworks ni paso de compilación**: HTML, CSS y J
 | [`mapa.html`](mapa.html) | Mapa Leaflet interactivo de Brasil: óleo producido y pozos únicos por Estado, con métrica conmutable, umbral mínimo, panel de detalle y ranking. |
 | [`Estadistica.html`](Estadistica.html) | Estadística descriptiva: resumen en cifras, población y muestra, variables, TDF y GDF (nominal, ordinal, discreta y continua), indicadores de óleo, gas y agua, y resumen por Estado. |
 | [`estadisticaInferencial.html`](estadisticaInferencial.html) | Estadística inferencial: resumen y veredicto por modelo, VAD, modelo discreto, VAC, modelos continuos, tests de ajuste, probabilidades, estimación, tamaño muestral, segunda VAC (agua) y VAD (pozos por campo), χ² en submuestras y validación con 2023 completo. |
-| [`regresion.html`](regresion.html) | 4.3.1 Regresión clásica: galería de modelos, x e y, pares, dispersión, modelos lineal, potencial, exponencial, logarítmico y polinómico, parámetros paso a paso, Pearson, determinación y no determinación, restricciones, tripletas y regresión múltiple con plano 3D. |
+| [`regresion.html`](regresion.html) | 4.3.1 Regresión clásica, índice: galería de modelos, x e y, pares, dispersión, conjetura, comparación de indicadores con criterios comunes y restricciones generales. |
+| `regresion-lineal.html`, `regresion-potencial.html`, `regresion-exponencial.html`, `regresion-logaritmica.html`, `regresion-polinomica.html` | Una página por modelo simple: dictamen, linealización, parámetros paso a paso, ajuste gráfico, Pearson, determinación, no determinación y prueba t, residuos y distancia de Cook, restricciones y calculadora. |
+| `regresion-multiple.html` | y = f(x₁, x₂): tripletas, ecuaciones normales, modelos lineal y logarítmico comparados, plano 3D y calculadora. |
 | [`conclusiones.html`](conclusiones.html) | Conclusiones descriptivas e inferenciales, limitaciones y trabajo futuro. |
 | [`herramientas.html`](herramientas.html) | Herramientas, fuente de datos y pasos para reproducir el análisis. |
 | [`equipo.html`](equipo.html) | Integrantes del proyecto. |
 
-Las nueve páginas comparten una **barra lateral colapsable** (estado persistido en `localStorage`), cabecera, pie con la fuente de datos y un diseño responsive con soporte de `prefers-reduced-motion`.
+Las quince páginas comparten una **barra lateral colapsable** (estado persistido en `localStorage`), cabecera, pie con la fuente de datos y un diseño responsive con soporte de `prefers-reduced-motion`.
 
 ## Contenido estadístico
 
@@ -58,7 +60,7 @@ Las nueve páginas comparten una **barra lateral colapsable** (estado persistido
 
 ### 4.3 Relación entre variables
 
-- **4.3.1 Regresión clásica** (`regresion.html`): unidad = campo con óleo > 0 (n = 165). x = pozos del campo, y = óleo del campo (bbl/día). El modelo potencial ŷ = 8,818·x^1,057 tiene el mayor r (0,801). La regresión múltiple con x₂ = gas natural total da ŷ = 118,67 + 6,346·x₁ + 0,689·x₂ (R² = 0,781).
+- **4.3.1 Regresión clásica** (`regresion.html` y una página por modelo): unidad = campo con óleo > 0 (n = 165). x = pozos del campo, y = óleo del campo (bbl/día). Se elige el modelo potencial ŷ = 8,818·x^1,057 (r = 0,801; sin campos con D de Cook > 1). Los modelos se comparan con criterios comunes: R² en ln y, error relativo mediano y campos influyentes. Para la múltiple con x₂ = gas natural total se recomienda la forma logarítmica, ŷ = 21,14·x₁^0,678·x₂^0,327 (R² = 0,809); el múltiple lineal (R² = 0,781) depende de cuatro campos.
 - Machine learning multivariable (4.3.2) y serie de tiempo (4.3.3) siguen pendientes.
 
 ## Datos
@@ -95,7 +97,8 @@ Todos los JSON de ejecución viven en [`data/`](data). El CSV original se conser
 ├── mapa.html                   # Mapa Leaflet por Estado
 ├── Estadistica.html            # 4.1 Estadística descriptiva
 ├── estadisticaInferencial.html # 4.2 Estadística inferencial
-├── regresion.html              # 4.3.1 Regresión clásica
+├── regresion.html              # 4.3.1 Regresión clásica (índice)
+├── regresion-*.html            # Una página por modelo (5 simples + múltiple)
 ├── conclusiones.html           # Conclusiones
 ├── herramientas.html           # Herramientas y reproducibilidad
 ├── equipo.html                 # Integrantes
@@ -121,7 +124,10 @@ Todos los JSON de ejecución viven en [`data/`](data). El CSV original se conser
 │   ├── variableContinua.js
 │   ├── modeloContinuo.js
 │   ├── inferencialAmpliacion.js # 4.2.15 a 4.2.18
-│   ├── regresion.js            # 4.3.1 Regresión clásica
+│   ├── regresionComun.js       # Utilidades de las páginas de regresión
+│   ├── regresion.js            # Índice de la regresión
+│   ├── regresionModelo.js      # Páginas de los modelos simples
+│   ├── regresionMultiple.js    # Página de la regresión múltiple
 │   └── indiceLateral.js        # Índice lateral de la página inferencial
 ├── data/                       # CSV de origen, GeoJSON y JSON de ejecución
 ├── scripts/

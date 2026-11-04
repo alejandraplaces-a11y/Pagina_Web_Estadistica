@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Regresión lineal múltiple del óleo de los campos terrestres de Brasil según sus pozos y su gas: tripletas, parámetros, comparación de modelos y plano 3D (enero de 2023).">
+  <title>Regresión múltiple · Regresión · Producción terrestre de petróleo en Brasil</title>
+  <script>
+    (function () {
+      try { if (localStorage.getItem('sidebar-expanded') === '1') document.documentElement.classList.add('sidebar-expanded'); } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="css/estadisticaInferencial.css">
+  <link rel="stylesheet" href="css/regresion.css">
+  <script defer src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <script defer src="js/common.js"></script>
+  <script defer src="js/sidebar.js"></script>
+  <script defer src="js/regresionComun.js"></script>
+  <script defer src="js/regresionMultiple.js"></script>
+</head>
+<body class="has-sidebar">
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Navegación lateral">
+      <button class="sidebar-toggle" id="sidebar-toggle" type="button" aria-label="Alternar menú lateral" aria-expanded="false" aria-controls="sidebar">
+        <span class="sidebar-toggle-icon" aria-hidden="true">☰</span>
+      </button>
+      <a class="sidebar-brand" href="index.html" aria-label="Terra, inicio">
+        <img class="sidebar-logo" src="img/logo-universidad.png" alt="" width="34" height="34">
+        <span class="sidebar-brand-text">
+          <span class="sidebar-title">Universidad Central del Ecuador</span>
+        </span>
+      </a>
+      <nav class="sidebar-nav" aria-label="Navegación lateral">
+        <ul class="sidebar-list">
+          <li>
+            <a class="sidebar-link" href="index.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10.4V20h13v-9.6"/></svg>
+              <span class="sidebar-link-label">Inicio</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="introduccion.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v16H5.5C4.7 20 4 19.3 4 18.5Z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v16h5.5c.8 0 1.5-.7 1.5-1.5Z"/></svg>
+              <span class="sidebar-link-label">Introducción</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="mapa.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Z"/><path d="M9 4v14m6-12v14"/></svg>
+              <span class="sidebar-link-label">Mapa Web</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="Estadistica.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18 6H7l6 6-6 6h11"/></svg>
+              <span class="sidebar-link-label">Estadística Descriptiva</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="estadisticaInferencial.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 20h18"/><path d="M5 20c2-9 4-14 7-14s5 5 7 14"/><path d="M12 6v14"/></svg>
+              <span class="sidebar-link-label">Estadística Inferencial</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link is-active" href="regresion.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 20h16"/><path d="M4 20V4"/><circle cx="8" cy="15" r="1.2"/><circle cx="12" cy="11" r="1.2"/><circle cx="17" cy="9" r="1.2"/><path d="M6 17 19 6"/></svg>
+              <span class="sidebar-link-label">Regresión</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="conclusiones.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5 9.5 17 19 7"/></svg>
+              <span class="sidebar-link-label">Conclusiones</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="herramientas.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.7 6.3a4 4 0 0 0 5 5L12 19a2.1 2.1 0 0 1-3-3l7.7-7.7"/><path d="M4 4l5 5"/></svg>
+              <span class="sidebar-link-label">Herramientas</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="equipo.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 5.5a3 3 0 0 1 0 5"/><path d="M18 14.5c1.8.8 3 2.6 3 4.5"/></svg>
+              <span class="sidebar-link-label">Equipo</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <div class="app-main">
+      <div class="sidebar-backdrop" id="sidebar-backdrop" hidden></div>
+      <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+      <header class="site-header">
+        <div class="container header-inner">
+          <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="sidebar">
+            <span aria-hidden="true">☰</span>
+          </button>
+          <a class="brand" href="index.html" aria-label="Terra, inicio">
+            <img class="sidebar-logo" src="img/logo-universidad.png" alt="" width="34" height="34">
+            <span class="brand-word">Universidad Central del Ecuador</span>
+            <span class="brand-caption">Proyecto de Estadística</span>
+          </a>
+        </div>
+      </header>
+
+      <main id="contenido">
+        <section class="page-hero" aria-labelledby="pagina-titulo">
+          <video class="hero-video" autoplay muted loop playsinline preload="auto" aria-hidden="true" tabindex="-1">
+            <source src="video/video-inferencial.mp4" type="video/mp4">
+            Tu navegador no puede reproducir el video.
+          </video>
+          <div class="hero-overlay" aria-hidden="true"></div>
+          <div class="container hero-content">
+            <p class="section-kicker">04 / 4.3.1 · Regresión múltiple</p>
+            <h1 id="pagina-titulo">Regresión múltiple.</h1>
+            <p class="aside-meta">Brasil · Enero de 2023 · 4.3.1</p>
+            <p class="page-lead">y = f(x₁, x₂): óleo del campo según sus pozos (x₁) y su gas natural (x₂), en escala lineal y logarítmica.</p>
+          </div>
+        </section>
+        <nav class="reg-subnav" aria-label="Modelos de regresión">
+          <div class="container reg-subnav-lista">
+            <a href="regresion.html">Resumen</a>
+            <a href="regresion-lineal.html">Lineal</a>
+            <a href="regresion-potencial.html">Potencial</a>
+            <a href="regresion-exponencial.html">Exponencial</a>
+            <a href="regresion-logaritmica.html">Logarítmica</a>
+            <a href="regresion-polinomica.html">Polinómica</a>
+            <a href="regresion-multiple.html" aria-current="page">Múltiple 3D</a>
+          </div>
+        </nav>
+
+        <section class="section resumen-clave" id="resumen-multiple" aria-labelledby="resumen-multiple-titulo">
+          <div class="container">
+            <p class="section-kicker">Dictamen</p>
+            <h2 id="resumen-multiple-titulo" class="subsection-title">Modelo recomendado: <span class="veredicto es-elegido">múltiple logarítmico</span></h2>
+            <dl class="stat-metrics resumen-metrics">
+              <div><dt>Modelo recomendado</dt><dd class="dd-ecuacion">ŷ = 21,14·x₁<sup>0,678</sup>·x₂<sup>0,327</sup></dd></div>
+              <div><dt>R² (ln y) · ajustado</dt><dd>0,809 <span class="metric-unit">· 0,807</span></dd></div>
+              <div><dt>Múltiple lineal · R²</dt><dd>0,781 <span class="metric-unit">sin 4 campos: 0,488</span></dd></div>
+              <div><dt>Campos con D de Cook &gt; 1</dt><dd>0 <span class="metric-unit">frente a 4 en el lineal</span></dd></div>
+            </dl>
+            <aside class="frame-note"><strong>¿Por qué no el lineal?</strong> El múltiple lineal y = b₀ + b₁·x₁ + b₂·x₂ da R² = 0,781, pero ese valor lo producen cuatro campos: Canto do Amaro, Leste do Urucu, Estreito y Rio Urucu (distancias de Cook de 3,0 a 4,6). Sin ellos, R² cae a 0,488 y el coeficiente del gas pasa de 0,69 a 2,45: el modelo no es estable y sus residuos no son normales. Al aplicar logaritmos a las tres variables, el modelo sigue siendo lineal en sus parámetros, explica el 80,9 % de la variación de ln y, ningún campo lo domina y sus residuos son casi normales (p = 0,052).</aside>
+            <noscript><p class="status status-error">Las tablas, el plano 3D y la calculadora se generan con JavaScript; el dictamen y las cifras clave están arriba.</p></noscript>
+          </div>
+        </section>
+
+        <section class="section cream" id="modelo-multiple" aria-labelledby="modelo-multiple-titulo">
+          <div class="container">
+            <p class="section-kicker">4.3.1 · h)</p>
+            <h2 id="modelo-multiple-titulo">Modelo matemático y = f(x₁, x₂)</h2>
+            <div class="method-grid metodo-tres">
+              <article class="method-card">
+                <p class="method-card-tag">Variables</p>
+                <h4>Dos variables explicativas</h4>
+                <p><strong>x₁</strong>: pozos del campo.<br><strong>x₂</strong>: gas natural total del campo (Mm³/día).<br><strong>y</strong>: óleo del campo (bbl/día).</p>
+                <p class="stat-notation">El gas asociado sale del mismo yacimiento que el óleo y aporta información que el número de pozos no tiene.</p>
+              </article>
+              <article class="method-card teal">
+                <p class="method-card-tag">Lineal</p>
+                <h4>Plano en (x₁, x₂, y)</h4>
+                <p class="method-symbolic">y = b₀ + b₁·x₁ + b₂·x₂</p>
+                <p class="stat-notation">b₁ y b₂: bbl/día adicionales por pozo y por Mm³/día de gas, con la otra variable fija.</p>
+              </article>
+              <article class="method-card">
+                <p class="method-card-tag">Logarítmico (recomendado)</p>
+                <h4>Plano en (ln x₁, ln x₂, ln y)</h4>
+                <p class="method-symbolic">ln y = b₀ + b₁·ln x₁ + b₂·ln x₂</p>
+                <p class="stat-notation">Equivale a y = e<sup>b₀</sup>·x₁<sup>b₁</sup>·x₂<sup>b₂</sup>. b₁ y b₂ son elasticidades: % de cambio del óleo por cada 1 % de cambio de x₁ o x₂.</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="tabla-tripletas" aria-labelledby="tabla-tripletas-titulo">
+          <div class="container">
+            <p class="section-kicker">4.3.1 · i)</p>
+            <h2 id="tabla-tripletas-titulo">Tabla de tripletas de valores (x₁, x₂, y)</h2>
+            <p id="estado-tripletas" class="status" role="status">Cargando tripletas…</p>
+            <div id="contenido-tripletas" hidden>
+              <div class="table-scroll">
+                <table class="data-table">
+                  <caption>Los 10 campos con más óleo y su estimación con cada modelo</caption>
+                  <thead><tr><th scope="col">Campo</th><th scope="col" class="numero">x₁ (pozos)</th><th scope="col" class="numero">x₂ (Mm³/día)</th><th scope="col" class="numero">y (bbl/día)</th><th scope="col" class="numero">ŷ logarítmico</th><th scope="col" class="numero">ŷ lineal</th></tr></thead>
+                  <tbody id="cuerpo-tripletas-top"></tbody>
+                </table>
+              </div>
+              <details class="var-card">
+                <summary><span class="var-card-tipo">Tabla completa</span><span class="var-card-titulo">Las <span class="reg-n">165</span> tripletas, en escala original y en ln</span></summary>
+                <div class="table-scroll tabla-alta">
+                  <table class="data-table">
+                    <caption>Tripletas (x₁, x₂, y) y sus logaritmos naturales</caption>
+                    <thead><tr><th scope="col" class="numero">i</th><th scope="col">Campo</th><th scope="col" class="numero">x₁</th><th scope="col" class="numero">x₂</th><th scope="col" class="numero">ln x₁</th><th scope="col" class="numero">ln x₂</th><th scope="col" class="numero">y</th><th scope="col" class="numero">ln y</th></tr></thead>
+                    <tbody id="cuerpo-tripletas"></tbody>
+                  </table>
+                </div>
+              </details>
+            </div>
+          </div>
+        </section>
+
+        <section class="section cream" id="parametros-multiple" aria-labelledby="parametros-multiple-titulo">
+          <div class="container">
+            <p class="section-kicker">4.3.1 · j)</p>
+            <h2 id="parametros-multiple-titulo">Cálculo de parámetros de regresión múltiple lineal</h2>
+            <p id="estado-parametros-mult" class="status" role="status">Calculando sumatorias…</p>
+            <div id="contenido-parametros-mult" hidden>
+              <div class="method-grid">
+                <article class="method-card">
+                  <p class="method-card-tag">Forma matricial</p>
+                  <h4>Mínimos cuadrados</h4>
+                  <p class="method-symbolic" aria-label="b igual a la inversa de X transpuesta por X, por X transpuesta por y">b = (XᵀX)⁻¹·Xᵀy</p>
+                  <p class="stat-notation">X es la matriz n × 3 con una columna de unos, x₁ y x₂ (o ln x₁ y ln x₂). Equivale a resolver las ecuaciones normales:</p>
+                  <p class="stat-notation ecuaciones-normales">Σy = nb₀ + b₁Σx₁ + b₂Σx₂<br>Σx₁y = b₀Σx₁ + b₁Σx₁² + b₂Σx₁x₂<br>Σx₂y = b₀Σx₂ + b₁Σx₁x₂ + b₂Σx₂²</p>
+                </article>
+                <article class="method-card teal">
+                  <p class="method-card-tag">Sumatorias</p>
+                  <h4>Valores de las ecuaciones normales</h4>
+                  <div class="sumas-dobles">
+                    <div class="table-scroll tabla-mini"><table class="data-table"><caption>Escala lineal</caption><tbody id="sumas-lineal"></tbody></table></div>
+                    <div class="table-scroll tabla-mini"><table class="data-table"><caption>Escala ln (x₁, x₂, y → ln)</caption><tbody id="sumas-log"></tbody></table></div>
+                  </div>
+                </article>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="comparacion-multiple" aria-labelledby="comparacion-multiple-titulo">
+          <div class="container">
+            <p class="section-kicker">Resultados</p>
+            <h2 id="comparacion-multiple-titulo">Coeficientes, indicadores y diagnóstico</h2>
+            <p id="estado-comparacion-mult" class="status" role="status">Calculando los modelos…</p>
+            <div id="contenido-comparacion-mult" hidden>
+              <details class="var-card" open>
+                <summary><span class="var-card-tipo">Recomendado</span><span class="var-card-titulo">Múltiple logarítmico</span><span class="var-card-preview">ln ŷ = 3,0511 + 0,6777·ln x₁ + 0,3265·ln x₂ · R² = 0,809</span></summary>
+              <div class="table-scroll">
+                <table class="data-table">
+                  <caption>Múltiple logarítmico: coeficientes con prueba t (gl = 162)</caption>
+                  <thead><tr><th scope="col">Coef.</th><th scope="col">Término</th><th scope="col" class="numero">Estimación</th><th scope="col" class="numero">Error estándar</th><th scope="col" class="numero">t</th><th scope="col" class="numero">Valor p</th><th scope="col">Interpretación</th></tr></thead>
+                  <tbody id="cuerpo-log"></tbody>
+                </table>
+              </div>
+              <dl class="stat-metrics test-metrics">
+                <div><dt>R múltiple</dt><dd id="log-R"></dd></div>
+                <div><dt>R² (determinación)</dt><dd id="log-r2"></dd></div>
+                <div><dt>1 − R² (no determinación)</dt><dd id="log-k2"></dd></div>
+                <div><dt>R² ajustado</dt><dd id="log-r2a"></dd></div>
+              </dl>
+              <p class="stat-scope">Prueba F global: <span id="log-F"></span>.</p>
+              <div class="table-scroll">
+                <table class="data-table">
+                  <caption>Campos con mayor distancia de Cook</caption>
+                  <thead><tr><th scope="col">Campo</th><th scope="col" class="numero">x₁</th><th scope="col" class="numero">x₂</th><th scope="col" class="numero">y</th><th scope="col" class="numero">D de Cook</th><th scope="col">Lectura</th></tr></thead>
+                  <tbody id="influyentes-log"></tbody>
+                </table>
+              </div>
+                <aside class="frame-note">Con el gas constante, un 10 % más de pozos se asocia con un 6,8 % más de óleo; con los pozos constantes, un 10 % más de gas, con un 3,3 % más. x₁ y x₂ tienen r = 0,575 en escala ln (VIF = 1,49): hay correlación, pero no multicolinealidad. Ningún campo tiene D de Cook &gt; 1. R² en bbl/día = 0,673 y error relativo mediano del 49,7 %.</aside>
+              </details>
+              <details class="var-card">
+                <summary><span class="var-card-tipo">Comparación</span><span class="var-card-titulo">Múltiple lineal</span><span class="var-card-preview">ŷ = 118,67 + 6,346·x₁ + 0,6887·x₂ · R² = 0,781 · inestable</span></summary>
+              <div class="table-scroll">
+                <table class="data-table">
+                  <caption>Múltiple lineal: coeficientes con prueba t (gl = 162)</caption>
+                  <thead><tr><th scope="col">Coef.</th><th scope="col">Término</th><th scope="col" class="numero">Estimación</th><th scope="col" class="numero">Error estándar</th><th scope="col" class="numero">t</th><th scope="col" class="numero">Valor p</th><th scope="col">Interpretación</th></tr></thead>
+                  <tbody id="cuerpo-lin"></tbody>
+                </table>
+              </div>
+              <dl class="stat-metrics test-metrics">
+                <div><dt>R múltiple</dt><dd id="lin-R"></dd></div>
+                <div><dt>R² (determinación)</dt><dd id="lin-r2"></dd></div>
+                <div><dt>1 − R² (no determinación)</dt><dd id="lin-k2"></dd></div>
+                <div><dt>R² ajustado</dt><dd id="lin-r2a"></dd></div>
+              </dl>
+              <p class="stat-scope">Prueba F global: <span id="lin-F"></span>.</p>
+              <div class="table-scroll">
+                <table class="data-table">
+                  <caption>Campos con mayor distancia de Cook</caption>
+                  <thead><tr><th scope="col">Campo</th><th scope="col" class="numero">x₁</th><th scope="col" class="numero">x₂</th><th scope="col" class="numero">y</th><th scope="col" class="numero">D de Cook</th><th scope="col">Lectura</th></tr></thead>
+                  <tbody id="influyentes-lin"></tbody>
+                </table>
+              </div>
+                <aside class="frame-note">x₁ y x₂ casi no están correlacionadas (r = 0,004), pero el gas solo es alto en dos campos del Amazonas (Leste do Urucu y Rio Urucu) y el número de pozos, en Estreito y Canto do Amaro. Esos cuatro campos fijan el plano: sin ellos, R² cae a 0,488 y b₂ pasa de 0,689 a 2,451. Error relativo mediano del 111,8 % y residuos no normales (p &lt; 0,0001).</aside>
+              </details>
+            </div>
+          </div>
+        </section>
+
+        <section class="section cream" id="vista-3d-seccion" aria-labelledby="vista-3d-titulo">
+          <div class="container">
+            <p class="section-kicker">Visualización 3D</p>
+            <h2 id="vista-3d-titulo">Plano de regresión y campos observados</h2>
+            <p id="estado-vista-3d" class="status" role="status">Dibujando el plano…</p>
+            <div id="contenido-vista-3d" hidden>
+              <div class="chart-card" id="vista-3d">
+                <div class="chart-head">
+                  <div><p class="section-kicker">Los 165 campos</p><h3 class="chart-title">Cada modelo es un plano en su propia escala</h3></div>
+                  <div class="segmentado" role="group" aria-label="Modelo mostrado">
+                    <button type="button" class="segmento" data-valor="log" aria-pressed="true">Logarítmico (ln)</button>
+                    <button type="button" class="segmento" data-valor="lineal" aria-pressed="false">Lineal</button>
+                  </div>
+                </div>
+                <div id="grafica-3d" class="chart-box chart-box-3d" role="img" aria-label="Gráfica tridimensional de los campos según pozos, gas y óleo, con el plano de regresión múltiple"></div>
+                <p class="source">Verde: campo por encima del plano; rojo: por debajo. Arrastra para girar y usa la rueda para acercar. En la vista lineal, unos pocos campos estiran los ejes y casi todos los puntos quedan juntos en una esquina: es el mismo problema que muestran las distancias de Cook.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="prediccion-multiple" aria-labelledby="prediccion-multiple-titulo">
+          <div class="container">
+            <p class="section-kicker">Predicción y restricciones</p>
+            <h2 id="prediccion-multiple-titulo">Estima el óleo de un campo</h2>
+            <div class="method-grid">
+              <article class="method-card teal calculator-card">
+                <p class="method-card-tag">Calculadora</p>
+                <h4>Con los dos modelos</h4>
+                <div class="calculator-fields">
+                  <label>x₁: pozos<input id="calc-x1" type="number" min="1" step="1" value="50" inputmode="numeric"></label>
+                  <label>x₂: gas (Mm³/día)<input id="calc-x2" type="number" min="0.0001" step="any" value="5" inputmode="decimal"></label>
+                </div>
+                <p class="calculator-result" id="calc-resultado" role="status" aria-live="polite"></p>
+              </article>
+              <article class="method-card">
+                <p class="method-card-tag">Restricciones</p>
+                <h4>Cuándo usar el modelo</h4>
+                <ul class="lista-simple">
+                  <li>Rango observado: 1–950 pozos y 0,0001–6.131 Mm³/día de gas; fuera de él es extrapolación.</li>
+                  <li>El modelo logarítmico exige x₂ &gt; 0 y estima la mediana de y, no la media.</li>
+                  <li>El gas se produce junto con el óleo: la relación es asociación, no causa. El modelo explica la producción, pero no la pronostica antes de medir el gas.</li>
+                  <li>Corresponde a un solo mes (enero de 2023).</li>
+                </ul>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <nav class="reg-paginacion container" aria-label="Paginación de modelos">
+          <a href="regresion-polinomica.html" rel="prev"><span>← Anterior</span>Modelo polinómico</a>
+          <a href="regresion.html" rel="next"><span>Volver →</span>Resumen de la regresión</a>
+        </nav>
+      </main>
+
+      <footer class="site-footer">
+        <div class="container footer-row">
+          <div>
+            <p>© 2026 Integrantes: <span class="footer-members">Génesis Once, Esther Places, Evelyn Rodríguez, Andrea Sarmiento, Melany Zapata</span></p>
+            <p class="footer-location">Proyecto académico · Brasil, enero de 2023</p>
+          </div>
+          <div>
+            <p class="footer-label">Fuente</p>
+            <p>ANP (Brasil) · Agregación por pozo y Estado</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+</body>
+</html>

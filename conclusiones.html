@@ -114,10 +114,6 @@
 
       <main id="contenido">
         <section class="page-hero" aria-labelledby="conclusiones-titulo">
-          <video class="hero-video" autoplay muted loop playsinline preload="auto" aria-hidden="true" tabindex="-1">
-            <source src="video/video-regresion.mp4" type="video/mp4">
-            Tu navegador no puede reproducir el video.
-          </video>
           <div class="container hero-content">
             <p class="section-kicker">05 / Cierre</p>
             <h1 id="conclusiones-titulo">Conclusiones.</h1>
@@ -238,16 +234,18 @@
                 <h4>Óleo del campo frente a sus pozos</h4>
                 <ul class="lista-simple">
                   <li>El modelo potencial ŷ = 8,818·x<sup>1,057</sup> tiene la correlación más fuerte (r = 0,801; R² = 0,642; no determinación 0,358).</li>
-                  <li>b ≈ 1: el óleo crece casi en proporción al número de pozos, unos 8,8 bbl/día por pozo.</li>
-                  <li>El potencial sobreestima los campos más grandes (Estreito: 12.393 estimados frente a 5.077 bbl/día); para esos volúmenes el lineal (R² = 0,550) es más fiable.</li>
+                  <li>El IC del 95 % de b, [0,935; 1,179], contiene el 1: el óleo es proporcional al número de pozos, unos 8,8 bbl/día por pozo en mediana.</li>
+                  <li>Es el único modelo simple sin campos con distancia de Cook &gt; 1. El R² = 0,550 del lineal lo producen dos campos (sin ellos, 0,205); el logarítmico predice óleo negativo y el término x² del polinómico no es significativo.</li>
+                  <li>Estima la mediana, no la media, y sobreestima los campos más grandes (Estreito: 12.393 estimados frente a 5.077 bbl/día).</li>
                 </ul>
               </article>
               <article class="method-card">
                 <p class="method-card-tag">Regresión múltiple</p>
                 <h4>y = f(pozos, gas)</h4>
                 <ul class="lista-simple">
-                  <li>ŷ = 118,67 + 6,346·x₁ + 0,689·x₂, con R² = 0,781 (ajustado 0,778).</li>
-                  <li>Añadir el gas del campo sube la variación explicada del 55 % al 78 %; ambos coeficientes son significativos (p &lt; 0,0001) y sin multicolinealidad (r(x₁, x₂) = 0,004).</li>
+                  <li>Modelo recomendado: ln ŷ = 3,051 + 0,678·ln x₁ + 0,326·ln x₂, es decir, ŷ = 21,14·x₁<sup>0,678</sup>·x₂<sup>0,327</sup>, con R² = 0,809 (ajustado 0,807) y sin campos influyentes.</li>
+                  <li>Con el gas constante, un 10 % más de pozos se asocia con un 6,8 % más de óleo; con los pozos constantes, un 10 % más de gas, con un 3,3 % más.</li>
+                  <li>El múltiple lineal (R² = 0,781) depende de cuatro campos: sin ellos, R² cae a 0,488 y el coeficiente del gas pasa de 0,69 a 2,45.</li>
                 </ul>
               </article>
             </div>

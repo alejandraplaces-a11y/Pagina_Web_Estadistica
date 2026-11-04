@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Modelo lineal para el óleo de los campos terrestres de Brasil según su número de pozos: cálculo de parámetros, indicadores, residuos y restricciones (enero de 2023).">
+  <title>Modelo lineal · Regresión · Producción terrestre de petróleo en Brasil</title>
+  <script>
+    (function () {
+      try { if (localStorage.getItem('sidebar-expanded') === '1') document.documentElement.classList.add('sidebar-expanded'); } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="css/estadisticaInferencial.css">
+  <link rel="stylesheet" href="css/regresion.css">
+  <script defer src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <script defer src="js/common.js"></script>
+  <script defer src="js/sidebar.js"></script>
+  <script defer src="js/regresionComun.js"></script>
+  <script defer src="js/regresionModelo.js"></script>
+</head>
+<body class="has-sidebar" data-modelo="lineal">
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Navegación lateral">
+      <button class="sidebar-toggle" id="sidebar-toggle" type="button" aria-label="Alternar menú lateral" aria-expanded="false" aria-controls="sidebar">
+        <span class="sidebar-toggle-icon" aria-hidden="true">☰</span>
+      </button>
+      <a class="sidebar-brand" href="index.html" aria-label="Terra, inicio">
+        <img class="sidebar-logo" src="img/logo-universidad.png" alt="" width="34" height="34">
+        <span class="sidebar-brand-text">
+          <span class="sidebar-title">Universidad Central del Ecuador</span>
+        </span>
+      </a>
+      <nav class="sidebar-nav" aria-label="Navegación lateral">
+        <ul class="sidebar-list">
+          <li>
+            <a class="sidebar-link" href="index.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10.4V20h13v-9.6"/></svg>
+              <span class="sidebar-link-label">Inicio</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="introduccion.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v16H5.5C4.7 20 4 19.3 4 18.5Z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v16h5.5c.8 0 1.5-.7 1.5-1.5Z"/></svg>
+              <span class="sidebar-link-label">Introducción</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="mapa.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Z"/><path d="M9 4v14m6-12v14"/></svg>
+              <span class="sidebar-link-label">Mapa Web</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="Estadistica.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18 6H7l6 6-6 6h11"/></svg>
+              <span class="sidebar-link-label">Estadística Descriptiva</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="estadisticaInferencial.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 20h18"/><path d="M5 20c2-9 4-14 7-14s5 5 7 14"/><path d="M12 6v14"/></svg>
+              <span class="sidebar-link-label">Estadística Inferencial</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link is-active" href="regresion.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 20h16"/><path d="M4 20V4"/><circle cx="8" cy="15" r="1.2"/><circle cx="12" cy="11" r="1.2"/><circle cx="17" cy="9" r="1.2"/><path d="M6 17 19 6"/></svg>
+              <span class="sidebar-link-label">Regresión</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="conclusiones.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5 9.5 17 19 7"/></svg>
+              <span class="sidebar-link-label">Conclusiones</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="herramientas.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.7 6.3a4 4 0 0 0 5 5L12 19a2.1 2.1 0 0 1-3-3l7.7-7.7"/><path d="M4 4l5 5"/></svg>
+              <span class="sidebar-link-label">Herramientas</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="equipo.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 5.5a3 3 0 0 1 0 5"/><path d="M18 14.5c1.8.8 3 2.6 3 4.5"/></svg>
+              <span class="sidebar-link-label">Equipo</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <div class="app-main">
+      <div class="sidebar-backdrop" id="sidebar-backdrop" hidden></div>
+      <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+      <header class="site-header">
+        <div class="container header-inner">
+          <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="sidebar">
+            <span aria-hidden="true">☰</span>
+          </button>
+          <a class="brand" href="index.html" aria-label="Terra, inicio">
+            <img class="sidebar-logo" src="img/logo-universidad.png" alt="" width="34" height="34">
+            <span class="brand-word">Universidad Central del Ecuador</span>
+            <span class="brand-caption">Proyecto de Estadística</span>
+          </a>
+        </div>
+      </header>
+
+      <main id="contenido">
+        <section class="page-hero" aria-labelledby="pagina-titulo">
+          <video class="hero-video" autoplay muted loop playsinline preload="auto" aria-hidden="true" tabindex="-1">
+            <source src="video/video-inferencial.mp4" type="video/mp4">
+            Tu navegador no puede reproducir el video.
+          </video>
+          <div class="hero-overlay" aria-hidden="true"></div>
+          <div class="container hero-content">
+            <p class="section-kicker">04 / 4.3.1 · Regresión simple</p>
+            <h1 id="pagina-titulo">Modelo lineal.</h1>
+            <p class="aside-meta">Brasil · Enero de 2023 · 4.3.1</p>
+            <p class="page-lead">y = a + b·x · Óleo del campo (y) frente a su número de pozos (x), n = 165 campos.</p>
+          </div>
+        </section>
+        <nav class="reg-subnav" aria-label="Modelos de regresión">
+          <div class="container reg-subnav-lista">
+            <a href="regresion.html">Resumen</a>
+            <a href="regresion-lineal.html" aria-current="page">Lineal</a>
+            <a href="regresion-potencial.html">Potencial</a>
+            <a href="regresion-exponencial.html">Exponencial</a>
+            <a href="regresion-logaritmica.html">Logarítmica</a>
+            <a href="regresion-polinomica.html">Polinómica</a>
+            <a href="regresion-multiple.html">Múltiple 3D</a>
+          </div>
+        </nav>
+
+        <section class="section resumen-clave" id="resumen-modelo" aria-labelledby="resumen-modelo-titulo">
+          <div class="container">
+            <p class="section-kicker">Dictamen</p>
+            <h2 id="resumen-modelo-titulo" class="subsection-title">Modelo lineal: <span class="veredicto es-descartado">Descartado</span></h2>
+            <dl class="stat-metrics resumen-metrics">
+              <div><dt>Ecuación ajustada</dt><dd class="dd-ecuacion">ŷ = 178,91 + 6,362·x</dd></div>
+              <div><dt>r de Pearson</dt><dd>0,7415</dd></div>
+              <div><dt>R² (determinación)</dt><dd>0,5498</dd></div>
+              <div><dt>Modelo</dt><dd class="dd-ecuacion">y = a + b·x</dd></div>
+            </dl>
+            <aside class="frame-note"><strong>¿Por qué?</strong> La correlación es fuerte (r = 0,742) y la pendiente es significativa, pero el ajuste lo deciden dos campos: Estreito (950 pozos) y Canto do Amaro (707), con distancias de Cook de 3,28 y 3,20. Sin ellos, R² cae de 0,550 a 0,205. Además, predice al menos 185 bbl/día para cualquier campo, cuando los 36 campos de un pozo tienen una mediana de 7,7 bbl/día.</aside>
+            <noscript><p class="status status-error">Las tablas, gráficas y cálculos se generan con JavaScript; el dictamen y las cifras clave están arriba.</p></noscript>
+          </div>
+        </section>
+
+        <section class="section cream" id="modelo" aria-labelledby="modelo-titulo">
+          <div class="container">
+            <p class="section-kicker">1 · Modelo</p>
+            <h2 id="modelo-titulo">Modelo y linealización</h2>
+            <div class="method-grid metodo-tres">
+              <article class="method-card">
+                <p class="method-card-tag">Modelo</p>
+                <h4>y = f(x)</h4>
+                <p class="method-symbolic">y = a + b·x</p>
+              </article>
+              <article class="method-card teal">
+                <p class="method-card-tag">Forma lineal</p>
+                <h4>Para mínimos cuadrados</h4>
+                <p class="method-symbolic">y = a + b·x</p>
+                <p class="stat-notation">Ninguna: X = x, Y = y.</p>
+              </article>
+              <article class="method-card">
+                <p class="method-card-tag">Supuesto</p>
+                <h4>Qué afirma el modelo</h4>
+                <p>Cada pozo añade la misma cantidad b de óleo, sin importar el tamaño del campo.</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="calculo" aria-labelledby="calculo-titulo">
+          <div class="container">
+            <p class="section-kicker">2 · Parámetros</p>
+            <h2 id="calculo-titulo">Cálculo de parámetros paso a paso</h2>
+            <p id="estado-calculo" class="status" role="status">Calculando sumatorias…</p>
+            <div id="contenido-calculo" class="calculo-grid" hidden>
+              <div class="table-scroll tabla-mini">
+                <table class="data-table">
+                  <caption>Sumatorias (n = <span class="reg-n">165</span>)</caption>
+                  <tbody id="cuerpo-sumas"></tbody>
+                </table>
+              </div>
+              <div class="panel-calculo">
+                <h3>Procedimiento</h3>
+                <ol class="pasos" id="pasos-calculo"></ol>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section cream" id="ajuste" aria-labelledby="ajuste-titulo">
+          <div class="container">
+            <p class="section-kicker">3 · Ajuste gráfico</p>
+            <h2 id="ajuste-titulo">Datos y curva ajustada</h2>
+            <p id="estado-ajuste" class="status" role="status">Dibujando el ajuste…</p>
+            <div id="contenido-ajuste" hidden>
+              <div class="chart-card">
+                <div class="chart-head">
+                  <div><p class="section-kicker">Dispersión</p><h3 class="chart-title">ŷ = 178,91 + 6,362·x</h3></div>
+                  <div class="segmentado" role="group" aria-label="Escala de los ejes">
+                    <button type="button" class="segmento" data-valor="linear" aria-pressed="true">Escala lineal</button>
+                    <button type="button" class="segmento" data-valor="log" aria-pressed="false">Escala log-log</button>
+                  </div>
+                </div>
+                <div id="grafica-ajuste" class="chart-box chart-box-tall" role="img" aria-label="Diagrama de dispersión del óleo de cada campo frente a sus pozos con la curva del modelo lineal"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="indicadores" aria-labelledby="indicadores-titulo">
+          <div class="container">
+            <p class="section-kicker">4 · Indicadores</p>
+            <h2 id="indicadores-titulo">Pearson, determinación, no determinación y significancia</h2>
+            <p id="estado-indicadores" class="status" role="status">Calculando indicadores…</p>
+            <div id="contenido-indicadores" hidden>
+              <dl class="stat-metrics test-metrics">
+                <div><dt>r de Pearson</dt><dd id="ind-r"></dd></div>
+                <div><dt>R² = r² (determinación)</dt><dd id="ind-r2"></dd></div>
+                <div><dt>1 − R² (no determinación)</dt><dd id="ind-k2"></dd></div>
+                <div><dt>Error estándar de la estimación</dt><dd id="ind-s"></dd></div>
+              </dl>
+              <p class="stat-scope" id="prueba-r"></p>
+              <div class="table-scroll">
+                <table class="data-table">
+                  <caption>Coeficientes con error estándar, prueba t (gl = <span id="ind-gl"></span>; t crítico = <span id="ind-tc"></span>) e IC del 95 %</caption>
+                  <thead><tr><th scope="col">Coeficiente</th><th scope="col" class="numero">Estimación</th><th scope="col" class="numero">Error estándar</th><th scope="col" class="numero">t</th><th scope="col" class="numero">Valor p</th><th scope="col" class="numero">IC 95 %</th><th scope="col">Decisión</th></tr></thead>
+                  <tbody id="cuerpo-coeficientes"></tbody>
+                </table>
+              </div>
+              <p class="source">r, R² y el error estándar se calculan en la forma linealizada (y = a + b·x), que es la que minimiza el ajuste. Para comparar modelos con distinta transformación de y, ver la <a href="regresion.html#comparacion">tabla comparativa</a>.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section cream" id="diagnostico" aria-labelledby="diagnostico-titulo">
+          <div class="container">
+            <p class="section-kicker">5 · Diagnóstico</p>
+            <h2 id="diagnostico-titulo">Residuos y campos influyentes</h2>
+            <p id="estado-diagnostico" class="status" role="status">Analizando residuos…</p>
+            <div id="contenido-diagnostico" hidden>
+              <div class="chart-card">
+                <p class="section-kicker">Residuos</p>
+                <h3 class="chart-title">Residuo de cada campo frente a x</h3>
+                <div id="grafica-residuos" class="chart-box" role="img" aria-label="Gráfica de residuos del modelo frente al número de pozos"></div>
+              </div>
+              <p class="stat-scope" id="nota-normalidad"></p>
+              <div class="table-scroll">
+                <table class="data-table">
+                  <caption>Los 5 campos con mayor distancia de Cook</caption>
+                  <thead><tr><th scope="col">Campo</th><th scope="col" class="numero">x</th><th scope="col" class="numero">y (bbl/día)</th><th scope="col" class="numero">Palanca hᵢ</th><th scope="col" class="numero">D de Cook</th><th scope="col">Lectura</th></tr></thead>
+                  <tbody id="cuerpo-influyentes"></tbody>
+                </table>
+              </div>
+              <aside class="frame-note"><p id="nota-sensibilidad"></p></aside>
+              <p class="source">D de Cook mide cuánto cambian los coeficientes si se quita el campo. D &gt; 1: el campo por sí solo cambia el ajuste.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="restricciones" aria-labelledby="restricciones-titulo">
+          <div class="container">
+            <p class="section-kicker">6 · Restricciones</p>
+            <h2 id="restricciones-titulo">Restricciones y lectura del modelo</h2>
+            <ul class="lista-restricciones">
+              <li>La ordenada a = 178,91 bbl/día sería el óleo de un campo sin pozos: no tiene sentido físico.</li>
+              <li>Error relativo mediano del 178 %: sobreestima mucho los campos pequeños, que son la mayoría (mediana: 6 pozos).</li>
+              <li>Residuos no normales (Shapiro-Wilk, p &lt; 0,0001) y con dispersión creciente: las pruebas t y los intervalos no son fiables.</li>
+              <li>b = 6,36 bbl/día por pozo adicional es un promedio dominado por los dos campos más grandes.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="section cream" id="prediccion" aria-labelledby="prediccion-titulo">
+          <div class="container">
+            <p class="section-kicker">7 · Predicción</p>
+            <h2 id="prediccion-titulo">Estima el óleo de un campo</h2>
+            <p id="estado-prediccion" class="status" role="status">Preparando la calculadora…</p>
+            <div id="contenido-prediccion" hidden>
+              <article class="method-card teal calculator-card calculadora-sola">
+                <p class="method-card-tag">Calculadora</p>
+                <h4>ŷ = 178,91 + 6,362·x</h4>
+                <div class="calculator-fields">
+                  <label>x: pozos del campo<input id="calc-x" type="number" min="1" step="1" value="50" inputmode="numeric"></label>
+                </div>
+                <p class="calculator-result" id="calc-resultado" role="status" aria-live="polite"></p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <nav class="reg-paginacion container" aria-label="Paginación de modelos">
+          <a href="regresion.html" rel="prev"><span>← Anterior</span>Resumen de la regresión</a>
+          <a href="regresion-potencial.html" rel="next"><span>Siguiente →</span>Modelo potencial</a>
+        </nav>
+      </main>
+
+      <footer class="site-footer">
+        <div class="container footer-row">
+          <div>
+            <p>© 2026 Integrantes: <span class="footer-members">Génesis Once, Esther Places, Evelyn Rodríguez, Andrea Sarmiento, Melany Zapata</span></p>
+            <p class="footer-location">Proyecto académico · Brasil, enero de 2023</p>
+          </div>
+          <div>
+            <p class="footer-label">Fuente</p>
+            <p>ANP (Brasil) · Agregación por pozo y Estado</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+</body>
+</html>
