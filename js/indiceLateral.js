@@ -5,11 +5,13 @@
   if (!indice) return;
 
   const desplegable = indice.querySelector('details');
-  const escritorio = window.matchMedia('(min-width: 1200px)');
+  const escritorio = window.matchMedia('(min-width: 900px)');
   const enlaces = [...indice.querySelectorAll('.indice-lista a')];
 
   function ajustarApertura() {
-    if (escritorio.matches) desplegable.open = true;
+    // Abierto en escritorio (columna fija) y plegado en tablet/móvil
+    // (barra superior), incluso si se cambia el tamaño de la ventana.
+    desplegable.open = escritorio.matches;
   }
   ajustarApertura();
   escritorio.addEventListener('change', ajustarApertura);

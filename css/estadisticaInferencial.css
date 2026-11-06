@@ -87,7 +87,15 @@ body { color: var(--ink-soft); }
 .data-table tbody tr.is-best td { background: rgba(140, 109, 70, 0.08); font-weight: 650; }
 
 /* Modelo continuo: restricciones */
-.restriction-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin-top: 24px; padding: 0 16px; }
+.restriction-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin-top: 24px; }
+
+/* Las tarjetas de restricciones no viven dentro de .method-grid, así que
+   heredaban el fondo blanco de .section.cream .method-card pero se quedaban
+   sin marco, radio ni padding. Se replican aquí los mismos estilos de tarjeta. */
+.restriction-grid article.method-card { background: #FFFFFF; border: 1px solid var(--line); border-top: 3px solid var(--oil); border-radius: 12px; padding: 28px; min-width: 0; }
+.restriction-grid article .method-card-tag { font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--oil-deep); }
+.restriction-grid article.method-card h4 { margin: 10px 0 12px; font-family: var(--serif); font-size: 20px; font-weight: 500; letter-spacing: -0.02em; color: var(--ink); }
+.restriction-grid article.method-card p { max-width: 46ch; color: var(--ink-soft); font-size: 13px; line-height: 1.8; }
 
 /* Calculadoras */
 .calculator-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 6px; }
@@ -108,17 +116,40 @@ body { color: var(--ink-soft); }
    Índice lateral fijo de la inferencial (sección 4.2)
    ============================================================ */
 
-/* Se oculta el índice en regresión.html; el cuerpo usa una sola columna. */
+/* Regresión también usa .inferencial-cuerpo pero no incluye el índice, así
+   que el layout de dos columnas se limita a .con-indice. */
 .inferencial-cuerpo { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; }
 .inferencial-secciones { min-width: 0; width: 100%; max-width: none; }
 
-.indice-lateral { display: none; }
+/* Móvil y tablet: el índice es una barra plegable pegada bajo la cabecera. */
+.indice-lateral { position: sticky; top: 76px; z-index: 5; background: var(--paper-2); border-bottom: 1px solid var(--line); }
+.indice-lateral details { width: min(1120px, calc(100% - 32px)); margin-inline: auto; }
+.indice-lateral summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 0; font-family: var(--sans); font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--oil-deep); cursor: pointer; list-style: none; }
+.indice-lateral summary::-webkit-details-marker { display: none; }
+.indice-lateral summary::after { content: "▾"; font-size: 14px; transition: transform 0.2s; }
+.indice-lateral details[open] summary::after { transform: rotate(180deg); }
+.indice-contenido { max-height: 60vh; overflow-y: auto; padding-bottom: 16px; }
+.indice-grupo + .indice-grupo { margin-top: 18px; }
+.indice-grupo-titulo { margin: 0 0 6px; font-family: var(--sans); font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); }
+.indice-lista { margin: 0; padding: 0; list-style: none; border-left: 1px solid var(--line); }
+.indice-lista a { display: grid; grid-template-columns: 46px minmax(0, 1fr); gap: 6px; margin-left: -1px; padding: 7px 10px 7px 12px; border-left: 2px solid transparent; font-size: 13px; line-height: 1.4; color: var(--ink-soft); text-decoration: none; }
+.indice-lista a:hover { color: var(--ink); background: rgba(11, 34, 30, 0.05); }
+.indice-lista a.is-active, .indice-lista a[aria-current="location"] { border-left-color: var(--oil); background: rgba(140, 109, 70, 0.08); color: var(--ink); font-weight: 600; }
+.indice-numero { font-family: var(--sans); font-size: 11px; color: var(--oil-deep); padding-top: 1px; }
+.indice-estado { display: inline-block; margin-left: 6px; padding: 1px 6px; border-radius: 999px; background: var(--paper); font-size: 10px; font-weight: 600; color: var(--ink-soft); vertical-align: 1px; }
 
-/* Escritorio: layout de una sola columna, el contenido ocupa todo el ancho. */
-@media (min-width: 1200px) {
-  .inferencial-cuerpo { grid-template-columns: minmax(0, 1fr); }
+/* Escritorio y portátiles: el índice va como columna fija a la derecha. */
+@media (min-width: 900px) {
+  .inferencial-cuerpo.con-indice { grid-template-columns: minmax(0, 1fr) clamp(220px, 20vw, 280px); align-items: start; }
 
-  .inferencial-secciones { width: 100%; max-width: none; }
+  .con-indice .indice-lateral { grid-column: 2; grid-row: 1; top: 88px; max-height: calc(100vh - 104px); margin: 28px 24px 28px 0; padding: 20px 14px 20px 18px; overflow-y: auto; background: var(--paper-2); border: 1px solid var(--line); border-radius: 12px; }
+  .con-indice .inferencial-secciones { grid-column: 1; grid-row: 1; }
+  .con-indice .indice-lateral details { width: auto; }
+  .con-indice .indice-lateral summary { cursor: default; pointer-events: none; }
+  .con-indice .indice-lateral summary::after { display: none; }
+  .con-indice .indice-contenido { max-height: none; overflow: visible; padding-bottom: 0; }
+  /* Las secciones comparten el ancho con el índice. */
+  .con-indice .inferencial-secciones .container { width: calc(100% - 64px); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -177,4 +208,5 @@ body { color: var(--ink-soft); }
 @media (max-width: 560px) {
   .var-card { padding: 0 14px; }
   .var-card > summary { grid-template-columns: minmax(0, 1fr); }
+  .restriction-grid article.method-card { padding: 22px; }
 }
