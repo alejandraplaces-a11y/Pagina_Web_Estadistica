@@ -174,20 +174,6 @@
           </div>
         </section>
 
-        <section class="section" id="reproducir" aria-labelledby="reproducir-titulo">
-          <div class="container">
-            <p class="section-kicker">Reproducibilidad</p>
-            <h2 id="reproducir-titulo" class="subsection-title">Reproducir el análisis</h2>
-            <p>Desde la raíz del repositorio:</p>
-            <pre class="code-block" tabindex="0"><code>python3 -m venv .venv &amp;&amp; .venv/bin/pip install pandas numpy scipy
-.venv/bin/python scripts/1_preprocesamiento_mapa.py data/2023_01_producao_Terra.csv
-.venv/bin/python scripts/2_descriptiva_inferencial.py data/2023_01_producao_Terra.csv --anual datos_2023/
-.venv/bin/python scripts/3_regresion.py data/2023_01_producao_Terra.csv
-python3 -m http.server 8000</code></pre>
-            <p class="frame-note">El último comando sirve el sitio en <code>http://localhost:8000/</code>; abrirlo con <code>file://</code> no funciona porque las páginas leen JSON locales.</p>
-          </div>
-        </section>
-
         <div class="container"><p class="source"><span>Fuente: ANP (Brasil), Dados abertos.</span></p></div>
       </main>
 
