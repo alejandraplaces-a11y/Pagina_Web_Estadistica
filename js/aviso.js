@@ -1,8 +1,10 @@
 (() => {
   'use strict';
 
-  // Aviso que aparece al cargar cualquier página HTML.
-  // Se muestra en cada navegación/recarga de página.
+  // Aviso que solo aparece en la primera visita al sitio.
+  // Se guarda en localStorage para no volver a mostrarlo.
+  const STORAGE_KEY = 'terra-aviso-visto';
+
   const CONTENIDO = {
     kicker: 'Aviso',
     titulo: 'Proyecto académico',
@@ -10,6 +12,21 @@
       'Este sitio presenta un análisis estadístico de la producción terrestre de hidrocarburos en Brasil con datos abiertos de la ANP (enero de 2023). Su contenido es de carácter académico e informativo.',
     boton: 'Entendido'
   };
+
+  function yaVisto() {
+    try {
+      return localStorage.getItem(STORAGE_KEY) === '1';
+    } catch (e) {
+      // Si localStorage no está disponible, volvemos a mostrar siempre.
+      return false;
+    }
+  }
+
+  function marcarVisto() {
+    try {
+      localStorage.setItem(STORAGE_KEY, '1');
+    } catch (e) {}
+  }
 
   function crearAviso() {
     const overlay = document.createElement('div');
@@ -54,6 +71,7 @@
 
     function cerrar() {
       if (!overlay.isConnected) return;
+      marcarVisto();
       document.body.classList.remove('aviso-abierto');
       overlay.remove();
       document.removeEventListener('keydown', alTeclar);
@@ -83,12 +101,15 @@
   }
 
   function iniciar() {
-    // Siempre muestra el aviso al cargar la página (no usa sessionStorage).
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', mostrar, { once: true });
-    } else {
-      mostrar();
+    // Solo muestra el aviso si el usuario aún no lo había visto.
+    if (!yaVisto()) {
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', mostrar, { once: true });
+      } else {
+        mostrar();
+      }
     }
+    // Si ya lo vio, nada se hace; el aviso no aparece en ninguna carga.
   }
 
   iniciar();
