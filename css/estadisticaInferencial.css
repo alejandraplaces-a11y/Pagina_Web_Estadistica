@@ -185,6 +185,18 @@ body { color: var(--ink-soft); }
 .resumen-clave { padding-top: 48px; padding-bottom: 48px; }
 .resumen-metrics { margin-top: 20px; }
 
+/* Optimización de renderizado para las métricas animadas en la inferencial:
+   - font-variant-numeric: tabular-nums evita que los números desplacen
+     el texto circundante al cambiar de ancho (ej. 999 → 1.000).
+   - will-change + transform: translateZ(0) activa la aceleración de hardware
+     en el compositor GPU, haciendo la animación más fluida a 60 FPS. */
+.stat-metrics .metric-value {
+  font-variant-numeric: tabular-nums;
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  transition-property: transform, opacity;
+}
+
 /* Tarjetas desplegables por variable o modelo (elemento details). */
 .var-card { margin-top: 16px; border: 1px solid var(--line); border-left: 3px solid var(--oil); border-radius: 12px; padding: 0 20px; }
 .var-card > summary { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; align-items: baseline; padding: 18px 28px 18px 0; cursor: pointer; list-style: none; position: relative; }

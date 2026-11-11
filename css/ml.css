@@ -94,4 +94,16 @@
 .colab-link:hover { color: var(--oil); }
 
 /* Ajustes de hero video para páginas ML */
-.hero-video { height: 180px; object-fit: cover; }
+.page-hero {
+  position: relative;
+  overflow: hidden;
+}
+.hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(1.45) saturate(1.1);
+  z-index: 0;
+}
