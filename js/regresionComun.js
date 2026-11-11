@@ -117,11 +117,9 @@ window.Regresion = (function () {
       document.querySelectorAll('.reg-n').forEach(el => { el.textContent = fmt.entero.format(d.n); });
       const dibujos = alCargar(d) || [];
       secciones.forEach(mostrar);
-      if (!window.Plotly || typeof window.Plotly.react !== 'function') {
-        throw new Error('No se descargó Plotly desde cdn.plot.ly. Comprueba la conexión a Internet.');
-      }
+      // Las tablas ya están visibles; si Plotly falta, solo se avisa en las gráficas.
       // Se dibuja con los contenedores visibles para que Plotly mida su ancho real.
-      await Promise.all(dibujos.map(f => f()));
+      await dibujarGraficas(dibujos);
     } catch (error) {
       secciones.forEach((id, i) => {
         mostrarError(`estado-${id}`, i === 0

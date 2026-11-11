@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sección 4.3.2 Machine Learning: modelo de predicción multivariable de producción de óleo por pozo (enero-diciembre 2023).">
+  <title>Machine Learning · Producción terrestre de petróleo en Brasil</title>
+  <script>
+    (function () {
+      try { if (localStorage.getItem('sidebar-expanded') === '1') document.documentElement.classList.add('sidebar-expanded'); } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="css/estadisticaInferencial.css">
+  <link rel="stylesheet" href="css/regresion.css">
+  <link rel="stylesheet" href="css/ml.css">
+  <script defer src="js/plotly.min.js"></script>
+  <script defer src="js/common.js"></script>
+  <script defer src="js/sidebar.js"></script>
+  <script defer src="js/aviso.js"></script>
+  <script defer src="js/main.js"></script>
+</head>
+<body class="has-sidebar">
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Navegación lateral">
+      <button class="sidebar-toggle" id="sidebar-toggle" type="button" aria-label="Alternar menú lateral" aria-expanded="false" aria-controls="sidebar">
+        <span class="sidebar-toggle-icon" aria-hidden="true">☰</span>
+      </button>
+      <a class="sidebar-brand" href="index.html" aria-label="Terra, inicio">
+        <img class="sidebar-logo" src="img/logo-universidad.png" alt="" width="34" height="34">
+        <span class="sidebar-brand-text">
+          <span class="sidebar-title">Universidad Central del Ecuador</span>
+        </span>
+      </a>
+      <nav class="sidebar-nav" aria-label="Navegación lateral">
+        <ul class="sidebar-list">
+          <li>
+            <a class="sidebar-link" href="index.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10.4V20h13v-9.6"/></svg>
+              <span class="sidebar-link-label">Inicio</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="introduccion.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v16H5.5C4.7 20 4 19.3 4 18.5Z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v16h5.5c.8 0 1.5-.7 1.5-1.5Z"/></svg>
+              <span class="sidebar-link-label">Introducción</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="mapa.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Z"/><path d="M9 4v14m6-12v14"/></svg>
+              <span class="sidebar-link-label">Mapa Web</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="Estadistica.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18 6H7l6 6-6 6h11"/></svg>
+              <span class="sidebar-link-label">Estadística Descriptiva</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="estadisticaInferencial.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 20h18"/><path d="M5 20c2-9 4-14 7-14s5 5 7 14"/><path d="M12 6v14"/></svg>
+              <span class="sidebar-link-label">Estadística Inferencial</span>
+            </a>
+          </li>
+          </li>
+            <a class="sidebar-link" href="regresion.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 20h16"/><path d="M4 20V4"/><circle cx="8" cy="15" r="1.2"/><circle cx="12" cy="11" r="1.2"/><circle cx="17" cy="9" r="1.2"/><path d="M6 17 19 6"/></svg>
+              <span class="sidebar-link-label">Regresión</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link is-active" href="machine-learning.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 20h16"/><path d="M4 20V4"/><circle cx="8" cy="15" r="1.2"/><circle cx="12" cy="11" r="1.2"/><circle cx="17" cy="9" r="1.2"/><path d="M6 17 19 6"/></svg>
+              <span class="sidebar-link-label">Machine Learning</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="conclusiones.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5 9.5 17 19 7"/></svg>
+              <span class="sidebar-link-label">Conclusiones</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="herramientas.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.7 6.3a4 4 0 0 0 5 5L12 19a2.1 2.1 0 0 1-3-3l7.7-7.7"/><path d="M4 4l5 5"/></svg>
+              <span class="sidebar-link-label">Herramientas</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="equipo.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 5.5a3 3 0 0 1 0 5"/><path d="M18 14.5c1.8.8 3 2.6 3 4.5"/></svg>
+              <span class="sidebar-link-label">Equipo</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <div class="app-main">
+      <div class="sidebar-backdrop" id="sidebar-backdrop" hidden></div>
+      <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+      <header class="site-header">
+        <div class="container header-inner">
+          <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="sidebar">
+            <span aria-hidden="true">☰</span>
+          </button>
+          <a class="brand" href="index.html" aria-label="Terra, inicio">
+            <img class="sidebar-logo" src="img/logo-universidad.png" alt="" width="34" height="34">
+            <span class="brand-word">Universidad Central del Ecuador</span>
+            <span class="brand-caption">Proyecto de Estadística</span>
+          </a>
+        </div>
+      </header>
+
+      <main id="contenido">
+        <section class="page-hero" aria-labelledby="pagina-titulo">
+          <video class="hero-video" autoplay muted loop playsinline preload="auto" aria-hidden="true" tabindex="-1">
+            <source src="video/video-.mp4" type="video/mp4">
+            Tu navegador no puede reproducir el video.
+          </video>
+          <div class="hero-overlay" aria-hidden="true"></div>
+          <div class="container hero-content">
+            <p class="section-kicker">04 / 4.3.2</p>
+            <h1 id="pagina-titulo">Machine Learning</h1>
+            <p class="aside-meta">Brasil · 2023 · Random Forest y Gradient Boosting</p>
+            <p class="page-lead">Predicción de la producción de óleo del pozo siguiente usando variables del pozo actual y anterior.</p>
+          </div>
+        </section>
+
+        <section class="section resumen-clave" aria-labelledby="resumen-clave-titulo">
+          <div class="container">
+            <p class="section-kicker">En cifras</p>
+            <h2 id="resumen-clave-titulo" class="subsection-title">Resultados principales</h2>
+            <dl class="stat-metrics resumen-metrics">
+              <div><dt>58.302 pares pozo-mes</dt><dd>Entrenamiento y prueba con los 12 meses de 2023</dd></div>
+              <div><dt>Prueba oct–dic 2023</dt><dd>Últimos 3 meses evaluados independientemente</dd></div>
+              <div><dt>Regresión: Random Forest</dt><dd>R² en log = 0,853 (frente a 0,827 del modelo base)</dd></div>
+              <div><dt>Clasificación: Gradient Boosting</dt><dd>Anticipa el 55 % de los pozos que dejan de producir óleo</dd></div>
+            </dl>
+            <p class="stat-scope">Los modelos se eligieron en septiembre (validación) y se evaluaron una sola vez en octubre–diciembre (prueba).</p>
+          </div>
+        </section>
+
+        <section class="section" id="regresion-card" aria-labelledby="regresion-card-titulo">
+          <div class="container">
+            <p class="section-kicker">Regresión: ¿Cuánto óleo producirá un pozo el mes siguiente?</p>
+            <h2 id="regresion-card-titulo" class="subsection-title">Predicción de producción continua</h2>
+            <div class="method-card">
+              <h3>Pregunta clave</h3>
+              <p>¿Cuánto óleo producirá un pozo el mes siguiente (bbl/día)?</p>
+              <dl class="stat-metrics">
+                <div><dt>Modelo elegido</dt><dd>Random Forest</dd></div>
+                <div><dt>R² en log</dt><dd>0,853</dd></div>
+                <div><dt>MAE vs base</dt><dd>Mejora del 1,5 %</dd></div>
+              </dl>
+            </div>
+          </div>
+        </section>
+
+        <section class="section cream" id="clasificacion-card" aria-labelledby="clasificacion-card-titulo">
+          <div class="container">
+            <p class="section-kicker">Clasificación: ¿Producirá óleo un pozo el mes siguiente?</p>
+            <h2 id="clasificacion-card-titulo" class="subsection-title">Predicción de cambio de producción</h2>
+            <div class="method-card">
+              <h3>Pregunta clave</h3>
+              <p>¿Producirá óleo un pozo el mes siguiente (clase: Sin óleo / Con óleo)?</p>
+              <dl class="stat-metrics">
+                <div><dt>Modelo elegido</dt><dd>Gradient Boosting</dd></div>
+                <div><dt>Pozos anticipados</dt><dd>55 % (167 de 304)</dd></div>
+                <div><dt>Clase positiva</dt><dd>Sin óleo</dd></div>
+              </dl>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="datos-metodo" aria-labelledby="datos-metodo-titulo">
+          <div class="container">
+            <p class="section-kicker">Datos y método</p>
+            <h2 id="datos-metodo-titulo" class="subsection-title">Información del estudio</h2>
+            <ul>
+              <li><strong>Unidad:</strong> pozo-mes. Los 12 archivos mensuales de 2023 de la ANP (producción terrestre por pozo).</li>
+              <li><strong>Diseño de previo a posteriori:</strong> Cada fila usa el mes t y el mes t − 1 de un pozo para predecir el mes t + 1. Ninguna variable de entrada se mide en el mes que se predice: no hay fuga de datos. Esto importa porque en otros proyectos usar la producción para predecir el nivel de producción da un acierto falso del 99 %.</li>
+              <li><strong>Variables de entrada:</strong> tabla siguiente.</li>
+              <li><strong>División temporal:</strong> Entrenamiento: marzo–agosto (32 302 filas). Validación: septiembre (6 302 filas; elegir hiperparámetros y umbral). Prueba: octubre–diciembre (19 698 filas; evaluación final). Pozos‑mes sin mes siguiente: 1 583 no entran en el cálculo.</li>
+              <li><strong>Modelos comparados:</strong> Persistencia (mes siguiente = actual), modelo lineal (Ridge / regresión logística), Random Forest, Gradient Boosting, red neuronal MLP. Los modelos se eligen en validación y se evalúan una sola vez en la prueba.</li>
+            </ul>
+            <div class="table-scroll">
+              <table class="data-table">
+                <caption>Variables de entrada</caption>
+                <thead><tr><th scope="col">Variable</th><th scope="col">Descripción</th></tr></thead>
+                <tbody>
+                  <tr><td>oleo</td><td>Óleo del pozo en el mes t (bbl/día)</td></tr>
+                  <tr><td>condensado</td><td>Condensado en t (bbl/día)</td></tr>
+                  <tr><td>gas</td><td>Gas natural total en t (Mm³/día)</td></tr>
+                  <tr><td>agua</td><td>Agua en t (bbl/día)</td></tr>
+                  <tr><td>horas</td><td>Horas de producción en t</td></tr>
+                  <tr><td>api</td><td>Grado API del crudo</td></tr>
+                  <tr><td>oleo_ant</td><td>Óleo en el mes t − 1 (bbl/día)</td></tr>
+                  <tr><td>horas_ant</td><td>Horas de producción en t − 1</td></tr>
+                  <tr><td>presente_ant</td><td>El pozo aparecía en t − 1 (1/0)</td></tr>
+                  <tr><td>pozos_campo</td><td>Pozos de su campo en t</td></tr>
+                  <tr><td>estado</td><td>Estado</td></tr>
+                  <tr><td>bacia</td><td>Cuenca</td></tr>
+                  <tr><td>operador</td><td>Operador</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="source">Fuente: 2023_01_producao_Terra.csv (ANP). Unidad estadística: pozo‑mes; n = 58 302 (con mes siguiente).</p>
+          </div>
+        </section>
+
+        <section class="section cream" id="notebooks" aria-labelledby="notebooks-titulo">
+          <div class="container">
+            <p class="section-kicker">Notebooks</p>
+            <h2 id="notebooks-titulo" class="subsection-title">Proyectos en Google Colab</h2>
+            <p>Los notebooks generan los datos JSON y permiten reproducir los resultados.</p>
+            <div class="colab-cards">
+              <div class="colab-card">
+                <a href="https://colab.research.google.com/drive/1t54nnWKFG3VpGG9Cr4hSeT6RBh7oEtzi?usp=sharing" target="_blank" rel="noopener" class="colab-link">
+                  <svg class="colab-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5.25c2.71 0 4.92 2.2 4.92 4.92v4.92h-2.15c.57-.98.83-2.22.83-3.85 0-1.49-.55-2.65-1.38-3.55v-1.88c0-.31-.03-.62-.08-.93L12 3.3l-1.07.95c-.13.25-.3.5-.5.73-.5 1.46-.88 2.86-1.42 3.98l.004.21c0 1.06.86 1.93 1.92 1.93s1.92-.87 1.92-1.93c0-.26 0-.51-.004-.76l-.004-.21c-.54-1.13-1.25-2.1-.93-3.42 0-.65.37-1.19.85-1.55M12 8l-1.46 2.58.015 1.25h3.13l.015-1.25L12 8zM12 1.875C6.48 1.875 1.875 6.48 1.875 12s4.605 10.125 10.125 10.125 10.125-4.605 10.125-10.125S17.515 1.875 12 1.875z"/></svg>
+                  <span>Regresión</span>
+                </a>
+              </div>
+              <div class="colab-card">
+                <a href="https://colab.research.google.com/drive/10OLvLHJ0_awf7DrKdBrOLv8wGcsf124s?usp=sharing" target="_blank" rel="noopener" class="colab-link">
+                  <svg class="colab-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5.25c2.71 0 4.92 2.2 4.92 4.92v4.92h-2.15c.57-.98.83-2.22.83-3.85 0-1.49-.55-2.65-1.38-3.55v-1.88c0-.31-.03-.62-.08-.93L12 3.3l-1.07.95c-.13.25-.3.5-.5.73-.5 1.46-.88 2.86-1.42 3.98l.004.21c0 1.06.86 1.93 1.92 1.93s1.92-.87 1.92-1.93c0-.26 0-.51-.004-.76l-.004-.21c-.54-1.13-1.25-2.1-.93-3.42 0-.65.37-1.19.85-1.55M12 8l-1.46 2.58.015 1.25h3.13l.015-1.25L12 8zM12 1.875C6.48 1.875 1.875 6.48 1.875 12s4.605 10.125 10.125 10.125 10.125-4.605 10.125-10.125S17.515 1.875 12 1.875z"/></svg>
+                  <span>Clasificación</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section cream" id="restricciones" aria-labelledby="restricciones-titulo">
+          <div class="container">
+            <p class="section-kicker">Restricciones</p>
+            <h2 id="restricciones-titulo" class="subsection-title">Restricciones generales</h2>
+            <ul class="lista-restricciones">
+              <li><strong>Evaluación temporal:</strong> Los modelos se eligieron en septiembre y se evaluaron una sola vez en octubre–diciembre. No se reentrenaron con los datos de prueba.</li>
+              <li><strong>Solo pozos que siguen reportando:</strong> No predice cierres ni pozos nuevos; solo considera pozos que tienen producción reportada en los tres meses siguientes.</li>
+              <li><strong>Un solo año:</strong> Los resultados corresponden a 2023; no se garantiza que se mantengan en otros años.</li>
+              <li><strong Asociación, no causalidad:</strong> El modelo encuentra asociaciones entre variables, pero la producción de un pozo depende de muchos factores no incluídos.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="section cream" id="comunicacion" aria-labelledby="comunicacion-titulo">
+          <div class="container">
+            <p class="section-kicker">Resultados en palabras simples</p>
+            <h2 id="comunicacion-titulo" class="subsection-title">Tarjetas de comunicación</h2>
+            <dl class="stat-metrics resumen-metrics">
+              <div><dt class="cifra">3,4 bbl/día</dt><dt class="titulo">Error promedio</dt><dd class="texto">En promedio, la predicción del próximo mes se aleja 3,4 barriles por día del valor real (un pozo típico produce unos 5,8 bbl/día).</dd></div>
+              <div><dt class="cifra">6 de cada 10</dt><dt class="titulo">Pozos bien estimados</dt><dd class="texto">En 6 de cada 10 pozos con producción, la predicción queda a menos de un 30 % del valor real.</dd></div>
+              <div><dt class="cifra">1,5 %</dt><dt class="titulo">Mejora frente a lo simple</dt><dd class="texto">Suponer que el pozo repite la producción de este mes ya es una buena predicción. El modelo (Random Forest) reduce el error en un 1,5 %: ayuda, pero poco.</dd></div>
+              <div><dt class="cifra">Producción actual</dt><dt class="titulo">Lo que más influye</dt><dd class="texto">La producción de este mes es lo que más pesa en la predicción. Le siguen la del mes anterior y las horas trabajadas este mes. La producción de un pozo cambia poco de un mes a otro.</dd></div>
+            </dl>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="container footer-row">
+          <div>
+            <p>© 2026 Integrantes: <span class="footer-members">Génesis Once, Esther Places, Evelyn Rodríguez, Andrea Sarmiento, Melany Zapata</span></p>
+            <p class="footer-location">Proyecto académico · Brasil, enero de 2023</p>
+            <p class="footer-location">Universidad Central del Ecuador · FIGEMPA · <a href="equipo.html">Equipo</a></p>
+          </div>
+          <div>
+            <p class="footer-label">Fuente</p>
+            <p>ANP (Brasil) · Agregación por pozo y Estado</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+</body>
+</html>

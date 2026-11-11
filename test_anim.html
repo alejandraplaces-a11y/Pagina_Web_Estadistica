@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Test Animation</title>
+</head>
+<body>
+  <dl class="stat-metrics">
+    <div><dt>Muestra · n</dt><dd><span class="metric-value" data-target="5308" data-decimals="0">5.308</span> <span class="metric-unit">pozos</span></dd></div>
+    <div><dt>Media del óleo</dt><dd><span class="metric-value" data-target="11.95" data-decimals="2">11,95</span> <span class="metric-unit">bbl/día</span></dd></div>
+    <div><dt>Mediana del óleo</dt><dd><span class="metric-value" data-target="4.42" data-decimals="2">4,42</span> <span class="metric-unit">bbl/día</span></dd></div>
+  </dl>
+
+  <script>
+    // Minimal test
+    'use strict';
+    
+    const DURATION = 1400;
+    const easeOutCubic = t => 1 - Math.pow(1 - t, 3);
+    
+    function formatNumber(value, decimals) {
+      const fixed = value.toFixed(decimals);
+      const [integer, fraction] = fixed.split('.');
+      const grouped = integer.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+      return fraction ? grouped + ',' + fraction : grouped;
+    }
+    
+    // Wait for DOM
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function() {
+        animateNumbers();
+      });
+    } else {
+      animateNumbers();
+    }
+    
+    function animateNumbers() {
+      const elements = document.querySelectorAll('.stat-metrics .metric-value[data-target]');
+      console.log('Elements found:', elements.length);
+      
+      elements.forEach(node => {
+        const target = Number(node.dataset.target);
+        const decimals = Number(node.dataset.decimals) || 0;
+        console.log('Processing:', target, 'decimals:', decimals);
+        node.textContent = formatNumber(0, decimals); // Start at 0
+      });
+      
+      // Simple animation
+      const startTime = performance.now();
+      
+      function animate() {
+        const now = performance.now();
+        const progress = Math.min((now - startTime) / DURATION, 1);
+        const eased = easeOutCubic(progress);
+        
+        elements.forEach(node => {
+          const target = Number(node.dataset.target);
+          const decimals = Number(node.dataset.decimals) || 0;
+          const value = target * eased;
+          node.textContent = formatNumber(value, decimals);
+        });
+        
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        }
+      }
+      
+      animate();
+    }
+  </script>
+</body>
+</html>

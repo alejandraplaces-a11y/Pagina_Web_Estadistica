@@ -13,7 +13,8 @@
     "media": 13.577140430618249,
     "mediana": 5.5011,
     "media_en_ic": true,
-    "mediana_en_ic": false
+    "mediana_en_ic": false,
+    "mediana_en_ic_orden": false
   },
   "meses": [
     {
@@ -23,7 +24,8 @@
       "media": 12.975171890343699,
       "mediana": 4.9852,
       "media_en_ic": true,
-      "mediana_en_ic": false
+      "mediana_en_ic": false,
+      "mediana_en_ic_orden": true
     },
     {
       "mes": "02",
@@ -32,7 +34,8 @@
       "media": 13.556336402753871,
       "mediana": 5.27965,
       "media_en_ic": true,
-      "mediana_en_ic": false
+      "mediana_en_ic": false,
+      "mediana_en_ic_orden": false
     },
     {
       "mes": "03",
@@ -41,7 +44,8 @@
       "media": 13.71798490408674,
       "mediana": 5.2543,
       "media_en_ic": true,
-      "mediana_en_ic": false
+      "mediana_en_ic": false,
+      "mediana_en_ic_orden": false
     },
     {
       "mes": "04",
@@ -50,7 +54,8 @@
       "media": 13.307992961460446,
       "mediana": 5.1525,
       "media_en_ic": true,
-      "mediana_en_ic": false
+      "mediana_en_ic": false,
+      "mediana_en_ic_orden": true
     },
     {
       "mes": "05",
@@ -59,7 +64,8 @@
       "media": 13.170088718636277,
       "mediana": 5.3224,
       "media_en_ic": true,
-      "mediana_en_ic": false
+      "mediana_en_ic": false,
+      "mediana_en_ic_orden": false
     },
     {
       "mes": "06",
@@ -68,7 +74,8 @@
       "media": 13.452979270738377,
       "mediana": 5.3086,
       "media_en_ic": true,
-      "mediana_en_ic": false
+      "mediana_en_ic": false,
+      "mediana_en_ic_orden": false
     },
     {
       "mes": "07",
@@ -77,7 +84,8 @@
       "media": 13.934612996969157,
       "mediana": 5.6957,
       "media_en_ic": false,
-      "mediana_en_ic": false
+      "mediana_en_ic": false,
+      "mediana_en_ic_orden": false
     },
     {
       "mes": "08",
@@ -86,7 +94,8 @@
       "media": 13.538618524560452,
       "mediana": 5.7458,
       "media_en_ic": true,
-      "mediana_en_ic": false
+      "mediana_en_ic": false,
+      "mediana_en_ic_orden": false
     },
     {
       "mes": "09",
@@ -95,7 +104,8 @@
       "media": 14.777369746211427,
       "mediana": 6.2137,
       "media_en_ic": false,
-      "mediana_en_ic": false
+      "mediana_en_ic": false,
+      "mediana_en_ic_orden": false
     },
     {
       "mes": "10",
@@ -104,7 +114,8 @@
       "media": 13.915423229813664,
       "mediana": 5.6276,
       "media_en_ic": true,
-      "mediana_en_ic": false
+      "mediana_en_ic": false,
+      "mediana_en_ic_orden": false
     },
     {
       "mes": "11",
@@ -113,7 +124,8 @@
       "media": 13.304172897526502,
       "mediana": 5.62805,
       "media_en_ic": true,
-      "mediana_en_ic": false
+      "mediana_en_ic": false,
+      "mediana_en_ic_orden": false
     },
     {
       "mes": "12",
@@ -122,9 +134,15 @@
       "media": 13.186961255903446,
       "mediana": 5.7507,
       "media_en_ic": true,
-      "mediana_en_ic": false
+      "mediana_en_ic": false,
+      "mediana_en_ic_orden": false
     }
   ],
   "meses_media_en_ic": 10,
-  "meses_mediana_en_ic": 0
+  "meses_mediana_en_ic": 0,
+  "ic_mediana_orden": [
+    4.7707,
+    5.2153
+  ],
+  "meses_mediana_en_ic_orden": 2
 }

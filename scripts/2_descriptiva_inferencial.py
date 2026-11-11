@@ -77,8 +77,8 @@ def consolidar_pozos(datos):
     """Un registro por pozo.
 
     Los pozos repetidos aparecen una vez por cada campo al que aportan (mismo contrato y
-    Estado), así que sus volúmenes son partes del total del pozo y se suman. Las horas se
-    repiten en cada fila: se toma el máximo para no superar las 744 h de enero.
+    Estado), así que sus volúmenes son partes del total del pozo y se suman. Las horas pueden
+    repetirse entre filas: se toma el máximo para no superar las 744 h de enero.
     """
     principal = datos.sort_values(OLEO, ascending=False).groupby("Nome Poço")
     pozos = datos.groupby("Nome Poço").agg(
@@ -155,7 +155,7 @@ def construir_variables(datos, pozos):
                 "Ordinal", "{Pesado < Mediano < Ligero}", "Ordinal",
                 "Clasificación a partir del grado API", "Pesado < Mediano < Ligero")
     cuantitativa("horas", HORAS, "Tiempo de producción", "Horas en que el pozo produjo durante el mes",
-                 "Discreta", "{0, 1, …, 744}", "Razón", medicion, "h/mes", 0)
+                 "Continua (registrada en horas enteras)", "0 – 744 (horas enteras)", "Razón", medicion, "h/mes", 0)
     cuantitativa("dias", "— (derivada de Tempo de Produção)", "Días completos de producción",
                  "⌊horas / 24⌋", "Discreta", "{0, 1, …, 31}", "Razón", "Cálculo a partir de las horas", "días", 0)
     cuantitativa(OLEO, OLEO, "Óleo", "Volumen medio diario de petróleo (sin condensado)", "Continua",
@@ -579,15 +579,20 @@ def construir_validacion(carpeta):
     for m in meses:
         m["media_en_ic"] = dentro(m["media"], ic["E[Y]"])
         m["mediana_en_ic"] = dentro(m["mediana"], ic["e^μ"])
+        m["mediana_en_ic_orden"] = dentro(m["mediana"], ic["Me"])
     return {
         "fuente": "ANP · 2023_MM_producao_Terra.csv (enero a diciembre de 2023)",
         "ic_media": [ic["E[Y]"]["inferior"], ic["E[Y]"]["superior"]],
         "ic_mediana": [ic["e^μ"]["inferior"], ic["e^μ"]["superior"]],
+        "ic_mediana_orden": [ic["Me"]["inferior"], ic["Me"]["superior"]],
         "anual": {"observaciones": int(len(anual)), "media": media, "mediana": mediana,
-                  "media_en_ic": dentro(media, ic["E[Y]"]), "mediana_en_ic": dentro(mediana, ic["e^μ"])},
+                  "media_en_ic": dentro(media, ic["E[Y]"]),
+                  "mediana_en_ic": dentro(mediana, ic["e^μ"]),
+                  "mediana_en_ic_orden": dentro(mediana, ic["Me"])},
         "meses": meses,
         "meses_media_en_ic": sum(m["media_en_ic"] for m in meses),
         "meses_mediana_en_ic": sum(m["mediana_en_ic"] for m in meses),
+        "meses_mediana_en_ic_orden": sum(m["mediana_en_ic_orden"] for m in meses),
     }
 
 

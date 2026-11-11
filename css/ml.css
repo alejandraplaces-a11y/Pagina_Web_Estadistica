@@ -1,0 +1,97 @@
+/* -------------------------------------------------
+   Machine Learning: estilos propios (sobre
+   estadisticaInferencial.css + regresion.css)
+   ------------------------------------------------- */
+
+/* Tarjetas method-card para las secciones de regresión y clasificación */
+.method-card {
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 24px;
+  background: #fff;
+}
+.method-card h3 { margin-top: 0; font-size: 1.1rem; }
+.method-card dl { margin: 8px 0; }
+.method-card dt { font-weight: 600; font-size: 0.85rem; color: #555; }
+.method-card dd { margin: 4px 0 0; font-size: 0.95rem; }
+
+/* Estado loading/ready */
+.status { color: #555; font-size: 0.9rem; }
+.status.error { color: #b00; }
+
+/* Tabla responsive */
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* Segmentado (toggle de modelos) */
+.segmentado { display: flex; gap: 8px; margin: 12px 0; }
+.segmentado .segmento {
+  flex: 1;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  background: #f5f5f5;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+.segmentado .segmento[aria-pressed="true"],
+.segmentado .segmento:hover { background: #e2e6e9; border-color: #999; }
+
+/* Detalle técnico <details> */
+.var-card { margin-top: 24px; }
+.var-card summary { cursor: pointer; font-weight: 600; }
+.var-card[open] summary { margin-bottom: 12px; }
+
+/* Comunicación tarjetas */
+.cifra { font-size: 2rem; font-weight: 700; color: #2c3e50; }
+.titulo { font-size: 1rem; font-weight: 600; color: #555; margin-top: 4px; }
+.texto { font-size: 0.85rem; color: #444; margin-top: 4px; }
+
+/* Noborder note */
+.frame-note { margin: 16px 0; padding: 10px; background: #fafafa; border: 1px solid #ddd; border-radius: 4px; font-size: 0.85rem; color: #555; }
+.frame-note p { margin: 0; }
+
+/* Importancia tabla */
+.importancia tbody tr { border-bottom: 1px solid #eee; }
+.importancia tbody tr:last-child { border-bottom: none; }
+
+/* Pocos datos note */
+.poco-datos { text-align: center; padding: 20px; color: #777; }
+
+/* Colab cards */
+.colab-cards { display: grid; gap: 16px; margin-top: 24px; }
+.colab-card {
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 8px;
+  padding: 20px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+.colab-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,.08);
+}
+.colab-icon {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  color: var(--oil);
+}
+.colab-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink);
+  font-size: 0.95rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.colab-link:hover { color: var(--oil); }
+
+/* Ajustes de hero video para páginas ML */
+.hero-video { height: 180px; object-fit: cover; }

@@ -9,7 +9,7 @@
 
   function probabilidad(valor) {
     if (valor === 0) return '0';
-    if (valor < 0.0001) return valor.toExponential(2).replace('.', ',');
+    if (valor < 0.0001) return '< 0,0001';
     return fmt.cuatro.format(valor);
   }
 
@@ -139,27 +139,27 @@
   }
 
   async function cargar() {
+    let modelo;
     try {
-      if (!window.Plotly || typeof window.Plotly.newPlot !== 'function') {
-        throw new Error('No se descargó Plotly desde cdn.plot.ly. Comprueba la conexión a Internet.');
-      }
-      const modelo = await leerJSON('data/modelo_discreto.json');
-
-      renderModelo(modelo);
-      document.getElementById('contenido-modelo-discreto').hidden = false;
-      document.getElementById('estado-modelo-discreto').hidden = true;
-
-      renderPrueba(modelo.binomial.prueba, 'prueba-binomial');
-      renderPrueba(modelo.betabinomial.prueba, 'prueba-betabinomial');
-      document.getElementById('contenido-test-discreto').hidden = false;
-      document.getElementById('estado-test-discreto').hidden = true;
-
-      // Se dibuja con el contenedor visible para que Plotly mida su ancho real.
-      await graficarModelo(modelo);
+      modelo = await leerJSON('data/modelo_discreto.json');
     } catch (error) {
-      mostrarError('estado-modelo-discreto', `No se pudo cargar el modelo discreto. ${error.message} Coloca modelo_discreto.json dentro de la carpeta data/.`, error);
+      mostrarError('estado-modelo-discreto', `No se pudo cargar el modelo discreto. ${error.message}`, error);
       mostrarError('estado-test-discreto', 'No se pudo calcular el test de ajuste.', error);
+      return;
     }
+
+    // Las tablas y los resultados se construyen antes de tocar Plotly.
+    renderModelo(modelo);
+    document.getElementById('contenido-modelo-discreto').hidden = false;
+    document.getElementById('estado-modelo-discreto').hidden = true;
+
+    renderPrueba(modelo.binomial.prueba, 'prueba-binomial');
+    renderPrueba(modelo.betabinomial.prueba, 'prueba-betabinomial');
+    document.getElementById('contenido-test-discreto').hidden = false;
+    document.getElementById('estado-test-discreto').hidden = true;
+
+    // Se dibuja con el contenedor visible para que Plotly mida su ancho real.
+    await dibujarGraficas([() => graficarModelo(modelo)]);
   }
 
   cargar();

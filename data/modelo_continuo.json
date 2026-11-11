@@ -343,12 +343,20 @@
       "metodo": "√((n−1)s² / χ²)"
     },
     {
-      "parametro": "Mediana de Y (bbl/día)",
+      "parametro": "Mediana del modelo (bbl/día)",
       "simbolo": "e^μ",
       "estimacion": 4.732316838591453,
       "inferior": 4.545736645612478,
       "superior": 4.9265552333375,
       "metodo": "exp(IC de μ)"
+    },
+    {
+      "parametro": "Mediana (bbl/día)",
+      "simbolo": "Me",
+      "estimacion": 4.9852,
+      "inferior": 4.7707,
+      "superior": 5.2153,
+      "metodo": "estadísticos de orden y(j), y(k)"
     },
     {
       "parametro": "Media de Y (bbl/día)",

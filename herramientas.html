@@ -61,10 +61,15 @@
               <span class="sidebar-link-label">Estadística Inferencial</span>
             </a>
           </li>
-          <li>
             <a class="sidebar-link" href="regresion.html">
               <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 20h16"/><path d="M4 20V4"/><circle cx="8" cy="15" r="1.2"/><circle cx="12" cy="11" r="1.2"/><circle cx="17" cy="9" r="1.2"/><path d="M6 17 19 6"/></svg>
               <span class="sidebar-link-label">Regresión</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="machine-learning.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 20h16"/><path d="M4 20V4"/><circle cx="8" cy="15" r="1.2"/><circle cx="12" cy="11" r="1.2"/><circle cx="17" cy="9" r="1.2"/><path d="M6 17 19 6"/></svg>
+              <span class="sidebar-link-label">Machine Learning</span>
             </a>
           </li>
           <li>
@@ -137,6 +142,11 @@
                 <p>Lee los JSON de <code>data/</code> y arma tablas, gráficas, mapa e interacción de la página.</p>
               </article>
               <article class="method-card">
+                <p class="method-card-tag">Lenguaje</p>
+                <h4>Python scikit-learn & Jupyter</h4>
+                <p>Para los modelos de Machine Learning. Los notebooks en Google Colab generan los JSON <code>data/ml_regresion.json</code> y <code>data/ml_clasificacion.json</code>.</p>
+              </article>
+              <article class="method-card">
                 <p class="method-card-tag">Gráficas</p>
                 <h4>Plotly.js 2.35.2</h4>
                 <p>Gráficas interactivas: histogramas, ajustes de modelos y comparaciones.</p>
@@ -175,6 +185,77 @@
           </div>
         </section>
 
+        <section class="section" id="reproducir" aria-labelledby="reproducir-titulo">
+          <div class="container">
+            <p class="section-kicker">Reproducción</p>
+            <h2 id="reproducir-titulo" class="subsection-title">Cómo reproducir el análisis</h2>
+            <p class="section-intro">Todo el análisis se regenera con tres scripts de Python y se publica como sitio estático, sin pasos de compilación. Las versiones usadas fueron Python 3.14.4, pandas, NumPy y SciPy para los datos; Plotly.js 2.35.2 y Leaflet 1.9.4 para las gráficas y el mapa.</p>
+
+            <p class="section-kicker section-kicker-spaced">Paso 1 · Entorno</p>
+            <p class="stat-scope">Crear un entorno virtual e instalar las tres librerías de cálculo.</p>
+            <pre class="code-block"><code>python3 -m venv .venv
+.venv/bin/pip install pandas numpy scipy</code></pre>
+            <p class="stat-scope">En Windows el intérprete del entorno es <code>.venv\Scripts\python</code> en lugar de <code>.venv/bin/python</code>.</p>
+
+            <p class="section-kicker section-kicker-spaced">Paso 2 · Regenerar los JSON de <code>data/</code></p>
+            <p class="stat-scope">Los scripts se ejecutan en orden: el segundo lee <code>data/vac_oleo.json</code> y <code>data/modelo_continuo.json</code>, que produce el primero. El primero deja sus cuatro archivos en <code>scripts/data/</code>; cópialos a <code>data/</code> antes de continuar. El segundo descarga los 12 ZIP mensuales de la ANP en la carpeta que indiques con <code>--anual</code> si aún no están.</p>
+            <pre class="code-block"><code>.venv/bin/python scripts/1_preprocesamiento_mapa.py data/2023_01_producao_Terra.csv
+.venv/bin/python scripts/2_descriptiva_inferencial.py data/2023_01_producao_Terra.csv --anual datos-anp
+.venv/bin/python scripts/3_regresion.py data/2023_01_producao_Terra.csv</code></pre>
+
+            <p class="section-kicker section-kicker-spaced">Paso 3 · Servir el sitio</p>
+            <p class="stat-scope">Abrir <code>http://localhost:8000/</code> desde la raíz del repositorio. Debe servirse por HTTP: las páginas leen los JSON con <code>fetch</code> y abrirlas con <code>file://</code> deja las secciones vacías.</p>
+            <pre class="code-block"><code>python3 -m http.server 8000</code></pre>
+
+            <p class="section-kicker section-kicker-spaced">Uso por sección</p>
+            <h3 class="subsection-title">Qué herramienta alimenta cada página</h3>
+            <div class="table-scroll">
+              <table class="data-table">
+                <caption>Scripts, librerías y archivos que producen cada sección del sitio.</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Sección</th>
+                    <th scope="col">Herramienta</th>
+                    <th scope="col">Uso y salida</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">Mapa Web</th>
+                    <td>Python (pandas) + Leaflet 1.9.4</td>
+                    <td>Agrupa la producción por Estado y dibuja el corredor terrestre. Genera <code>map_data.json</code> y los JSON de la inferencial (<code>vac_oleo.json</code>, <code>vad_dias_produccion.json</code>, <code>modelo_discreto.json</code>, <code>modelo_continuo.json</code>).</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Estadística descriptiva</th>
+                    <td>pandas, NumPy + <code>scripts/2_descriptiva_inferencial.py</code></td>
+                    <td>Variables, tablas de frecuencia e indicadores. Genera <code>variables_estadistica.json</code>, <code>distribucion_frecuencias.json</code> e <code>indicadores_descriptivos.json</code>.</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Estadística inferencial</th>
+                    <td>SciPy (binomial, Poisson, normal, χ², t de Student) + <code>scripts/2_descriptiva_inferencial.py</code></td>
+                    <td>Ajuste de modelos, intervalos de confianza y validación anual. Genera <code>inferencial_ampliacion.json</code> y <code>validacion_anual.json</code>.</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Regresión</th>
+                    <td>NumPy, SciPy + <code>scripts/3_regresion.py</code></td>
+                    <td>Ajusta los cinco modelos simples y el múltiple, calcula R², errores e influencia. Genera <code>regresion.json</code>.</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Machine Learning (4.3.2)</th>
+                    <td>scikit-learn + Jupyter/Google Colab</td>
+                    <td>Entrena Random Forest y Gradient Boosting; genera <code>data/ml_regresion.json</code> y <code>data/ml_clasificacion.json</code>. Los notebooks en Colab permiten reproducir los resultados moviendo los controles.</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Todas las páginas</th>
+                    <td>JavaScript sin frameworks + Plotly.js 2.35.2</td>
+                    <td>Lee los JSON de <code>data/</code> y arma tablas, gráficas e interacción en el navegador; Plotly se carga local desde <code>js/plotly.min.js</code>.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
         <div class="container"><p class="source"><span>Fuente: ANP (Brasil), Dados abertos.</span></p></div>
       </main>
 
@@ -183,6 +264,7 @@
           <div>
             <p>© 2026 Integrantes: <span class="footer-members">Génesis Once, Esther Places, Evelyn Rodríguez, Andrea Sarmiento, Melany Zapata</span></p>
             <p class="footer-location">Proyecto académico · Brasil, enero de 2023</p>
+            <p class="footer-location">Universidad Central del Ecuador · FIGEMPA · <a href="equipo.html">Equipo</a></p>
           </div>
           <div>
             <p class="footer-label">Fuente</p>

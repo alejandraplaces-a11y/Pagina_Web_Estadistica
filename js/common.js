@@ -6,13 +6,16 @@ async function leerJSON(ruta) {
   try {
     respuesta = await fetch(ruta);
   } catch (error) {
-    throw new Error(`No se pudo descargar ${ruta}. Comprueba la conexión y que el servidor esté activo.`);
+    throw new Error(`No se pudo descargar ${ruta}. Comprueba que el servidor esté activo.`);
   }
   if (!respuesta.ok) {
-    const ayuda = ruta === 'data/map_data.json'
-      ? ' Ejecuta .venv/bin/python scripts/1_preprocesamiento_mapa.py data/2023_01_producao_Terra.csv y coloca el JSON generado en data/.'
-      : ' Coloca el archivo JSON en la carpeta data/.';
-    throw new Error(`${ruta}: HTTP ${respuesta.status}.${ayuda}`);
+    if (respuesta.status === 404) {
+      const ayuda = ruta === 'data/map_data.json'
+        ? ' Ejecuta .venv/bin/python scripts/1_preprocesamiento_mapa.py data/2023_01_producao_Terra.csv y coloca el JSON generado en data/.'
+        : '';
+      throw new Error(`${ruta}: el archivo no existe en la carpeta data/.${ayuda}`);
+    }
+    throw new Error(`${ruta}: el servidor respondió HTTP ${respuesta.status} ${respuesta.statusText}.`.trim());
   }
   try {
     return await respuesta.json();
@@ -23,6 +26,10 @@ async function leerJSON(ruta) {
 
 function mostrarError(id, mensaje, error) {
   const estado = document.getElementById(id);
+  if (!estado) {
+    console.error(mensaje, error);
+    return;
+  }
   estado.hidden = false;
   estado.textContent = mensaje;
   estado.className = 'status status-error';
@@ -30,3 +37,35 @@ function mostrarError(id, mensaje, error) {
   console.error(error);
 }
 
+function plotlyDisponible() {
+  return Boolean(window.Plotly && typeof window.Plotly.newPlot === 'function');
+}
+
+// Las tablas y los resultados se llenan antes de llamar aquí. Si Plotly no carga,
+// solo se avisa en las gráficas vacías; el resto de la sección sigue visible.
+async function dibujarGraficas(dibujos = []) {
+  if (!plotlyDisponible()) {
+    console.error('Plotly no está disponible: las tablas y los resultados se muestran sin gráficas.');
+    document.querySelectorAll('.chart-box').forEach(caja => {
+      if (caja.childElementCount === 0 && !caja.textContent.trim()) {
+        caja.textContent = 'La gráfica no está disponible porque la librería Plotly no cargó. Las tablas y los resultados de esta sección siguen visibles.';
+        caja.style.display = 'flex';
+        caja.style.alignItems = 'center';
+        caja.style.justifyContent = 'center';
+        caja.style.padding = '24px';
+        caja.style.textAlign = 'center';
+        caja.style.fontSize = '13px';
+        caja.style.color = 'var(--ink-soft, #5c665f)';
+      }
+    });
+    return false;
+  }
+
+  const resultados = await Promise.allSettled(dibujos.map(dibujo => Promise.resolve().then(dibujo)));
+  resultados.forEach(resultado => {
+    if (resultado.status === 'rejected') {
+      console.error('No se pudo dibujar una gráfica con Plotly:', resultado.reason);
+    }
+  });
+  return resultados.every(resultado => resultado.status === 'fulfilled');
+}

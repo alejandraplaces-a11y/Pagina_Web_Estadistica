@@ -87,30 +87,29 @@ function graficarBarrasVad(vad) {
 }
 
 async function cargarEstadisticaDiferencial() {
+  let vad;
   try {
-    if (!window.Plotly || typeof window.Plotly.newPlot !== 'function') {
-      throw new Error('No se descargó Plotly desde cdn.plot.ly. Comprueba la conexión a Internet.');
-    }
-    const vad = await leerJSON('data/vad_dias_produccion.json');
+    vad = await leerJSON('data/vad_dias_produccion.json');
     if (!Array.isArray(vad.tdf) || vad.tdf.length === 0) {
-      throw new Error('vad_dias_produccion.json no contiene la tabla de frecuencias.');
+      throw new Error('data/vad_dias_produccion.json no contiene la tabla de frecuencias.');
     }
-
-    renderIdentificacion(vad);
-    document.getElementById('contenido-vad').hidden = false;
-    document.getElementById('estado-vad').hidden = true;
-
-    renderTdf(vad);
-    document.getElementById('contenido-tdf-vad').hidden = false;
-    document.getElementById('estado-tdf-vad').hidden = true;
-
-    // Se dibuja con el contenedor visible para que Plotly mida su ancho real.
-    await graficarBarrasVad(vad);
   } catch (error) {
-    const mensaje = `No se pudo cargar la variable aleatoria discreta. ${error.message} Coloca vad_dias_produccion.json dentro de la carpeta data/.`;
-    mostrarError('estado-vad', mensaje, error);
+    mostrarError('estado-vad', `No se pudo cargar la variable aleatoria discreta. ${error.message}`, error);
     mostrarError('estado-tdf-vad', 'No se pudo construir la TDF ni la gráfica de barras.', error);
+    return;
   }
+
+  // Las tablas y los resultados se construyen antes de tocar Plotly.
+  renderIdentificacion(vad);
+  document.getElementById('contenido-vad').hidden = false;
+  document.getElementById('estado-vad').hidden = true;
+
+  renderTdf(vad);
+  document.getElementById('contenido-tdf-vad').hidden = false;
+  document.getElementById('estado-tdf-vad').hidden = true;
+
+  // Se dibuja con el contenedor visible para que Plotly mida su ancho real.
+  await dibujarGraficas([() => graficarBarrasVad(vad)]);
 }
 
 cargarEstadisticaDiferencial();

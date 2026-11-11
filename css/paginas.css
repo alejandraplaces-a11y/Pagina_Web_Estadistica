@@ -8,5 +8,9 @@
 .member-grid { list-style: none; margin: 24px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
 .member-card { display: flex; align-items: center; gap: 14px; min-width: 0; padding: 20px; background: #FFFFFF; border: 1px solid var(--line); border-top: 3px solid var(--oil); border-radius: 12px; }
 .member-avatar { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--oil-deep); color: #FFFFFF; font-size: 14px; font-weight: 600; letter-spacing: 0.04em; }
+.member-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .member-name { font-family: var(--serif); font-size: 18px; color: var(--ink); overflow-wrap: anywhere; }
+.member-role { font-size: 12px; line-height: 1.5; color: var(--ink-soft); }
+.member-email { font-size: 12px; line-height: 1.5; color: var(--oil-deep); overflow-wrap: anywhere; }
+.member-email:hover { text-decoration: underline; }
 @media (max-width: 560px) { .member-grid { grid-template-columns: 1fr; } .code-block { padding: 14px; font-size: 12px; } }

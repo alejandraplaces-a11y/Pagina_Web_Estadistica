@@ -12,10 +12,11 @@
   </script>
   <link rel="stylesheet" href="css/estadisticaInferencial.css">
   <link rel="stylesheet" href="css/regresion.css">
-  <script defer src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <script defer src="js/plotly.min.js"></script>
   <script defer src="js/common.js"></script>
   <script defer src="js/sidebar.js"></script>
   <script defer src="js/aviso.js"></script>
+  <script defer src="js/resumenCifras.js?v=3"></script>
   <script defer src="js/regresionComun.js"></script>
   <script defer src="js/regresion.js"></script>
   <script defer src="js/indiceLateral.js"></script>
@@ -68,6 +69,12 @@
             <a class="sidebar-link is-active" href="regresion.html" aria-current="page">
               <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 20h16"/><path d="M4 20V4"/><circle cx="8" cy="15" r="1.2"/><circle cx="12" cy="11" r="1.2"/><circle cx="17" cy="9" r="1.2"/><path d="M6 17 19 6"/></svg>
               <span class="sidebar-link-label">Regresión</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="machine-learning.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 20h16"/><path d="M4 20V4"/><circle cx="8" cy="15" r="1.2"/><circle cx="12" cy="11" r="1.2"/><circle cx="17" cy="9" r="1.2"/><path d="M6 17 19 6"/></svg>
+              <span class="sidebar-link-label">Machine Learning</span>
             </a>
           </li>
           <li>
@@ -140,10 +147,10 @@
             <p class="section-kicker">En cifras</p>
             <h2 id="resumen-regresion-titulo" class="subsection-title">Resumen de la regresión</h2>
             <dl class="stat-metrics resumen-metrics">
-              <div><dt>Campos analizados · n</dt><dd>165 <span class="metric-unit">campos</span></dd></div>
-              <div><dt>Modelo simple elegido</dt><dd>Potencial <span class="metric-unit">r = 0,801</span></dd></div>
-              <div><dt>Exponente b · IC 95 %</dt><dd>1,057 <span class="metric-unit">[0,935; 1,179]</span></dd></div>
-              <div><dt>Múltiple recomendado · R²</dt><dd>0,809 <span class="metric-unit">ln y = f(ln x₁, ln x₂)</span></dd></div>
+              <div><dt>Campos analizados · n</dt><dd><span class="metric-value" data-target="165" data-decimals="0">165</span> <span class="metric-unit">campos</span></dd></div>
+              <div><dt>Modelo simple elegido</dt><dd>Potencial <span class="metric-unit">r = <span class="metric-value" data-target="0.801" data-decimals="3">0,801</span></span></dd></div>
+              <div><dt>Exponente b · IC 95 %</dt><dd><span class="metric-value" data-target="1.057" data-decimals="3">1,057</span> <span class="metric-unit">[0,935; 1,179]</span></dd></div>
+              <div><dt>Múltiple recomendado · R²</dt><dd><span class="metric-value" data-target="0.809" data-decimals="3">0,809</span> <span class="metric-unit">ln y = f(ln x₁, ln x₂)</span></dd></div>
             </dl>
             <p class="stat-scope">Unidad: campo de producción con óleo &gt; 0 en enero de 2023 (165 de 221 campos). El óleo de un campo crece casi en proporción a sus pozos, unos 8,8 bbl/día por pozo en mediana; si además se considera el gas del campo, se explica el 80,9 % de la variación de ln y.</p>
             <noscript><p class="status status-error">Las tablas y gráficas de esta página se generan con JavaScript. Las cifras clave y los dictámenes están en este resumen y en las tarjetas de modelos.</p></noscript>
@@ -296,6 +303,7 @@
                   </table>
                 </div>
               </details>
+              <p class="source">Σx = 5.329 pozos y no 5.308: los campos se cuentan por separado y un pozo que aporta a dos campos aparece en el x de ambos. Σy = 63.422,64 bbl/día es el óleo de los 165 campos con producción positiva.</p>
             </div>
           </div>
         </section>
@@ -398,7 +406,7 @@
                 <h3 class="chart-title">Determinación frente a no determinación (forma linealizada)</h3>
                 <div id="grafica-indicadores" class="chart-box" role="img" aria-label="Barras apiladas con la determinación y la no determinación de cada modelo"></div>
               </div>
-              <aside class="frame-note"><strong>Criterio de elección.</strong> r, R² y 1 − R² se calculan en la forma linealizada de cada modelo, así que no se pueden comparar directamente entre sí: el lineal mide la variación de y y el potencial la de ln y. Por eso se añaden tres criterios comunes. <strong>R² en ln y</strong> mide a todos los modelos en la misma escala, la adecuada porque el óleo es muy asimétrico. El <strong>error relativo mediano</strong> |y − ŷ| / y indica cuánto se equivoca el modelo en un campo típico. Los <strong>campos con D de Cook &gt; 1</strong> muestran si el ajuste depende de unos pocos puntos. El modelo potencial es el mejor en los tres: R² en ln y = 0,642, error relativo mediano del 66 % y ningún campo influyente. Aunque el lineal tiene R² = 0,550 en bbl/día, ese valor lo producen Estreito y Canto do Amaro; sin ellos baja a 0,205.</aside>
+              <aside class="frame-note"><strong>Criterio de elección.</strong> r, R² y 1 − R² se calculan en la forma linealizada de cada modelo, así que no se pueden comparar directamente entre sí: el lineal mide la variación de y y el potencial la de ln y. Por eso se añaden tres criterios comunes. <strong>R² en ln y</strong> mide a todos los modelos en la misma escala, la adecuada porque el óleo es muy asimétrico. El <strong>error relativo mediano</strong> |y − ŷ| / y indica cuánto se equivoca el modelo en un campo típico. Los <strong>campos con D de Cook &gt; 1</strong> muestran si el ajuste depende de unos pocos puntos; en las páginas de cada modelo, D &gt; 4/n se marca como umbral de revisión. El modelo potencial es el mejor en los tres: R² en ln y = 0,642, error relativo mediano del 66 %, ningún campo supera D &gt; 1 y 8 superan 4/n = 0,024 sin dominar el ajuste. Aunque el lineal tiene R² = 0,550 en bbl/día, ese valor lo producen Estreito y Canto do Amaro; sin ellos baja a 0,205.</aside>
               <p class="source">Lectura de |r|: &lt; 0,3 débil; 0,3–0,7 moderada; ≥ 0,7 fuerte. En el polinómico, r es la correlación múltiple R = √R². «No aplica»: el modelo predice valores negativos, que no tienen logaritmo.</p>
             </div>
           </div>
@@ -440,9 +448,9 @@
                 <p>Los 56 campos de gas (y = 0) quedan fuera: el logaritmo de 0 no existe y el modelo no estima la probabilidad de que un campo no produzca óleo.</p>
               </article>
               <article class="method-card consideracion">
-                <p class="method-card-tag">Consideración</p>
-                <h4>Asociación vs. causalidad</h4>
-                <p>La relación entre el número de pozos y el óleo refleja una asociación estadística: los campos más grandes tienden a tener más pozos y mayor producción. El modelo explica variación pero no determina la causa directa del volumen productivo.</p>
+                <p class="method-card-tag">Gas asociado</p>
+                <h4>El gas no es una causa externa</h4>
+                <p>En el modelo múltiple x₂ es el gas del campo, pero el gas asociado sale junto con el petróleo de los mismos pozos. No es una causa del óleo, sino otro resultado de la misma producción: el modelo describe la relación conjunta y no sirve para predecir el óleo de un campo nuevo a partir de su gas.</p>
               </article>
             </div>
           </div>
@@ -459,6 +467,7 @@
           <div>
             <p>© 2026 Integrantes: <span class="footer-members">Génesis Once, Esther Places, Evelyn Rodríguez, Andrea Sarmiento, Melany Zapata</span></p>
             <p class="footer-location">Proyecto académico · Brasil, enero de 2023</p>
+            <p class="footer-location">Universidad Central del Ecuador · FIGEMPA · <a href="equipo.html">Equipo</a></p>
           </div>
           <div>
             <p class="footer-label">Fuente</p>

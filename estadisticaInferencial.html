@@ -11,10 +11,11 @@
     })();
   </script>
   <link rel="stylesheet" href="css/estadisticaInferencial.css">
-  <script defer src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <script defer src="js/plotly.min.js"></script>
   <script defer src="js/common.js"></script>
   <script defer src="js/sidebar.js"></script>
   <script defer src="js/aviso.js"></script>
+  <script defer src="js/resumenCifras.js?v=3"></script>
   <script defer src="js/estadisticaInferencial.js"></script>
   <script defer src="js/modeloDiscreto.js"></script>
   <script defer src="js/variableContinua.js"></script>
@@ -66,10 +67,15 @@
               <span class="sidebar-link-label">Estadística Inferencial</span>
             </a>
           </li>
-          <li>
             <a class="sidebar-link" href="regresion.html">
               <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 20h16"/><path d="M4 20V4"/><circle cx="8" cy="15" r="1.2"/><circle cx="12" cy="11" r="1.2"/><circle cx="17" cy="9" r="1.2"/><path d="M6 17 19 6"/></svg>
               <span class="sidebar-link-label">Regresión</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="machine-learning.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 20h16"/><path d="M4 20V4"/><circle cx="8" cy="15" r="1.2"/><circle cx="12" cy="11" r="1.2"/><circle cx="17" cy="9" r="1.2"/><path d="M6 17 19 6"/></svg>
+              <span class="sidebar-link-label">Machine Learning</span>
             </a>
           </li>
           <li>
@@ -131,9 +137,9 @@
             <p class="section-kicker">En cifras</p>
             <h2 id="resumen-inferencial-titulo" class="subsection-title">Resumen de la inferencial</h2>
             <dl class="stat-metrics resumen-metrics">
-              <div><dt>Muestra · n</dt><dd>5.308 <span class="metric-unit">pozos</span></dd></div>
-              <div><dt>Media de Y · IC 95 %</dt><dd>12,98 <span class="metric-unit">[12,02; 13,93]</span></dd></div>
-              <div><dt>Mediana observada de Y</dt><dd>4,99 <span class="metric-unit">bbl/día</span></dd></div>
+              <div><dt>Muestra · n</dt><dd><span class="metric-value" data-target="5308" data-decimals="0">5.308</span> <span class="metric-unit">pozos</span></dd></div>
+              <div><dt>Media de Y · IC 95 %</dt><dd><span class="metric-value" data-target="12.98" data-decimals="2">12,98</span> <span class="metric-unit">[12,02; 13,93]</span></dd></div>
+              <div><dt>Mediana observada de Y</dt><dd><span class="metric-value" data-target="4.99" data-decimals="2">4,99</span> <span class="metric-unit">bbl/día</span></dd></div>
               <div><dt>Modelo continuo elegido</dt><dd>Lognormal <span class="metric-unit">r = 0,993</span></dd></div>
             </dl>
 
@@ -250,7 +256,7 @@
               </div>
 
               <aside class="frame-note">
-                <strong>Criterio por pozo.</strong> <span id="vad-repetidos"></span> pozos aparecen en varias filas y repiten sus horas en cada una; sumarlas superaría las 744 horas del mes. Por eso se toma el máximo de horas registrado para cada pozo.
+                <strong>Criterio por pozo.</strong> <span id="vad-repetidos"></span> pozos aparecen en varias filas y sus horas pueden repetirse entre filas; sumarlas superaría las 744 horas del mes. Por eso se toma el máximo de horas registrado para cada pozo.
               </aside>
               <p class="source">Fuente: <span id="vad-fuente"></span> · Variable derivada de las horas de producción del mes.</p>
             </div>
@@ -488,7 +494,7 @@
                   <thead>
                     <tr>
                       <th scope="col" class="numero">Clase</th>
-                      <th scope="col">Intervalo [Lᵢ; Lᵢ₊₁) bbl/día</th>
+                      <th scope="col">Intervalo bbl/día (última clase cerrada)</th>
                       <th scope="col">Intervalo en log₁₀</th>
                       <th scope="col" class="numero">Marca yᵢ</th>
                       <th scope="col" class="numero">fᵢ</th>
@@ -509,7 +515,7 @@
               </div>
 
               <aside class="frame-note"><p id="nota-histograma-relativo"></p></aside>
-              <p class="source">Marca de clase yᵢ = √(Lᵢ · Lᵢ₊₁), punto medio en escala logarítmica.</p>
+              <p class="source">Marca de clase yᵢ = √(Lᵢ · Lᵢ₊₁), punto medio en escala logarítmica. La última clase se cierra en el máximo observado.</p>
             </div>
           </div>
         </section>
@@ -825,10 +831,10 @@
               </div>
 
               <aside class="frame-note">
-                <strong>Lectura.</strong> Con una confianza del 95 %, la mediana del modelo lognormal (e^μ) está entre <span id="ic-mediana-rango"></span> bbl/día, y la producción media por pozo, entre <span id="ic-media-rango"></span> bbl/día. El intervalo de la media es más ancho porque los pocos pozos de producción muy alta aumentan la variabilidad. Aquí σ se estima con n − 1 en el denominador. No se aplica corrección por población finita, porque la población (pozos terrestres de Brasil) no tiene un N fijo.
+                <strong>Lectura.</strong> Con una confianza del 95 %, la mediana de Y estimada por estadísticos de orden (sin suponer modelo) está entre <span id="ic-mediana-orden-rango"></span> bbl/día, y la producción media por pozo, entre <span id="ic-media-rango"></span> bbl/día. El intervalo de la media es más ancho porque los pocos pozos de producción muy alta aumentan la variabilidad. Aquí σ se estima con n − 1 en el denominador. No se aplica corrección por población finita, porque la población (pozos terrestres de Brasil) no tiene un N fijo.
               </aside>
               <aside class="frame-note nota-alerta">
-                <strong>La mediana observada queda fuera de su intervalo.</strong> El IC del 95 % de la mediana del modelo, e^μ, es <span id="ic-mediana-rango-2">[4,55; 4,93]</span> bbl/día, pero la mediana muestral de los pozos productores es <span id="ic-mediana-observada">4,99</span> bbl/día. No es un error de cálculo: el intervalo estima la mediana <em>de la lognormal</em>, y la lognormal coloca demasiada probabilidad en la cola izquierda (pozos de producción muy baja). Es la misma desviación que detecta el χ² en 4.2.10; por eso la mediana del modelo subestima ligeramente la observada. Con todo 2023 ocurre lo mismo (<a href="#validacion-anual">4.2.18</a>).
+                <strong>Mediana del modelo frente a la mediana observada.</strong> El IC del 95 % de la mediana del modelo lognormal, e^μ, es <span id="ic-mediana-rango-2">[4,55; 4,93]</span> bbl/día, pero la mediana muestral de los pozos productores es <span id="ic-mediana-observada">4,99</span> bbl/día. No es un error de cálculo: el intervalo estima la mediana <em>de la lognormal</em>, y la lognormal coloca demasiada probabilidad en la cola izquierda (pozos de producción muy baja). Es la misma desviación que detecta el χ² en 4.2.10. En cambio, el IC de la mediana por estadísticos de orden, <span id="ic-mediana-orden-rango-2"></span> bbl/día, no supone ningún modelo y sí contiene la mediana observada. Con todo 2023 se comparan ambos intervalos (<a href="#validacion-anual">4.2.18</a>).
               </aside>
             </div>
           </div>
@@ -977,7 +983,7 @@
                 <article class="method-card">
                   <p class="method-card-tag">Definición</p>
                   <h4>Número de pozos de cada campo</h4>
-                  <p>V = número de pozos distintos con producción reportada en cada campo en enero de 2023. Aquí la unidad estadística es el <strong>campo</strong>, no el pozo. Un pozo que aporta a dos campos cuenta en ambos. V es discreta (conteo) y vale al menos 1.</p>
+                  <p>V = número de pozos distintos con producción reportada en cada campo en enero de 2023. Aquí la unidad estadística es el <strong>campo</strong>, no el pozo. Un pozo que aporta a dos campos cuenta en ambos: por eso la suma de pozos por campo da 5.471 y no 5.308, que es el número de pozos únicos de la descriptiva. V es discreta (conteo) y vale al menos 1.</p>
                 </article>
                 <article class="method-card teal">
                   <p class="method-card-tag">Modelos</p>
@@ -1071,6 +1077,7 @@
                 <div><dt>Media anual de Y</dt><dd><span id="val-media"></span> <span class="metric-unit">bbl/día</span></dd></div>
                 <div><dt>IC 95 % de la media (enero)</dt><dd id="val-ic-media"></dd></div>
                 <div><dt>Meses con la media dentro del IC</dt><dd id="val-meses"></dd></div>
+                <div><dt>Meses con la mediana dentro del IC sin modelo</dt><dd id="val-meses-mediana-orden"></dd></div>
               </dl>
 
               <div class="chart-card">
@@ -1090,7 +1097,8 @@
                       <th scope="col" class="numero">Media</th>
                       <th scope="col">¿Dentro del IC de la media?</th>
                       <th scope="col" class="numero">Mediana</th>
-                      <th scope="col">¿Dentro del IC de la mediana?</th>
+                      <th scope="col">¿Dentro del IC del modelo?</th>
+                      <th scope="col">¿Dentro del IC sin modelo?</th>
                     </tr>
                   </thead>
                   <tbody id="cuerpo-validacion"></tbody>
@@ -1111,6 +1119,7 @@
           <div>
             <p>© 2026 Integrantes: <span class="footer-members">Génesis Once, Esther Places, Evelyn Rodríguez, Andrea Sarmiento, Melany Zapata</span></p>
             <p class="footer-location">Proyecto académico · Brasil, enero de 2023</p>
+            <p class="footer-location">Universidad Central del Ecuador · FIGEMPA · <a href="equipo.html">Equipo</a></p>
           </div>
           <div>
             <p class="footer-label">Fuente</p>

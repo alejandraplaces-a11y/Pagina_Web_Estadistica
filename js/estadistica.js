@@ -106,7 +106,9 @@
       lista.replaceChildren();
       datos.excluidas.forEach((excluida) => {
         const li = document.createElement('li');
-        const distintos = excluida.valores_distintos ? ` (${entero.format(excluida.valores_distintos)} valores distintos)` : '';
+        const distintos = excluida.valores_distintos
+          ? ` (${entero.format(excluida.valores_distintos)} ${excluida.valores_distintos === 1 ? 'valor distinto' : 'valores distintos'})`
+          : '';
         li.textContent = `${excluida.variable}: ${excluida.motivo}${distintos}.`;
         lista.appendChild(li);
       });

@@ -29,7 +29,7 @@ const DEFINICION_INDICADORES = [
     filas: [
       { etiqueta: 'Media aritmética', simbolo: 'x̄', formula: 'x̄ = (1/n) Σ xᵢ', valor: v => numeroIndicador(v.media) },
       { etiqueta: 'Mediana', simbolo: 'Me', formula: 'valor central de los datos ordenados', valor: v => numeroIndicador(v.mediana) },
-      { etiqueta: 'Clase modal', simbolo: 'Mo', formula: 'clase de mayor fᵢ (clases de 4.1.4)', valor: v => claseModal(v.clase_modal) }
+      { etiqueta: 'Clase modal', simbolo: 'Mo', formula: 'clase de mayor fᵢ (clases log₁₀ calculadas en el script)', valor: v => claseModal(v.clase_modal) }
     ]
   },
   {
