@@ -238,10 +238,14 @@
     texto('ic-z', fmt.cuatro.format(m.z));
     const porSimbolo = Object.fromEntries(m.intervalos.map(i => [i.simbolo, i]));
     const rango = i => `${fmt.dos.format(i.inferior)} y ${fmt.dos.format(i.superior)}`;
-    texto('ic-mediana-rango', rango(porSimbolo['e^μ']));
+    const rangoCorchetes = i => `[${fmt.dos.format(i.inferior)}; ${fmt.dos.format(i.superior)}]`;
+    const medianaModelo = porSimbolo['e^μ'];
+    const medianaOrden = porSimbolo['Me'];
+    texto('ic-mediana-rango', rango(medianaModelo));
+    texto('ic-mediana-orden-rango', rango(medianaOrden));
     texto('ic-media-rango', rango(porSimbolo['E[Y]']));
-    const mediana = porSimbolo['e^μ'];
-    texto('ic-mediana-rango-2', `[${fmt.dos.format(mediana.inferior)}; ${fmt.dos.format(mediana.superior)}]`);
+    texto('ic-mediana-rango-2', rangoCorchetes(medianaModelo));
+    texto('ic-mediana-orden-rango-2', rangoCorchetes(medianaOrden));
     texto('ic-mediana-observada', fmt.dos.format(m.mediana_observada));
     m.intervalos.forEach(i => {
       const esProporcion = i.simbolo === 'p';
@@ -292,33 +296,33 @@
   const SECCIONES = ['conjetura', 'parametros', 'test-continuo', 'restricciones', 'probabilidades', 'estimacion', 'tamano'];
 
   async function cargar() {
+    let m;
     try {
-      if (!window.Plotly || typeof window.Plotly.newPlot !== 'function') {
-        throw new Error('No se descargó Plotly desde cdn.plot.ly. Comprueba la conexión a Internet.');
-      }
-      const m = await leerJSON('data/modelo_continuo.json');
-
-      renderConjetura(m);
-      renderParametros(m);
-      renderPrueba(m);
-      renderRestricciones(m);
-      renderProbabilidades(m);
-      renderIntervalos(m);
-      renderTamanos(m);
-      SECCIONES.forEach(id => {
-        document.getElementById(`contenido-mc-${id}`).hidden = false;
-        document.getElementById(`estado-mc-${id}`).hidden = true;
-      });
-
-      // Se dibuja con los contenedores visibles para que Plotly mida su ancho real.
-      await Promise.all([graficarAjuste(m), graficarPearson(m)]);
+      m = await leerJSON('data/modelo_continuo.json');
     } catch (error) {
       SECCIONES.forEach((id, i) => {
         mostrarError(`estado-mc-${id}`, i === 0
-          ? `No se pudo cargar el modelo continuo. ${error.message} Coloca modelo_continuo.json dentro de la carpeta data/.`
+          ? `No se pudo cargar el modelo continuo. ${error.message}`
           : 'No se pudo calcular esta sección.', error);
       });
+      return;
     }
+
+    // Las tablas y los resultados se construyen antes de tocar Plotly.
+    renderConjetura(m);
+    renderParametros(m);
+    renderPrueba(m);
+    renderRestricciones(m);
+    renderProbabilidades(m);
+    renderIntervalos(m);
+    renderTamanos(m);
+    SECCIONES.forEach(id => {
+      document.getElementById(`contenido-mc-${id}`).hidden = false;
+      document.getElementById(`estado-mc-${id}`).hidden = true;
+    });
+
+    // Se dibuja con los contenedores visibles para que Plotly mida su ancho real.
+    await dibujarGraficas([() => graficarAjuste(m), () => graficarPearson(m)]);
   }
 
   cargar();

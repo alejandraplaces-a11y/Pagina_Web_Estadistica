@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="css/paginas.css">
   <script defer src="js/sidebar.js"></script>
   <script defer src="js/aviso.js"></script>
+  <script defer src="js/resumenCifras.js?v=3"></script>
 </head>
 
 <body class="has-sidebar">
@@ -128,9 +129,9 @@
             <p class="section-kicker">Resumen</p>
             <h2 id="resumen-cifras-titulo" class="subsection-title">Resumen en cifras</h2>
             <dl class="stat-metrics">
-              <div><dt>Muestra · n</dt><dd>5.308 <span class="metric-unit">pozos</span></dd></div>
-              <div><dt>Media del óleo</dt><dd>11,95 <span class="metric-unit">bbl/día</span></dd></div>
-              <div><dt>Mediana del óleo</dt><dd>4,42 <span class="metric-unit">bbl/día</span></dd></div>
+              <div><dt>Muestra · n</dt><dd><span class="metric-value" data-target="5308" data-decimals="0">5.308</span> <span class="metric-unit">pozos</span></dd></div>
+              <div><dt>Media del óleo</dt><dd><span class="metric-value" data-target="11.95" data-decimals="2">11,95</span> <span class="metric-unit">bbl/día</span></dd></div>
+              <div><dt>Mediana del óleo</dt><dd><span class="metric-value" data-target="4.42" data-decimals="2">4,42</span> <span class="metric-unit">bbl/día</span></dd></div>
               <div><dt>Modelo continuo elegido</dt><dd>Lognormal</dd></div>
             </dl>
             <p class="stat-scope">Población: pozos terrestres de Brasil. Muestra: pozos con reporte en enero de 2023, es decir, 5.308 pozos (5.471 registros; 143 pozos aparecen en dos o más filas porque aportan a varios campos y sus volúmenes se suman). Participan 9 estados; Rio Grande do Norte concentra 3.195 pozos (60,2 %).</p>
@@ -217,7 +218,7 @@
                 <ul class="lista-simple">
                   <li>Media de Y: [12,02; 13,93] bbl/día.</li>
                   <li>Con todo 2023 (12 archivos ANP, 63.583 pozo-mes productores): la media anual, 13,58, cae dentro del IC; 10 de 12 medias mensuales caen dentro (julio y septiembre no).</li>
-                  <li>El IC de la mediana lognormal e<sup>μ</sup> [4,55; 4,93] no contiene la mediana observada de enero (4,99) ni ninguna mediana mensual (4,99 a 6,21): la lognormal subestima la mediana por la desviación en la cola izquierda que detecta el χ².</li>
+                  <li>El IC de la mediana lognormal e<sup>μ</sup> [4,55; 4,93] no contiene la mediana observada de enero (4,99) ni ninguna mediana mensual (4,99 a 6,21): la lognormal subestima la mediana por la desviación en la cola izquierda que detecta el χ². El IC de la mediana por estadísticos de orden, que no supone modelo, es [4,77; 5,22] y sí contiene la mediana de enero y la de abril; las demás quedan por encima porque la mediana crece a lo largo de 2023.</li>
                 </ul>
               </article>
             </div>
@@ -244,7 +245,7 @@
                 <p class="method-card-tag">Regresión múltiple</p>
                 <h4>y = f(pozos, gas)</h4>
                 <ul class="lista-simple">
-                  <li>Modelo recomendado: ln ŷ = 3,051 + 0,678·ln x₁ + 0,326·ln x₂, es decir, ŷ = 21,14·x₁<sup>0,678</sup>·x₂<sup>0,327</sup>, con R² = 0,809 (ajustado 0,807) y sin campos influyentes.</li>
+                  <li>Modelo recomendado: ln ŷ = 3,051 + 0,678·ln x₁ + 0,326·ln x₂, es decir, ŷ = 21,14·x₁<sup>0,678</sup>·x₂<sup>0,327</sup>, con R² = 0,809 (ajustado 0,807). Ningún campo supera D de Cook &gt; 1; cinco superan el umbral de revisión D &gt; 4/n = 0,024 (el mayor, PA-1ENV25DAM_AM-T-84_AM-T-85, D = 0,148), sin que el ajuste dependa de ellos.</li>
                   <li>Con el gas constante, un 10 % más de pozos se asocia con un 6,8 % más de óleo; con los pozos constantes, un 10 % más de gas, con un 3,3 % más.</li>
                   <li>El múltiple lineal (R² = 0,781) depende de cuatro campos: sin ellos, R² cae a 0,488 y el coeficiente del gas pasa de 0,69 a 2,45.</li>
                 </ul>
@@ -272,10 +273,38 @@
                 <h4>Pendiente</h4>
                 <ul class="lista-simple">
                   <li>Modelo de mezcla (pozos parados vs. activos) para los días completos de producción.</li>
-                  <li>Machine learning y series temporales (secciones 4.3.2 y 4.3.3 del proyecto).</li>
+                  <li>Series temporales de producción mensual (sección 4.3.3).</li>
                 </ul>
               </article>
             </div>
+          </div>
+        </section>
+
+        <section class="section cream" id="machine-learning-conclusion" aria-labelledby="machine-learning-conclusion-titulo">
+          <div class="container">
+            <p class="section-kicker">4.3.2</p>
+            <h2 id="machine-learning-conclusion-titulo" class="subsection-title">Conclusiones de Machine Learning</h2>
+            <div class="method-grid">
+              <article class="method-card">
+                <p class="method-card-tag">Regresión: producción de óleo</p>
+                <h4>Random Forest, R² en log = 0,853</h4>
+                <ul class="lista-simple">
+                  <li>Mejora del 1,5 % frente al modelo base (persistencia): la producción de un pozo cambia poco de un mes a otro.</li>
+                  <li>Error promedio de 3,4 bbl/día frente a un pozo típico de 5,8 bbl/día.</li>
+                  <li>En 6 de cada 10 pozos con producción, la predicción queda a menos de un 30 % del valor real.</li>
+                </ul>
+              </article>
+              <article class="method-card">
+                <p class="method-card-tag">Clasificación: cambio de producción</p>
+                <h4>Gradient Boosting, 55 % de pozos anticipados</h4>
+                <ul class="lista-simple">
+                  <li>Antecipa 167 de 304 pozos que dejan de producir óleo (55 %), frente a 0 de la persistencia.</li>
+                  <li>Mayor sensibilidad para detectar pozos que se detienen, a cambio de más falsos positivos.</li>
+                  <li>La exactidad global engaña por desbalance: 8,6 % entrenamiento vs 16,3 % prueba de «sin óleo».</li>
+                </ul>
+              </article>
+            </div>
+            <p class="frame-note">Los modelos se eligieron en septiembre (validación) y evaluaron una sola vez en octubre–diciembre (prueba). Los notebooks en Colab generan los datos JSON.</p>
           </div>
         </section>
 
@@ -287,6 +316,7 @@
           <div>
             <p>© 2026 Integrantes: <span class="footer-members">Génesis Once, Esther Places, Evelyn Rodríguez, Andrea Sarmiento, Melany Zapata</span></p>
             <p class="footer-location">Proyecto académico · Brasil, enero de 2023</p>
+            <p class="footer-location">Universidad Central del Ecuador · FIGEMPA · <a href="equipo.html">Equipo</a></p>
           </div>
           <div>
             <p class="footer-label">Fuente</p>

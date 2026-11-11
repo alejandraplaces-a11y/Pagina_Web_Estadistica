@@ -26,7 +26,7 @@
       .forEach(([e, valor]) => R.filaTabla(tbody, [[e, false, true], [typeof valor === 'string' ? valor : num(valor), true]]));
   }
 
-  function renderModelo(prefijo, mm, interpretaciones) {
+  function renderModelo(prefijo, mm, interpretaciones, n) {
     R.texto(`${prefijo}-R`, cuatro(mm.R));
     R.texto(`${prefijo}-r2`, cuatro(mm.r2));
     R.texto(`${prefijo}-k2`, cuatro(mm.no_determinacion));
@@ -40,7 +40,8 @@
     const infl = document.getElementById(`influyentes-${prefijo}`);
     mm.influyentes.slice(0, 4).forEach(i => R.filaTabla(infl, [
       [i.campo, false, true], [fmt.entero.format(i.x), true], [num(i.x2), true], [fmt.dos.format(i.y), true],
-      [fmt.tres.format(i.cook), true], [i.cook > 1 ? 'Muy influyente' : 'Normal', false]
+      [fmt.tres.format(i.cook), true],
+      [i.cook > 1 ? 'Muy influyente (D > 1)' : i.cook > 4 / n ? 'Influyente (D > 4/n)' : 'Normal', false]
     ]));
   }
 
@@ -110,12 +111,12 @@
       'Óleo de un campo sin pozos ni gas: solo ancla el plano',
       'bbl/día extra por cada pozo, con el gas constante',
       'bbl/día extra por cada Mm³/día de gas, con los pozos constantes'
-    ]);
+    ], d.n);
     renderModelo('log', d.multiple.logaritmica, [
       `e^b₀ = ${num(Math.exp(d.multiple.logaritmica.coeficientes[0].valor))}: óleo de un campo con 1 pozo y 1 Mm³/día de gas`,
       'Elasticidad: +1 % de pozos → +b₁ % de óleo, con el gas constante',
       'Elasticidad: +1 % de gas → +b₂ % de óleo, con los pozos constantes'
-    ]);
+    ], d.n);
     renderCalculadora(d);
     return [render3D(d)];
   });

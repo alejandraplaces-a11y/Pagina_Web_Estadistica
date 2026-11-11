@@ -12,7 +12,7 @@
   </script>
   <link rel="stylesheet" href="css/estadisticaInferencial.css">
   <link rel="stylesheet" href="css/regresion.css">
-  <script defer src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <script defer src="js/plotly.min.js"></script>
   <script defer src="js/common.js"></script>
   <script defer src="js/sidebar.js"></script>
   <script defer src="js/aviso.js"></script>
@@ -67,6 +67,12 @@
             <a class="sidebar-link is-active" href="regresion.html">
               <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 20h16"/><path d="M4 20V4"/><circle cx="8" cy="15" r="1.2"/><circle cx="12" cy="11" r="1.2"/><circle cx="17" cy="9" r="1.2"/><path d="M6 17 19 6"/></svg>
               <span class="sidebar-link-label">Regresión</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="machine-learning.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M1 3h22l-6 16-6-16ZM11 7h2v9h-2z"/><path d="M2 9l4 8h4L8 9l4-8H2z"/></svg>
+              <span class="sidebar-link-label">Machine Learning</span>
             </a>
           </li>
           <li>
@@ -259,7 +265,7 @@
                 </table>
               </div>
               <aside class="frame-note"><p id="nota-sensibilidad"></p></aside>
-              <p class="source">D de Cook mide cuánto cambian los coeficientes si se quita el campo. D &gt; 1: el campo por sí solo cambia el ajuste.</p>
+              <p class="source">D de Cook mide cuánto cambian los coeficientes si se quita el campo. D &gt; 1: el campo por sí solo cambia el ajuste; D &gt; 4/n es un umbral de revisión.</p>
             </div>
           </div>
         </section>
@@ -305,6 +311,7 @@
           <div>
             <p>© 2026 Integrantes: <span class="footer-members">Génesis Once, Esther Places, Evelyn Rodríguez, Andrea Sarmiento, Melany Zapata</span></p>
             <p class="footer-location">Proyecto académico · Brasil, enero de 2023</p>
+            <p class="footer-location">Universidad Central del Ecuador · FIGEMPA · <a href="equipo.html">Equipo</a></p>
           </div>
           <div>
             <p class="footer-label">Fuente</p>

@@ -12,6 +12,7 @@
     entero: new Intl.NumberFormat('es-EC', { maximumFractionDigits: 0 }),
     cuatro: new Intl.NumberFormat('es-EC', { minimumFractionDigits: 4, maximumFractionDigits: 4 }),
     pct: new Intl.NumberFormat('es-EC', { style: 'percent', minimumFractionDigits: 1, maximumFractionDigits: 1 }),
+    pct2: new Intl.NumberFormat('es-EC', { style: 'percent', minimumFractionDigits: 2, maximumFractionDigits: 2 }),
     sig: new Intl.NumberFormat('es-EC', { maximumSignificantDigits: 3 }),
     dos: new Intl.NumberFormat('es-EC', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
   };
@@ -36,40 +37,41 @@
   function frecuencias(fila) {
     return [
       [fmt.entero.format(fila.fi), true],
-      [fmt.cuatro.format(fila.hi), true],
+      [fmt.pct2.format(fila.hi), true],
       [fmt.entero.format(fila.Fi), true],
-      [fmt.cuatro.format(fila.Hi), true],
+      [fmt.pct2.format(fila.Hi), true],
     ];
   }
 
   function renderTabla(id, filas, columnasIniciales) {
     const tbody = document.getElementById(id);
     tbody.replaceChildren();
-    filas.forEach((fila) => {
+    filas.forEach((fila, i) => {
       const tr = document.createElement('tr');
-      celdas(tr, [...columnasIniciales(fila), ...frecuencias(fila)]);
+      celdas(tr, [...columnasIniciales(fila, i, filas.length), ...frecuencias(fila)]);
       tbody.appendChild(tr);
     });
     const total = filas.reduce((suma, fila) => suma + fila.fi, 0);
     const pie = document.createElement('tr');
     pie.className = 'fila-total';
-    const vacias = columnasIniciales(filas[0]).length - 1;
+    const vacias = columnasIniciales(filas[0], 0, filas.length).length - 1;
     celdas(pie, [['Total', false, true], ...Array(vacias).fill(['', false]),
-      [fmt.entero.format(total), true], [fmt.cuatro.format(filas.reduce((s, f) => s + f.hi, 0)), true], ['', true], ['', true]]);
+      [fmt.entero.format(total), true], [fmt.pct2.format(filas.reduce((s, f) => s + f.hi, 0)), true], ['', true], ['', true]]);
     tbody.appendChild(pie);
   }
 
-  function intervalo(fila) {
-    return fila.cero ? '{0} · sin producción' : `[${volumen(fila.li)}; ${volumen(fila.ls)})`;
+  // La última clase se cierra porque su límite superior es el máximo observado.
+  function intervalo(fila, esUltima = false) {
+    return fila.cero ? '{0} · sin producción' : `[${volumen(fila.li)}; ${volumen(fila.ls)}${esUltima ? ']' : ')'}`;
   }
 
   function renderTablas(d) {
     renderTabla('tabla-estado', d.estado.filas, (f) => [[f.categoria, false, true]]);
     renderTabla('tabla-api', d.clase_api.filas, (f) => [[f.categoria, false, true], [CRITERIO_API[f.categoria], false]]);
     renderTabla('tabla-dias', d.dias.filas, (f) => [[f.categoria, true, true]]);
-    renderTabla('tabla-oleo', d.oleo.filas, (f) => [
+    renderTabla('tabla-oleo', d.oleo.filas, (f, i, total) => [
       [String(f.clase), true],
-      [intervalo(f), false],
+      [intervalo(f, i === total - 1), false],
       [f.cero ? '0' : volumen(f.marca), true],
     ]);
 
@@ -89,11 +91,13 @@
     $('#preview-estado').textContent = `${d.estado.filas.length} estados · moda: ${estado.categoria} (${fmt.pct.format(estado.hi)})`;
     $('#preview-api').textContent = `moda y mediana: ${api.categoria} (${fmt.pct.format(api.hi)}) · ${fmt.entero.format(d.clase_api.nulos)} sin dato`;
     $('#preview-dias').textContent = `0 días: ${fmt.entero.format(dias[0].fi)} pozos · 31 días: ${fmt.entero.format(dias[31].fi)} pozos`;
-    $('#preview-oleo').textContent = `${oleo.k + 1} clases · clase modal ${intervalo(modal)} bbl/día (${fmt.pct.format(modal.hi)})`;
+    $('#preview-oleo').textContent = `${oleo.k + 1} clases · clase modal ${intervalo(modal, oleo.filas.indexOf(modal) === oleo.filas.length - 1)} bbl/día (${fmt.pct.format(modal.hi)})`;
 
     const primera = oleo.filas[1];
+    const ultima = oleo.filas[oleo.filas.length - 1];
     $('#nota-tdf').textContent = `La clase 0 reúne los ${fmt.entero.format(oleo.ceros)} pozos sin óleo (${fmt.pct.format(oleo.filas[0].hi)}); no tienen logaritmo, por eso van aparte. `
-      + `Los ${fmt.entero.format(oleo.positivos)} pozos productores se reparten en ${oleo.k} clases de igual ancho en log₁₀, desde ${volumen(primera.li)} hasta ${volumen(oleo.filas[oleo.filas.length - 1].ls)} bbl/día. `
+      + `Los ${fmt.entero.format(oleo.positivos)} pozos productores se reparten en ${oleo.k} clases de igual ancho en log₁₀, desde ${volumen(primera.li)} hasta ${volumen(ultima.ls)} bbl/día. `
+      + `La última clase se cierra por la derecha, [${volumen(ultima.li)}; ${volumen(ultima.ls)}], porque ${volumen(ultima.ls)} es el máximo observado. `
       + 'Con clases de igual ancho en bbl/día (Sturges lineal, A = 79) el 98 % de los pozos caía en la primera clase y 7 clases quedaban vacías; la escala log₁₀ reparte los pozos y muestra la forma de la distribución.';
   }
 
@@ -173,7 +177,7 @@
     const clases = oleo.filas.filter((f) => !f.cero);
     const A = oleo.amplitud_log10;
     const centros = clases.map((f) => (f.t_li + f.t_ls) / 2);
-    const etiqueta = (f) => `[${volumen(f.li)}; ${volumen(f.ls)}) bbl/día`;
+    const etiqueta = (f, i) => `[${volumen(f.li)}; ${volumen(f.ls)}${i === clases.length - 1 ? ']' : ')'} bbl/día`;
     Plotly.newPlot('gdf-histograma', [
       {
         type: 'bar',
@@ -181,7 +185,7 @@
         y: clases.map((f) => f.fi),
         width: clases.map((f) => f.t_ls - f.t_li),
         marker: { color: COLOR_OIL, opacity: 0.85, line: { color: '#FFFFFF', width: 1 } },
-        customdata: clases.map(etiqueta),
+        customdata: clases.map((f, i) => etiqueta(f, i)),
         hovertemplate: '%{customdata}<br>fᵢ = %{y}<extra></extra>',
         name: 'Histograma',
       },
@@ -224,7 +228,7 @@
       yaxis: { title: { text: 'Hᵢ' }, range: [0, 1.05], gridcolor: GRID, tickformat: '.0%' },
     }), { responsive: true, displaylogo: false });
 
-    $('#nota-gdf').textContent = `GDF 4 y 5 usan las clases log₁₀ de 4.1.4. Los ${fmt.entero.format(oleo.ceros)} pozos con óleo = 0 no tienen posición en escala logarítmica: no aparecen en el histograma y la ojiva parte de H₀ = ${fmt.cuatro.format(cero.Hi)}. La ojiva se grafica sobre los límites superiores de clase. Muestra: ${fmt.entero.format(d.n)} pozos. Fuente: ${d.fuente}.`;
+    $('#nota-gdf').textContent = `GDF 4 y 5 usan las clases log₁₀ de 4.1.4. Los ${fmt.entero.format(oleo.ceros)} pozos con óleo = 0 no tienen posición en escala logarítmica: no aparecen en el histograma y la ojiva parte de H₀ = ${fmt.pct2.format(cero.Hi)}. La última clase es cerrada por la derecha. La ojiva se grafica sobre los límites superiores de clase. Muestra: ${fmt.entero.format(d.n)} pozos. Fuente: ${d.fuente}.`;
   }
 
   async function cargar() {
@@ -240,14 +244,10 @@
       return;
     }
 
-    if (typeof Plotly === 'undefined') {
-      mostrarError('estado-gdf', 'No se pudo cargar la librería de gráficas (Plotly). Comprueba la conexión a Internet.', new Error('Plotly no disponible'));
-      return;
-    }
     // Se muestra antes de dibujar para que Plotly mida el ancho real de los contenedores.
     $('#contenido-gdf').hidden = false;
     $('#estado-gdf').hidden = true;
-    renderGraficas(datos);
+    await dibujarGraficas([() => renderGraficas(datos)]);
   }
 
   if (document.readyState === 'loading') {

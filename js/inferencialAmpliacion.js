@@ -184,6 +184,7 @@
     texto('val-media', fmt.tres.format(v.anual.media));
     texto('val-ic-media', rango(v.ic_media));
     texto('val-meses', `${v.meses_media_en_ic} de 12`);
+    texto('val-meses-mediana-orden', `${v.meses_mediana_en_ic_orden} de 12`);
     texto('val-fuente', v.fuente);
     v.meses.forEach(m => {
       fila('cuerpo-validacion', [
@@ -193,15 +194,19 @@
         [fmt.tres.format(m.media), true],
         [m.media_en_ic ? 'Sí' : 'No', false],
         [fmt.tres.format(m.mediana), true],
-        [m.mediana_en_ic ? 'Sí' : 'No', false]
+        [m.mediana_en_ic ? 'Sí' : 'No', false],
+        [m.mediana_en_ic_orden ? 'Sí' : 'No', false]
       ]);
     });
     const fuera = v.meses.filter(m => !m.media_en_ic).map(m => MESES[Number(m.mes) - 1].toLowerCase());
     const medianas = v.meses.map(m => m.mediana);
+    const mesesOrden = v.meses.filter(m => m.mediana_en_ic_orden).map(m => MESES[Number(m.mes) - 1].toLowerCase());
     texto('nota-validacion', `La media anual de 2023 (${fmt.tres.format(v.anual.media)} bbl/día) ${v.anual.media_en_ic ? 'cae dentro' : 'queda fuera'} del IC de enero ${rango(v.ic_media)}, `
       + `y ${v.meses_media_en_ic} de las 12 medias mensuales también (${fuera.length ? `quedan fuera ${fuera.join(' y ')}` : 'ninguna queda fuera'}): el intervalo de la media de enero describe bien el año. `
       + `En cambio, ninguna mediana mensual (${fmt.dos.format(Math.min(...medianas))} a ${fmt.dos.format(Math.max(...medianas))} bbl/día) cae en el IC de la mediana lognormal ${rango(v.ic_mediana)}, igual que la mediana de enero: `
-      + 'el modelo subestima la mediana por su desajuste en la cola izquierda. Además, el número de pozos crece de enero a diciembre, así que enero no es un mes idéntico al resto del año.');
+      + 'el modelo subestima la mediana por su desajuste en la cola izquierda. '
+      + `Con el IC de la mediana por estadísticos de orden (sin modelo), ${rango(v.ic_mediana_orden)}, caen ${v.meses_mediana_en_ic_orden} de las 12 medianas mensuales (${mesesOrden.length ? mesesOrden.join(' y ') : 'ninguna'}): las demás quedan por encima porque la mediana crece a lo largo de 2023. `
+      + 'Además, el número de pozos también crece de enero a diciembre, así que enero no es un mes idéntico al resto del año.');
 
     return () => Plotly.newPlot('grafica-validacion', [
       {
@@ -216,6 +221,10 @@
       {
         type: 'scatter', mode: 'lines', x: [0.5, 12.5, 12.5, 0.5], y: [v.ic_mediana[0], v.ic_mediana[0], v.ic_mediana[1], v.ic_mediana[1]],
         fill: 'toself', fillcolor: 'rgba(31, 92, 82, 0.16)', line: { width: 0 }, name: 'IC 95 % de la mediana e^μ (enero)', hoverinfo: 'skip'
+      },
+      {
+        type: 'scatter', mode: 'lines', x: [0.5, 12.5, 12.5, 0.5], y: [v.ic_mediana_orden[0], v.ic_mediana_orden[0], v.ic_mediana_orden[1], v.ic_mediana_orden[1]],
+        fill: 'toself', fillcolor: 'rgba(140, 109, 70, 0.14)', line: { width: 0 }, name: 'IC 95 % de la mediana por orden (enero)', hoverinfo: 'skip'
       },
       {
         type: 'scatter', mode: 'lines+markers', x: v.meses.map(m => Number(m.mes)), y: v.meses.map(m => m.mediana),
@@ -233,28 +242,27 @@
   const SECCIONES = ['agua', 'campos', 'submuestras', 'validacion'];
 
   async function cargar() {
+    let a, v;
     try {
-      const [a, v] = await Promise.all([
+      [a, v] = await Promise.all([
         leerJSON('data/inferencial_ampliacion.json'),
         leerJSON('data/validacion_anual.json')
       ]);
-      const dibujarAgua = renderAgua({ ...a.agua });
-      renderCampos(a.pozos_por_campo);
-      renderSubmuestras(a.submuestras);
-      const dibujarValidacion = renderValidacion(v);
-      SECCIONES.forEach(mostrar);
-
-      if (!window.Plotly || typeof window.Plotly.newPlot !== 'function') {
-        throw new Error('No se descargó Plotly desde cdn.plot.ly. Comprueba la conexión a Internet.');
-      }
-      await Promise.all([dibujarAgua(), dibujarValidacion()]);
     } catch (error) {
-      SECCIONES.forEach((id, i) => {
-        mostrarError(`estado-${id}`, i === 0
-          ? `No se pudo cargar la ampliación inferencial. ${error.message}`
-          : 'No se pudo calcular esta sección.', error);
+      SECCIONES.forEach(id => {
+        mostrarError(`estado-${id}`, `No se pudo cargar la ampliación inferencial. ${error.message}`, error);
       });
+      return;
     }
+
+    // Las tablas y los resultados se construyen antes de tocar Plotly.
+    const dibujarAgua = renderAgua({ ...a.agua });
+    renderCampos(a.pozos_por_campo);
+    renderSubmuestras(a.submuestras);
+    const dibujarValidacion = renderValidacion(v);
+    SECCIONES.forEach(mostrar);
+
+    await dibujarGraficas([dibujarAgua, dibujarValidacion]);
   }
 
   cargar();

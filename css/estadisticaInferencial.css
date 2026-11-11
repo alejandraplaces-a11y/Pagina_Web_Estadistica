@@ -65,7 +65,7 @@ body { color: var(--ink-soft); }
 .data-table { width: 100%; min-width: 640px; border-collapse: collapse; font-size: 14px; }
 .data-table caption { caption-side: top; text-align: left; padding: 16px 18px; font-size: 13px; color: var(--ink-soft); }
 .data-table th, .data-table td { padding: 12px 16px; border-top: 1px solid var(--line); text-align: left; vertical-align: top; }
-.data-table th { border-top: 0; background: var(--paper-2); font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--oil-deep); }
+.data-table th { border-top: 0; background: var(--paper-2); font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: 0.02em; color: var(--oil-deep); }
 .data-table tbody tr:hover { background: var(--paper-2); }
 .data-table .numero { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
 .data-table tfoot td { border-top: 2px solid var(--line); font-weight: 650; background: var(--paper-2); }

@@ -13,6 +13,11 @@
     return valor < 100 ? fmt.significativo.format(valor) : fmt.dos.format(valor);
   }
 
+  // La última clase es cerrada por la derecha porque su límite es el máximo observado.
+  function intervalo(c, esUltima) {
+    return `[${volumen(c.li)}; ${volumen(c.ls)}${esUltima ? ']' : ')'}`;
+  }
+
   function cientifico(valor) {
     if (valor === 0) return '0';
     if (valor >= 0.01) return fmt.cuatro.format(valor);
@@ -80,12 +85,13 @@
     texto('hr-k', String(vac.k));
     texto('hr-amplitud', fmt.cuatro.format(vac.amplitud_log10));
     const cuerpo = document.getElementById('cuerpo-histograma-relativo');
-    vac.clases.forEach(c => {
+    vac.clases.forEach((c, i) => {
+      const esUltima = i === vac.clases.length - 1;
       const tr = document.createElement('tr');
       tr.append(
         celda(String(c.clase), true),
-        celda(`[${volumen(c.li)}; ${volumen(c.ls)})`),
-        celda(`[${fmt.dos.format(c.t_li)}; ${fmt.dos.format(c.t_ls)})`),
+        celda(intervalo(c, esUltima)),
+        celda(`[${fmt.dos.format(c.t_li)}; ${fmt.dos.format(c.t_ls)}${esUltima ? ']' : ')'}`),
         celda(volumen(c.marca), true),
         celda(fmt.entero.format(c.fi), true),
         celda(fmt.porcentaje.format(c.hi), true),
@@ -101,7 +107,7 @@
 
     const mayor = vac.clases.reduce((a, c) => (c.fi > a.fi ? c : a));
     texto('nota-histograma-relativo',
-      `La clase modal es [${volumen(mayor.li)}; ${volumen(mayor.ls)}) bbl/día, con ${fmt.porcentaje.format(mayor.hi)} de los pozos. ` +
+      `La clase modal es ${intervalo(mayor, vac.clases.indexOf(mayor) === vac.clases.length - 1)} bbl/día, con ${fmt.porcentaje.format(mayor.hi)} de los pozos. ` +
       `En escala logarítmica la distribución es casi simétrica (asimetría de log₁₀ y = ${fmt.dos.format(vac.asimetria_log10)}), ` +
       `aunque en la escala original la asimetría es ${fmt.dos.format(vac.asimetria)}.`);
   }
@@ -109,13 +115,13 @@
   function renderDensidad(vac) {
     const cuerpo = document.getElementById('cuerpo-histograma-densidad');
     let integral = 0;
-    vac.clases.forEach(c => {
+    vac.clases.forEach((c, i) => {
       const ancho = c.t_ls - c.t_li;
       integral += c.densidad_t * ancho;
       const tr = document.createElement('tr');
       tr.append(
         celda(String(c.clase), true),
-        celda(`[${volumen(c.li)}; ${volumen(c.ls)})`),
+        celda(intervalo(c, i === vac.clases.length - 1)),
         celda(fmt.porcentaje.format(c.hi), true),
         celda(fmt.cuatro.format(ancho), true),
         celda(fmt.cuatro.format(c.densidad_t), true),
@@ -133,16 +139,16 @@
   function graficar(vac) {
     const marcas = vac.clases.map(c => (c.t_li + c.t_ls) / 2);
     const anchos = vac.clases.map(c => c.t_ls - c.t_li);
-    const intervalos = vac.clases.map(c => [volumen(c.li), volumen(c.ls)]);
+    const intervalos = vac.clases.map((c, i) => [volumen(c.li), volumen(c.ls), i === vac.clases.length - 1 ? ']' : ')']);
 
     const relativo = Plotly.newPlot('grafica-histograma-relativo', [{
       type: 'bar',
       x: marcas,
       y: vac.clases.map(c => c.hi),
       width: anchos,
-      customdata: intervalos.map((iv, i) => [...iv, vac.clases[i].fi]),
+      customdata: intervalos.map((iv, i) => [iv[0], iv[1], iv[2], vac.clases[i].fi]),
       marker: { color: '#8C6D46', line: { color: '#ffffff', width: 1 } },
-      hovertemplate: '[%{customdata[0]}; %{customdata[1]}) bbl/día<br>fᵢ = %{customdata[2]:,.0f}<br>hᵢ = %{y:.2%}<extra></extra>'
+      hovertemplate: '[%{customdata[0]}; %{customdata[1]}%{customdata[2]} bbl/día<br>fᵢ = %{customdata[3]:,.0f}<br>hᵢ = %{y:.2%}<extra></extra>'
     }], {
       ...layoutBase('Frecuencia relativa (hᵢ)', vac),
       yaxis: { title: { text: 'Frecuencia relativa (hᵢ)' }, tickformat: '.0%', rangemode: 'tozero', automargin: true }
@@ -155,7 +161,7 @@
       width: anchos,
       customdata: intervalos,
       marker: { color: '#0B221E', line: { color: '#ffffff', width: 1 } },
-      hovertemplate: '[%{customdata[0]}; %{customdata[1]}) bbl/día<br>g = %{y:.4f}<extra></extra>'
+      hovertemplate: '[%{customdata[0]}; %{customdata[1]}%{customdata[2]} bbl/día<br>g = %{y:.4f}<extra></extra>'
     }], layoutBase('Densidad g(t) = hᵢ / Δt', vac),
     { responsive: true, displaylogo: false });
 
@@ -163,27 +169,26 @@
   }
 
   async function cargar() {
+    let vac;
     try {
-      if (!window.Plotly || typeof window.Plotly.newPlot !== 'function') {
-        throw new Error('No se descargó Plotly desde cdn.plot.ly. Comprueba la conexión a Internet.');
-      }
-      const vac = await leerJSON('data/vac_oleo.json');
-
-      renderVac(vac);
-      renderFrecuencias(vac);
-      renderDensidad(vac);
-      ['vac', 'histograma-relativo', 'histograma-densidad'].forEach(id => {
-        document.getElementById(`contenido-${id}`).hidden = false;
-        document.getElementById(`estado-${id}`).hidden = true;
-      });
-
-      await graficar(vac);
+      vac = await leerJSON('data/vac_oleo.json');
     } catch (error) {
-      const mensaje = `No se pudo cargar la variable continua. ${error.message} Coloca vac_oleo.json dentro de la carpeta data/.`;
-      mostrarError('estado-vac', mensaje, error);
+      mostrarError('estado-vac', `No se pudo cargar la variable continua. ${error.message}`, error);
       mostrarError('estado-histograma-relativo', 'No se pudo construir la tabla de frecuencias relativas.', error);
       mostrarError('estado-histograma-densidad', 'No se pudo construir la tabla de densidad.', error);
+      return;
     }
+
+    // Las tablas y los resultados se construyen antes de tocar Plotly.
+    renderVac(vac);
+    renderFrecuencias(vac);
+    renderDensidad(vac);
+    ['vac', 'histograma-relativo', 'histograma-densidad'].forEach(id => {
+      document.getElementById(`contenido-${id}`).hidden = false;
+      document.getElementById(`estado-${id}`).hidden = true;
+    });
+
+    await dibujarGraficas([() => graficar(vac)]);
   }
 
   cargar();

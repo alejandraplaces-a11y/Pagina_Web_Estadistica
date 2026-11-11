@@ -359,14 +359,22 @@ def construir_modelo_continuo(csv_path, vac):
     proporcion = float((y >= 10).mean())
     e_p = z * np.sqrt(proporcion * (1 - proporcion) / n)
     e_media = t * s_y / np.sqrt(n)
+    mediana_observada = float(np.median(y))
+    # IC de la mediana sin suponer modelo (estadísticos de orden, aproximación normal a la binomial).
+    ordenados = np.sort(y)
+    j = max(int(math.floor(n / 2 - z * math.sqrt(n) / 2)), 1)
+    k_sup = min(int(math.ceil(n / 2 + z * math.sqrt(n) / 2)) + 1, n)
     intervalos = [
         {"parametro": "μ (media de ln Y)", "simbolo": "μ", "estimacion": mu,
          "inferior": mu - e_mu, "superior": mu + e_mu, "metodo": "x̄ ± t·s/√n"},
         {"parametro": "σ (desviación de ln Y)", "simbolo": "σ", "estimacion": s_ln,
          "inferior": float(np.sqrt((n - 1) * s_ln ** 2 / chi_inf)),
          "superior": float(np.sqrt((n - 1) * s_ln ** 2 / chi_sup)), "metodo": "√((n−1)s² / χ²)"},
-        {"parametro": "Mediana de Y (bbl/día)", "simbolo": "e^μ", "estimacion": float(np.exp(mu)),
+        {"parametro": "Mediana del modelo (bbl/día)", "simbolo": "e^μ", "estimacion": float(np.exp(mu)),
          "inferior": float(np.exp(mu - e_mu)), "superior": float(np.exp(mu + e_mu)), "metodo": "exp(IC de μ)"},
+        {"parametro": "Mediana (bbl/día)", "simbolo": "Me", "estimacion": mediana_observada,
+         "inferior": float(ordenados[j - 1]), "superior": float(ordenados[k_sup - 1]),
+         "metodo": "estadísticos de orden y(j), y(k)"},
         {"parametro": "Media de Y (bbl/día)", "simbolo": "E[Y]", "estimacion": media_y,
          "inferior": media_y - e_media, "superior": media_y + e_media, "metodo": "ȳ ± t·s/√n"},
         {"parametro": "Proporción de pozos con Y ≥ 10", "simbolo": "p", "estimacion": proporcion,
@@ -384,8 +392,6 @@ def construir_modelo_continuo(csv_path, vac):
         n0 = z ** 2 * proporcion * (1 - proporcion) / error ** 2
         tamanos.append({"objetivo": "Proporción Y ≥ 10", "error": error, "unidad": "proporción",
                         "n0": float(n0), "n": int(np.ceil(n0)), "cubre": bool(np.ceil(n0) <= n)})
-    mediana_observada = float(np.median(y))
-
     return {
         "fuente": vac["fuente"],
         "variable": vac["variable"],

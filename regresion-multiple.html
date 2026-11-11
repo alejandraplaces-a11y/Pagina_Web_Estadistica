@@ -12,7 +12,7 @@
   </script>
   <link rel="stylesheet" href="css/estadisticaInferencial.css">
   <link rel="stylesheet" href="css/regresion.css">
-  <script defer src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <script defer src="js/plotly.min.js"></script>
   <script defer src="js/common.js"></script>
   <script defer src="js/sidebar.js"></script>
   <script defer src="js/aviso.js"></script>
@@ -67,6 +67,12 @@
             <a class="sidebar-link is-active" href="regresion.html">
               <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 20h16"/><path d="M4 20V4"/><circle cx="8" cy="15" r="1.2"/><circle cx="12" cy="11" r="1.2"/><circle cx="17" cy="9" r="1.2"/><path d="M6 17 19 6"/></svg>
               <span class="sidebar-link-label">Regresión</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="machine-learning.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M1 3h22l-6 16-6-16ZM11 7h2v9h-2z"/><path d="M2 9l4 8h4L8 9l4-8H2z"/></svg>
+              <span class="sidebar-link-label">Machine Learning</span>
             </a>
           </li>
           <li>
@@ -259,7 +265,8 @@
                   <tbody id="influyentes-log"></tbody>
                 </table>
               </div>
-                <aside class="frame-note">Con el gas constante, un 10 % más de pozos se asocia con un 6,8 % más de óleo; con los pozos constantes, un 10 % más de gas, con un 3,3 % más. x₁ y x₂ tienen r = 0,575 en escala ln (VIF = 1,49): hay correlación, pero no multicolinealidad. Ningún campo tiene D de Cook &gt; 1. R² en bbl/día = 0,673 y error relativo mediano del 49,7 %.</aside>
+              <p class="source">D de Cook &gt; 1: muy influyente; D &gt; 4/n = 0,024: influyente (umbral de revisión). Es el mismo criterio que en las páginas de los modelos simples.</p>
+                <aside class="frame-note">Con el gas constante, un 10 % más de pozos se asocia con un 6,8 % más de óleo; con los pozos constantes, un 10 % más de gas, con un 3,3 % más. x₁ y x₂ tienen r = 0,575 en escala ln (VIF = 1,49): hay correlación, pero no multicolinealidad. Ningún campo supera D de Cook &gt; 1; cinco superan el umbral de revisión D &gt; 4/165 = 0,024, encabezados por PA-1ENV25DAM_AM-T-84_AM-T-85 (D = 0,148), pero ninguno domina el ajuste. R² en bbl/día = 0,673 y error relativo mediano del 49,7 %.</aside>
               </details>
               <details class="var-card">
                 <summary><span class="var-card-tipo">Comparación</span><span class="var-card-titulo">Múltiple lineal</span><span class="var-card-preview">ŷ = 118,67 + 6,346·x₁ + 0,6887·x₂ · R² = 0,781 · inestable</span></summary>
@@ -333,6 +340,7 @@
                   <li>El modelo logarítmico exige x₂ &gt; 0 y estima la mediana de y, no la media.</li>
                   <li>El gas se produce junto con el óleo: la relación es asociación, no causa. El modelo explica la producción, pero no la pronostica antes de medir el gas.</li>
                   <li>Corresponde a un solo mes (enero de 2023).</li>
+                  <li>PA-1ENV25DAM_AM-T-84_AM-T-85 no es un campo con nombre: es un código de la ANP, probablemente un área de prueba en Amazonas con 1 pozo y 1.102,83 bbl/día, el pozo más productivo del archivo. Aparece entre los influyentes por su producción, no porque represente a un campo típico.</li>
                 </ul>
               </article>
             </div>
@@ -350,6 +358,7 @@
           <div>
             <p>© 2026 Integrantes: <span class="footer-members">Génesis Once, Esther Places, Evelyn Rodríguez, Andrea Sarmiento, Melany Zapata</span></p>
             <p class="footer-location">Proyecto académico · Brasil, enero de 2023</p>
+            <p class="footer-location">Universidad Central del Ecuador · FIGEMPA · <a href="equipo.html">Equipo</a></p>
           </div>
           <div>
             <p class="footer-label">Fuente</p>

@@ -12,7 +12,7 @@
   </script>
   <link rel="stylesheet" href="css/estadisticaInferencial.css">
   <link rel="stylesheet" href="css/regresion.css">
-  <script defer src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <script defer src="js/plotly.min.js"></script>
   <script defer src="js/common.js"></script>
   <script defer src="js/sidebar.js"></script>
   <script defer src="js/aviso.js"></script>
@@ -259,7 +259,7 @@
                 </table>
               </div>
               <aside class="frame-note"><p id="nota-sensibilidad"></p></aside>
-              <p class="source">D de Cook mide cuánto cambian los coeficientes si se quita el campo. D &gt; 1: el campo por sí solo cambia el ajuste.</p>
+              <p class="source">D de Cook mide cuánto cambian los coeficientes si se quita el campo. D &gt; 1: el campo por sí solo cambia el ajuste; D &gt; 4/n es un umbral de revisión.</p>
             </div>
           </div>
         </section>
@@ -307,6 +307,7 @@
           <div>
             <p>© 2026 Integrantes: <span class="footer-members">Génesis Once, Esther Places, Evelyn Rodríguez, Andrea Sarmiento, Melany Zapata</span></p>
             <p class="footer-location">Proyecto académico · Brasil, enero de 2023</p>
+            <p class="footer-location">Universidad Central del Ecuador · FIGEMPA · <a href="equipo.html">Equipo</a></p>
           </div>
           <div>
             <p class="footer-label">Fuente</p>

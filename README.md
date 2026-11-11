@@ -61,6 +61,7 @@ Las quince páginas comparten una **barra lateral colapsable** (estado persistid
 ### 4.3 Relación entre variables
 
 - **4.3.1 Regresión clásica** (`regresion.html` y una página por modelo): unidad = campo con óleo > 0 (n = 165). x = pozos del campo, y = óleo del campo (bbl/día). Se elige el modelo potencial ŷ = 8,818·x^1,057 (r = 0,801; sin campos con D de Cook > 1). Los modelos se comparan con criterios comunes: R² en ln y, error relativo mediano y campos influyentes. Para la múltiple con x₂ = gas natural total se recomienda la forma logarítmica, ŷ = 21,14·x₁^0,678·x₂^0,327 (R² = 0,809); el múltiple lineal (R² = 0,781) depende de cuatro campos.
+- **4.3.2 Machine learning multivariable**: Predicción multivariable de la producción de óleo por pozo usando Random Forest (regresión) y Gradient Boosting (clasificación), con datos de los 12 meses de 2023. Véanse las páginas [`ml-regresion.html`](ml-regresion.html) y [`ml-clasificacion.html`](ml-clasificacion.html) para dictámenes, gráficas y tablas detallados. Los resultados están en `data/ml_regresion.json` y `data/ml_clasificacion.json`, generados desde los notebooks de Colab.
 - Machine learning multivariable (4.3.2) y serie de tiempo (4.3.3) siguen pendientes.
 
 ## Datos
@@ -86,6 +87,8 @@ Todos los JSON de ejecución viven en [`data/`](data). El CSV original se conser
 - **Leaflet 1.9.4** (CDN) y teselas de OpenStreetMap para el mapa interactivo.
 - **Plotly 2.35.2** (CDN) para las gráficas estadísticas.
 - **Python 3 + pandas, NumPy y SciPy** para el preprocesamiento, los modelos y el cálculo de los JSON.
+- **scikit-learn** para los modelos de Machine Learning (Random Forest, Gradient Boosting, etc.).
+- **Google Colab** para los notebooks que generan `data/ml_regresion.json` y `data/ml_clasificacion.json`.
 - **Fuentes autoalojadas** Archivo y Fraunces (subconjuntos latinos, SIL OFL 1.1) en [`fonts/`](fonts).
 
 ## Estructura del repositorio
