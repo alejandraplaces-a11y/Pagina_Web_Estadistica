@@ -26,7 +26,7 @@ Es un sitio **estático, sin frameworks ni paso de compilación**: HTML, CSS y J
 | [`index.html`](index.html) | Portada con video de fondo, recorrido interactivo oeste→este por los Estados productores y las secciones de misión, visión y motivación. |
 | [`introduccion.html`](introduccion.html) | Planteamiento del problema y objetivos (general + 3 específicos), cargados desde `data/contexto.json`. |
 | [`mapa.html`](mapa.html) | Mapa Leaflet interactivo de Brasil: óleo producido y pozos únicos por Estado, con métrica conmutable, umbral mínimo, panel de detalle y ranking. |
-| [`Estadistica.html`](Estadistica.html) | Estadística descriptiva: resumen en cifras, población y muestra, variables, TDF y GDF (nominal, ordinal, discreta y continua), indicadores de óleo, gas y agua, y resumen por Estado. |
+| [`Estadistica.html`](Estadistica.html) | Estadística descriptiva: resumen en cifras, población y muestra, tablas de variables e indicadores (Excel), análisis por tipo de variable (17 fichas con informe propio), TDF y GDF (nominal, ordinal, discreta y continua), indicadores de óleo, gas y agua, y resumen por Estado. |
 | [`estadisticaInferencial.html`](estadisticaInferencial.html) | Estadística inferencial: resumen y veredicto por modelo, VAD, modelo discreto, VAC, modelos continuos, tests de ajuste, probabilidades, estimación, tamaño muestral, segunda VAC (agua) y VAD (pozos por campo), χ² en submuestras y validación con 2023 completo. |
 | [`regresion.html`](regresion.html) | 4.3.1 Regresión clásica, índice: galería de modelos, x e y, pares, dispersión, conjetura, comparación de indicadores con criterios comunes y restricciones generales. |
 | `regresion-lineal.html`, `regresion-potencial.html`, `regresion-exponencial.html`, `regresion-logaritmica.html`, `regresion-polinomica.html` | Una página por modelo simple: dictamen, linealización, parámetros paso a paso, ajuste gráfico, Pearson, determinación, no determinación y prueba t, residuos y distancia de Cook, restricciones y calculadora. |
@@ -42,7 +42,9 @@ Las quince páginas comparten una **barra lateral colapsable** (estado persistid
 ### 4.1 Estadística descriptiva (`Estadistica.html`)
 
 - Población: pozos terrestres de Brasil (N no fijado). Muestra: pozos con reporte en enero de 2023, n = 5.308. Los 143 pozos repetidos aportan a varios campos: sus volúmenes se suman y sus horas toman el máximo.
-- Tabla de variables con traducción, descripción, tipo, subtipo, dominio, rango observado, escala, instrumento, unidad, válidos, nulos y ceros calculados desde los datos.
+- Tabla de variables con traducción, descripción, tipo, subtipo, dominio, rango observado, escala, fuente del dato, unidad, válidos, nulos y ceros calculados desde los datos.
+- Documentación descargable: `recursos/descriptiva_brasil/documentos/Tabla_Variables_Brasil.xlsx` y `Tabla_Indicadores_Brasil.xlsx`.
+- Análisis por tipo de variable: 7 nominales, 1 ordinal, 2 discretas y 7 continuas; cada ficha enlaza a su informe HTML local en `recursos/descriptiva_brasil/analisis/`.
 - TDF con hᵢ = fᵢ / n para Estado (nominal), clase de crudo por API (ordinal), días de producción (discreta) y óleo (continua: clase {0} + clases de igual ancho en log₁₀).
 - GDF: barras, bastones, histograma con polígono en escala log₁₀ y ojiva sobre los límites superiores de clase.
 - Indicadores de óleo, gas y agua (clase modal, atípicos con 1,5·RIC, CV solo en escala de razón) y de días, grado API y clase de crudo.
@@ -133,10 +135,13 @@ Todos los JSON de ejecución viven en [`data/`](data). El CSV original se conser
 │   ├── regresionMultiple.js    # Página de la regresión múltiple
 │   └── indiceLateral.js        # Índice lateral de la página inferencial
 ├── data/                       # CSV de origen, GeoJSON y JSON de ejecución
+├── recursos/
+│   └── descriptiva_brasil/     # Excel, 17 informes HTML y datos de la descriptiva
 ├── scripts/
 │   ├── 1_preprocesamiento_mapa.py   # Mapa, VAD, VAC y modelos
 │   ├── 2_descriptiva_inferencial.py # Descriptiva, ampliación y validación anual
-│   └── 3_regresion.py               # 4.3.1 Regresión clásica
+│   ├── 3_regresion.py               # 4.3.1 Regresión clásica
+│   └── 4_descriptiva_tarjetas.py    # Genera las 17 fichas de análisis en Estadistica.html
 ├── img/                        # Logo y fotografía institucional
 ├── video/                      # Videos de los hero (uno por sección)
 ├── fonts/                      # Archivo y Fraunces (woff2)

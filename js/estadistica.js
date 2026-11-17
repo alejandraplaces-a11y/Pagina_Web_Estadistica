@@ -74,7 +74,7 @@
     { clave: 'dominio' },
     { clave: 'rango' },
     { clave: 'escala' },
-    { clave: 'instrumento' },
+    { clave: 'fuente' },
     { clave: 'unidad' },
     { clave: 'validos', numero: true },
     { clave: 'nulos', numero: true },

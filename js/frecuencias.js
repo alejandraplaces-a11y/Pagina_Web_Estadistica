@@ -15,8 +15,11 @@
     pct2: new Intl.NumberFormat('es-EC', { style: 'percent', minimumFractionDigits: 2, maximumFractionDigits: 2 }),
     sig: new Intl.NumberFormat('es-EC', { maximumSignificantDigits: 3 }),
     dos: new Intl.NumberFormat('es-EC', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+    // Límites y marcas de clase con 6 cifras significativas: son los mismos valores
+    // que documentan los informes de recursos/descriptiva_brasil/analisis/.
+    detalle: new Intl.NumberFormat('es-EC', { maximumSignificantDigits: 6 }),
   };
-  const volumen = (v) => (v < 100 ? fmt.sig.format(v) : fmt.dos.format(v));
+  const volumen = (v) => fmt.detalle.format(v);
 
   const CRITERIO_API = {
     Pesado: 'API < 22,3°',

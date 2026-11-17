@@ -80,16 +80,19 @@ def consolidar_pozos(datos):
     Estado), así que sus volúmenes son partes del total del pozo y se suman. Las horas pueden
     repetirse entre filas: se toma el máximo para no superar las 744 h de enero.
     """
-    principal = datos.sort_values(OLEO, ascending=False).groupby("Nome Poço")
+    # Orden estable: en empate de óleo se conserva el orden original del archivo.
+    ordenado = datos.sort_values(OLEO, ascending=False, kind="stable")
+    principal = ordenado.drop_duplicates("Nome Poço").set_index("Nome Poço")
     pozos = datos.groupby("Nome Poço").agg(
         **{c: (c, "sum") for c in VOLUMENES},
         horas=(HORAS, "max"),
         campos=("Campo", "nunique"),
     )
     for columna in ["Estado", "Bacia", "Operador", "Campo", "Tipo Instalação"]:
-        pozos[columna] = principal[columna].first()
+        # Categoría de la fila con más óleo; no se rellena desde otra fila.
+        pozos[columna] = principal[columna].reindex(pozos.index)
     # Grado API de la fila con más óleo (20 pozos repetidos tienen corrientes distintas).
-    pozos["api"] = principal[API].first()
+    pozos["api"] = ordenado.groupby("Nome Poço")[API].first()
     pozos["clase_api"] = pozos["api"].map(clase_api)
     pozos["dias"] = (pozos["horas"].fillna(0) // 24).astype(int).clip(0, 31)
     return pozos.reset_index()
@@ -109,18 +112,18 @@ def construir_variables(datos, pozos):
     n = len(pozos)
     filas = []
 
-    def cualitativa(columna, traduccion, descripcion, subtipo, dominio, escala, instrumento, rango=None):
+    def cualitativa(columna, traduccion, descripcion, subtipo, dominio, escala, fuente, rango=None):
         serie = pozos[columna]
         validos = int(serie.notna().sum())
         filas.append({
-            "columna": columna if columna != "clase_api" else "— (derivada de Grau API)",
+            "columna": columna if columna != "clase_api" else "\u2014 (derivada de Grau API)",
             "traduccion": traduccion, "descripcion": descripcion, "tipo": "Cualitativa",
             "subtipo": subtipo, "dominio": dominio,
-            "rango": rango or f"{serie.nunique()} categorías observadas", "escala": escala,
-            "instrumento": instrumento, "unidad": "—", "validos": validos, "nulos": n - validos, "ceros": None,
+            "rango": rango or f"{serie.nunique()} categor\u00edas observadas", "escala": escala,
+            "fuente": fuente, "unidad": "\u2014", "validos": validos, "nulos": n - validos, "ceros": None,
         })
 
-    def cuantitativa(columna, nombre_csv, traduccion, descripcion, subtipo, dominio, escala, instrumento,
+    def cuantitativa(columna, nombre_csv, traduccion, descripcion, subtipo, dominio, escala, fuente,
                      unidad, decimales=4):
         serie = pozos[columna]
         validos = int(serie.notna().sum())
@@ -128,52 +131,71 @@ def construir_variables(datos, pozos):
             "columna": nombre_csv, "traduccion": traduccion, "descripcion": descripcion,
             "tipo": "Cuantitativa", "subtipo": subtipo, "dominio": dominio,
             "rango": fmt_rango(float(serie.min()), float(serie.max()), decimales), "escala": escala,
-            "instrumento": instrumento, "unidad": unidad, "validos": validos, "nulos": n - validos,
+            "fuente": fuente, "unidad": unidad, "validos": validos, "nulos": n - validos,
             "ceros": int((serie == 0).sum()),
         })
 
-    registro = "Registro administrativo de la ANP"
-    medicion = "Medición fiscal del operador declarada a la ANP"
+    # La ANP es la fuente administrativa del archivo, no un instrumento: el CSV no
+    # identifica el equipo físico de medición de cada variable.
+    registro = "Registro administrativo de la ANP; el archivo no identifica el equipo f\u00edsico"
+    declarado = "Dato declarado en el archivo de la ANP; el archivo no identifica el equipo f\u00edsico"
+    calculo = "C\u00e1lculo propio a partir de las horas reportadas por el pozo"
+
     cualitativa("Estado", "Estado", "Unidad federativa donde se ubica el pozo", "Nominal",
                 "27 unidades federativas de Brasil", "Nominal", registro,
                 f"{pozos['Estado'].nunique()} estados")
     cualitativa("Bacia", "Cuenca", "Cuenca sedimentaria del pozo", "Nominal",
                 "Cuencas sedimentarias terrestres", "Nominal", registro,
                 f"{pozos['Bacia'].nunique()} cuencas")
-    campos = datos["Campo"].nunique()
-    cualitativa("Campo", "Campo", "Campo de producción (el de mayor óleo si el pozo aporta a varios)",
+    # 213 campos principales (uno por pozo) frente a los 221 campos del archivo completo.
+    campos_registro = int(datos["Campo"].nunique())
+    campos_principales = int(pozos["Campo"].nunique())
+    cualitativa("Campo", "Campo principal",
+                f"Campo de la fila con m\u00e1s \u00f3leo ({campos_principales} campos principales; "
+                f"el archivo completo tiene {campos_registro} campos distintos)",
                 "Nominal", "Campos con contrato de concesión", "Nominal", registro,
-                f"{campos} campos")
-    cualitativa("Operador", "Operador", "Empresa que opera el pozo", "Nominal",
-                "Empresas autorizadas por la ANP", "Nominal", registro,
+                f"{campos_principales} campos principales")
+    cualitativa("Operador", "Operador principal", "Operador de la fila con m\u00e1s \u00f3leo",
+                "Nominal", "Empresas autorizadas por la ANP", "Nominal", registro,
                 f"{pozos['Operador'].nunique()} operadores")
-    cualitativa("Tipo Instalação", "Tipo de instalación de destino",
-                "Tipo de instalación que recibe la producción", "Nominal",
-                "Tipos de instalación de la ANP", "Nominal", registro)
-    cualitativa("clase_api", "Clase de crudo",
-                f"Pesado < {API_PESADO:.1f}°; mediano {API_PESADO:.1f}°–{API_LIGERO:.1f}°; ligero > {API_LIGERO:.1f}°".replace(".", ","),
+    cualitativa("Tipo Instalação", "Tipo de instalación",
+                "Tipo de instalación de destino de la fila principal; no se rellena desde otra fila",
+                "Nominal", "Tipos de instalación de la ANP", "Nominal", registro)
+    cualitativa("clase_api", "Clase de crudo por API",
+                f"Pesado < {API_PESADO:.1f}\u00b0; mediano {API_PESADO:.1f}\u00b0\u2013{API_LIGERO:.1f}\u00b0; "
+                f"ligero > {API_LIGERO:.1f}\u00b0 (clasificaci\u00f3n operativa del proyecto)".replace(".", ","),
                 "Ordinal", "{Pesado < Mediano < Ligero}", "Ordinal",
-                "Clasificación a partir del grado API", "Pesado < Mediano < Ligero")
-    cuantitativa("horas", HORAS, "Tiempo de producción", "Horas en que el pozo produjo durante el mes",
-                 "Continua (registrada en horas enteras)", "0 – 744 (horas enteras)", "Razón", medicion, "h/mes", 0)
-    cuantitativa("dias", "— (derivada de Tempo de Produção)", "Días completos de producción",
-                 "⌊horas / 24⌋", "Discreta", "{0, 1, …, 31}", "Razón", "Cálculo a partir de las horas", "días", 0)
-    cuantitativa(OLEO, OLEO, "Óleo", "Volumen medio diario de petróleo (sin condensado)", "Continua",
-                 "[0; +∞)", "Razón", medicion, "bbl/día")
-    cuantitativa(COND, COND, "Condensado", "Volumen medio diario de condensado", "Continua",
-                 "[0; +∞)", "Razón", medicion, "bbl/día")
-    cuantitativa(GAS_A, "Gás Natural · Associado", "Gas natural asociado",
-                 "Gas producido junto con el petróleo", "Continua", "[0; +∞)", "Razón", medicion, "Mm³/día")
-    cuantitativa(GAS_NA, "Gás Natural · Não Associado", "Gas natural no asociado",
-                 "Gas de yacimientos de gas", "Continua", "[0; +∞)", "Razón", medicion, "Mm³/día")
-    cuantitativa(GAS_T, "Gás Natural · Gás Total", "Gas natural total",
-                 "Gas asociado + no asociado", "Continua", "[0; +∞)", "Razón", medicion, "Mm³/día")
-    cuantitativa(AGUA, AGUA, "Agua", "Volumen medio diario de agua producida", "Continua",
-                 "[0; +∞)", "Razón", medicion, "bbl/día")
+                "Clasificaci\u00f3n propia a partir del grado API declarado en el archivo",
+                "Pesado < Mediano < Ligero")
+    cuantitativa("horas", HORAS, "Horas de producción registradas",
+                 "M\u00e1ximo de horas reportadas por pozo; discretas por la resoluci\u00f3n entera del "
+                 "archivo, no porque el tiempo f\u00edsico sea discreto",
+                 "Discreta", "0 \u2013 744 (horas enteras)", "R\u00f3n", declarado, "h/mes", 0)
+    cuantitativa("dias", "\u2014 (derivada de Tempo de Produ\u00e7\u00e3o)", "D\u00edas equivalentes completos",
+                 "Parte entera del m\u00e1ximo de horas entre 24; no son d\u00edas calendario trabajados",
+                 "Discreta", "{0, 1, \u2026, 31}", "R\u00f3n", calculo, "d\u00edas", 0)
+    cuantitativa(OLEO, OLEO, "\u00d3leo por pozo",
+                 "Suma de las tasas medias diarias de \u00f3leo de sus filas; incluye ceros", "Continua",
+                 "[0; +\u221e)", "R\u00f3n", declarado, "bbl/d\u00eda")
+    cuantitativa(COND, COND, "Condensado por pozo",
+                 "Suma de las tasas medias diarias de condensado", "Continua",
+                 "[0; +\u221e)", "R\u00f3n", declarado, "bbl/d\u00eda")
+    cuantitativa(GAS_A, "G\u00e1s Natural \u00b7 Associado", "Gas natural asociado",
+                 "Gas producido junto con el petr\u00f3leo; no confundir con el gas total", "Continua",
+                 "[0; +\u221e)", "R\u00f3n", declarado, "Mm\u00b3/d\u00eda")
+    cuantitativa(GAS_NA, "G\u00e1s Natural \u00b7 N\u00e3o Associado", "Gas natural no asociado",
+                 "Gas de yacimientos de gas", "Continua", "[0; +\u221e)", "R\u00f3n", declarado, "Mm\u00b3/d\u00eda")
+    cuantitativa(GAS_T, "G\u00e1s Natural \u00b7 G\u00e1s Total", "Gas natural total",
+                 "Gas asociado + no asociado", "Continua", "[0; +\u221e)", "R\u00f3n", declarado, "Mm\u00b3/d\u00eda")
+    cuantitativa(AGUA, AGUA, "Agua por pozo",
+                 "Suma de las tasas medias diarias de agua", "Continua",
+                 "[0; +\u221e)", "R\u00f3n", declarado, "bbl/d\u00eda")
     cuantitativa("api", API, "Grado API",
-                 "Densidad del crudo; 141,5/densidad relativa − 131,5. El cero no indica ausencia",
-                 "Continua", "(−∞; +∞), en la práctica 10°–70°", "Intervalo",
-                 "Análisis de laboratorio de la corriente", "°API", 2)
+                 "Primer grado API no nulo al ordenar las filas por \u00f3leo descendente; no se promedian "
+                 "grados de corrientes. Densidad del crudo; 141,5/densidad relativa \u2212 131,5",
+                 "Continua", "(\u2212\u221e; +\u221e), en la pr\u00e1ctica 10\u00b0\u201370\u00b0", "Intervalo",
+                 "Dato declarado en el archivo de la ANP (grado de la corriente); el archivo no "
+                 "identifica el equipo f\u00edsico", "\u00b0API", 2)
 
     def distintos(columna):
         return int(datos[columna].nunique()) if columna in datos else 0

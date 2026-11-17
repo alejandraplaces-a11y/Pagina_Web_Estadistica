@@ -189,7 +189,7 @@
           <div class="container">
             <p class="section-kicker">Reproducción</p>
             <h2 id="reproducir-titulo" class="subsection-title">Cómo reproducir el análisis</h2>
-            <p class="section-intro">Todo el análisis se regenera con tres scripts de Python y se publica como sitio estático, sin pasos de compilación. Las versiones usadas fueron Python 3.14.4, pandas, NumPy y SciPy para los datos; Plotly.js 2.35.2 y Leaflet 1.9.4 para las gráficas y el mapa.</p>
+            <p class="section-intro">Todo el análisis se regenera con los scripts de Python de <code>scripts/</code> y con el generador de entregables de <code>recursos/descriptiva_brasil/</code>, y se publica como sitio estático, sin pasos de compilación. Las versiones usadas fueron Python 3.14.4, pandas, NumPy y SciPy para los datos; Plotly.js 2.35.2 y Leaflet 1.9.4 para las gráficas y el mapa.</p>
 
             <p class="section-kicker section-kicker-spaced">Paso 1 · Entorno</p>
             <p class="stat-scope">Crear un entorno virtual e instalar las tres librerías de cálculo.</p>
@@ -206,6 +206,13 @@
             <p class="section-kicker section-kicker-spaced">Paso 3 · Servir el sitio</p>
             <p class="stat-scope">Abrir <code>http://localhost:8000/</code> desde la raíz del repositorio. Debe servirse por HTTP: las páginas leen los JSON con <code>fetch</code> y abrirlas con <code>file://</code> deja las secciones vacías.</p>
             <pre class="code-block"><code>python3 -m http.server 8000</code></pre>
+
+            <p class="section-kicker section-kicker-spaced">Paso 4 · Entregables de la descriptiva (opcional)</p>
+            <p class="stat-scope">La carpeta <code>recursos/descriptiva_brasil/</code> contiene los dos libros de Excel, los 17 informes HTML por variable y sus datos. Se regenera con su propio script (pandas, NumPy, Matplotlib y openpyxl) y después se reconstruyen las tarjetas de la página con el cuarto script, que no necesita instalar nada.</p>
+            <pre class="code-block"><code>python3 recursos/descriptiva_brasil/reproducibilidad/generar_descriptiva.py \
+    data/2023_01_producao_Terra.csv recursos/descriptiva_brasil
+python3 scripts/4_descriptiva_tarjetas.py</code></pre>
+            <p class="stat-scope"><code>scripts/4_descriptiva_tarjetas.py</code> lee <code>recursos/descriptiva_brasil/datos/descriptiva_brasil.json</code> y reescribe el bloque de 17 tarjetas de <code>Estadistica.html</code>; es idempotente y no toca el resto de la página.</p>
 
             <p class="section-kicker section-kicker-spaced">Uso por sección</p>
             <h3 class="subsection-title">Qué herramienta alimenta cada página</h3>
@@ -229,6 +236,11 @@
                     <th scope="row">Estadística descriptiva</th>
                     <td>pandas, NumPy + <code>scripts/2_descriptiva_inferencial.py</code></td>
                     <td>Variables, tablas de frecuencia e indicadores. Genera <code>variables_estadistica.json</code>, <code>distribucion_frecuencias.json</code> e <code>indicadores_descriptivos.json</code>.</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Entregables descriptivos (Excel e informes)</th>
+                    <td>pandas, NumPy, Matplotlib, openpyxl + <code>recursos/descriptiva_brasil/reproducibilidad/generar_descriptiva.py</code></td>
+                    <td>Escribe los dos libros de Excel, los 17 informes HTML por variable y <code>datos/descriptiva_brasil.json</code>. Después, <code>scripts/4_descriptiva_tarjetas.py</code> refresca las tarjetas de <code>Estadistica.html</code>.</td>
                   </tr>
                   <tr>
                     <th scope="row">Estadística inferencial</th>

@@ -182,3 +182,115 @@
   .var-card { padding: 0 14px; }
   .var-card > summary { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* ============================================================
+   Índice lateral de la descriptiva (mismo patrón que 4.2)
+   ============================================================ */
+
+.descriptiva-cuerpo { display: grid; grid-template-columns: minmax(0, 1fr); }
+.descriptiva-secciones { min-width: 0; width: 100%; }
+
+.indice-lateral { position: sticky; top: 76px; z-index: 5; background: var(--paper-2); border-bottom: 1px solid var(--line); }
+.indice-lateral details { width: min(1120px, calc(100% - 32px)); margin-inline: auto; }
+.indice-lateral summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 0; font-family: var(--sans); font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--oil-deep); cursor: pointer; list-style: none; }
+.indice-lateral summary::-webkit-details-marker { display: none; }
+.indice-lateral summary::after { content: "▾"; font-size: 14px; transition: transform 0.2s; }
+.indice-lateral details[open] summary::after { transform: rotate(180deg); }
+.indice-contenido { max-height: 60vh; overflow-y: auto; padding-bottom: 16px; }
+.indice-grupo + .indice-grupo { margin-top: 18px; }
+.indice-grupo-titulo { margin: 0 0 6px; font-family: var(--sans); font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); }
+.indice-lista { margin: 0; padding: 0; list-style: none; border-left: 1px solid var(--line); }
+.indice-lista a { display: grid; grid-template-columns: 46px minmax(0, 1fr); gap: 6px; margin-left: -1px; padding: 7px 10px 7px 12px; border-left: 2px solid transparent; font-size: 13px; line-height: 1.4; color: var(--ink-soft); text-decoration: none; }
+.indice-lista a:hover { color: var(--ink); background: rgba(11, 34, 30, 0.05); }
+.indice-lista a.is-active, .indice-lista a[aria-current="location"] { border-left-color: var(--oil); background: rgba(140, 109, 70, 0.08); color: var(--ink); font-weight: 600; }
+.indice-numero { font-family: var(--sans); font-size: 11px; color: var(--oil-deep); padding-top: 1px; }
+.indice-estado { display: inline-block; margin-left: 6px; padding: 1px 6px; border-radius: 999px; background: var(--paper); font-size: 10px; font-weight: 600; color: var(--ink-soft); vertical-align: 1px; }
+
+@media (min-width: 900px) {
+  .descriptiva-cuerpo.con-indice { grid-template-columns: minmax(0, 1fr) clamp(220px, 20vw, 280px); align-items: start; }
+  .con-indice .indice-lateral { grid-column: 2; grid-row: 1; top: 88px; max-height: calc(100vh - 104px); margin: 28px 24px 28px 0; padding: 20px 14px 20px 18px; overflow-y: auto; background: var(--paper-2); border: 1px solid var(--line); border-radius: 12px; }
+  .con-indice .descriptiva-secciones { grid-column: 1; grid-row: 1; }
+  .con-indice .indice-lateral details { width: auto; }
+  .con-indice .indice-lateral summary { cursor: default; pointer-events: none; }
+  .con-indice .indice-lateral summary::after { display: none; }
+  .con-indice .indice-contenido { max-height: none; overflow: visible; padding-bottom: 0; }
+  .con-indice .descriptiva-secciones .container { width: calc(100% - 64px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .indice-lateral summary::after { transition: none; }
+}
+
+/* ============================================================
+   Bloques plegables (tablas largas de 4.1.3, 4.1.6 y 4.1.7)
+   ============================================================ */
+
+.bloque-plegable { margin-top: 18px; border: 1px solid var(--line); border-radius: 12px; background: #FFFFFF; padding: 0 20px; }
+.bloque-plegable > summary { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 16px 28px 16px 0; cursor: pointer; list-style: none; position: relative; font-family: var(--sans); font-size: 13px; font-weight: 600; color: var(--ink); }
+.bloque-plegable > summary::-webkit-details-marker { display: none; }
+.bloque-plegable > summary::after { content: "+"; position: absolute; right: 0; top: 12px; font-size: 22px; line-height: 1; color: var(--oil-deep); }
+.bloque-plegable[open] > summary::after { content: "−"; }
+.bloque-plegable > summary:focus-visible { outline: 2px solid var(--oil); outline-offset: 4px; border-radius: 6px; }
+.bloque-plegable-resumen { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; width: 100%; }
+.bloque-plegable-nota { font-weight: 400; font-size: 12px; color: var(--ink-faint); }
+.bloque-plegable[open] { padding-bottom: 20px; }
+.bloque-plegable .table-scroll { margin-top: 4px; }
+
+/* ============================================================
+   Documentación: tablas de variables e indicadores (4.1.3)
+   ============================================================ */
+
+.grid-documentos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; margin-top: 28px; }
+.documento-tarjeta { display: flex; flex-direction: column; padding: 26px 26px 22px; background: #FFFFFF; border: 1px solid var(--line); border-top: 3px solid var(--oil); border-radius: 12px; }
+.documento-tarjeta-tipo { font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--oil-deep); }
+.documento-tarjeta-titulo { margin-top: 10px; font-family: var(--serif); font-size: 22px; font-weight: 500; letter-spacing: -0.02em; color: var(--ink); }
+.documento-tarjeta-texto { margin-top: 12px; color: var(--ink-soft); font-size: 14px; line-height: 1.75; }
+.documento-tarjeta-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+
+.boton-enlace { display: inline-flex; align-items: center; gap: 8px; padding: 11px 20px; border: 1px solid var(--oil); border-radius: 999px; background: var(--oil); color: var(--white); font-family: var(--sans); font-size: 13px; font-weight: 600; line-height: 1; text-decoration: none; transition: background-color .2s var(--ease), color .2s var(--ease), border-color .2s var(--ease), transform .2s var(--ease); }
+.boton-enlace:hover { background: var(--oil-deep); border-color: var(--oil-deep); color: var(--white); transform: translateY(-1px); }
+.boton-enlace-secundario { background: transparent; color: var(--oil-deep); }
+.boton-enlace-secundario:hover { background: rgba(140, 109, 70, .08); color: var(--ink); }
+
+/* ============================================================
+   Análisis por tipo de variable (4.1.3): cuatro grupos, 17 tarjetas
+   ============================================================ */
+
+.grupo-variables { margin-top: 38px; }
+.grupo-variables:first-of-type { margin-top: 30px; }
+.grupo-variables-encabezado { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+.grupo-variables-titulo { font-family: var(--serif); font-size: 22px; font-weight: 500; letter-spacing: -0.02em; color: var(--ink); }
+.grupo-variables-conteo { font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); white-space: nowrap; }
+.grupo-variables-descripcion { margin-top: 12px; max-width: 78ch; color: var(--ink-soft); font-size: 13px; line-height: 1.75; }
+
+.tarjetas-variables { display: grid; grid-template-columns: repeat(auto-fill, minmax(272px, 1fr)); gap: 16px; margin-top: 18px; }
+
+.tarjeta-variable { display: flex; flex-direction: column; gap: 10px; min-width: 0; padding: 20px 20px 18px; background: #FFFFFF; border: 1px solid var(--line); border-radius: 12px; transition: border-color .2s var(--ease), transform .2s var(--ease); }
+.tarjeta-variable:hover { border-color: var(--oil); transform: translateY(-2px); }
+.tarjeta-variable-tipo { align-self: flex-start; padding: 3px 9px; border-radius: 999px; background: rgba(140, 109, 70, .1); font-family: var(--sans); font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--oil-deep); }
+.tarjeta-variable-nombre { font-family: var(--serif); font-size: 20px; font-weight: 500; letter-spacing: -0.02em; color: var(--ink); }
+.tarjeta-variable-lectura { font-size: 13px; line-height: 1.7; color: var(--ink-soft); }
+.tarjeta-variable-datos { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: auto; padding-top: 10px; border-top: 1px solid var(--line); font-size: 11px; color: var(--ink-faint); }
+.tarjeta-variable-datos b { font-family: var(--sans); font-size: 13px; font-weight: 650; color: var(--ink); font-variant-numeric: tabular-nums; }
+.tarjeta-variable-cifras { font-size: 11px; line-height: 1.6; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+.tarjeta-variable-enlace { display: inline-flex; align-items: center; gap: 6px; align-self: flex-start; margin-top: 2px; font-family: var(--sans); font-size: 12px; font-weight: 600; color: var(--oil-deep); text-decoration: none; }
+.tarjeta-variable-enlace:hover { color: var(--ink); text-decoration: underline; }
+.tarjeta-variable-enlace:focus-visible { outline: 2px solid var(--oil); outline-offset: 3px; border-radius: 4px; }
+.tarjeta-variable-flecha { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ============================================================
+   Responsive de los componentes nuevos
+   ============================================================ */
+
+@media (max-width: 900px) {
+  .grid-documentos { grid-template-columns: minmax(0, 1fr); }
+  .tarjetas-variables { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+}
+
+@media (max-width: 560px) {
+  .bloque-plegable { padding: 0 14px; }
+  .bloque-plegable-resumen { flex-direction: column; gap: 2px; }
+  .tarjetas-variables { grid-template-columns: minmax(0, 1fr); }
+  .grupo-variables-encabezado { flex-direction: column; gap: 4px; }
+  .documento-tarjeta { padding: 22px 20px 20px; }
+}

@@ -2,3 +2,5 @@
 .opencode/
 .env/
 opencode-playground/
+__pycache__/
+.venv/
