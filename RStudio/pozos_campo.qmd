@@ -1,0 +1,261 @@
+---
+title: "Pozos por campo"
+subtitle: "Estadística descriptiva · Producción terrestre de Brasil · enero de 2023"
+engine: knitr
+lang: es
+format:
+  html:
+    toc: true
+    toc-location: left
+    code-fold: false
+    code-tools: true
+    embed-resources: true
+    theme: default
+execute:
+  echo: true
+  warning: false
+  message: false
+---
+
+
+## Qué se analiza
+
+Número de pozos con producción en cada campo. Aquí la unidad es el campo, no el pozo.
+
+| | |
+|---|---|
+| **Tipo** | Cuantitativa · Discreta |
+| **Escala de medición** | Razón |
+| **Unidad** | pozos/campo |
+| **Fuente** | Cálculo propio a partir del campo de cada fila (221 campos con al menos una fila) |
+| **Muestra** | periodo 2023/01 · `r fmtn(nrow(pozos), 0)` pozos (una fila por pozo) |
+
+## Datos y consolidación
+
+```{r}
+# ===========================================================================
+# 1 · Datos: una fila por pozo
+# ===========================================================================
+# El CSV de la ANP trae tres encabezados: la fila de nombres ocupa dos líneas
+# físicas (una comilla contiene un salto de línea) y debajo vienen dos filas de
+# subencabezado. Los datos empiezan en la quinta línea física; todas las filas
+# tienen 48 campos.
+
+ruta_produccion <- "../data/2023_01_producao_Terra.csv"
+
+lineas <- readLines(ruta_produccion, encoding = "UTF-8", warn = FALSE)
+lineas <- sub("\r$", "", lineas)
+
+orig <- trimws(gsub('"', "", strsplit(paste(lineas[1], lineas[2], sep = "\n"),
+                                       ";", fixed = TRUE)[[1]]))
+stopifnot(length(orig) == 48, orig[1] == "Estado", orig[5] == "Campo",
+          orig[6] == "Operador")
+
+# Nombres simples por posición: así no se depende de los acentos ni de las
+# columnas sin nombre del encabezado.
+nombres <- orig
+nombres[orig == ""] <- paste0("V", which(orig == ""))
+nombres[c(1, 2, 3, 5, 6, 9, 10, 12, 13, 14, 16, 18, 19, 22)] <-
+  c("estado", "bacia", "id_pozo", "campo", "operador", "oleo", "condensado",
+    "gas_asociado", "gas_no_asociado", "gas_total", "agua",
+    "tipo_instalacion", "horas", "api")
+
+datos <- read.csv(
+  text = paste(lineas[-(1:4)], collapse = "\n"),
+  sep = ";", header = FALSE, col.names = nombres,
+  stringsAsFactors = FALSE, colClasses = "character",
+  quote = "", comment.char = "", fill = TRUE, check.names = FALSE
+)
+
+# Conversión numérica: el punto es separador de miles y la coma es decimal.
+a_num <- function(x) {
+  x <- trimws(x)
+  x[!is.na(x) & !nzchar(x)] <- NA_character_
+  con_coma <- !is.na(x) & grepl(",", x)
+  x[con_coma] <- gsub(",", ".", gsub("\\.", "", x[con_coma]), fixed = TRUE)
+  suppressWarnings(as.numeric(x))
+}
+
+datos$oleo <- a_num(datos$oleo)
+datos$condensado <- a_num(datos$condensado)
+datos$gas_asociado <- a_num(datos$gas_asociado)
+datos$gas_no_asociado <- a_num(datos$gas_no_asociado)
+datos$gas_total <- a_num(datos$gas_total)
+datos$agua <- a_num(datos$agua)
+datos$horas <- a_num(datos$horas)
+datos$api <- a_num(datos$api)
+datos$id <- trimws(datos$id_pozo)
+
+# --- Consolidación ---------------------------------------------------------
+# Los pozos repetidos aparecen una vez por cada campo al que aportan (mismo
+# contrato y Estado): sus volúmenes son partes del total y se suman. Las horas
+# se repiten entre filas, así que se toma el máximo para no pasar de 744 h. Las
+# categorías y el grado API salen de la fila con más óleo del pozo.
+ord <- order(-datos$oleo, seq_len(nrow(datos)), na.last = TRUE)
+dat <- datos[ord, , drop = FALSE]
+principal <- dat[!duplicated(dat$id), , drop = FALSE]
+
+vol <- c("oleo", "condensado", "gas_asociado", "gas_no_asociado", "gas_total",
+         "agua")
+dat[vol] <- lapply(dat[vol], function(z) { z[is.na(z)] <- 0; z })
+sumas <- rowsum(dat[vol], group = dat$id, reorder = FALSE)
+ids <- rownames(sumas)
+mat <- as.matrix(sumas)
+
+pozos <- data.frame(id = ids, stringsAsFactors = FALSE)
+for (v in vol) pozos[[v]] <- as.numeric(mat[, v])
+
+horas_max <- tapply(dat$horas, dat$id,
+                    function(z) if (all(is.na(z))) NA_real_ else max(z, na.rm = TRUE))
+pozos$horas <- as.numeric(horas_max[ids])
+
+campos_n <- tapply(dat$campo, dat$id, function(z) length(unique(z)))
+pozos$campos <- as.integer(campos_n[ids])
+
+mfil <- match(ids, principal$id)
+pozos$estado <- principal$estado[mfil]
+pozos$bacia <- principal$bacia[mfil]
+pozos$operador <- principal$operador[mfil]
+pozos$campo <- principal$campo[mfil]
+pozos$tipo_instalacion <- principal$tipo_instalacion[mfil]
+
+# Primer grado API no nulo al ordenar por óleo descendente: no se promedian
+# grados de corrientes distintas.
+api_pri <- tapply(dat$api, dat$id,
+                  function(z) { z <- z[!is.na(z)]; if (length(z)) z[1] else NA_real_ })
+pozos$api <- as.numeric(api_pri[ids])
+
+# Días equivalentes completos: parte entera de las horas ÷ 24 (no son días
+# calendario trabajados).
+pozos$dias <- pmin(31, pmax(0, floor(ifelse(is.na(pozos$horas), 0, pozos$horas) / 24)))
+
+# --- Variables derivadas ---------------------------------------------------
+pozos$produce_oleo <- ifelse(pozos$oleo > 0, "Sí", "No")
+pozos$produce_gas <- ifelse(pozos$gas_total > 0, "Sí", "No")
+# Pesado < 22,3° · mediano 22,3°–31,1° (inclusive) · ligero > 31,1°
+pozos$clase_api <- ifelse(is.na(pozos$api), NA_character_,
+                  ifelse(pozos$api < 22.3, "Pesado",
+                  ifelse(pozos$api <= 31.1, "Mediano", "Ligero")))
+# Cortes en los cuartiles del óleo por pozo
+q <- unname(quantile(pozos$oleo, c(0.25, 0.75), na.rm = TRUE))
+pozos$nivel_oleo <- ifelse(pozos$oleo <= q[1], "Bajo",
+                    ifelse(pozos$oleo <= q[2], "Medio", "Alto"))
+# 0 días: inactivo · 1 a 30: parcial · 31: continuo
+pozos$nivel_actividad <- ifelse(pozos$dias == 0, "Inactivo",
+                         ifelse(pozos$dias >= 31, "Continuo", "Parcial"))
+
+# --- Utilidades de formato (español) ---------------------------------------
+fmtn <- function(x, d = 4) formatC(x, format = "f", digits = d,
+                                   decimal.mark = ",", big.mark = ".")
+fmtp <- function(x, d = 1) formatC(x, format = "f", digits = d,
+                                   decimal.mark = ",", big.mark = ".")
+fmtg <- function(x) gsub(".", ",", formatC(x, format = "g", digits = 5), fixed = TRUE)
+sturges <- function(n) ceiling(1 + 3.322 * log10(n))
+
+```
+
+## Tabla de frecuencias
+
+```{r tdf}
+por_campo <- tapply(datos$id, datos$campo, function(z) length(unique(z)))
+serie <- as.numeric(por_campo)
+x <- serie[!is.na(serie)]
+n_validos <- length(x)
+n_nulos <- length(serie) - n_validos
+
+# TDF por intervalos de Sturges; el último límite se cierra en el máximo
+k <- sturges(length(x))
+amplitud <- (max(x) - min(x)) / k
+if (amplitud == 0) amplitud <- 1
+bordes <- min(x) + amplitud * (0:k)
+bordes[k + 1] <- max(x)
+indice <- pmin(floor((x - min(x)) / amplitud), k - 1) + 1
+conteo <- table(factor(indice, levels = 1:k))
+
+li <- bordes[as.integer(names(conteo))]
+ls <- bordes[as.integer(names(conteo)) + 1]
+d <- if (amplitud < 0.01) 4 else if (amplitud < 1) 2 else if (amplitud < 1000) 1 else 0
+tdf <- data.frame(
+  Clase = paste0("[", fmtn(li, d), "; ", fmtn(ls, d), ")"),
+  li = li, ls = ls, marca = (li + ls) / 2,
+  fi = as.integer(conteo),
+  hi = as.numeric(conteo) / n_validos,
+  Fi = cumsum(as.integer(conteo)),
+  Hi = cumsum(as.numeric(conteo)) / n_validos,
+  row.names = NULL
+)
+tdf
+
+clase_modal <- which.max(tdf$fi)
+marca_modal <- tdf$marca[clase_modal]
+```
+
+
+## Gráfica
+
+```{r bastones}
+#| fig-cap: "Diagrama de bastones"
+ggplot(tdf, aes(x = marca, y = fi)) +
+  geom_col(fill = "#1F5C52", width = 0.7 * diff(range(tdf$marca)) / length(tdf$marca)) +
+  labs(title = "Pozos por campo", x = "pozos/campo", y = "Frecuencia") +
+  theme_minimal(base_size = 12)
+```
+
+
+## Indicadores
+
+```{r moda}
+moda <- fmtn(marca_modal, 1)
+```
+
+```{r indicadores}
+media <- mean(x)
+mediana <- median(x)
+varianza <- var(x)
+desv <- sd(x)
+cv <- 100 * desv / media
+nn <- length(x)
+z <- (x - media) / desv
+asimetria <- (nn / ((nn - 1) * (nn - 2))) * sum(z^3)
+curtosis <- (nn * (nn + 1) / ((nn - 1) * (nn - 2) * (nn - 3))) * sum(z^4) -
+  3 * (nn - 1)^2 / ((nn - 2) * (nn - 3))
+q1 <- quantile(x, 0.25, names = FALSE)
+q3 <- quantile(x, 0.75, names = FALSE)
+ric <- q3 - q1
+bajos <- sum(x < q1 - 1.5 * ric)
+altos <- sum(x > q3 + 1.5 * ric)
+
+data.frame(
+  Indicador = c("n (válidos)", "Sin dato", "Mínimo", "Q1", "Mediana", "Q3",
+                "Máximo", "Media", "Moda", "Varianza", "Desviación estándar",
+                "CV (%)", "Asimetría", "Curtosis", "Atípicos bajos", "Atípicos altos"),
+  Valor = c(fmtn(n_validos, 0), fmtn(n_nulos, 0), fmtn(min(x), 4), fmtn(q1, 4),
+            fmtn(mediana, 4), fmtn(q3, 4), fmtn(max(x), 4), fmtn(media, 4),
+            moda, fmtn(varianza, 4), fmtn(desv, 4), fmtp(cv, 1),
+            fmtn(asimetria, 3), fmtn(curtosis, 3), fmtn(bajos, 0), fmtn(altos, 0)),
+  row.names = NULL
+)
+```
+
+
+## Interpretación
+
+La media es `r fmtn(media, 1)` pozos por campo y la mediana `r fmtn(mediana, 1)`: la distribución está muy tirada por los campos grandes. La moda cae en la clase `r tdf$Clase[clase_modal]` (marca `r fmtn(marca_modal, 1)`). El campo con más pozos es **`r names(por_campo)[which.max(por_campo)]`** con `r fmtn(max(por_campo), 0)`, y `r fmtn(sum(por_campo == 1), 0)` campos tienen un solo pozo.
+
+La suma de los conteos da `r fmtn(sum(por_campo), 0)`, mayor que `r fmtn(nrow(pozos), 0)` pozos, porque un pozo que aporta a dos campos cuenta en ambos.
+
+## Notas
+
+- La unidad estadística cambia: el individuo es el campo (n = 221), no el pozo.
+- Un pozo que aporta a dos campos cuenta en ambos; por eso la suma da 5.471 y no 5.308.
+
+## Reproducibilidad
+
+- **Fuente principal:** `data/2023_01_producao_Terra.csv` (ANP, periodo 2023/01;
+  sha256 `ee41f84f84de3ec3…`).
+- **Consolidación:** una fila por pozo (`Nome Poço`); los volúmenes de las filas
+  repetidas se suman, las horas toman el máximo y las categorías salen de la fila
+  con más óleo.
+- **Unidad estadística:** pozo (n = `r fmtn(nrow(pozos), 0)`).
+- **Cómo renderizar:** desde la carpeta `RStudio/`,
+  `quarto render pozos_campo.qmd` (requiere R y el paquete `ggplot2`).

@@ -65,56 +65,6 @@
     });
   }
 
-  const COLUMNAS_VARIABLES = [
-    { clave: 'columna', encabezado: true },
-    { clave: 'traduccion' },
-    { clave: 'descripcion' },
-    { clave: 'tipo' },
-    { clave: 'subtipo' },
-    { clave: 'dominio' },
-    { clave: 'rango' },
-    { clave: 'escala' },
-    { clave: 'fuente' },
-    { clave: 'unidad' },
-    { clave: 'validos', numero: true },
-    { clave: 'nulos', numero: true },
-    { clave: 'ceros', numero: true },
-  ];
-
-  function renderVariables(datos) {
-    const tbody = $('#tabla-variables');
-    if (tbody) {
-      tbody.replaceChildren();
-      datos.variables.forEach((variable) => {
-        const tr = document.createElement('tr');
-        COLUMNAS_VARIABLES.forEach((columna) => {
-          const celda = document.createElement(columna.encabezado ? 'th' : 'td');
-          if (columna.encabezado) celda.scope = 'row';
-          if (columna.numero) celda.className = 'numero';
-          const valor = variable[columna.clave];
-          celda.textContent = valor === null || valor === undefined
-            ? '—'
-            : columna.numero ? entero.format(valor) : String(valor);
-          tr.appendChild(celda);
-        });
-        tbody.appendChild(tr);
-      });
-    }
-
-    const lista = $('#excluidas-variables');
-    if (lista) {
-      lista.replaceChildren();
-      datos.excluidas.forEach((excluida) => {
-        const li = document.createElement('li');
-        const distintos = excluida.valores_distintos
-          ? ` (${entero.format(excluida.valores_distintos)} ${excluida.valores_distintos === 1 ? 'valor distinto' : 'valores distintos'})`
-          : '';
-        li.textContent = `${excluida.variable}: ${excluida.motivo}${distintos}.`;
-        lista.appendChild(li);
-      });
-    }
-  }
-
   async function load() {
     try {
       const estadistica = await leerJSON('data/estadistica_descriptiva.json');
@@ -137,14 +87,6 @@
     }
 
     initReveals();
-
-    try {
-      renderVariables(await leerJSON('data/variables_estadistica.json'));
-      $('#estado-variables').hidden = true;
-      $('#contenido-variables').hidden = false;
-    } catch (error) {
-      mostrarError('estado-variables', `No se pudo cargar la tabla de variables. ${error.message}`, error);
-    }
   }
 
   if (document.readyState === 'loading') {

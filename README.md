@@ -44,7 +44,7 @@ Las quince páginas comparten una **barra lateral colapsable** (estado persistid
 - Población: pozos terrestres de Brasil (N no fijado). Muestra: pozos con reporte en enero de 2023, n = 5.308. Los 143 pozos repetidos aportan a varios campos: sus volúmenes se suman y sus horas toman el máximo.
 - Tabla de variables con traducción, descripción, tipo, subtipo, dominio, rango observado, escala, fuente del dato, unidad, válidos, nulos y ceros calculados desde los datos.
 - Documentación descargable: `recursos/descriptiva_brasil/documentos/Tabla_Variables_Brasil.xlsx` y `Tabla_Indicadores_Brasil.xlsx`.
-- Análisis por tipo de variable: 7 nominales, 1 ordinal, 2 discretas y 7 continuas; cada ficha enlaza a su informe HTML local en `recursos/descriptiva_brasil/analisis/`.
+- Análisis por tipo de variable: 9 nominales, 4 ordinales, 2 discretas y 12 continuas (27 variables); las 17 con informe individual enlazan a su HTML local en `recursos/descriptiva_brasil/analisis/` y las otras 10 quedan documentadas en la tabla de variables.
 - TDF con hᵢ = fᵢ / n para Estado (nominal), clase de crudo por API (ordinal), días de producción (discreta) y óleo (continua: clase {0} + clases de igual ancho en log₁₀).
 - GDF: barras, bastones, histograma con polígono en escala log₁₀ y ojiva sobre los límites superiores de clase.
 - Indicadores de óleo, gas y agua (clase modal, atípicos con 1,5·RIC, CV solo en escala de razón) y de días, grado API y clase de crudo.

@@ -2450,10 +2450,10 @@
       "clave": "horas",
       "nombre": "Horas de producción registradas",
       "tipo": "Cuantitativa",
-      "subtipo": "Discreta",
+      "subtipo": "Continua",
       "escala": "Razón",
       "unidad": "h/mes",
-      "descripcion": "Máximo de horas reportadas por pozo; discretas por resolución entera del archivo, no porque el tiempo físico sea discreto",
+      "descripcion": "Máximo de horas reportadas por pozo; el tiempo es continuo, aunque el archivo lo registre en horas enteras",
       "ruta": "analisis/horas.html",
       "indicadores": {
         "validos": 5308,

@@ -48,7 +48,7 @@ SPEC=[
 ('produce_gas','Produce gas total','Nominal','—','Sí cuando gas asociado + no asociado es mayor que cero','Derivada de Gás Total','Nominal'),
 ('clase_api','Clase de crudo por API','Ordinal','—','Pesado <22,3; mediano 22,3–31,1 inclusive; ligero >31,1 (clasificación operativa del proyecto)','Derivada de Grau API','Ordinal'),
 ('dias','Días equivalentes completos','Discreta','días','Parte entera del máximo de horas por pozo dividido entre 24; no días calendario efectivamente trabajados','Derivada de Tempo de Produção','Razón'),
-('horas','Horas de producción registradas','Discreta','h/mes','Máximo de horas reportadas por pozo; discretas por resolución entera del archivo, no porque el tiempo físico sea discreto','Tempo de Produção (hs por mês)','Razón'),
+('horas','Horas de producción registradas','Continua','h/mes','Máximo de horas reportadas por pozo; el tiempo es continuo, aunque el archivo lo registre en horas enteras','Tempo de Produção (hs por mês)','Razón'),
 ('oleo','Óleo por pozo','Continua','bbl/día','Suma de tasas medias diarias de óleo de sus filas; incluye ceros','Óleo (bbl/dia)','Razón'),
 ('condensado','Condensado por pozo','Continua','bbl/día','Suma de tasas medias diarias de condensado','Condensado (bbl/dia)','Razón'),
 ('gas_asociado','Gas natural asociado','Continua','Mm³/día','Suma de la subcolumna Associado; no confundir con gas total','Gás Natural · Associado','Razón'),
@@ -107,7 +107,7 @@ for key,name,sub,unit,definition,original,scale in SPEC:
     domain= 'Categorías del registro ANP' if cat else '[0; +∞)' if scale=='Razón' else 'Escala API (cero convencional)'
     if sub=='Ordinal': domain='Pesado < Mediano < Ligero'
     if key=='dias': domain='{0,1,…,31}'
-    if key=='horas': domain='{0,1,…,744} según resolución del archivo'
+    if key=='horas': domain='0 – 744 (horas enteras en el registro)'
     observed='; '.join(map(str,sorted(x.unique()))) if cat else f"{f(stats['minimo'])} a {f(stats['maximo'])}"
     dictionaries.append([original,name,definition,'Cualitativa' if cat else 'Cuantitativa',sub,domain,observed,instrument,unit,scale,n,N-n,stats.get('ceros','—')])
     ind_rows.append([name,observed,stats.get('media','No aplica'),stats.get('mediana','No aplica'),stats.get('clase_modal') or stats['moda'],stats.get('sd','No aplica'),stats.get('cv_pct') if stats.get('cv_pct') is not None else 'No aplica',stats.get('asimetria','No aplica'),stats.get('curtosis_exceso','No aplica'),stats.get('outliers','No aplica')])

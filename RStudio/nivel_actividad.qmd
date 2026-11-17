@@ -1,0 +1,229 @@
+---
+title: "Nivel de actividad en el mes"
+subtitle: "Estadística descriptiva · Producción terrestre de Brasil · enero de 2023"
+engine: knitr
+lang: es
+format:
+  html:
+    toc: true
+    toc-location: left
+    code-fold: false
+    code-tools: true
+    embed-resources: true
+    theme: default
+execute:
+  echo: true
+  warning: false
+  message: false
+---
+
+
+## Qué se analiza
+
+Indica cuánto trabajó el pozo en enero: inactivo (0 días), parcial (1 a 30 días) o continuo (31 días).
+
+| | |
+|---|---|
+| **Tipo** | Cualitativa · Ordinal |
+| **Escala de medición** | Ordinal |
+| **Unidad** | — |
+| **Fuente** | Cálculo propio a partir de los días equivalentes completos |
+| **Muestra** | periodo 2023/01 · `r fmtn(nrow(pozos), 0)` pozos (una fila por pozo) |
+
+## Datos y consolidación
+
+```{r}
+# ===========================================================================
+# 1 · Datos: una fila por pozo
+# ===========================================================================
+# El CSV de la ANP trae tres encabezados: la fila de nombres ocupa dos líneas
+# físicas (una comilla contiene un salto de línea) y debajo vienen dos filas de
+# subencabezado. Los datos empiezan en la quinta línea física; todas las filas
+# tienen 48 campos.
+
+ruta_produccion <- "../data/2023_01_producao_Terra.csv"
+
+lineas <- readLines(ruta_produccion, encoding = "UTF-8", warn = FALSE)
+lineas <- sub("\r$", "", lineas)
+
+orig <- trimws(gsub('"', "", strsplit(paste(lineas[1], lineas[2], sep = "\n"),
+                                       ";", fixed = TRUE)[[1]]))
+stopifnot(length(orig) == 48, orig[1] == "Estado", orig[5] == "Campo",
+          orig[6] == "Operador")
+
+# Nombres simples por posición: así no se depende de los acentos ni de las
+# columnas sin nombre del encabezado.
+nombres <- orig
+nombres[orig == ""] <- paste0("V", which(orig == ""))
+nombres[c(1, 2, 3, 5, 6, 9, 10, 12, 13, 14, 16, 18, 19, 22)] <-
+  c("estado", "bacia", "id_pozo", "campo", "operador", "oleo", "condensado",
+    "gas_asociado", "gas_no_asociado", "gas_total", "agua",
+    "tipo_instalacion", "horas", "api")
+
+datos <- read.csv(
+  text = paste(lineas[-(1:4)], collapse = "\n"),
+  sep = ";", header = FALSE, col.names = nombres,
+  stringsAsFactors = FALSE, colClasses = "character",
+  quote = "", comment.char = "", fill = TRUE, check.names = FALSE
+)
+
+# Conversión numérica: el punto es separador de miles y la coma es decimal.
+a_num <- function(x) {
+  x <- trimws(x)
+  x[!is.na(x) & !nzchar(x)] <- NA_character_
+  con_coma <- !is.na(x) & grepl(",", x)
+  x[con_coma] <- gsub(",", ".", gsub("\\.", "", x[con_coma]), fixed = TRUE)
+  suppressWarnings(as.numeric(x))
+}
+
+datos$oleo <- a_num(datos$oleo)
+datos$condensado <- a_num(datos$condensado)
+datos$gas_asociado <- a_num(datos$gas_asociado)
+datos$gas_no_asociado <- a_num(datos$gas_no_asociado)
+datos$gas_total <- a_num(datos$gas_total)
+datos$agua <- a_num(datos$agua)
+datos$horas <- a_num(datos$horas)
+datos$api <- a_num(datos$api)
+datos$id <- trimws(datos$id_pozo)
+
+# --- Consolidación ---------------------------------------------------------
+# Los pozos repetidos aparecen una vez por cada campo al que aportan (mismo
+# contrato y Estado): sus volúmenes son partes del total y se suman. Las horas
+# se repiten entre filas, así que se toma el máximo para no pasar de 744 h. Las
+# categorías y el grado API salen de la fila con más óleo del pozo.
+ord <- order(-datos$oleo, seq_len(nrow(datos)), na.last = TRUE)
+dat <- datos[ord, , drop = FALSE]
+principal <- dat[!duplicated(dat$id), , drop = FALSE]
+
+vol <- c("oleo", "condensado", "gas_asociado", "gas_no_asociado", "gas_total",
+         "agua")
+dat[vol] <- lapply(dat[vol], function(z) { z[is.na(z)] <- 0; z })
+sumas <- rowsum(dat[vol], group = dat$id, reorder = FALSE)
+ids <- rownames(sumas)
+mat <- as.matrix(sumas)
+
+pozos <- data.frame(id = ids, stringsAsFactors = FALSE)
+for (v in vol) pozos[[v]] <- as.numeric(mat[, v])
+
+horas_max <- tapply(dat$horas, dat$id,
+                    function(z) if (all(is.na(z))) NA_real_ else max(z, na.rm = TRUE))
+pozos$horas <- as.numeric(horas_max[ids])
+
+campos_n <- tapply(dat$campo, dat$id, function(z) length(unique(z)))
+pozos$campos <- as.integer(campos_n[ids])
+
+mfil <- match(ids, principal$id)
+pozos$estado <- principal$estado[mfil]
+pozos$bacia <- principal$bacia[mfil]
+pozos$operador <- principal$operador[mfil]
+pozos$campo <- principal$campo[mfil]
+pozos$tipo_instalacion <- principal$tipo_instalacion[mfil]
+
+# Primer grado API no nulo al ordenar por óleo descendente: no se promedian
+# grados de corrientes distintas.
+api_pri <- tapply(dat$api, dat$id,
+                  function(z) { z <- z[!is.na(z)]; if (length(z)) z[1] else NA_real_ })
+pozos$api <- as.numeric(api_pri[ids])
+
+# Días equivalentes completos: parte entera de las horas ÷ 24 (no son días
+# calendario trabajados).
+pozos$dias <- pmin(31, pmax(0, floor(ifelse(is.na(pozos$horas), 0, pozos$horas) / 24)))
+
+# --- Variables derivadas ---------------------------------------------------
+pozos$produce_oleo <- ifelse(pozos$oleo > 0, "Sí", "No")
+pozos$produce_gas <- ifelse(pozos$gas_total > 0, "Sí", "No")
+# Pesado < 22,3° · mediano 22,3°–31,1° (inclusive) · ligero > 31,1°
+pozos$clase_api <- ifelse(is.na(pozos$api), NA_character_,
+                  ifelse(pozos$api < 22.3, "Pesado",
+                  ifelse(pozos$api <= 31.1, "Mediano", "Ligero")))
+# Cortes en los cuartiles del óleo por pozo
+q <- unname(quantile(pozos$oleo, c(0.25, 0.75), na.rm = TRUE))
+pozos$nivel_oleo <- ifelse(pozos$oleo <= q[1], "Bajo",
+                    ifelse(pozos$oleo <= q[2], "Medio", "Alto"))
+# 0 días: inactivo · 1 a 30: parcial · 31: continuo
+pozos$nivel_actividad <- ifelse(pozos$dias == 0, "Inactivo",
+                         ifelse(pozos$dias >= 31, "Continuo", "Parcial"))
+
+# --- Utilidades de formato (español) ---------------------------------------
+fmtn <- function(x, d = 4) formatC(x, format = "f", digits = d,
+                                   decimal.mark = ",", big.mark = ".")
+fmtp <- function(x, d = 1) formatC(x, format = "f", digits = d,
+                                   decimal.mark = ",", big.mark = ".")
+fmtg <- function(x) gsub(".", ",", formatC(x, format = "g", digits = 5), fixed = TRUE)
+sturges <- function(n) ceiling(1 + 3.322 * log10(n))
+
+```
+
+## Tabla de frecuencias (con el orden de las categorías)
+
+```{r tdf}
+serie <- factor(pozos$nivel_actividad, levels = c("Inactivo", "Parcial", "Continuo"), ordered = TRUE)
+n <- length(serie)
+serie <- serie[!is.na(serie)]
+n_validos <- length(serie)
+n_nulos <- n - n_validos
+
+# table() respeta el orden de los niveles del factor
+conteo <- table(serie)
+
+tdf <- data.frame(
+  Categoría = names(conteo),
+  fi = as.integer(conteo),
+  hi = as.numeric(conteo) / n_validos,
+  Fi = cumsum(as.integer(conteo)),
+  Hi = cumsum(as.numeric(conteo)) / n_validos,
+  row.names = NULL
+)
+tdf
+
+moda <- names(conteo)[which.max(conteo)]
+# Mediana categórica: primera categoría que alcanza el 50 % acumulado
+mediana <- names(conteo)[which(cumsum(conteo) >= n_validos / 2)[1]]
+```
+
+
+## Gráfica ordenada
+
+```{r barras}
+#| fig-cap: "Diagrama de barras en el orden natural de la variable"
+dfg <- data.frame(Categoría = tdf$Categoría, fi = tdf$fi)
+dfg$Categoría <- factor(dfg$Categoría, levels = tdf$Categoría, ordered = TRUE)
+
+ggplot(dfg, aes(x = Categoría, y = fi)) +
+  geom_col(fill = "#1F5C52", width = 0.6) +
+  labs(title = "Nivel de actividad en el mes", x = NULL, y = "Frecuencia (pozos)") +
+  theme_minimal(base_size = 12)
+```
+
+
+## Moda y mediana
+
+```{r resumen}
+data.frame(Moda = moda, Pozos = tdf$fi[tdf$Categoría == moda],
+           Mediana = mediana, row.names = NULL)
+```
+
+
+## Interpretación
+
+La moda es **`r moda`** (`r fmtn(tdf$fi[tdf$Categoría == moda], 0)` pozos) y la mediana categórica cae en **`r mediana`**: al acumular las frecuencias es la primera categoría que alcanza el 50 % de los pozos con dato.
+
+La variable tiene orden, pero no distancia entre categorías: por eso no se calculan media ni desviación estándar. El resumen es la moda, la mediana categórica y la tabla de frecuencias acumuladas.
+
+Las categorías van de menor a mayor: Inactivo < Parcial < Continuo.
+
+## Notas
+
+- 0 días: inactivo · 1 a 30 días: parcial · 31 días: continuo.
+- Los días equivalentes completos salen de las horas ÷ 24, parte entera.
+
+## Reproducibilidad
+
+- **Fuente principal:** `data/2023_01_producao_Terra.csv` (ANP, periodo 2023/01;
+  sha256 `ee41f84f84de3ec3…`).
+- **Consolidación:** una fila por pozo (`Nome Poço`); los volúmenes de las filas
+  repetidas se suman, las horas toman el máximo y las categorías salen de la fila
+  con más óleo.
+- **Unidad estadística:** pozo (n = `r fmtn(nrow(pozos), 0)`).
+- **Cómo renderizar:** desde la carpeta `RStudio/`,
+  `quarto render nivel_actividad.qmd` (requiere R y el paquete `ggplot2`).

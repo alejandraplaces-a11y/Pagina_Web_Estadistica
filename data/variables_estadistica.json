@@ -80,6 +80,106 @@
       "ceros": null
     },
     {
+      "columna": "— (derivada de Óleo)",
+      "traduccion": "Produce óleo",
+      "descripcion": "Sí cuando el óleo consolidado del pozo es mayor que cero; No cuando es cero",
+      "tipo": "Cualitativa",
+      "subtipo": "Nominal",
+      "dominio": "{Sí, No}",
+      "rango": "2 categorías (Sí: 4.888; No: 420)",
+      "escala": "Nominal",
+      "fuente": "Cálculo propio a partir del óleo del pozo",
+      "unidad": "—",
+      "validos": 5308,
+      "nulos": 0,
+      "ceros": null
+    },
+    {
+      "columna": "— (derivada de Gás Total)",
+      "traduccion": "Produce gas total",
+      "descripcion": "Sí cuando gas asociado + no asociado es mayor que cero; No cuando es cero",
+      "tipo": "Cualitativa",
+      "subtipo": "Nominal",
+      "dominio": "{Sí, No}",
+      "rango": "2 categorías (Sí: 5.069; No: 239)",
+      "escala": "Nominal",
+      "fuente": "Cálculo propio a partir del gas total del pozo",
+      "unidad": "—",
+      "validos": 5308,
+      "nulos": 0,
+      "ceros": null
+    },
+    {
+      "columna": "CATEGORIA (Tabela de Poços)",
+      "traduccion": "Categoría del pozo",
+      "descripcion": "Propósito con que se perforó el pozo: desarrollo, extensión, exploración, inyección…",
+      "tipo": "Cualitativa",
+      "subtipo": "Nominal",
+      "dominio": "{Desarrollo, Extensión, Pionero, Especial, Inyección, Pionero adyacente, Yacimiento más profundo, Yacimiento más somero}",
+      "rango": "8 categorías",
+      "escala": "Nominal",
+      "fuente": "Registro administrativo de la ANP (Tabela de Poços); el archivo no identifica el equipo físico",
+      "unidad": "—",
+      "validos": 5308,
+      "nulos": 0,
+      "ceros": null,
+      "tarjeta": {
+        "lectura": "La categoría más frecuente es Desarrollo: 4.811 de 5.308 pozos con dato (90,6 %).",
+        "datos": [
+          [
+            "5.308",
+            "con dato"
+          ],
+          [
+            "0",
+            "sin dato"
+          ],
+          [
+            "8",
+            "categorías"
+          ]
+        ],
+        "cifras": [
+          "Categoría modal: Desarrollo (4.811 pozos, 90,6 %)"
+        ]
+      }
+    },
+    {
+      "columna": "DIRECAO (Tabela de Poços)",
+      "traduccion": "Dirección del pozo",
+      "descripcion": "Trayectoria de la perforación: vertical, direccional u horizontal",
+      "tipo": "Cualitativa",
+      "subtipo": "Nominal",
+      "dominio": "{Vertical, Direccional, Horizontal}",
+      "rango": "3 categorías (Vertical 4.036; Direccional 1.178; Horizontal 94)",
+      "escala": "Nominal",
+      "fuente": "Registro administrativo de la ANP (Tabela de Poços); el archivo no identifica el equipo físico",
+      "unidad": "—",
+      "validos": 5308,
+      "nulos": 0,
+      "ceros": null,
+      "tarjeta": {
+        "lectura": "La categoría más frecuente es Vertical: 4.036 de 5.308 pozos con dato (76,0 %).",
+        "datos": [
+          [
+            "5.308",
+            "con dato"
+          ],
+          [
+            "0",
+            "sin dato"
+          ],
+          [
+            "3",
+            "categorías"
+          ]
+        ],
+        "cifras": [
+          "Vertical 4.036 · Direccional 1.178 · Horizontal 94"
+        ]
+      }
+    },
+    {
       "columna": "— (derivada de Grau API)",
       "traduccion": "Clase de crudo por API",
       "descripcion": "Pesado < 22,3°; mediano 22,3°–31,1°; ligero > 31,1° (clasificación operativa del proyecto)",
@@ -95,19 +195,112 @@
       "ceros": null
     },
     {
-      "columna": "Tempo de Produção (hs por mês)",
-      "traduccion": "Horas de producción registradas",
-      "descripcion": "Máximo de horas reportadas por pozo; discretas por la resolución entera del archivo, no porque el tiempo físico sea discreto",
-      "tipo": "Cuantitativa",
-      "subtipo": "Discreta",
-      "dominio": "0 – 744 (horas enteras)",
-      "rango": "0 – 744",
-      "escala": "Rón",
-      "fuente": "Dato declarado en el archivo de la ANP; el archivo no identifica el equipo físico",
-      "unidad": "h/mes",
+      "columna": "— (derivada de los días de producción)",
+      "traduccion": "Nivel de actividad en el mes",
+      "descripcion": "Inactivo con 0 días; parcial de 1 a 30 días; continuo con 31 días",
+      "tipo": "Cualitativa",
+      "subtipo": "Ordinal",
+      "dominio": "{Inactivo < Parcial < Continuo}",
+      "rango": "Inactivo < Parcial < Continuo (Inactivo 356; Parcial 3.358; Continuo 1.594)",
+      "escala": "Ordinal",
+      "fuente": "Cálculo propio a partir de los días equivalentes completos",
+      "unidad": "—",
       "validos": 5308,
       "nulos": 0,
-      "ceros": 109
+      "ceros": null,
+      "tarjeta": {
+        "lectura": "Inactivo 356, parcial 3.358 y continuo 1.594 pozos; la moda y la mediana son Parcial.",
+        "datos": [
+          [
+            "5.308",
+            "con dato"
+          ],
+          [
+            "0",
+            "sin dato"
+          ],
+          [
+            "3",
+            "categorías"
+          ]
+        ],
+        "cifras": [
+          "0 días: inactivo · 1–30 días: parcial · 31 días: continuo",
+          "Moda y mediana: Parcial"
+        ]
+      }
+    },
+    {
+      "columna": "— (derivada del óleo)",
+      "traduccion": "Nivel de producción de óleo",
+      "descripcion": "Bajo hasta Q₁ (1,45 bbl/día); medio entre Q₁ y Q₃; alto por encima de Q₃ (10,64 bbl/día)",
+      "tipo": "Cualitativa",
+      "subtipo": "Ordinal",
+      "dominio": "{Bajo < Medio < Alto}",
+      "rango": "Bajo < Medio < Alto (Bajo 1.327; Medio 2.654; Alto 1.327)",
+      "escala": "Ordinal",
+      "fuente": "Cálculo propio a partir de los cuartiles del óleo por pozo",
+      "unidad": "—",
+      "validos": 5308,
+      "nulos": 0,
+      "ceros": null,
+      "tarjeta": {
+        "lectura": "Bajo 1.327, medio 2.654 y alto 1.327 pozos; la moda y la mediana son Medio.",
+        "datos": [
+          [
+            "5.308",
+            "con dato"
+          ],
+          [
+            "0",
+            "sin dato"
+          ],
+          [
+            "3",
+            "categorías"
+          ]
+        ],
+        "cifras": [
+          "Cortes en Q₁ = 1,45 y Q₃ = 10,64 bbl/día",
+          "Moda y mediana: Medio"
+        ]
+      }
+    },
+    {
+      "columna": "— (derivada de la profundidad perforada)",
+      "traduccion": "Clase de profundidad",
+      "descripcion": "Somero < 1.000 m; intermedio de 1.000 a 3.000 m; profundo > 3.000 m (criterio del grupo)",
+      "tipo": "Cualitativa",
+      "subtipo": "Ordinal",
+      "dominio": "{Somero < Intermedio < Profundo}",
+      "rango": "Somero < Intermedio < Profundo (Somero 3.306; Intermedio 1.380; Profundo 120)",
+      "escala": "Ordinal",
+      "fuente": "Cálculo propio a partir de la profundidad perforada",
+      "unidad": "—",
+      "validos": 4806,
+      "nulos": 502,
+      "ceros": null,
+      "tarjeta": {
+        "lectura": "Somero 3.306, intermedio 1.380 y profundo 120 pozos; la moda y la mediana son Somero.",
+        "datos": [
+          [
+            "4.806",
+            "con dato"
+          ],
+          [
+            "502",
+            "sin dato"
+          ],
+          [
+            "3",
+            "categorías"
+          ]
+        ],
+        "cifras": [
+          "Cortes del grupo: 1.000 m y 3.000 m",
+          "Moda y mediana: Somero"
+        ]
+      }
     },
     {
       "columna": "— (derivada de Tempo de Produção)",
@@ -117,12 +310,59 @@
       "subtipo": "Discreta",
       "dominio": "{0, 1, …, 31}",
       "rango": "0 – 31",
-      "escala": "Rón",
+      "escala": "Razón",
       "fuente": "Cálculo propio a partir de las horas reportadas por el pozo",
       "unidad": "días",
       "validos": 5308,
       "nulos": 0,
       "ceros": 356
+    },
+    {
+      "columna": "— (derivada de Campo)",
+      "traduccion": "Pozos por campo",
+      "descripcion": "Número de pozos con producción en cada campo; la unidad es el campo (n = 221), no el pozo",
+      "tipo": "Cuantitativa",
+      "subtipo": "Discreta",
+      "dominio": "1, 2, 3, …",
+      "rango": "1 – 950",
+      "escala": "Razón",
+      "fuente": "Cálculo propio a partir del campo de cada fila (221 campos con al menos una fila)",
+      "unidad": "pozos/campo",
+      "validos": 221,
+      "nulos": 0,
+      "ceros": null,
+      "tarjeta": {
+        "lectura": "La media es 24,8 pozos por campo y la mediana 3; Estreito es el mayor, con 950 pozos.",
+        "datos": [
+          [
+            "221",
+            "campos"
+          ],
+          [
+            "0",
+            "sin dato"
+          ]
+        ],
+        "cifras": [
+          "72 campos con un solo pozo",
+          "Unidad: campo (n = 221); un pozo que aporta a dos campos cuenta en ambos"
+        ]
+      }
+    },
+    {
+      "columna": "Tempo de Produção (hs por mês)",
+      "traduccion": "Horas de producción registradas",
+      "descripcion": "Máximo de horas reportadas por pozo; el tiempo es continuo, aunque el archivo lo registre en horas enteras",
+      "tipo": "Cuantitativa",
+      "subtipo": "Continua",
+      "dominio": "0 – 744",
+      "rango": "0 – 744",
+      "escala": "Razón",
+      "fuente": "Dato declarado en el archivo de la ANP; el archivo no identifica el equipo físico",
+      "unidad": "h/mes",
+      "validos": 5308,
+      "nulos": 0,
+      "ceros": 109
     },
     {
       "columna": "Óleo (bbl/dia)",
@@ -132,7 +372,7 @@
       "subtipo": "Continua",
       "dominio": "[0; +∞)",
       "rango": "0,0000 – 1102,8289",
-      "escala": "Rón",
+      "escala": "Razón",
       "fuente": "Dato declarado en el archivo de la ANP; el archivo no identifica el equipo físico",
       "unidad": "bbl/día",
       "validos": 5308,
@@ -147,7 +387,7 @@
       "subtipo": "Continua",
       "dominio": "[0; +∞)",
       "rango": "0,0000 – 722,7292",
-      "escala": "Rón",
+      "escala": "Razón",
       "fuente": "Dato declarado en el archivo de la ANP; el archivo no identifica el equipo físico",
       "unidad": "bbl/día",
       "validos": 5308,
@@ -162,7 +402,7 @@
       "subtipo": "Continua",
       "dominio": "[0; +∞)",
       "rango": "0,0000 – 550,6889",
-      "escala": "Rón",
+      "escala": "Razón",
       "fuente": "Dato declarado en el archivo de la ANP; el archivo no identifica el equipo físico",
       "unidad": "Mm³/día",
       "validos": 5308,
@@ -177,7 +417,7 @@
       "subtipo": "Continua",
       "dominio": "[0; +∞)",
       "rango": "0,0000 – 499,6123",
-      "escala": "Rón",
+      "escala": "Razón",
       "fuente": "Dato declarado en el archivo de la ANP; el archivo no identifica el equipo físico",
       "unidad": "Mm³/día",
       "validos": 5308,
@@ -192,7 +432,7 @@
       "subtipo": "Continua",
       "dominio": "[0; +∞)",
       "rango": "0,0000 – 550,6889",
-      "escala": "Rón",
+      "escala": "Razón",
       "fuente": "Dato declarado en el archivo de la ANP; el archivo no identifica el equipo físico",
       "unidad": "Mm³/día",
       "validos": 5308,
@@ -207,7 +447,7 @@
       "subtipo": "Continua",
       "dominio": "[0; +∞)",
       "rango": "0,0000 – 5074,2289",
-      "escala": "Rón",
+      "escala": "Razón",
       "fuente": "Dato declarado en el archivo de la ANP; el archivo no identifica el equipo físico",
       "unidad": "bbl/día",
       "validos": 5308,
@@ -228,6 +468,132 @@
       "validos": 4435,
       "nulos": 873,
       "ceros": 0
+    },
+    {
+      "columna": "LATITUDE_BASE_DD (Tabela de Poços)",
+      "traduccion": "Latitud",
+      "descripcion": "Posición norte-sur de la base del pozo en grados decimales (SIRGAS2000)",
+      "tipo": "Cuantitativa",
+      "subtipo": "Continua",
+      "dominio": "[−90; 90]°",
+      "rango": "−24,7303 – −2,5817",
+      "escala": "Intervalo",
+      "fuente": "Registro administrativo de la ANP (Tabela de Poços, SIRGAS2000); el archivo no identifica el equipo físico",
+      "unidad": "°",
+      "validos": 5308,
+      "nulos": 0,
+      "ceros": null,
+      "tarjeta": {
+        "lectura": "Va de −24,7303° a −2,5817°; media −7,76° y mediana −5,39°. Los pozos se concentran cerca de −5°.",
+        "datos": [
+          [
+            "5.308",
+            "con dato"
+          ],
+          [
+            "0",
+            "sin dato"
+          ]
+        ],
+        "cifras": [
+          "Escala de intervalo: no se calcula CV"
+        ]
+      }
+    },
+    {
+      "columna": "LONGITUDE_BASE_DD (Tabela de Poços)",
+      "traduccion": "Longitud",
+      "descripcion": "Posición este-oeste de la base del pozo en grados decimales (SIRGAS2000)",
+      "tipo": "Cuantitativa",
+      "subtipo": "Continua",
+      "dominio": "[−180; 180]°",
+      "rango": "−65,6630 – −35,5797",
+      "escala": "Intervalo",
+      "fuente": "Registro administrativo de la ANP (Tabela de Poços, SIRGAS2000); el archivo no identifica el equipo físico",
+      "unidad": "°",
+      "validos": 5308,
+      "nulos": 0,
+      "ceros": null,
+      "tarjeta": {
+        "lectura": "Va de −65,6630° a −35,5797°; media −37,76° y mediana −37,10°. Los pozos se concentran cerca de −37°.",
+        "datos": [
+          [
+            "5.308",
+            "con dato"
+          ],
+          [
+            "0",
+            "sin dato"
+          ]
+        ],
+        "cifras": [
+          "Escala de intervalo: no se calcula CV"
+        ]
+      }
+    },
+    {
+      "columna": "COTA_ALTIMETRICA_M (Tabela de Poços)",
+      "traduccion": "Altitud del terreno",
+      "descripcion": "Elevación del terreno en la boca del pozo; 209 ceros se tratan como falta de dato",
+      "tipo": "Cuantitativa",
+      "subtipo": "Continua",
+      "dominio": "[0; +∞)",
+      "rango": "0 – 397,5",
+      "escala": "Intervalo",
+      "fuente": "Registro administrativo de la ANP (Tabela de Poços); el archivo no identifica el equipo físico",
+      "unidad": "m s. n. m.",
+      "validos": 3217,
+      "nulos": 2091,
+      "ceros": null,
+      "tarjeta": {
+        "lectura": "Va de 0 a 397,5 m; media 47,1 m y mediana 37,7 m. Quedan 3.217 pozos con dato.",
+        "datos": [
+          [
+            "3.217",
+            "con dato"
+          ],
+          [
+            "2.091",
+            "sin dato"
+          ]
+        ],
+        "cifras": [
+          "Escala de intervalo: no se calcula CV",
+          "209 ceros se tratan como falta de dato"
+        ]
+      }
+    },
+    {
+      "columna": "PROFUNDIDADE_SONDADOR_M (Tabela de Poços)",
+      "traduccion": "Profundidad perforada",
+      "descripcion": "Profundidad final del pozo medida por el perforador; se descartan 402 ceros y 100 vacíos",
+      "tipo": "Cuantitativa",
+      "subtipo": "Continua",
+      "dominio": "[0; +∞)",
+      "rango": "181,4 – 4.618",
+      "escala": "Razón",
+      "fuente": "Registro administrativo de la ANP (Tabela de Poços); el archivo no identifica el equipo físico",
+      "unidad": "m",
+      "validos": 4806,
+      "nulos": 502,
+      "ceros": null,
+      "tarjeta": {
+        "lectura": "Va de 181,4 a 4.618 m; media 921,5 m y mediana 739 m. Quedan 4.806 pozos con dato.",
+        "datos": [
+          [
+            "4.806",
+            "con dato"
+          ],
+          [
+            "502",
+            "sin dato"
+          ]
+        ],
+        "cifras": [
+          "Escala de razón",
+          "402 ceros y 100 vacíos se tratan como falta de dato"
+        ]
+      }
     }
   ],
   "excluidas": [
