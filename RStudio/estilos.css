@@ -1,0 +1,170 @@
+/* ==========================================================================
+   Informes de estadística descriptiva · Producción terrestre de Brasil
+   Estilo propio: azul petróleo y tipografía serif para tablas y encabezados
+   ========================================================================== */
+
+/* --- 0 · Tipografía ------------------------------------------------------ */
+:root {
+  --petroleo: #264E5B;
+  --petroleo-claro: #C3D6DB;
+  --cebra: #EAF1F3;
+  --borde: #D5E2E6;
+  --tinta: #23303A;
+}
+
+body {
+  color: var(--tinta);
+  font-family: "Source Sans Pro", "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+h1, h2, h3, h4,
+.title,
+.subtitle,
+.quarto-title .title {
+  font-family: Georgia, "Times New Roman", serif;
+  letter-spacing: 0.01em;
+}
+
+h2 {
+  color: var(--petroleo);
+  border-bottom: 1px solid var(--borde);
+  padding-bottom: 0.2em;
+}
+
+h3 {
+  color: #3B6773;
+}
+
+/* --- 1 · Bloque de código (chunk) --------------------------------------- */
+div.sourceCode {
+  background-color: #F7FAFB !important;
+  border: 1px solid var(--borde);
+  border-left: 4px solid var(--petroleo);
+  border-radius: 4px;
+  padding: 0.55em 0.9em;
+  margin: 0 0 0.6em 0;
+}
+
+div.sourceCode pre,
+div.sourceCode code {
+  background-color: transparent !important;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+div.sourceCode code {
+  font-size: 0.86em;
+}
+
+/* Resaltado de sintaxis: funciones en negro, cadenas en granate y números en azul */
+code span.fu,
+code span.fu-parameter {
+  color: #000000 !important;
+}
+
+code span.st,
+code span.ss,
+code span.sc,
+code span.vs {
+  color: #7B1E3A !important;
+}
+
+code span.dv,
+code span.fl,
+code span.bn,
+code span.cn {
+  color: #1C4E8A !important;
+}
+
+code span.co {
+  color: #6E6E6E !important;
+  font-style: italic;
+}
+
+/* --- 2 · Salidas y mensajes de ejecución (consola) ---------------------- */
+.cell-output-stdout,
+.cell-output-stderr {
+  background-color: #FFFFFF !important;
+  border: 1px solid var(--borde);
+  border-left: 4px solid #8FA9B1;
+  border-radius: 4px;
+  padding: 0.5em 0.9em;
+  margin: 0 0 1em 0;
+}
+
+.cell-output-stdout pre,
+.cell-output-stderr pre {
+  background-color: transparent !important;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  color: #333333;
+  font-size: 0.86em;
+}
+
+/* --- 3 · Tablas gt ------------------------------------------------------ */
+.gt_table {
+  margin: 0.4em 0 1.2em 0;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.gt_table thead th,
+.gt_table .gt_col_heading {
+  background-color: var(--petroleo) !important;
+  color: #FFFFFF !important;
+  border-color: var(--petroleo) !important;
+}
+
+.gt_table tbody tr:nth-child(even) td {
+  background-color: var(--cebra) !important;
+}
+
+.gt_table .gt_summary_row td,
+.gt_table .gt_grand_summary_row td {
+  background-color: var(--petroleo-claro) !important;
+}
+
+.gt_table .gt_table_title,
+.gt_table .gt_heading {
+  font-family: Georgia, "Times New Roman", serif;
+  color: var(--petroleo);
+}
+
+.gt_table .gt_sourcenote {
+  color: #55636B;
+  font-size: 0.78em;
+  border-top: 1px solid var(--borde);
+  padding-top: 0.35em;
+}
+
+/* --- 4 · Figuras -------------------------------------------------------- */
+.cell-output-display figure img {
+  border: 1px solid var(--borde);
+  background-color: #FFFFFF;
+}
+
+.figure-caption {
+  font-size: 0.85em;
+  color: #55636B;
+}
+
+/* --- 5 · Plegado del código --------------------------------------------- */
+.code-fold > summary,
+details.code-fold > summary {
+  display: block;
+  width: fit-content;
+  margin: 0 0 0.3em auto;
+  padding: 0.05em 0.6em;
+  font-size: 0.78em;
+  color: var(--petroleo);
+  background-color: #E8EEF0;
+  border: 1px solid var(--borde);
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.code-fold > summary:hover,
+details.code-fold > summary:hover {
+  background-color: #DCE7EA;
+}

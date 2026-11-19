@@ -7,41 +7,227 @@ format:
   html:
     toc: true
     toc-location: left
-    code-fold: false
+    code-fold: show
+    code-summary: "Código"
     code-tools: true
     embed-resources: true
     theme: default
+    css: estilos.css
 execute:
   echo: true
   warning: false
   message: false
 ---
 
+## 1. Configuración y Carga de Datos
 
-## Qué se analiza
-
-Número de días completos que el pozo produjo en enero de 2023 (horas ÷ 24, parte entera). No son días calendario trabajados.
-
-| | |
-|---|---|
-| **Tipo** | Cuantitativa · Discreta |
-| **Escala de medición** | Razón |
-| **Unidad** | días |
-| **Fuente** | Cálculo propio a partir de las horas reportadas por el pozo |
-| **Muestra** | periodo 2023/01 · `r fmtn(nrow(pozos), 0)` pozos (una fila por pozo) |
-
-## Datos y consolidación
+Se carga el conjunto de datos de producción terrestre de Brasil publicado por la ANP para enero de 2023 (5.471 registros).
 
 ```{r}
+#| code-fold: show
+# Librerías, lectura del CSV de la ANP, consolidación por pozo y funciones
+# compartidas: todo el código común vive en comun.R, junto a estos informes.
+source("comun.R")
+```
+
+## 2. Extraer Variable
+
+La variable **Días equivalentes completos de producción** registra número de días completos que el pozo produjo en enero de 2023 (horas ÷ 24, parte entera). No son días calendario trabajados. Se eliminan los registros sin valor y se conserva el 100 % de las observaciones válidas para el análisis.
+
+```{r extraer}
+serie <- pozos$dias
+n <- length(serie)
+x <- serie[!is.na(serie)]
+n_validos <- length(x)
+n_nulos <- n - n_validos
+```
+
+## 3. Ordenamiento Lógico
+
+Se establece el orden lógico de la variable cuantitativa discreta **Días equivalentes completos de producción**, respetando la progresión numérica natural de sus valores (de `r fmtn(min(x), 0)` a `r fmtn(max(x), 0)`). Este ordenamiento es fundamental para garantizar una correcta interpretación estadística y visual de los resultados.
+
+```{r orden}
+# Orden lógico: los valores posibles en su progresión numérica natural
+conteo <- table(factor(x, levels = 0:31))
+
+cat("Valores distintos observados:", length(conteo), "\n")
+print(conteo)
+```
+
+## 4. Tabla de Distribución de Frecuencias
+
+Se presenta la distribución de frecuencias completa de la variable **Días equivalentes completos de producción**, con `r fmtn(length(conteo), 0)` valores distintos (n = `r fmtn(n_validos, 0)` registros válidos). Al tratarse de una variable discreta, la tabla se ordena según la progresión lógica establecida en el punto anterior e incluye la frecuencia absoluta, el porcentaje y sus respectivos acumulados.
+
+```{r tdf}
+tdf <- data.frame(
+  Valor = names(conteo),
+  `Frecuencia Absoluta (ni)` = as.integer(conteo),
+  `Porcentaje (hi%)` = 100 * as.numeric(conteo) / n_validos,
+  `Frec. Acumulada (Ni)` = cumsum(as.integer(conteo)),
+  `Porcentaje Acumulado (Hi%)` = 100 * cumsum(as.numeric(conteo)) / n_validos,
+  check.names = FALSE,
+  row.names = NULL
+)
+
+print(c(valores = nrow(tdf), con_dato = n_validos, sin_dato = n_nulos))
+
+tabla_gt(
+  tdf,
+  decimales = c("Porcentaje (hi%)" = 2, "Porcentaje Acumulado (Hi%)" = 2),
+  titulo = "Cuadro N°1: Distribución de Frecuencias Completa",
+  subtitulo = paste0("Variable Cuantitativa Discreta: Días equivalentes completos de producción (n = ",
+                     fmtn(n_validos, 0), ")")
+)
+```
+
+```{r total}
+# Fila de TOTAL: confirma que la frecuencia absoluta suma n y que el
+# porcentaje acumulado cierra en 100 %
+total <- data.frame(
+  Categoría = "TOTAL",
+  `Frecuencia (ni)` = sum(tdf[[2]]),
+  `Porcentaje (hi%)` = 100
+)
+
+tabla_gt(total, total = TRUE,
+         decimales = c("Porcentaje (hi%)" = 2))
+```
+
+## 5. Representación Gráfica
+
+Se presentan tres gráficas en escala de grises que permiten analizar visualmente la distribución de la variable cuantitativa discreta Días equivalentes completos de producción. Los diagramas de barras conservan la progresión numérica completa de los valores, sin recortes, para no perder información.
+
+### 5.1 Gráfica N°1 — Diagrama de barras de frecuencia absoluta
+
+```{r barras}
+#| fig.width: 9
+#| fig.height: 6
+par(mar = c(8, 6, 5, 2))
+bp1 <- barplot(tdf[[2]], main = "", xlab = "", ylab = "",
+               col = "gray72", border = "gray30",
+               ylim = c(0, max(tdf[[2]]) * 1.15),
+               names.arg = as.character(tdf$Valor),
+               cex.names = 0.7, las = 2)
+mtext("Frecuencia Absoluta (ni)", side = 2, line = 4.5, cex = 0.95)
+mtext("Días equivalentes completos de producción (días)", side = 1, line = 5.5, cex = 0.95)
+mtext(paste(strwrap("Gráfica N°1: Diagrama de Barras — Frecuencia Absoluta de Días equivalentes completos de producción", width = 72), collapse = "\n"),
+      side = 3, line = 2, adj = 0.5, cex = 0.85, font = 2)
+```
+
+### 5.2 Gráfica N°2 — Diagrama de barras de porcentaje
+
+```{r barras_pct}
+#| fig.width: 9
+#| fig.height: 6
+par(mar = c(8, 6, 5, 2))
+bp2 <- barplot(tdf[[3]], main = "", xlab = "", ylab = "Porcentaje (hi %)",
+               col = "gray72", border = "gray30",
+               ylim = c(0, max(tdf[[3]]) * 1.2),
+               names.arg = as.character(tdf$Valor),
+               cex.names = 0.7, las = 2)
+mtext("Días equivalentes completos de producción (días)", side = 1, line = 5.5, cex = 0.95)
+mtext(paste(strwrap("Gráfica N°2: Diagrama de Barras — Porcentaje de Días equivalentes completos de producción", width = 72), collapse = "\n"),
+      side = 3, line = 2, adj = 0.5, cex = 0.85, font = 2)
+```
+
+### 5.3 Gráfica N°3 — Diagrama circular porcentual
+
+```{r circular}
+#| fig.width: 9
+#| fig.height: 6
+grises <- grDevices::gray(seq(0.28, 0.82, length.out = nrow(tdf)))
+par(mar = c(3, 2, 6, 12), xpd = TRUE)
+pie(tdf[[3]], labels = NA, col = grises, border = "gray30",
+    main = "", radius = 1, cex = 0.7)
+legend(x = 1.15, y = 1,
+       legend = paste0(tdf$Valor, " (", format(tdf[[2]], big.mark = "."), " | ",
+                       format(round(tdf[[3]], 2), decimal.mark = ","), " %)"),
+       fill = grises, cex = 0.6, ncol = 2,
+       title = "Días equivalentes completos de producción (ni | hi%)", bty = "n")
+mtext(paste(strwrap("Gráfica N°3: Diagrama Circular — Distribución Porcentual de Días equivalentes completos de producción", width = 72), collapse = "\n"),
+      side = 3, line = 3, adj = 0.5, cex = 0.85, font = 2)
+```
+
+## 6. Indicadores Estadísticos
+
+```{r indicadores}
+media <- mean(x)
+mediana <- median(x)
+varianza <- var(x)
+desv_std <- sd(x)
+cv <- 100 * desv_std / media
+asimetria <- (3 * (media - mediana)) / desv_std
+curtosis_val <- (sum((x - media)^4) / length(x)) / (desv_std^4)
+moda <- names(conteo)[which.max(conteo)]
+q1 <- as.numeric(quantile(x, 0.25))
+q3 <- as.numeric(quantile(x, 0.75))
+
+indicadores <- data.frame(
+  Indicador = c("Variable", "Tipo de variable", "Categorías (Rango)", "Moda (Mo)",
+                "Mediana (Me)", "Media (X̄)", "Varianza (V)", "Desv. Estándar (Sd)",
+                "Coef. Variación (CV%)", "Asimetría (As)", "Curtosis (K)"),
+  Valor = c("Días equivalentes completos de producción", "Cuantitativa Discreta", "32 valores (0 a 31)",
+            moda,
+            fmtn(mediana, 2), fmtn(media, 4), fmtn(varianza, 4),
+            fmtn(desv_std, 4), paste0(fmtp(cv, 2), " %"),
+            fmtn(asimetria, 4), fmtn(curtosis_val, 4)),
+  check.names = FALSE, stringsAsFactors = FALSE
+)
+
+t <- tabla_gt(indicadores,
+              titulo = "Tabla N°2: Indicadores Estadísticos",
+              subtitulo = "Variable Cuantitativa Discreta: Días equivalentes completos de producción")
+t <- gt::cols_align(t, align = "left", columns = "Indicador")
+t <- gt::tab_style(
+  t,
+  style = list(gt::cell_fill(color = "#C3D6DB"), gt::cell_text(weight = "bold")),
+  locations = gt::cells_body(rows = indicadores$Indicador %in% c("Moda (Mo)",
+                                                                 "Mediana (Me)"))
+)
+gt::tab_options(t, table.width = gt::pct(60))
+```
+
+## 7. Conclusiones
+
+La variable **Días equivalentes completos de producción** es cuantitativa discreta y toma `r fmtn(length(conteo), 0)` valores distintos entre `r fmtn(min(x), 0)` y `r fmtn(max(x), 0)` días. El valor más frecuente (moda) es **`r moda`**, con `r fmtn(max(conteo), 0)` pozos (`r fmtp(100 * max(conteo) / n_validos, 2)` %). La mediana es `r fmtn(mediana, 2)` y la media `r fmtn(media, 4)`, con una desviación estándar de `r fmtn(desv_std, 4)` días (CV = `r fmtp(cv, 2)` %). La asimetría de Pearson es `r fmtn(asimetria, 4)` y la curtosis `r fmtn(curtosis_val, 4)`: la distribución se concentra en los valores bajos y deja una cola hacia los valores altos.
+
+Los 31 días son el máximo teórico de enero (31 días calendario × 24 h = 744 h); llegar ahí indica actividad continua en el mes. Los pozos con 0 días son inactivos y se conservan en el análisis.
+
+## Anexo. Código del archivo `comun.R`
+
+Las secciones anteriores cargan el código compartido con `source("comun.R")`. Para que el informe pueda revisarse completo desde RPubs, se reproduce aquí el contenido íntegro de ese archivo.
+
+```{r}
+#| eval: false
+#| code-fold: show
 # ===========================================================================
-# 1 · Datos: una fila por pozo
+# comun.R · Código compartido de los informes de estadística descriptiva
+# ---------------------------------------------------------------------------
+# Carga y consolida el CSV de producción terrestre de la ANP (una fila por
+# pozo), define las utilidades de formato en español y las funciones que arman
+# las tablas gt y los intervalos de clase.
+#
+# Cada .qmd lo carga con source("comun.R"): Quarto ejecuta con el directorio
+# del documento, así que este archivo debe quedar en la misma carpeta RStudio/.
 # ===========================================================================
+
+# ===========================================================================
+# Carga y consolidación de datos
+# ===========================================================================
+library(gt)
+
 # El CSV de la ANP trae tres encabezados: la fila de nombres ocupa dos líneas
 # físicas (una comilla contiene un salto de línea) y debajo vienen dos filas de
 # subencabezado. Los datos empiezan en la quinta línea física; todas las filas
 # tienen 48 campos.
 
-ruta_produccion <- "../data/2023_01_producao_Terra.csv"
+# El CSV puede estar en la carpeta hermana data/ (repo) o en data/ del proyecto
+rutas_datos <- c("../data/2023_01_producao_Terra.csv",
+                 "data/2023_01_producao_Terra.csv")
+ruta_produccion <- rutas_datos[file.exists(rutas_datos)][1]
+if (is.na(ruta_produccion)) {
+  stop("No se encontró 2023_01_producao_Terra.csv: revisa que la carpeta data/ esté junto a estos .qmd")
+}
 
 lineas <- readLines(ruta_produccion, encoding = "UTF-8", warn = FALSE)
 lineas <- sub("\r$", "", lineas)
@@ -152,97 +338,177 @@ fmtp <- function(x, d = 1) formatC(x, format = "f", digits = d,
 fmtg <- function(x) gsub(".", ",", formatC(x, format = "g", digits = 5), fixed = TRUE)
 sturges <- function(n) ceiling(1 + 3.322 * log10(n))
 
+# --- Tablas (gt) -----------------------------------------------------------
+# Diseno propio: encabezado azul petroleo con letra blanca, cebra azul
+# grisacea y fila de totales en azul grisaceo medio. La tabla usa tipografia
+# serif para separarse visualmente de las tablas de los informes de referencia.
+
+tabla_gt <- function(datos, decimales = NULL, total = FALSE,
+                     titulo = NULL, subtitulo = NULL) {
+  t <- gt::gt(datos)
+
+  if (!is.null(titulo)) {
+    t <- gt::tab_header(
+      t,
+      title = gt::md(paste0("**", titulo, "**")),
+      subtitle = if (is.null(subtitulo)) NULL
+                 else gt::md(paste0("*", subtitulo, "*"))
+    )
+  }
+
+  # Encabezados en blanco sobre el azul petroleo
+  t <- gt::tab_style(
+    t,
+    style = list(gt::cell_fill(color = "#264E5B"),
+                 gt::cell_text(color = "#FFFFFF", weight = "bold")),
+    locations = gt::cells_column_labels(columns = gt::everything())
+  )
+
+  # Numeros con coma decimal y punto de miles; enteros sin decimales
+  for (col in names(datos)) {
+    v <- datos[[col]]
+    if (!is.numeric(v)) next
+    d <- if (!is.null(decimales) && col %in% names(decimales)) {
+      as.integer(decimales[[col]])
+    } else if (all(is.na(v))) {
+      0
+    } else if (all(v == round(v), na.rm = TRUE)) {
+      0
+    } else if (col %in% c("hi%", "hi", "Hi", "Hi (asc)", "Hi (desc)",
+                          "Porcentaje", "Porcentaje (hi%)")) {
+      2
+    } else {
+      4
+    }
+    t <- gt::fmt_number(t, columns = col, decimals = d,
+                        dec_mark = ",", sep_mark = ".")
+  }
+
+  # Las celdas sin dato se leen como raya, no como NA
+  t <- gt::sub_missing(t, columns = gt::everything(), missing_text = "—")
+
+  # Fila de totales en azul grisaceo medio
+  if (total) {
+    t <- gt::tab_style(
+      t,
+      style = list(gt::cell_fill(color = "#C3D6DB"),
+                   gt::cell_text(weight = "bold")),
+      locations = gt::cells_body(rows = nrow(datos))
+    )
+  }
+
+  t <- gt::tab_options(
+    t,
+    table.font.names = "Georgia",
+    table.font.size = gt::px(13),
+    heading.title.font.size = gt::px(16),
+    heading.subtitle.font.size = gt::px(12),
+    heading.title.font.weight = "bold",
+    column_labels.background.color = "#264E5B",
+    column_labels.border.top.color = "#264E5B",
+    column_labels.border.bottom.color = "#264E5B",
+    table_body.hlines.color = "#D5E2E6",
+    table_body.border.bottom.color = "#264E5B",
+    row.striping.background_color = "#EAF1F3",
+    row.striping.include_table_body = TRUE,
+    data_row.padding = gt::px(6),
+    table.width = gt::pct(100)
+  )
+  gt::opt_row_striping(t)
+}
+
+# Ficha tecnica de identificacion de la variable
+tabla_ficha <- function(nombre, nombre_tecnico, tipo, subtipo, dominio, rango,
+                        unidad, escala, fuente, ancho = 70) {
+  ficha <- data.frame(
+    Criterio = c("Nombre", "Nombre técnico", "Tipo", "Subtipo", "Dominio",
+                 "Rango", "Unidad", "Escala", "Fuente"),
+    Clasificación = c(nombre, nombre_tecnico, tipo, subtipo, dominio, rango,
+                      unidad, escala, fuente),
+    check.names = FALSE, stringsAsFactors = FALSE
+  )
+  t <- tabla_gt(ficha, titulo = "Identificación de la Variable")
+  t <- gt::cols_align(t, align = "left", columns = gt::everything())
+  gt::tab_options(t, table.width = gt::pct(ancho))
+}
+
+# --- Intervalos de clase ---------------------------------------------------
+# Agrupa los valores en k clases de igual ancho (natural o logaritmico) y
+# devuelve los cortes, las marcas de clase, las frecuencias y los acumulados
+# ascendentes y descendentes, ademas de la tabla ya armada.
+intervalos <- function(v, k, log10 = FALSE) {
+  v <- v[!is.na(v)]
+  n <- length(v)
+
+  if (log10) {
+    # Escala logaritmica: el ancho es constante en log10 (rango multiplicativo).
+    # Los ceros no entran en la escala y forman una clase propia {0}.
+    ceros <- sum(v == 0)
+    pos <- v[v > 0]
+    t <- log10(pos)
+    a <- (max(t) - min(t)) / k
+    if (!is.finite(a) || a <= 0) a <- 1
+    bt <- min(t) + a * (0:k)
+    bt[k + 1] <- max(t)
+    idx <- pmin(floor((t - min(t)) / a), k - 1) + 1
+    ni <- as.integer(table(factor(idx, levels = seq_len(k))))
+    li <- 10^bt[1:k]
+    ls <- 10^bt[2:(k + 1)]
+    mc <- sqrt(li * ls)
+    etiq <- paste0("[", fmtg(li), "; ", fmtg(ls), ")")
+    etiq[k] <- paste0("[", fmtg(li[k]), "; ", fmtg(ls[k]), "]")
+    cortes <- c(0, 10^bt)
+    # Los bordes se fijan con los valores exactos para que el histograma
+    # corte en los mismos limites que la tabla
+    cortes[2] <- min(pos)
+    cortes[length(cortes)] <- max(pos)
+    if (ceros > 0) {
+      ni <- c(ceros, ni)
+      mc <- c(0, mc)
+      etiq <- c("{0}", etiq)
+    }
+    amplitud <- 0
+  } else {
+    a <- (max(v) - min(v)) / k
+    if (!is.finite(a) || a <= 0) a <- 1
+    li <- min(v) + a * (0:(k - 1))
+    ls <- li + a
+    if (max(v) > li[k]) ls[k] <- max(v)
+    mc <- (li + ls) / 2
+    idx <- pmin(floor((v - min(v)) / a), k - 1) + 1
+    ni <- as.integer(table(factor(idx, levels = seq_len(k))))
+    d <- if (a >= 1000) 0 else if (a >= 10) 1 else if (a >= 1) 2 else 4
+    etiq <- paste0("[", fmtn(li, d), "; ", fmtn(ls, d), ")")
+    etiq[k] <- paste0("[", fmtn(li[k], d), "; ", fmtn(ls[k], d), "]")
+    cortes <- c(li, ls[k])
+    amplitud <- a
+  }
+
+  hi <- ni / n
+  Ni_asc <- cumsum(ni); Hi_asc <- cumsum(hi)
+  Ni_desc <- rev(cumsum(rev(ni))); Hi_desc <- rev(cumsum(rev(hi)))
+  kt <- length(ni)
+
+  tabla <- data.frame(
+    Intervalo = etiq, MC = mc, ni = ni, `hi%` = 100 * hi, hi = hi,
+    `Ni (asc)` = Ni_asc, `Hi (asc)` = Hi_asc,
+    `Ni (desc)` = Ni_desc, `Hi (desc)` = Hi_desc,
+    check.names = FALSE, stringsAsFactors = FALSE
+  )
+
+  list(li = cortes[-(kt + 1)], ls = cortes[-1], mc = mc, ni = ni, hi = hi,
+       etiq = etiq, Ni_asc = Ni_asc, Hi_asc = Hi_asc, Ni_desc = Ni_desc,
+       Hi_desc = Hi_desc, cortes = cortes, amplitud = amplitud, k = kt,
+       n = n, tabla = tabla)
+}
+
+# Agrega la fila de totales a una tabla de intervalos
+con_total <- function(tabla) {
+  rbind(tabla, data.frame(
+    Intervalo = "TOTAL", MC = NA_real_, ni = sum(tabla$ni), `hi%` = 100,
+    hi = 1, `Ni (asc)` = sum(tabla$ni), `Hi (asc)` = 1,
+    `Ni (desc)` = sum(tabla$ni), `Hi (desc)` = 1,
+    check.names = FALSE, stringsAsFactors = FALSE
+  ))
+}
 ```
-
-## Tabla de frecuencias
-
-```{r tdf}
-serie <- pozos$dias
-n <- length(serie)
-x <- serie[!is.na(serie)]
-n_validos <- length(x)
-n_nulos <- n - n_validos
-
-# TDF por valor, completo (la variable toma pocos valores)
-conteo <- table(factor(x, levels = 0:31))
-
-tdf <- data.frame(
-  Valor = names(conteo),
-  fi = as.integer(conteo),
-  hi = as.numeric(conteo) / n_validos,
-  Fi = cumsum(as.integer(conteo)),
-  Hi = cumsum(as.numeric(conteo)) / n_validos,
-  row.names = NULL
-)
-tdf
-```
-
-
-## Gráfica
-
-```{r bastones}
-#| fig-cap: "Diagrama de bastones"
-ggplot(tdf, aes(x = as.numeric(Valor), y = fi)) +
-  geom_col(fill = "#1F5C52", width = 0.7) +
-  labs(title = "Días equivalentes completos de producción", x = "días", y = "Frecuencia") +
-  theme_minimal(base_size = 12)
-```
-
-
-## Indicadores
-
-```{r moda}
-moda <- names(which.max(conteo))
-```
-
-```{r indicadores}
-media <- mean(x)
-mediana <- median(x)
-varianza <- var(x)
-desv <- sd(x)
-cv <- 100 * desv / media
-nn <- length(x)
-z <- (x - media) / desv
-asimetria <- (nn / ((nn - 1) * (nn - 2))) * sum(z^3)
-curtosis <- (nn * (nn + 1) / ((nn - 1) * (nn - 2) * (nn - 3))) * sum(z^4) -
-  3 * (nn - 1)^2 / ((nn - 2) * (nn - 3))
-q1 <- quantile(x, 0.25, names = FALSE)
-q3 <- quantile(x, 0.75, names = FALSE)
-ric <- q3 - q1
-bajos <- sum(x < q1 - 1.5 * ric)
-altos <- sum(x > q3 + 1.5 * ric)
-
-data.frame(
-  Indicador = c("n (válidos)", "Sin dato", "Mínimo", "Q1", "Mediana", "Q3",
-                "Máximo", "Media", "Moda", "Varianza", "Desviación estándar",
-                "CV (%)", "Asimetría", "Curtosis", "Atípicos bajos", "Atípicos altos"),
-  Valor = c(fmtn(n_validos, 0), fmtn(n_nulos, 0), fmtn(min(x), 4), fmtn(q1, 4),
-            fmtn(mediana, 4), fmtn(q3, 4), fmtn(max(x), 4), fmtn(media, 4),
-            moda, fmtn(varianza, 4), fmtn(desv, 4), fmtp(cv, 1),
-            fmtn(asimetria, 3), fmtn(curtosis, 3), fmtn(bajos, 0), fmtn(altos, 0)),
-  row.names = NULL
-)
-```
-
-
-## Interpretación
-
-Recorrido de `r fmtn(min(x), 0)` a `r fmtn(max(x), 0)` días. La media es `r fmtn(media, 1)` y la mediana `r fmtn(mediana, 1)`; la moda es **`r moda`**, con `r fmtn(max(conteo), 0)` pozos. El CV es `r fmtp(cv, 1)` % y la asimetría `r fmtn(asimetria, 3)`.
-
-Los 31 días son el máximo teórico de enero (31 días calendario × 24 h = 744 h); llegar ahí indica actividad continua en el mes.
-
-## Notas
-
-- Es la parte entera de las horas ÷ 24: no son días calendario trabajados.
-- Los pozos con 0 días son inactivos en el mes y se conservan en el análisis.
-
-## Reproducibilidad
-
-- **Fuente principal:** `data/2023_01_producao_Terra.csv` (ANP, periodo 2023/01;
-  sha256 `ee41f84f84de3ec3…`).
-- **Consolidación:** una fila por pozo (`Nome Poço`); los volúmenes de las filas
-  repetidas se suman, las horas toman el máximo y las categorías salen de la fila
-  con más óleo.
-- **Unidad estadística:** pozo (n = `r fmtn(nrow(pozos), 0)`).
-- **Cómo renderizar:** desde la carpeta `RStudio/`,
-  `quarto render dias.qmd` (requiere R y el paquete `ggplot2`).

@@ -7,41 +7,220 @@ format:
   html:
     toc: true
     toc-location: left
-    code-fold: false
+    code-fold: show
+    code-summary: "Código"
     code-tools: true
     embed-resources: true
     theme: default
+    css: estilos.css
 execute:
   echo: true
   warning: false
   message: false
 ---
 
+## 1 Configuración y Carga de Datos
 
-## Qué se analiza
-
-Clasifica el pozo por cuartiles de su producción: bajo ≤ Q₁ (1,45 bbl/día), medio entre Q₁ y Q₃, alto > Q₃ (10,64 bbl/día).
-
-| | |
-|---|---|
-| **Tipo** | Cualitativa · Ordinal |
-| **Escala de medición** | Ordinal |
-| **Unidad** | — |
-| **Fuente** | Cálculo propio a partir de los cuartiles del óleo por pozo |
-| **Muestra** | periodo 2023/01 · `r fmtn(nrow(pozos), 0)` pozos (una fila por pozo) |
-
-## Datos y consolidación
+Para iniciar el procesamiento estadístico se verifica la estructura global del conjunto de datos: 5.471 registros de producción terrestre de Brasil publicados por la ANP para enero de 2023, consolidados en una fila por pozo.
 
 ```{r}
+#| code-fold: show
+# Librerías, lectura del CSV de la ANP, consolidación por pozo y funciones
+# compartidas: todo el código común vive en comun.R, junto a estos informes.
+source("comun.R")
+```
+
+## 2 Extraer Variable
+
+Se realiza el aislamiento de la variable cualitativa ordinal **Nivel de producción de óleo**. Clasifica el pozo por cuartiles de su producción: bajo ≤ Q₁ (1,45 bbl/día), medio entre Q₁ y Q₃, alto > Q₃ (10,64 bbl/día). Se eliminan los registros sin valor y se conserva el 100 % de las observaciones válidas para el análisis.
+
+```{r extraer}
+serie <- factor(pozos$nivel_oleo, levels = c("Bajo", "Medio", "Alto"), ordered = TRUE)
+n <- length(serie)
+serie <- serie[!is.na(serie)]
+n_validos <- length(serie)
+n_nulos <- n - n_validos
+```
+
+## 3 Ordenamiento Lógico
+
+Se establece el orden lógico de la variable cualitativa ordinal **Nivel de producción de óleo**. El orden va de menor a mayor producción: **Bajo** (≤ Q₁ del óleo por pozo) → **Medio** (entre Q₁ y Q₃) → **Alto** (> Q₃). Los cortes son los cuartiles de la muestra, de modo que las tres categorías agrupan aproximadamente un tercio de los pozos.
+
+```{r orden}
+niveles <- c("Bajo", "Medio", "Alto")
+conteo <- table(serie)
+
+cat("Orden de categorías establecido:\n")
+print(niveles)
+cat("\nDistribución por categoría:\n")
+print(conteo)
+```
+
+## 4 Tabla de Distribución de Frecuencias
+
+Se calcula la distribución de frecuencias absolutas (\(n_i\)) y porcentuales (\(h_i\%\)) para las 3 niveles de la variable cualitativa ordinal, respetando la estructura de tres columnas estipulada por la cátedra. La tabla se ordena según la progresión lógica establecida en el punto anterior y no por frecuencia.
+
+```{r tdf}
+tdf <- data.frame(
+  Categoría = names(conteo),
+  `Frecuencia (ni)` = as.integer(conteo),
+  `Porcentaje (hi%)` = 100 * as.numeric(conteo) / n_validos,
+  check.names = FALSE,
+  row.names = NULL
+)
+
+# Mediana categórica: primera categoría que alcanza el 50 % acumulado
+moda <- names(conteo)[which.max(conteo)]
+mediana <- names(conteo)[which(cumsum(conteo) >= n_validos / 2)[1]]
+
+print(c(categorías = nrow(tdf), con_dato = n_validos, sin_dato = n_nulos))
+
+# Fila de totales: la suma de las frecuencias es el total de válidos
+tdf_mostrada <- rbind(
+  tdf,
+  data.frame(Categoría = "TOTAL",
+             `Frecuencia (ni)` = sum(tdf[[2]]),
+             `Porcentaje (hi%)` = 100,
+             check.names = FALSE)
+)
+
+tabla_gt(tdf_mostrada,
+         decimales = c("Porcentaje (hi%)" = 2),
+         total = TRUE,
+         titulo = "Tabla N°1: Distribución de Frecuencias",
+         subtitulo = "Variable Cualitativa Ordinal: Nivel de producción de óleo")
+```
+
+## 5 Representación Gráfica
+
+Se presentan tres gráficas en escala de grises que permiten analizar visualmente la distribución de la variable cualitativa ordinal Nivel de producción de óleo. Todas respetan el ordenamiento lógico establecido en el punto 3.
+
+### 5.1 Gráfica N°1 — Barras de frecuencia absoluta
+
+```{r barras}
+#| fig.width: 8
+#| fig.height: 6
+par(mar = c(6, 6, 5, 2))
+bp1 <- barplot(tdf[[2]], main = "", xlab = "", ylab = "",
+               col = "gray72", border = "gray30",
+               ylim = c(0, max(tdf[[2]]) * 1.15),
+               names.arg = as.character(tdf$Categoría),
+               cex.names = 0.9, las = 1)
+mtext("Frecuencia (ni)", side = 2, line = 4.5, cex = 0.95)
+mtext("Nivel de producción de óleo", side = 1, line = 4, cex = 0.95)
+mtext(paste(strwrap("Gráfica N°1: Distribución de Frecuencias Absolutas de la Variable Nivel de producción de óleo", width = 72), collapse = "\n"),
+      side = 3, line = 2, adj = 0.5, cex = 0.85, font = 2)
+text(x = bp1, y = tdf[[2]], labels = format(tdf[[2]], big.mark = "."),
+     pos = 3, cex = 0.85)
+```
+
+### 5.2 Gráfica N°2 — Barras de porcentaje
+
+```{r barras_pct}
+#| fig.width: 8
+#| fig.height: 6
+par(mar = c(6, 6, 5, 2))
+bp2 <- barplot(tdf[[3]], main = "", xlab = "", ylab = "Porcentaje %",
+               col = "gray72", border = "gray30",
+               ylim = c(0, max(tdf[[3]]) * 1.2),
+               names.arg = as.character(tdf$Categoría),
+               cex.names = 0.9, las = 1)
+mtext("Nivel de producción de óleo", side = 1, line = 4, cex = 0.95)
+mtext(paste(strwrap("Gráfica N°2: Distribución Porcentual de la Variable Nivel de producción de óleo", width = 72), collapse = "\n"),
+      side = 3, line = 2, adj = 0.5, cex = 0.85, font = 2)
+text(x = bp2, y = tdf[[3]],
+     labels = paste0(format(round(tdf[[3]], 2), decimal.mark = ","), " %"),
+     pos = 3, cex = 0.85)
+```
+
+### 5.3 Gráfica N°3 — Gráfico circular porcentual
+
+```{r circular}
+#| fig.width: 8
+#| fig.height: 5.5
+grises <- grDevices::gray(seq(0.35, 0.78, length.out = nrow(tdf)))
+par(mar = c(5, 2, 4, 11), xpd = TRUE)
+pie(tdf[[3]], main = "", radius = 1,
+    labels = paste0(format(round(tdf[[3]], 2), decimal.mark = ","), " %"),
+    col = grises, cex = 0.85)
+mtext(paste(strwrap("Gráfica N°3: Distribución Porcentual de la Variable Nivel de producción de óleo", width = 72), collapse = "\n"),
+      side = 3, line = 2, adj = 0.5, cex = 0.85, font = 2)
+legend(x = 1.15, y = 1, legend = as.character(tdf$Categoría), fill = grises,
+       cex = 0.85, title = "Nivel de producción de óleo", bty = "n")
+```
+
+## 6 Indicadores Estadísticos
+
+```{r indicadores}
+indicadores <- data.frame(
+  Indicador = c("Variable", "Tipo de variable", "Categorías (Rango)", "Moda (Mo)",
+                "Mediana (Me)", "Media (X̄)", "Varianza (V)", "Desv. Estándar (Sd)",
+                "Coef. Variación (CV%)", "Asimetría (As)", "Curtosis (K)"),
+  Valor = c("Nivel de producción de óleo", "Cualitativa Ordinal", "3 niveles",
+            moda, mediana,
+            "—", "—", "—", "—", "—", "—"),
+  check.names = FALSE, stringsAsFactors = FALSE
+)
+
+t <- tabla_gt(indicadores,
+              titulo = "Tabla N°2: Indicadores Estadísticos",
+              subtitulo = "Variable Cualitativa Ordinal: Nivel de producción de óleo")
+t <- gt::cols_align(t, align = "left", columns = "Indicador")
+t <- gt::tab_style(
+  t,
+  style = list(gt::cell_fill(color = "#C3D6DB"), gt::cell_text(weight = "bold")),
+  locations = gt::cells_body(rows = indicadores$Indicador %in% c("Moda (Mo)",
+                                                                 "Mediana (Me)"))
+)
+t <- gt::tab_style(
+  t,
+  style = gt::cell_text(style = "italic", color = "gray40"),
+  locations = gt::cells_body(rows = indicadores$Valor == "—", columns = "Valor")
+)
+gt::tab_options(t, table.width = gt::pct(60))
+```
+
+## 7 Conclusiones
+
+La variable **Nivel de producción de óleo** es una variable cualitativa ordinal. Su valor más frecuente (moda) es **`r moda`**, con `r fmtn(tdf[[2]][tdf$Categoría == moda], 0)` de `r fmtn(n_validos, 0)` pozos con dato (`r fmtp(tdf[[3]][tdf$Categoría == moda], 2)` %); la mediana categórica cae en **`r mediana`**, la primera categoría que acumula el 50 % de los casos.
+
+La variable tiene orden, pero no distancia entre categorías: se resume con la moda y la mediana categórica, no con promedios.
+
+## Anexo. Código del archivo `comun.R`
+
+Las secciones anteriores cargan el código compartido con `source("comun.R")`. Para que el informe pueda revisarse completo desde RPubs, se reproduce aquí el contenido íntegro de ese archivo.
+
+```{r}
+#| eval: false
+#| code-fold: show
 # ===========================================================================
-# 1 · Datos: una fila por pozo
+# comun.R · Código compartido de los informes de estadística descriptiva
+# ---------------------------------------------------------------------------
+# Carga y consolida el CSV de producción terrestre de la ANP (una fila por
+# pozo), define las utilidades de formato en español y las funciones que arman
+# las tablas gt y los intervalos de clase.
+#
+# Cada .qmd lo carga con source("comun.R"): Quarto ejecuta con el directorio
+# del documento, así que este archivo debe quedar en la misma carpeta RStudio/.
 # ===========================================================================
+
+# ===========================================================================
+# Carga y consolidación de datos
+# ===========================================================================
+library(gt)
+
 # El CSV de la ANP trae tres encabezados: la fila de nombres ocupa dos líneas
 # físicas (una comilla contiene un salto de línea) y debajo vienen dos filas de
 # subencabezado. Los datos empiezan en la quinta línea física; todas las filas
 # tienen 48 campos.
 
-ruta_produccion <- "../data/2023_01_producao_Terra.csv"
+# El CSV puede estar en la carpeta hermana data/ (repo) o en data/ del proyecto
+rutas_datos <- c("../data/2023_01_producao_Terra.csv",
+                 "data/2023_01_producao_Terra.csv")
+ruta_produccion <- rutas_datos[file.exists(rutas_datos)][1]
+if (is.na(ruta_produccion)) {
+  stop("No se encontró 2023_01_producao_Terra.csv: revisa que la carpeta data/ esté junto a estos .qmd")
+}
 
 lineas <- readLines(ruta_produccion, encoding = "UTF-8", warn = FALSE)
 lineas <- sub("\r$", "", lineas)
@@ -152,77 +331,177 @@ fmtp <- function(x, d = 1) formatC(x, format = "f", digits = d,
 fmtg <- function(x) gsub(".", ",", formatC(x, format = "g", digits = 5), fixed = TRUE)
 sturges <- function(n) ceiling(1 + 3.322 * log10(n))
 
+# --- Tablas (gt) -----------------------------------------------------------
+# Diseno propio: encabezado azul petroleo con letra blanca, cebra azul
+# grisacea y fila de totales en azul grisaceo medio. La tabla usa tipografia
+# serif para separarse visualmente de las tablas de los informes de referencia.
+
+tabla_gt <- function(datos, decimales = NULL, total = FALSE,
+                     titulo = NULL, subtitulo = NULL) {
+  t <- gt::gt(datos)
+
+  if (!is.null(titulo)) {
+    t <- gt::tab_header(
+      t,
+      title = gt::md(paste0("**", titulo, "**")),
+      subtitle = if (is.null(subtitulo)) NULL
+                 else gt::md(paste0("*", subtitulo, "*"))
+    )
+  }
+
+  # Encabezados en blanco sobre el azul petroleo
+  t <- gt::tab_style(
+    t,
+    style = list(gt::cell_fill(color = "#264E5B"),
+                 gt::cell_text(color = "#FFFFFF", weight = "bold")),
+    locations = gt::cells_column_labels(columns = gt::everything())
+  )
+
+  # Numeros con coma decimal y punto de miles; enteros sin decimales
+  for (col in names(datos)) {
+    v <- datos[[col]]
+    if (!is.numeric(v)) next
+    d <- if (!is.null(decimales) && col %in% names(decimales)) {
+      as.integer(decimales[[col]])
+    } else if (all(is.na(v))) {
+      0
+    } else if (all(v == round(v), na.rm = TRUE)) {
+      0
+    } else if (col %in% c("hi%", "hi", "Hi", "Hi (asc)", "Hi (desc)",
+                          "Porcentaje", "Porcentaje (hi%)")) {
+      2
+    } else {
+      4
+    }
+    t <- gt::fmt_number(t, columns = col, decimals = d,
+                        dec_mark = ",", sep_mark = ".")
+  }
+
+  # Las celdas sin dato se leen como raya, no como NA
+  t <- gt::sub_missing(t, columns = gt::everything(), missing_text = "—")
+
+  # Fila de totales en azul grisaceo medio
+  if (total) {
+    t <- gt::tab_style(
+      t,
+      style = list(gt::cell_fill(color = "#C3D6DB"),
+                   gt::cell_text(weight = "bold")),
+      locations = gt::cells_body(rows = nrow(datos))
+    )
+  }
+
+  t <- gt::tab_options(
+    t,
+    table.font.names = "Georgia",
+    table.font.size = gt::px(13),
+    heading.title.font.size = gt::px(16),
+    heading.subtitle.font.size = gt::px(12),
+    heading.title.font.weight = "bold",
+    column_labels.background.color = "#264E5B",
+    column_labels.border.top.color = "#264E5B",
+    column_labels.border.bottom.color = "#264E5B",
+    table_body.hlines.color = "#D5E2E6",
+    table_body.border.bottom.color = "#264E5B",
+    row.striping.background_color = "#EAF1F3",
+    row.striping.include_table_body = TRUE,
+    data_row.padding = gt::px(6),
+    table.width = gt::pct(100)
+  )
+  gt::opt_row_striping(t)
+}
+
+# Ficha tecnica de identificacion de la variable
+tabla_ficha <- function(nombre, nombre_tecnico, tipo, subtipo, dominio, rango,
+                        unidad, escala, fuente, ancho = 70) {
+  ficha <- data.frame(
+    Criterio = c("Nombre", "Nombre técnico", "Tipo", "Subtipo", "Dominio",
+                 "Rango", "Unidad", "Escala", "Fuente"),
+    Clasificación = c(nombre, nombre_tecnico, tipo, subtipo, dominio, rango,
+                      unidad, escala, fuente),
+    check.names = FALSE, stringsAsFactors = FALSE
+  )
+  t <- tabla_gt(ficha, titulo = "Identificación de la Variable")
+  t <- gt::cols_align(t, align = "left", columns = gt::everything())
+  gt::tab_options(t, table.width = gt::pct(ancho))
+}
+
+# --- Intervalos de clase ---------------------------------------------------
+# Agrupa los valores en k clases de igual ancho (natural o logaritmico) y
+# devuelve los cortes, las marcas de clase, las frecuencias y los acumulados
+# ascendentes y descendentes, ademas de la tabla ya armada.
+intervalos <- function(v, k, log10 = FALSE) {
+  v <- v[!is.na(v)]
+  n <- length(v)
+
+  if (log10) {
+    # Escala logaritmica: el ancho es constante en log10 (rango multiplicativo).
+    # Los ceros no entran en la escala y forman una clase propia {0}.
+    ceros <- sum(v == 0)
+    pos <- v[v > 0]
+    t <- log10(pos)
+    a <- (max(t) - min(t)) / k
+    if (!is.finite(a) || a <= 0) a <- 1
+    bt <- min(t) + a * (0:k)
+    bt[k + 1] <- max(t)
+    idx <- pmin(floor((t - min(t)) / a), k - 1) + 1
+    ni <- as.integer(table(factor(idx, levels = seq_len(k))))
+    li <- 10^bt[1:k]
+    ls <- 10^bt[2:(k + 1)]
+    mc <- sqrt(li * ls)
+    etiq <- paste0("[", fmtg(li), "; ", fmtg(ls), ")")
+    etiq[k] <- paste0("[", fmtg(li[k]), "; ", fmtg(ls[k]), "]")
+    cortes <- c(0, 10^bt)
+    # Los bordes se fijan con los valores exactos para que el histograma
+    # corte en los mismos limites que la tabla
+    cortes[2] <- min(pos)
+    cortes[length(cortes)] <- max(pos)
+    if (ceros > 0) {
+      ni <- c(ceros, ni)
+      mc <- c(0, mc)
+      etiq <- c("{0}", etiq)
+    }
+    amplitud <- 0
+  } else {
+    a <- (max(v) - min(v)) / k
+    if (!is.finite(a) || a <= 0) a <- 1
+    li <- min(v) + a * (0:(k - 1))
+    ls <- li + a
+    if (max(v) > li[k]) ls[k] <- max(v)
+    mc <- (li + ls) / 2
+    idx <- pmin(floor((v - min(v)) / a), k - 1) + 1
+    ni <- as.integer(table(factor(idx, levels = seq_len(k))))
+    d <- if (a >= 1000) 0 else if (a >= 10) 1 else if (a >= 1) 2 else 4
+    etiq <- paste0("[", fmtn(li, d), "; ", fmtn(ls, d), ")")
+    etiq[k] <- paste0("[", fmtn(li[k], d), "; ", fmtn(ls[k], d), "]")
+    cortes <- c(li, ls[k])
+    amplitud <- a
+  }
+
+  hi <- ni / n
+  Ni_asc <- cumsum(ni); Hi_asc <- cumsum(hi)
+  Ni_desc <- rev(cumsum(rev(ni))); Hi_desc <- rev(cumsum(rev(hi)))
+  kt <- length(ni)
+
+  tabla <- data.frame(
+    Intervalo = etiq, MC = mc, ni = ni, `hi%` = 100 * hi, hi = hi,
+    `Ni (asc)` = Ni_asc, `Hi (asc)` = Hi_asc,
+    `Ni (desc)` = Ni_desc, `Hi (desc)` = Hi_desc,
+    check.names = FALSE, stringsAsFactors = FALSE
+  )
+
+  list(li = cortes[-(kt + 1)], ls = cortes[-1], mc = mc, ni = ni, hi = hi,
+       etiq = etiq, Ni_asc = Ni_asc, Hi_asc = Hi_asc, Ni_desc = Ni_desc,
+       Hi_desc = Hi_desc, cortes = cortes, amplitud = amplitud, k = kt,
+       n = n, tabla = tabla)
+}
+
+# Agrega la fila de totales a una tabla de intervalos
+con_total <- function(tabla) {
+  rbind(tabla, data.frame(
+    Intervalo = "TOTAL", MC = NA_real_, ni = sum(tabla$ni), `hi%` = 100,
+    hi = 1, `Ni (asc)` = sum(tabla$ni), `Hi (asc)` = 1,
+    `Ni (desc)` = sum(tabla$ni), `Hi (desc)` = 1,
+    check.names = FALSE, stringsAsFactors = FALSE
+  ))
+}
 ```
-
-## Tabla de frecuencias (con el orden de las categorías)
-
-```{r tdf}
-serie <- factor(pozos$nivel_oleo, levels = c("Bajo", "Medio", "Alto"), ordered = TRUE)
-n <- length(serie)
-serie <- serie[!is.na(serie)]
-n_validos <- length(serie)
-n_nulos <- n - n_validos
-
-# table() respeta el orden de los niveles del factor
-conteo <- table(serie)
-
-tdf <- data.frame(
-  Categoría = names(conteo),
-  fi = as.integer(conteo),
-  hi = as.numeric(conteo) / n_validos,
-  Fi = cumsum(as.integer(conteo)),
-  Hi = cumsum(as.numeric(conteo)) / n_validos,
-  row.names = NULL
-)
-tdf
-
-moda <- names(conteo)[which.max(conteo)]
-# Mediana categórica: primera categoría que alcanza el 50 % acumulado
-mediana <- names(conteo)[which(cumsum(conteo) >= n_validos / 2)[1]]
-```
-
-
-## Gráfica ordenada
-
-```{r barras}
-#| fig-cap: "Diagrama de barras en el orden natural de la variable"
-dfg <- data.frame(Categoría = tdf$Categoría, fi = tdf$fi)
-dfg$Categoría <- factor(dfg$Categoría, levels = tdf$Categoría, ordered = TRUE)
-
-ggplot(dfg, aes(x = Categoría, y = fi)) +
-  geom_col(fill = "#1F5C52", width = 0.6) +
-  labs(title = "Nivel de producción de óleo", x = NULL, y = "Frecuencia (pozos)") +
-  theme_minimal(base_size = 12)
-```
-
-
-## Moda y mediana
-
-```{r resumen}
-data.frame(Moda = moda, Pozos = tdf$fi[tdf$Categoría == moda],
-           Mediana = mediana, row.names = NULL)
-```
-
-
-## Interpretación
-
-La moda es **`r moda`** (`r fmtn(tdf$fi[tdf$Categoría == moda], 0)` pozos) y la mediana categórica cae en **`r mediana`**: al acumular las frecuencias es la primera categoría que alcanza el 50 % de los pozos con dato.
-
-La variable tiene orden, pero no distancia entre categorías: por eso no se calculan media ni desviación estándar. El resumen es la moda, la mediana categórica y la tabla de frecuencias acumuladas.
-
-Las categorías van de menor a mayor: Bajo < Medio < Alto.
-
-## Notas
-
-- Los cortes son Q₁ = 1,45 y Q₃ = 10,64 bbl/día, calculados sobre el óleo por pozo.
-
-## Reproducibilidad
-
-- **Fuente principal:** `data/2023_01_producao_Terra.csv` (ANP, periodo 2023/01;
-  sha256 `ee41f84f84de3ec3…`).
-- **Consolidación:** una fila por pozo (`Nome Poço`); los volúmenes de las filas
-  repetidas se suman, las horas toman el máximo y las categorías salen de la fila
-  con más óleo.
-- **Unidad estadística:** pozo (n = `r fmtn(nrow(pozos), 0)`).
-- **Cómo renderizar:** desde la carpeta `RStudio/`,
-  `quarto render nivel_oleo.qmd` (requiere R y el paquete `ggplot2`).

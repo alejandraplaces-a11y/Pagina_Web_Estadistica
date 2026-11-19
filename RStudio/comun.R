@@ -1,0 +1,312 @@
+# ===========================================================================
+# comun.R · Código compartido de los informes de estadística descriptiva
+# ---------------------------------------------------------------------------
+# Carga y consolida el CSV de producción terrestre de la ANP (una fila por
+# pozo), define las utilidades de formato en español y las funciones que arman
+# las tablas gt y los intervalos de clase.
+#
+# Cada .qmd lo carga con source("comun.R"): Quarto ejecuta con el directorio
+# del documento, así que este archivo debe quedar en la misma carpeta RStudio/.
+# ===========================================================================
+
+# ===========================================================================
+# Carga y consolidación de datos
+# ===========================================================================
+library(gt)
+
+# El CSV de la ANP trae tres encabezados: la fila de nombres ocupa dos líneas
+# físicas (una comilla contiene un salto de línea) y debajo vienen dos filas de
+# subencabezado. Los datos empiezan en la quinta línea física; todas las filas
+# tienen 48 campos.
+
+# El CSV puede estar en la carpeta hermana data/ (repo) o en data/ del proyecto
+rutas_datos <- c("../data/2023_01_producao_Terra.csv",
+                 "data/2023_01_producao_Terra.csv")
+ruta_produccion <- rutas_datos[file.exists(rutas_datos)][1]
+if (is.na(ruta_produccion)) {
+  stop("No se encontró 2023_01_producao_Terra.csv: revisa que la carpeta data/ esté junto a estos .qmd")
+}
+
+lineas <- readLines(ruta_produccion, encoding = "UTF-8", warn = FALSE)
+lineas <- sub("\r$", "", lineas)
+
+orig <- trimws(gsub('"', "", strsplit(paste(lineas[1], lineas[2], sep = "\n"),
+                                       ";", fixed = TRUE)[[1]]))
+stopifnot(length(orig) == 48, orig[1] == "Estado", orig[5] == "Campo",
+          orig[6] == "Operador")
+
+# Nombres simples por posición: así no se depende de los acentos ni de las
+# columnas sin nombre del encabezado.
+nombres <- orig
+nombres[orig == ""] <- paste0("V", which(orig == ""))
+nombres[c(1, 2, 3, 5, 6, 9, 10, 12, 13, 14, 16, 18, 19, 22)] <-
+  c("estado", "bacia", "id_pozo", "campo", "operador", "oleo", "condensado",
+    "gas_asociado", "gas_no_asociado", "gas_total", "agua",
+    "tipo_instalacion", "horas", "api")
+
+datos <- read.csv(
+  text = paste(lineas[-(1:4)], collapse = "\n"),
+  sep = ";", header = FALSE, col.names = nombres,
+  stringsAsFactors = FALSE, colClasses = "character",
+  quote = "", comment.char = "", fill = TRUE, check.names = FALSE
+)
+
+# Conversión numérica: el punto es separador de miles y la coma es decimal.
+a_num <- function(x) {
+  x <- trimws(x)
+  x[!is.na(x) & !nzchar(x)] <- NA_character_
+  con_coma <- !is.na(x) & grepl(",", x)
+  x[con_coma] <- gsub(",", ".", gsub("\\.", "", x[con_coma]), fixed = TRUE)
+  suppressWarnings(as.numeric(x))
+}
+
+datos$oleo <- a_num(datos$oleo)
+datos$condensado <- a_num(datos$condensado)
+datos$gas_asociado <- a_num(datos$gas_asociado)
+datos$gas_no_asociado <- a_num(datos$gas_no_asociado)
+datos$gas_total <- a_num(datos$gas_total)
+datos$agua <- a_num(datos$agua)
+datos$horas <- a_num(datos$horas)
+datos$api <- a_num(datos$api)
+datos$id <- trimws(datos$id_pozo)
+
+# --- Consolidación ---------------------------------------------------------
+# Los pozos repetidos aparecen una vez por cada campo al que aportan (mismo
+# contrato y Estado): sus volúmenes son partes del total y se suman. Las horas
+# se repiten entre filas, así que se toma el máximo para no pasar de 744 h. Las
+# categorías y el grado API salen de la fila con más óleo del pozo.
+ord <- order(-datos$oleo, seq_len(nrow(datos)), na.last = TRUE)
+dat <- datos[ord, , drop = FALSE]
+principal <- dat[!duplicated(dat$id), , drop = FALSE]
+
+vol <- c("oleo", "condensado", "gas_asociado", "gas_no_asociado", "gas_total",
+         "agua")
+dat[vol] <- lapply(dat[vol], function(z) { z[is.na(z)] <- 0; z })
+sumas <- rowsum(dat[vol], group = dat$id, reorder = FALSE)
+ids <- rownames(sumas)
+mat <- as.matrix(sumas)
+
+pozos <- data.frame(id = ids, stringsAsFactors = FALSE)
+for (v in vol) pozos[[v]] <- as.numeric(mat[, v])
+
+horas_max <- tapply(dat$horas, dat$id,
+                    function(z) if (all(is.na(z))) NA_real_ else max(z, na.rm = TRUE))
+pozos$horas <- as.numeric(horas_max[ids])
+
+campos_n <- tapply(dat$campo, dat$id, function(z) length(unique(z)))
+pozos$campos <- as.integer(campos_n[ids])
+
+mfil <- match(ids, principal$id)
+pozos$estado <- principal$estado[mfil]
+pozos$bacia <- principal$bacia[mfil]
+pozos$operador <- principal$operador[mfil]
+pozos$campo <- principal$campo[mfil]
+pozos$tipo_instalacion <- principal$tipo_instalacion[mfil]
+
+# Primer grado API no nulo al ordenar por óleo descendente: no se promedian
+# grados de corrientes distintas.
+api_pri <- tapply(dat$api, dat$id,
+                  function(z) { z <- z[!is.na(z)]; if (length(z)) z[1] else NA_real_ })
+pozos$api <- as.numeric(api_pri[ids])
+
+# Días equivalentes completos: parte entera de las horas ÷ 24 (no son días
+# calendario trabajados).
+pozos$dias <- pmin(31, pmax(0, floor(ifelse(is.na(pozos$horas), 0, pozos$horas) / 24)))
+
+# --- Variables derivadas ---------------------------------------------------
+pozos$produce_oleo <- ifelse(pozos$oleo > 0, "Sí", "No")
+pozos$produce_gas <- ifelse(pozos$gas_total > 0, "Sí", "No")
+# Pesado < 22,3° · mediano 22,3°–31,1° (inclusive) · ligero > 31,1°
+pozos$clase_api <- ifelse(is.na(pozos$api), NA_character_,
+                  ifelse(pozos$api < 22.3, "Pesado",
+                  ifelse(pozos$api <= 31.1, "Mediano", "Ligero")))
+# Cortes en los cuartiles del óleo por pozo
+q <- unname(quantile(pozos$oleo, c(0.25, 0.75), na.rm = TRUE))
+pozos$nivel_oleo <- ifelse(pozos$oleo <= q[1], "Bajo",
+                    ifelse(pozos$oleo <= q[2], "Medio", "Alto"))
+# 0 días: inactivo · 1 a 30: parcial · 31: continuo
+pozos$nivel_actividad <- ifelse(pozos$dias == 0, "Inactivo",
+                         ifelse(pozos$dias >= 31, "Continuo", "Parcial"))
+
+# --- Utilidades de formato (español) ---------------------------------------
+fmtn <- function(x, d = 4) formatC(x, format = "f", digits = d,
+                                   decimal.mark = ",", big.mark = ".")
+fmtp <- function(x, d = 1) formatC(x, format = "f", digits = d,
+                                   decimal.mark = ",", big.mark = ".")
+fmtg <- function(x) gsub(".", ",", formatC(x, format = "g", digits = 5), fixed = TRUE)
+sturges <- function(n) ceiling(1 + 3.322 * log10(n))
+
+# --- Tablas (gt) -----------------------------------------------------------
+# Diseno propio: encabezado azul petroleo con letra blanca, cebra azul
+# grisacea y fila de totales en azul grisaceo medio. La tabla usa tipografia
+# serif para separarse visualmente de las tablas de los informes de referencia.
+
+tabla_gt <- function(datos, decimales = NULL, total = FALSE,
+                     titulo = NULL, subtitulo = NULL) {
+  t <- gt::gt(datos)
+
+  if (!is.null(titulo)) {
+    t <- gt::tab_header(
+      t,
+      title = gt::md(paste0("**", titulo, "**")),
+      subtitle = if (is.null(subtitulo)) NULL
+                 else gt::md(paste0("*", subtitulo, "*"))
+    )
+  }
+
+  # Encabezados en blanco sobre el azul petroleo
+  t <- gt::tab_style(
+    t,
+    style = list(gt::cell_fill(color = "#264E5B"),
+                 gt::cell_text(color = "#FFFFFF", weight = "bold")),
+    locations = gt::cells_column_labels(columns = gt::everything())
+  )
+
+  # Numeros con coma decimal y punto de miles; enteros sin decimales
+  for (col in names(datos)) {
+    v <- datos[[col]]
+    if (!is.numeric(v)) next
+    d <- if (!is.null(decimales) && col %in% names(decimales)) {
+      as.integer(decimales[[col]])
+    } else if (all(is.na(v))) {
+      0
+    } else if (all(v == round(v), na.rm = TRUE)) {
+      0
+    } else if (col %in% c("hi%", "hi", "Hi", "Hi (asc)", "Hi (desc)",
+                          "Porcentaje", "Porcentaje (hi%)")) {
+      2
+    } else {
+      4
+    }
+    t <- gt::fmt_number(t, columns = col, decimals = d,
+                        dec_mark = ",", sep_mark = ".")
+  }
+
+  # Las celdas sin dato se leen como raya, no como NA
+  t <- gt::sub_missing(t, columns = gt::everything(), missing_text = "—")
+
+  # Fila de totales en azul grisaceo medio
+  if (total) {
+    t <- gt::tab_style(
+      t,
+      style = list(gt::cell_fill(color = "#C3D6DB"),
+                   gt::cell_text(weight = "bold")),
+      locations = gt::cells_body(rows = nrow(datos))
+    )
+  }
+
+  t <- gt::tab_options(
+    t,
+    table.font.names = "Georgia",
+    table.font.size = gt::px(13),
+    heading.title.font.size = gt::px(16),
+    heading.subtitle.font.size = gt::px(12),
+    heading.title.font.weight = "bold",
+    column_labels.background.color = "#264E5B",
+    column_labels.border.top.color = "#264E5B",
+    column_labels.border.bottom.color = "#264E5B",
+    table_body.hlines.color = "#D5E2E6",
+    table_body.border.bottom.color = "#264E5B",
+    row.striping.background_color = "#EAF1F3",
+    row.striping.include_table_body = TRUE,
+    data_row.padding = gt::px(6),
+    table.width = gt::pct(100)
+  )
+  gt::opt_row_striping(t)
+}
+
+# Ficha tecnica de identificacion de la variable
+tabla_ficha <- function(nombre, nombre_tecnico, tipo, subtipo, dominio, rango,
+                        unidad, escala, fuente, ancho = 70) {
+  ficha <- data.frame(
+    Criterio = c("Nombre", "Nombre técnico", "Tipo", "Subtipo", "Dominio",
+                 "Rango", "Unidad", "Escala", "Fuente"),
+    Clasificación = c(nombre, nombre_tecnico, tipo, subtipo, dominio, rango,
+                      unidad, escala, fuente),
+    check.names = FALSE, stringsAsFactors = FALSE
+  )
+  t <- tabla_gt(ficha, titulo = "Identificación de la Variable")
+  t <- gt::cols_align(t, align = "left", columns = gt::everything())
+  gt::tab_options(t, table.width = gt::pct(ancho))
+}
+
+# --- Intervalos de clase ---------------------------------------------------
+# Agrupa los valores en k clases de igual ancho (natural o logaritmico) y
+# devuelve los cortes, las marcas de clase, las frecuencias y los acumulados
+# ascendentes y descendentes, ademas de la tabla ya armada.
+intervalos <- function(v, k, log10 = FALSE) {
+  v <- v[!is.na(v)]
+  n <- length(v)
+
+  if (log10) {
+    # Escala logaritmica: el ancho es constante en log10 (rango multiplicativo).
+    # Los ceros no entran en la escala y forman una clase propia {0}.
+    ceros <- sum(v == 0)
+    pos <- v[v > 0]
+    t <- log10(pos)
+    a <- (max(t) - min(t)) / k
+    if (!is.finite(a) || a <= 0) a <- 1
+    bt <- min(t) + a * (0:k)
+    bt[k + 1] <- max(t)
+    idx <- pmin(floor((t - min(t)) / a), k - 1) + 1
+    ni <- as.integer(table(factor(idx, levels = seq_len(k))))
+    li <- 10^bt[1:k]
+    ls <- 10^bt[2:(k + 1)]
+    mc <- sqrt(li * ls)
+    etiq <- paste0("[", fmtg(li), "; ", fmtg(ls), ")")
+    etiq[k] <- paste0("[", fmtg(li[k]), "; ", fmtg(ls[k]), "]")
+    cortes <- c(0, 10^bt)
+    # Los bordes se fijan con los valores exactos para que el histograma
+    # corte en los mismos limites que la tabla
+    cortes[2] <- min(pos)
+    cortes[length(cortes)] <- max(pos)
+    if (ceros > 0) {
+      ni <- c(ceros, ni)
+      mc <- c(0, mc)
+      etiq <- c("{0}", etiq)
+    }
+    amplitud <- 0
+  } else {
+    a <- (max(v) - min(v)) / k
+    if (!is.finite(a) || a <= 0) a <- 1
+    li <- min(v) + a * (0:(k - 1))
+    ls <- li + a
+    if (max(v) > li[k]) ls[k] <- max(v)
+    mc <- (li + ls) / 2
+    idx <- pmin(floor((v - min(v)) / a), k - 1) + 1
+    ni <- as.integer(table(factor(idx, levels = seq_len(k))))
+    d <- if (a >= 1000) 0 else if (a >= 10) 1 else if (a >= 1) 2 else 4
+    etiq <- paste0("[", fmtn(li, d), "; ", fmtn(ls, d), ")")
+    etiq[k] <- paste0("[", fmtn(li[k], d), "; ", fmtn(ls[k], d), "]")
+    cortes <- c(li, ls[k])
+    amplitud <- a
+  }
+
+  hi <- ni / n
+  Ni_asc <- cumsum(ni); Hi_asc <- cumsum(hi)
+  Ni_desc <- rev(cumsum(rev(ni))); Hi_desc <- rev(cumsum(rev(hi)))
+  kt <- length(ni)
+
+  tabla <- data.frame(
+    Intervalo = etiq, MC = mc, ni = ni, `hi%` = 100 * hi, hi = hi,
+    `Ni (asc)` = Ni_asc, `Hi (asc)` = Hi_asc,
+    `Ni (desc)` = Ni_desc, `Hi (desc)` = Hi_desc,
+    check.names = FALSE, stringsAsFactors = FALSE
+  )
+
+  list(li = cortes[-(kt + 1)], ls = cortes[-1], mc = mc, ni = ni, hi = hi,
+       etiq = etiq, Ni_asc = Ni_asc, Hi_asc = Hi_asc, Ni_desc = Ni_desc,
+       Hi_desc = Hi_desc, cortes = cortes, amplitud = amplitud, k = kt,
+       n = n, tabla = tabla)
+}
+
+# Agrega la fila de totales a una tabla de intervalos
+con_total <- function(tabla) {
+  rbind(tabla, data.frame(
+    Intervalo = "TOTAL", MC = NA_real_, ni = sum(tabla$ni), `hi%` = 100,
+    hi = 1, `Ni (asc)` = sum(tabla$ni), `Hi (asc)` = 1,
+    `Ni (desc)` = sum(tabla$ni), `Hi (desc)` = 1,
+    check.names = FALSE, stringsAsFactors = FALSE
+  ))
+}
+
