@@ -3159,3 +3159,49 @@ body.aviso-abierto { overflow: hidden; }
   .aviso-acciones { justify-content: stretch; }
   .aviso-boton { width: 100%; }
 }
+
+/* ============================================================
+   Fondo dinámico de curvas de nivel y pozos petroleros
+   El canvas se inyecta en <body> con z-index:0; el contenido se
+   coloca por encima. Tarjetas, tablas y gráficas conservan su fondo.
+   ============================================================ */
+
+#bg-curvas-pozos {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+}
+
+html.fondo-curvas { background-color: #F5F0E6; }
+
+html.fondo-curvas body { background: transparent; }
+
+html.fondo-curvas main,
+html.fondo-curvas .app-main,
+html.fondo-curvas .wrap,
+html.fondo-curvas .container {
+  position: relative;
+  z-index: 1;
+  background: transparent;
+}
+
+/* Secciones generales de contenido: el canvas se ve detrás. */
+html.fondo-curvas .section:not(.page-hero):not(.hero):not(.video-hero),
+html.fondo-curvas .data-section,
+html.fondo-curvas .mission-section,
+html.fondo-curvas .motivation-section,
+html.fondo-curvas .context-section,
+html.fondo-curvas .method-section {
+  background: transparent;
+}
+
+/* Exclusión absoluta del hero con video: fondo y overlay intactos. */
+html.fondo-curvas .hero,
+html.fondo-curvas .video-hero,
+html.fondo-curvas .page-hero {
+  position: relative !important;
+  z-index: 2 !important;
+}

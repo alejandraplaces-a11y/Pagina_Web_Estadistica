@@ -138,3 +138,19 @@
   .reg-paginacion { grid-template-columns: minmax(0, 1fr); }
   .reg-paginacion a[rel="next"] { text-align: left; }
 }
+
+/* Fondo en canvas: contenedores generales transparentes; el hero con video
+   conserva su fondo y superposición originales. */
+html.fondo-curvas body,
+html.fondo-curvas main,
+html.fondo-curvas .app-main,
+html.fondo-curvas .wrap,
+html.fondo-curvas .section:not(.page-hero):not(.hero):not(.video-hero) {
+  background: transparent;
+}
+html.fondo-curvas .hero,
+html.fondo-curvas .video-hero,
+html.fondo-curvas .page-hero {
+  position: relative !important;
+  z-index: 2 !important;
+}
