@@ -22,3 +22,12 @@ playwright.config.ts
 # Prototipos / borradores locales
 *Fondos*doradas.html
 Tarjetas de variables ilustradas.html
+
+# RStudio
+.Rproj.user/
+.Rhistory
+.RData
+*.Rhistory
+*.Rproj
+.RmdProj
+packrat/

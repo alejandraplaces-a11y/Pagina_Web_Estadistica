@@ -1,0 +1,539 @@
+---
+title: "Agua por pozo"
+subtitle: "Pozos terrestres de Brasil · ANP · enero de 2023"
+author: "Grupo Brasil · Universidad Central del Ecuador"
+date: "`r format(Sys.Date(), '%d-%m-%Y')`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    theme: readable
+    highlight: tango
+---
+
+```{css, echo=FALSE}
+body { background-color: #F5F0E6; }
+h1.title { color: #0d2b24; font-weight: 700; }
+h3.subtitle, h4.author, h4.date { color: #8C6D46; }
+h1, h2, h3 { color: #0B221E; }
+.section.level1 { background-color: #EDEAE4; padding: 4px 16px 12px; border-radius: 8px; margin-bottom: 22px; }
+.list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus { background-color: #8C6D46; border-color: #8C6D46; color: #F5F0E6; }
+.tocify { border-color: #F2C14E; }
+pre { background-color: #F5F0E6; border: 1px solid #F2C14E; }
+pre.r { border-left: 4px solid #0d2b24; }
+.btn-default { color: #0d2b24; border-color: #F2C14E; }
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,
+                      fig.align = "center", fig.width = 10, fig.height = 6)
+```
+
+# Configuración y Carga de Datos
+
+Se carga el archivo de producción de petróleo y gas natural por pozo **en tierra** de Brasil, publicado por la **ANP** (Agência Nacional do Petróleo, Gás Natural e Biocombustíveis), correspondiente a **enero de 2023**. El archivo debe estar en la misma carpeta que este documento; si no se encuentra, se abre una ventana para elegirlo.
+
+```{r}
+library(readr)
+library(dplyr)
+library(gt)
+
+autor <- "Grupo Brasil"   # cambia aquí el nombre del autor o del grupo
+
+ruta_archivo <- "../data/2023_01_producao_Terra.csv"
+if (!file.exists(ruta_archivo)) ruta_archivo <- file.choose()
+
+datos_brasil <- read_delim(
+  ruta_archivo,
+  delim     = ";",
+  col_names = FALSE,
+  col_types = cols(.default = col_character()),
+  locale    = locale(encoding = "UTF-8")
+)
+
+cat("Base de datos cargada correctamente.\n")
+```
+
+Las tres primeras filas del archivo son encabezados (el nombre de la columna y dos subencabezados), por eso se leen las columnas por posición y se conservan solo las filas del período **2023/01**. Los números usan coma decimal y punto de miles.
+
+```{r}
+a_numero <- function(x) as.numeric(gsub(",", ".", gsub(".", "", x, fixed = TRUE), fixed = TRUE))
+
+registros <- datos_brasil %>%
+  filter(X8 == "2023/01") %>%
+  transmute(
+    estado          = X1,
+    cuenca          = X2,
+    pozo            = X3,
+    campo           = X5,
+    operador        = X6,
+    instalacion     = X18,
+    oleo            = a_numero(X9),
+    condensado      = a_numero(X10),
+    gas_asociado    = a_numero(X12),
+    gas_no_asociado = a_numero(X13),
+    gas_total       = a_numero(X14),
+    agua            = a_numero(X16),
+    horas           = a_numero(X19),
+    api             = a_numero(X22)
+  ) %>%
+  mutate(orden = row_number())
+
+cat("Total de registros (filas):", nrow(registros), "\n")
+cat("Total de pozos distintos:", n_distinct(registros$pozo), "\n")
+```
+
+Un mismo pozo puede aparecer en varias filas (una por cada campo al que entrega producción). Se consolida **un registro por pozo**: los volúmenes se suman, las horas toman el máximo, y los datos cualitativos y el grado API se toman de la fila con más óleo (en caso de empate, la primera del archivo).
+
+```{r}
+suma_na   <- function(x) if (all(is.na(x))) NA_real_ else sum(x, na.rm = TRUE)
+maximo_na <- function(x) if (all(is.na(x))) NA_real_ else max(x, na.rm = TRUE)
+
+pozos <- registros %>%
+  arrange(desc(oleo), orden) %>%
+  group_by(pozo) %>%
+  summarise(
+    estado          = first(estado),
+    cuenca          = first(cuenca),
+    campo           = first(campo),
+    operador        = first(operador),
+    instalacion     = first(instalacion),
+    api             = first(api[!is.na(api)]),
+    oleo            = suma_na(oleo),
+    condensado      = suma_na(condensado),
+    gas_asociado    = suma_na(gas_asociado),
+    gas_no_asociado = suma_na(gas_no_asociado),
+    gas_total       = suma_na(gas_total),
+    agua            = suma_na(agua),
+    horas           = maximo_na(horas),
+    .groups = "drop"
+  )
+
+cat("Pozos consolidados:", nrow(pozos), "\n")
+```
+
+# Extracción y Limpieza de la Variable
+
+Se realiza el aislamiento y limpieza de la variable **Agua por pozo** (columna `Água (bbl/dia)`: el agua producida junto con los hidrocarburos). Se descartan los pozos sin dato (`NA`).
+
+```{r}
+cat("Resumen de agua antes de la limpieza:\n")
+print(summary(pozos$agua))
+```
+
+```{r}
+x_raw <- pozos %>%
+  filter(!is.na(agua)) %>%
+  pull(agua)
+
+n <- length(x_raw)
+
+if (n == 0) {
+  stop("No se encontraron valores en agua. Revisa el resumen impreso arriba.")
+}
+
+f_num <- function(x, d = 4) formatC(x, format = "f", digits = d, big.mark = ",")
+
+cat("Observaciones válidas:", n, "\n")
+cat("Sin dato:", sum(is.na(pozos$agua)), "\n")
+cat("Valores únicos:", length(unique(x_raw)), "\n")
+cat("Ceros:", sum(x_raw == 0), "\n")
+```
+
+# Identificación de la Variable
+
+Se presenta la ficha técnica de identificación de la variable, especificando su naturaleza estadística y su fuente de origen.
+
+```{r}
+tabla_id <- data.frame(
+  Criterio = c(
+    "Nombre", "Nombre técnico", "Tipo", "Subtipo",
+    "Dominio", "Rango", "Unidad", "Escala", "Fuente"
+  ),
+  Clasificacion = c(
+    "Agua por pozo",
+    "Água (bbl/dia)",
+    "Cuantitativa",
+    "Continua",
+    "[0; +∞)",
+    paste0("[", f_num(min(x_raw)), " ; ", f_num(max(x_raw)), "] bbl/día"),
+    "bbl/día",
+    "Razón",
+    "ANP – Producción por pozo en tierra, enero 2023"
+  )
+)
+
+tabla_id %>%
+  gt() %>%
+  tab_header(
+    title = md("**Identificación de la Variable**")
+  ) %>%
+  cols_label(
+    Criterio      = md("**Criterio**"),
+    Clasificacion = md("**Clasificación**")
+  ) %>%
+  tab_style(
+    style = list(
+      cell_fill(color = "#F2C14E"),
+      cell_text(color = "#0B221E", weight = "bold")
+    ),
+    locations = cells_column_labels()
+  ) %>%
+  tab_style(
+    style = cell_text(color = "#0d2b24"),
+    locations = cells_title(groups = "title")
+  ) %>%
+  tab_style(
+    style = cell_fill(color = "#EDEAE4"),
+    locations = cells_body(rows = seq(1, nrow(tabla_id), by = 2))
+  ) %>%
+  tab_source_note(source_note = md(paste0("*Autor: ", autor, "*"))) %>%
+  tab_style(
+    style = cell_text(color = "#8C6D46"),
+    locations = cells_source_notes()
+  ) %>%
+  tab_options(
+    table.width                = pct(70),
+    heading.title.font.size    = px(16),
+    heading.subtitle.font.size = px(12),
+    table.font.size            = px(13),
+    data_row.padding           = px(6)
+  )
+```
+
+**Justificación:** El agua producida es un caudal medido que puede tomar cualquier valor real no negativo. Corresponde a una variable cuantitativa continua en escala de razón.
+
+# Tabla de Distribución de Frecuencias
+
+La variable está **muy sesgada a la derecha**: hay muchos pozos con valores pequeños y unos pocos con valores muy altos. Por eso se usa una clase aparte **{0}** para los pozos con valor cero y, para los pozos con valor positivo, clases de **igual ancho en log₁₀** con el número de clases de **Sturges** (k = 1 + log₂ n). La marca de clase es la media geométrica de sus límites, √(Li · Ls), que es el centro de la clase en escala logarítmica.
+
+```{r}
+# 1. Clase {0}: pozos sin producción
+ceros     <- sum(x_raw == 0)
+positivos <- x_raw[x_raw > 0]
+
+# 2. Regla de Sturges sobre log10 de los valores positivos
+base   <- log10(positivos)
+k      <- ceiling(1 + log2(length(base)))
+cortes <- seq(min(base), max(base), length.out = k + 1)
+clase  <- cut(base, breaks = cortes, right = FALSE, include.lowest = TRUE, labels = FALSE)
+
+lim_inf <- 10^cortes[1:k]
+lim_sup <- 10^cortes[2:(k + 1)]
+
+tabla_final <- data.frame(
+  Clase         = c("{0}", paste0("[", f_num(lim_inf), " ; ", f_num(lim_sup), ifelse(1:k == k, "]", ")"))),
+  Lim_inf       = c(0, lim_inf),
+  Lim_sup       = c(0, lim_sup),
+  Marca_xi      = c(0, sqrt(lim_inf * lim_sup)),
+  Frecuencia_ni = c(ceros, tabulate(clase, nbins = k))
+)
+
+# 3. Porcentaje y frecuencias acumuladas
+tabla_final <- tabla_final %>%
+  mutate(
+    Porcentaje_hi = (Frecuencia_ni / sum(Frecuencia_ni)) * 100,
+    Frecuencia_Ni = cumsum(Frecuencia_ni),
+    Porcentaje_Hi = cumsum(Porcentaje_hi)
+  )
+
+cat("Número de clases de Sturges (k):", k, "\n")
+
+# 4. Fila TOTAL y formateo
+resultado <- bind_rows(
+  tabla_final %>% transmute(
+    Clase,
+    Marca_xi      = f_num(Marca_xi),
+    Frecuencia_ni,
+    Porcentaje_hi = sprintf("%.2f", Porcentaje_hi),
+    Frecuencia_Ni = as.character(Frecuencia_Ni),
+    Porcentaje_Hi = sprintf("%.2f", Porcentaje_Hi)
+  ),
+  data.frame(
+    Clase         = "TOTAL",
+    Marca_xi      = "",
+    Frecuencia_ni = sum(tabla_final$Frecuencia_ni),
+    Porcentaje_hi = sprintf("%.2f", sum(tabla_final$Porcentaje_hi)),
+    Frecuencia_Ni = "—",
+    Porcentaje_Hi = "—"
+  )
+)
+
+# 5. Tabla GT
+resultado %>%
+  gt() %>%
+  tab_header(
+    title    = md("**Tabla N°1: Distribución de Frecuencias**"),
+    subtitle = md("*Variable Cuantitativa Continua: Agua por pozo (bbl/día)*")
+  ) %>%
+  cols_label(
+    Clase         = md("**Clase [Li ; Ls)**"),
+    Marca_xi      = md("**Marca (xi)**"),
+    Frecuencia_ni = md("**Frecuencia (ni)**"),
+    Porcentaje_hi = md("**Porcentaje (hi%)**"),
+    Frecuencia_Ni = md("**Frec. acumulada (Ni)**"),
+    Porcentaje_Hi = md("**Porc. acumulado (Hi%)**")
+  ) %>%
+  tab_style(
+    style = list(
+      cell_fill(color = "#F2C14E"),
+      cell_text(color = "#0B221E", weight = "bold")
+    ),
+    locations = cells_column_labels()
+  ) %>%
+  tab_style(
+    style = cell_text(color = "#0d2b24"),
+    locations = cells_title(groups = "title")
+  ) %>%
+  tab_style(
+    style = cell_fill(color = "#EDEAE4"),
+    locations = cells_body(rows = seq(1, nrow(resultado), by = 2))
+  ) %>%
+  tab_style(
+    style = list(
+      cell_fill(color = "#FBEFC8"),
+      cell_text(weight = "bold")
+    ),
+    locations = cells_body(
+      rows    = Clase == "TOTAL",
+      columns = everything()
+    )
+  ) %>%
+  tab_source_note(source_note = md(paste0("*Autor: ", autor, "*"))) %>%
+  tab_style(
+    style = cell_text(color = "#8C6D46"),
+    locations = cells_source_notes()
+  ) %>%
+  tab_options(
+    table.width                = pct(85),
+    heading.title.font.size    = px(16),
+    heading.subtitle.font.size = px(12),
+    table.font.size            = px(13),
+    data_row.padding           = px(6)
+  )
+```
+
+# Representación Gráfica
+
+Se presentan cuatro gráficas en tonos amarillo y verde claro para la variable continua **Agua por pozo**. En el histograma y el polígono, la barra verde es la clase {0} y las amarillas son las clases de igual ancho en log₁₀.
+
+## Gráfica N°1 — Histograma de frecuencias absolutas
+
+```{r, fig.height = 7}
+par(mar = c(12, 6, 5, 2))
+colores_hist <- ifelse(tabla_final$Clase == "{0}", "#0d2b24", "#F2C14E")
+bp1 <- barplot(tabla_final$Frecuencia_ni,
+               space     = 0,
+               main      = "",
+               ylab      = "",
+               col       = colores_hist,
+               border    = "#8C6D46",
+               ylim      = c(0, max(tabla_final$Frecuencia_ni) * 1.15),
+               names.arg = tabla_final$Clase,
+               cex.names = 0.7,
+               las       = 2)
+
+mtext("Frecuencia (ni)",          side = 2, line = 4.5, cex = 1)
+mtext("Agua por pozo (bbl/día)", side = 1, line = 10.5, cex = 1)
+mtext("Gráfica N°1: Histograma de la Variable Agua por pozo",
+      side = 3, line = 2, adj = 0.5, cex = 0.9, font = 2, col = "#0d2b24")
+
+text(x = bp1, y = tabla_final$Frecuencia_ni,
+     labels = format(tabla_final$Frecuencia_ni, big.mark = ","),
+     pos = 3, cex = 0.7, col = "#C9930A")
+```
+
+## Gráfica N°2 — Polígono de frecuencias porcentuales
+
+```{r, fig.height = 7}
+par(mar = c(12, 6, 5, 2))
+bp2 <- barplot(tabla_final$Porcentaje_hi,
+               space     = 0,
+               main      = "",
+               ylab      = "Porcentaje (hi%)",
+               col       = "#EDEAE4",
+               border    = "#D8D2C5",
+               ylim      = c(0, max(tabla_final$Porcentaje_hi) * 1.2),
+               names.arg = tabla_final$Clase,
+               cex.names = 0.7,
+               las       = 2)
+lines(bp2, tabla_final$Porcentaje_hi, type = "b", pch = 19, lwd = 2, col = "#8C6D46")
+
+mtext("Agua por pozo (bbl/día)", side = 1, line = 10.5, cex = 1)
+mtext("Gráfica N°2: Polígono de Frecuencias Porcentuales de la Variable Agua por pozo",
+      side = 3, line = 2, adj = 0.5, cex = 0.9, font = 2, col = "#0d2b24")
+
+text(x = bp2, y = tabla_final$Porcentaje_hi,
+     labels = paste0(round(tabla_final$Porcentaje_hi, 2), "%"),
+     pos = 3, cex = 0.65, col = "#C9930A")
+```
+
+## Gráfica N°3 — Ojiva (Hi%)
+
+```{r, fig.height = 7}
+par(mar = c(10, 6, 5, 2))
+plot(seq_len(nrow(tabla_final)), tabla_final$Porcentaje_Hi,
+     type = "n", xaxt = "n",
+     xlab = "", ylab = "Porcentaje acumulado (Hi%)",
+     ylim = c(0, 105), main = "")
+grid(col = "#D8D2C5")
+polygon(c(1, seq_len(nrow(tabla_final)), nrow(tabla_final)),
+        c(0, tabla_final$Porcentaje_Hi, 0),
+        col = "#FBEFC8", border = NA)
+lines(seq_len(nrow(tabla_final)), tabla_final$Porcentaje_Hi,
+      type = "b", pch = 19, lwd = 2, col = "#8C6D46")
+abline(h = 50, lty = 2, col = "#0d2b24")
+axis(1, at = seq_len(nrow(tabla_final)), labels = f_num(tabla_final$Lim_sup),
+     las = 2, cex.axis = 0.7)
+
+mtext("Límite superior de clase (bbl/día)", side = 1, line = 8, cex = 1)
+mtext("Gráfica N°3: Ojiva de la Variable Agua por pozo",
+      side = 3, line = 2, adj = 0.5, cex = 0.9, font = 2, col = "#0d2b24")
+```
+
+## Gráfica N°4 — Diagrama de caja
+
+```{r}
+par(mar = c(6, 4, 5, 2))
+boxplot(x_raw[x_raw > 0], horizontal = TRUE, log = "x",
+        col = "#FBEFC8", border = "#0d2b24",
+        outcol = "#8C6D46", pch = 19, cex = 0.5)
+
+mtext("Agua por pozo (bbl/día, escala logarítmica; solo valores > 0)", side = 1, line = 3.5, cex = 1)
+mtext("Gráfica N°4: Diagrama de Caja de la Variable Agua por pozo",
+      side = 3, line = 2, adj = 0.5, cex = 0.9, font = 2, col = "#0d2b24")
+```
+
+# Tabla de Indicadores
+
+Para la variable cuantitativa continua **Agua por pozo** se calculan las medidas de tendencia central, dispersión y forma. La varianza y la desviación estándar son muestrales (n − 1); la asimetría y la curtosis son los coeficientes ajustados por tamaño de muestra (la curtosis se informa como exceso sobre la normal, que vale 0). Los valores atípicos se cuentan con la regla de 1,5 veces el rango intercuartílico.
+
+```{r}
+# Tendencia central y dispersión
+media    <- mean(x_raw)
+mediana  <- median(x_raw)
+varianza <- var(x_raw)
+desv     <- sd(x_raw)
+cv       <- desv / media * 100
+
+# Forma: asimetría (G1) y curtosis en exceso (G2) ajustadas
+m2 <- mean((x_raw - media)^2)
+m3 <- mean((x_raw - media)^3)
+m4 <- mean((x_raw - media)^4)
+asimetria <- (m3 / m2^1.5) * sqrt(n * (n - 1)) / (n - 2)
+curtosis  <- ((n + 1) * (m4 / m2^2 - 3) + 6) * (n - 1) / ((n - 2) * (n - 3))
+
+# Cuartiles y valores atípicos (regla 1,5 · RIC)
+q1  <- unname(quantile(x_raw, 0.25))
+q3  <- unname(quantile(x_raw, 0.75))
+ric <- q3 - q1
+limite_inferior <- q1 - 1.5 * ric
+limite_superior <- q3 + 1.5 * ric
+atipicos <- sum(x_raw < limite_inferior | x_raw > limite_superior)
+
+# Moda: marca de la clase modal (la clase con mayor frecuencia)
+fila_modal <- which.max(tabla_final$Frecuencia_ni)
+moda_texto <- if (tabla_final$Clase[fila_modal] == "{0}") {
+  paste0("0 bbl/día (clase {0}, ", format(tabla_final$Frecuencia_ni[fila_modal], big.mark = ","), " pozos)")
+} else {
+  paste0(f_num(tabla_final$Marca_xi[fila_modal]), " bbl/día (clase modal ", tabla_final$Clase[fila_modal], ")")
+}
+
+# Tabla de indicadores en formato largo
+tabla_indicadores <- data.frame(
+  Indicador = c(
+    "Variable",
+    "Tipo de variable",
+    "Rango [mín ; máx]",
+    "Moda (Mo)",
+    "Mediana (Me)",
+    "Media (X̄)",
+    "Varianza (V)",
+    "Desv. Estándar (Sd)",
+    "Coef. Variación (CV%)",
+    "Asimetría (As)",
+    "Curtosis (K)",
+    "Cuartiles (Q1 ; Q3)",
+    "Valores atípicos"
+  ),
+  Valor = c(
+    "Agua por pozo",
+    "Cuantitativa Continua",
+    paste0("[", f_num(min(x_raw)), " ; ", f_num(max(x_raw)), "] bbl/día"),
+    moda_texto,
+    paste(f_num(mediana), "bbl/día"),
+    paste(f_num(media), "bbl/día"),
+    f_num(varianza),
+    paste(f_num(desv), "bbl/día"),
+    paste0(sprintf("%.2f", cv), "%"),
+    f_num(asimetria, 4),
+    f_num(curtosis, 4),
+    paste0(f_num(q1), " ; ", f_num(q3)),
+    paste0(format(atipicos, big.mark = ","), " (", sprintf("%.2f", atipicos / n * 100), "%)")
+  )
+)
+
+# Tabla GT de indicadores
+tabla_indicadores %>%
+  gt() %>%
+  tab_header(
+    title    = md("**Tabla N°2: Indicadores Estadísticos**"),
+    subtitle = md("*Variable Cuantitativa Continua: Agua por pozo*")
+  ) %>%
+  cols_label(
+    Indicador = md("**Indicador**"),
+    Valor     = md("**Valor**")
+  ) %>%
+  tab_style(
+    style = list(
+      cell_fill(color = "#F2C14E"),
+      cell_text(color = "#0B221E", weight = "bold")
+    ),
+    locations = cells_column_labels()
+  ) %>%
+  tab_style(
+    style = cell_text(color = "#0d2b24"),
+    locations = cells_title(groups = "title")
+  ) %>%
+  tab_style(
+    style = cell_fill(color = "#EDEAE4"),
+    locations = cells_body(rows = seq(1, nrow(tabla_indicadores), by = 2))
+  ) %>%
+  tab_style(
+    style = list(
+      cell_fill(color = "#FBEFC8"),
+      cell_text(weight = "bold")
+    ),
+    locations = cells_body(
+      rows    = Indicador %in% c("Media (X̄)", "Mediana (Me)", "Moda (Mo)"),
+      columns = everything()
+    )
+  ) %>%
+  tab_style(
+    style = cell_text(style = "italic", color = "#2C3531"),
+    locations = cells_body(
+      rows    = Valor == "—",
+      columns = Valor
+    )
+  ) %>%
+  tab_source_note(source_note = md(paste0("*Autor: ", autor, "*"))) %>%
+  tab_style(
+    style = cell_text(color = "#8C6D46"),
+    locations = cells_source_notes()
+  ) %>%
+  tab_options(
+    table.width                = pct(65),
+    heading.title.font.size    = px(16),
+    heading.subtitle.font.size = px(12),
+    table.font.size            = px(13),
+    data_row.padding           = px(6)
+  )
+```
+
+# Conclusión
+
+La variable **Agua por pozo** es una variable cuantitativa continua medida en `r format(n, big.mark = ",")` pozos con dato. Sus valores van de `r f_num(min(x_raw))` a `r f_num(max(x_raw))` bbl/día; la media es `r f_num(media)` y la mediana `r f_num(mediana)` bbl/día. La asimetría vale `r f_num(asimetria, 2)`, es decir, la distribución tiene asimetría `r if (asimetria > 0.5) "positiva (cola larga hacia los valores altos)" else if (asimetria < -0.5) "negativa (cola hacia los valores bajos)" else "leve: es aproximadamente simétrica"`, y la curtosis en exceso de `r f_num(curtosis, 2)` indica una distribución `r if (curtosis > 0.5) "leptocúrtica (más concentrada y con colas más pesadas que la normal)" else if (curtosis < -0.5) "platicúrtica (más aplanada que la normal)" else "cercana a la mesocúrtica"`. Se detectan `r format(atipicos, big.mark = ",")` valores atípicos con la regla de 1,5 · RIC. La mayoría de los pozos produce agua junto con el petróleo, algo típico de campos terrestres maduros.
+
+*Autor: `r autor`*

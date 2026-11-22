@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Terra: un análisis académico de la producción terrestre de petróleo en Brasil a partir de los registros de enero de 2023.">
+  <title>Introducción · Producción terrestre de petróleo en Brasil</title>
+  <link rel="preload" href="../../assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../assets/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    (function () {
+      try { if (localStorage.getItem('sidebar-expanded') === '1') document.documentElement.classList.add('sidebar-expanded'); } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="../../assets/css/styles.css">
+  <link rel="stylesheet" href="../../assets/css/ubicacion.css">
+  <script defer src="../../assets/js/main.js"></script>
+  <script defer src="../../assets/js/sidebar.js"></script>
+  <script defer src="../../assets/js/common.js"></script>
+  <script defer src="../../assets/js/aviso.js"></script>
+</head>
+<body class="has-sidebar">
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Navegación lateral">
+      <button class="sidebar-toggle" id="sidebar-toggle" type="button" aria-label="Alternar menú lateral" aria-expanded="false" aria-controls="sidebar">
+        <span class="sidebar-toggle-icon" aria-hidden="true">☰</span>
+      </button>
+      <a class="sidebar-brand" href="../../index.html" aria-label="Terra, inicio">
+        <img class="sidebar-logo" src="../../assets/img/logo-universidad.png" alt="" width="34" height="34">
+        <span class="sidebar-brand-text">
+          <span class="sidebar-title">Universidad Central del Ecuador</span>
+        </span>
+      </a>
+      <nav class="sidebar-nav" aria-label="Navegación lateral">
+        <ul class="sidebar-list">
+          <li>
+            <a class="sidebar-link" href="../../index.html#inicio">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10.4V20h13v-9.6"/></svg>
+              <span class="sidebar-link-label">Inicio</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link is-active" href="introduccion.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v16H5.5C4.7 20 4 19.3 4 18.5Z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v16h5.5c.8 0 1.5-.7 1.5-1.5Z"/></svg>
+              <span class="sidebar-link-label">Introducción</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="mapa.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Z"/><path d="M9 4v14m6-12v14"/></svg>
+              <span class="sidebar-link-label">Mapa Web</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="../estadistica/estadistica.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18 6H7l6 6-6 6h11"/></svg>
+              <span class="sidebar-link-label">Estadística Descriptiva</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="../estadistica/estadistica-inferencial.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 20h18"/><path d="M5 20c2-9 4-14 7-14s5 5 7 14"/><path d="M12 6v14"/></svg>
+              <span class="sidebar-link-label">Estadística Inferencial</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="../regresiones/regresion.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 20h16"/><path d="M4 20V4"/><circle cx="8" cy="15" r="1.2"/><circle cx="12" cy="11" r="1.2"/><circle cx="17" cy="9" r="1.2"/><path d="M6 17 19 6"/></svg>
+              <span class="sidebar-link-label">Regresión</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="machine-learning.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="2.5"/><circle cx="6" cy="6" r="1.5"/><circle cx="18" cy="6" r="1.5"/><circle cx="12" cy="20" r="1.5"/><path d="M10.2 10.2 7.3 7.3M13.8 10.2l2.9-2.9M12 14.5v4"/></svg>
+              <span class="sidebar-link-label">Machine Learning</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="conclusiones.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5 9.5 17 19 7"/></svg>
+              <span class="sidebar-link-label">Conclusiones</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="herramientas.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.7 6.3a4 4 0 0 0 5 5L12 19a2.1 2.1 0 0 1-3-3l7.7-7.7"/><path d="M4 4l5 5"/></svg>
+              <span class="sidebar-link-label">Herramientas</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="equipo.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 5.5a3 3 0 0 1 0 5"/><path d="M18 14.5c1.8.8 3 2.6 3 4.5"/></svg>
+              <span class="sidebar-link-label">Equipo</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+    <div class="app-main">
+  <div class="sidebar-backdrop" id="sidebar-backdrop" hidden></div>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <noscript><p class="noscript">Este análisis carga sus datos con JavaScript. Actívalo para ver las cifras y los gráficos.</p></noscript>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="sidebar">
+        <span aria-hidden="true">☰</span>
+      </button>
+      <a class="brand" href="../../index.html" aria-label="Terra, volver al inicio">
+        <img class="brand-mark" src="../../assets/img/logo-universidad.png" alt="" aria-hidden="true" width="34" height="34">
+        <span class="brand-word">Universidad Central del Ecuador</span>
+        <span class="brand-caption">Proyecto de Estadistica</span>
+      </a>
+      <nav class="site-nav" aria-label="Navegación principal">
+        <a href="#planteamiento">Planteamiento</a>
+        <a href="#objetivos">Objetivos</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido">
+    <section class="section context-section" id="planteamiento" aria-labelledby="planteamiento-title">
+      <div class="container context-grid">
+        <div class="context-aside" data-reveal>
+          <p class="section-kicker">Planteamiento del problema</p>
+          <h2 id="planteamiento-title">Planteamiento del problema.</h2>
+        </div>
+
+        <div class="context-body">
+          <p class="status" id="estado-planteamiento" role="status">Cargando planteamiento…</p>
+          <div id="planteamiento-contenido" hidden>
+            <div class="prose" id="problema" data-reveal>
+              <p>Brasil es uno de los mayores productores de hidrocarburos de América Latina, su producción varía mucho entre pozos y campos, lo que dificulta identificar las zonas más productivas. Este estudio aplica un modelo estadístico a los datos de producción por pozo de Brasil (ANP) para obtener información útil que permita entender ese comportamiento.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="section method-section" id="objetivos" aria-labelledby="objetivos-title">
+      <div class="container">
+        <div class="method-head" data-reveal>
+          <p class="section-kicker">Objetivos</p>
+          <h2 id="objetivos-title">Objetivos del estudio.</h2>
+        </div>
+
+        <div class="objectives-grid" data-reveal>
+          <div class="objective-block">
+            <h3 id="objetivo-general-title">Objetivo general</h3>
+            <p id="objetivo-general">Analizar estadísticamente la producción de petróleo y gas natural por pozo en Brasil, con los datos abiertos de la ANP.</p>
+          </div>
+
+          <div class="objective-block" id="objetivos-especificos">
+            <h3>Objetivos específicos</h3>
+            <ol>
+              <li>Describir la producción por pozo según ambiente, cuenca y estado mediante estadística descriptiva.</li>
+              <li>Comparar con pruebas de hipótesis la producción entre tierra, mar y pre-sal.</li> 
+              <li>Construir modelos de regresión y machine learning que expliquen y predigan la producción de petróleo.</li> 
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-row">
+      <div class="footer-left">
+        <p>© 2026 Integrantes: <span class="footer-members">Génesis Once, Esther Places, Evelyn Rodríguez, Andrea Sarmiento, Melany Zapata</span></p>
+        <p class="footer-location">Proyecto académico · Brasil, enero de 2023</p>
+        <p class="footer-location">Universidad Central del Ecuador · FIGEMPA · <a href="equipo.html">Equipo</a></p>
+      </div>
+      <div class="footer-right">
+        <p class="footer-label">Fuente</p>
+        <p>
+          <a href="https://www.gov.br/anp/pt-br/centrais-de-conteudo/dados-abertos/producao-de-petroleo-e-gas-natural-por-poco" target="_blank" rel="noopener noreferrer">
+            ANP (Brasil) — Dados Abertos
+          </a>
+          <br>Agregación por Estado
+        </p>
+      </div>
+    </div>
+  </footer>
+  </div><!-- /app-main -->
+  </div><!-- /app-shell -->
+  <script defer src="../../assets/js/fondo-curvas.js"></script>
+</body>
+</html>

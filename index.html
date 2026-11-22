@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Terra: análisis estadístico de la producción terrestre de hidrocarburos en Brasil (enero de 2023). Proyecto académico con diagrama interactivo por Estado.">
   <title>Producción terrestre de petróleo en Brasil</title>
-  <link rel="stylesheet" href="css/styles.css">
-  <link rel="stylesheet" href="css/ruta.css">
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="stylesheet" href="assets/css/ruta.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
   <script>
     (function () {
@@ -14,10 +14,10 @@
     })();
   </script>
   <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <script defer src="js/common.js"></script>
-  <script defer src="js/ruta.js"></script>
-  <script defer src="js/sidebar.js"></script>
-  <script defer src="js/aviso.js"></script>
+  <script defer src="assets/js/common.js"></script>
+  <script defer src="assets/js/ruta.js"></script>
+  <script defer src="assets/js/sidebar.js"></script>
+  <script defer src="assets/js/aviso.js"></script>
 </head>
 
 
@@ -30,7 +30,7 @@
         <span class="sidebar-toggle-icon" aria-hidden="true">☰</span>
       </button>
       <a class="sidebar-brand" href="index.html" aria-label="Terra, inicio">
-        <img class="sidebar-logo" src="img/logo-universidad.png" alt="" width="34" height="34">
+        <img class="sidebar-logo" src="assets/img/logo-universidad.png" alt="" width="34" height="34">
         <span class="sidebar-brand-text">
           <span class="sidebar-title">Universidad Central del Ecuador</span>
         </span>
@@ -44,54 +44,54 @@
             </a>
           </li>
           <li>
-            <a class="sidebar-link" href="introduccion.html">
+            <a class="sidebar-link" href="pages/general/introduccion.html">
               <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v16H5.5C4.7 20 4 19.3 4 18.5Z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v16h5.5c.8 0 1.5-.7 1.5-1.5Z"/></svg>
               <span class="sidebar-link-label">Introducción</span>
             </a>
           </li>
           <li>
-            <a class="sidebar-link" href="mapa.html">
+            <a class="sidebar-link" href="pages/general/mapa.html">
               <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Z"/><path d="M9 4v14m6-12v14"/></svg>
               <span class="sidebar-link-label">Mapa Web</span>
             </a>
           </li>
           <li>
-            <a class="sidebar-link" href="Estadistica.html">
+            <a class="sidebar-link" href="pages/estadistica/estadistica.html">
               <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18 6H7l6 6-6 6h11"/></svg>
               <span class="sidebar-link-label">Estadística Descriptiva</span>
             </a>
           </li>
           <li>
-            <a class="sidebar-link" href="estadisticaInferencial.html">
+            <a class="sidebar-link" href="pages/estadistica/estadistica-inferencial.html">
               <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 20h18"/><path d="M5 20c2-9 4-14 7-14s5 5 7 14"/><path d="M12 6v14"/></svg>
               <span class="sidebar-link-label">Estadística Inferencial</span>
             </a>
           </li>
-            <a class="sidebar-link" href="regresion.html">
+            <a class="sidebar-link" href="pages/regresiones/regresion.html">
               <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 20h16"/><path d="M4 20V4"/><circle cx="8" cy="15" r="1.2"/><circle cx="12" cy="11" r="1.2"/><circle cx="17" cy="9" r="1.2"/><path d="M6 17 19 6"/></svg>
               <span class="sidebar-link-label">Regresión</span>
             </a>
           </li>
           <li>
-            <a class="sidebar-link" href="machine-learning.html">
+            <a class="sidebar-link" href="pages/general/machine-learning.html">
               <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="2.5"/><circle cx="6" cy="6" r="1.5"/><circle cx="18" cy="6" r="1.5"/><circle cx="12" cy="20" r="1.5"/><path d="M10.2 10.2 7.3 7.3M13.8 10.2l2.9-2.9M12 14.5v4"/></svg>
               <span class="sidebar-link-label">Machine Learning</span>
             </a>
           </li>
           <li>
-            <a class="sidebar-link" href="conclusiones.html">
+            <a class="sidebar-link" href="pages/general/conclusiones.html">
               <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5 9.5 17 19 7"/></svg>
               <span class="sidebar-link-label">Conclusiones</span>
             </a>
           </li>
           <li>
-            <a class="sidebar-link" href="herramientas.html">
+            <a class="sidebar-link" href="pages/general/herramientas.html">
               <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.7 6.3a4 4 0 0 0 5 5L12 19a2.1 2.1 0 0 1-3-3l7.7-7.7"/><path d="M4 4l5 5"/></svg>
               <span class="sidebar-link-label">Herramientas</span>
             </a>
           </li>
           <li>
-            <a class="sidebar-link" href="equipo.html">
+            <a class="sidebar-link" href="pages/general/equipo.html">
               <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 5.5a3 3 0 0 1 0 5"/><path d="M18 14.5c1.8.8 3 2.6 3 4.5"/></svg>
               <span class="sidebar-link-label">Equipo</span>
             </a>
@@ -108,7 +108,7 @@
         <span aria-hidden="true">☰</span>
       </button>
       <a class="brand" href="index.html" aria-label="Terra, inicio">
-        <img class="brand-mark" src="img/logo-universidad.png" alt="" aria-hidden="true" width="34" height="34">
+        <img class="brand-mark" src="assets/img/logo-universidad.png" alt="" aria-hidden="true" width="34" height="34">
         <span class="brand-word">Universidad Central del Ecuador</span>
         <span class="brand-caption">Proyecto de Estadística</span>
       </a>
@@ -126,7 +126,7 @@
     <!-- 1. Nombre del proyecto -->
     <section class="hero video-hero" aria-labelledby="hero-title" id="hero">
       <video class="hero-video" autoplay muted loop playsinline preload="auto" aria-hidden="true" tabindex="-1">
-        <source src="video/video-completo.mp4" type="video/mp4">
+        <source src="assets/video/video-completo.mp4" type="video/mp4">
         Tu navegador no puede reproducir el video.
       </video>
       <div class="hero-overlay" aria-hidden="true"></div>
@@ -217,7 +217,7 @@
         <div class="motivation-layout">
           <figure class="motivation-figure">
             <!-- Reemplaza la ruta por la imagen de tu institución o del proyecto -->
-            <img src="img/imagen-facultad.jpg" alt="Instalaciones de la institución donde se desarrolla el proyecto" loading="lazy">
+            <img src="assets/img/imagen-facultad.jpg" alt="Instalaciones de la institución donde se desarrolla el proyecto" loading="lazy">
             <figcaption class="motivation-figcaption">FIGEMPA</figcaption>
           </figure>
 
@@ -236,7 +236,7 @@
       <div class="footer-left">
         <p>© 2026 Integrantes: <span class="footer-members">Génesis Once, Esther Places, Evelyn Rodríguez, Andrea Sarmiento, Melany Zapata</span></p>
         <p class="footer-location">Proyecto académico · Brasil, enero de 2023</p>
-        <p class="footer-location">Universidad Central del Ecuador · FIGEMPA · <a href="equipo.html">Equipo</a></p>
+        <p class="footer-location">Universidad Central del Ecuador · FIGEMPA · <a href="pages/general/equipo.html">Equipo</a></p>
       </div>
       <div class="footer-right">
         <p class="footer-label">Fuente</p>
@@ -251,6 +251,6 @@
   </footer>
   </div><!-- /app-main -->
   </div><!-- /app-shell -->
-  <script defer src="js/fondo-curvas.js"></script>
+  <script defer src="assets/js/fondo-curvas.js"></script>
 </body>
 </html>

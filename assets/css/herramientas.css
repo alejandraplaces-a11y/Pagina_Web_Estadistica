@@ -1,0 +1,246 @@
+:root {
+  --bg-page: #f6f2ea;
+  --text-primary: #1a1f1c;
+  --text-muted: #5a605d;
+  --accent-terracotta: #b86b28;
+  --card-border: #e5dec9;
+  --card-shadow: 0 4px 16px rgba(34, 25, 10, 0.03);
+  --card-shadow-hover: 0 14px 32px rgba(34, 25, 10, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-page);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+.container {
+  max-width: 1160px;
+  margin: 0 auto;
+}
+
+/* Encabezado */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent-terracotta);
+  margin-bottom: 10px;
+}
+
+.eyebrow::before {
+  content: "";
+  display: block;
+  width: 22px;
+  height: 2px;
+  background-color: var(--accent-terracotta);
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  margin-bottom: 16px;
+}
+
+.description {
+  font-size: 1rem;
+  color: var(--text-muted);
+  max-width: 760px;
+  margin-bottom: 32px;
+}
+
+/* Barra de Filtros */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 36px;
+}
+
+.filter-btn {
+  background-color: #ffffff;
+  border: 1px solid var(--card-border);
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.filter-btn:hover {
+  border-color: var(--accent-terracotta);
+  color: var(--accent-terracotta);
+}
+
+.filter-btn.active {
+  background-color: var(--accent-terracotta);
+  border-color: var(--accent-terracotta);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(184, 107, 40, 0.25);
+}
+
+/* Cuadrícula */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 22px;
+}
+
+/* Tarjetas */
+.card {
+  background-color: #ffffff;
+  border: 1.5px solid var(--card-border);
+  border-radius: 14px;
+  padding: 26px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  box-shadow: var(--card-shadow);
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+              box-shadow 0.3s ease,
+              border-color 0.25s ease;
+  animation: fadeIn 0.35s ease forwards;
+}
+
+.card.hidden {
+  display: none;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--card-shadow-hover);
+  border-color: var(--brand-color);
+}
+
+/* Fila superior de la tarjeta (Icono + Etiqueta de categoría) */
+.card-top {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background-color: #f4efe6;
+  color: var(--brand-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.card:hover .card-icon {
+  background-color: var(--brand-bg);
+  transform: scale(1.08) rotate(-3deg);
+}
+
+.card-icon svg {
+  width: 23px;
+  height: 23px;
+}
+
+.card-icon img {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+}
+
+/* Etiqueta (Badge) de categoría */
+.badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--brand-color);
+  background-color: var(--brand-bg);
+  padding: 4px 10px;
+  border-radius: 6px;
+  letter-spacing: 0.02em;
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.card-desc {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin-bottom: 22px;
+  flex-grow: 1;
+}
+
+.card-link {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--brand-color);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.arrow {
+  transition: transform 0.2s ease;
+}
+
+.card:hover .arrow {
+  transform: translateX(4px);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 600px) {
+  .title {
+    font-size: 2rem;
+  }
+}
+
+/* Fondo en canvas: contenedores generales transparentes; el hero con video
+   conserva su fondo y superposición originales. */
+html.fondo-curvas body,
+html.fondo-curvas main,
+html.fondo-curvas .app-main,
+html.fondo-curvas .wrap,
+html.fondo-curvas .section:not(.page-hero):not(.hero):not(.video-hero) {
+  background: transparent;
+}
+html.fondo-curvas .hero,
+html.fondo-curvas .video-hero,
+html.fondo-curvas .page-hero {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+/* Igualar el tamaño del recuadro verde (hero) con el de conclusiones: aquí el
+   lead cabe en una sola línea y deja el hero más corto que en conclusiones. */
+@media (min-width: 761px) {
+  .page-hero .hero-content { min-height: 406px; }
+}

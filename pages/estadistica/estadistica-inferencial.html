@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Estadística inferencial de la producción terrestre de petróleo en Brasil: modelos discretos y continuos, pruebas de ajuste, intervalos de confianza, tamaño muestral y validación con 2023 (muestra de enero de 2023).">
+  <title>Estadística inferencial · Producción terrestre de petróleo en Brasil</title>
+  <script>
+    (function () {
+      try { if (localStorage.getItem('sidebar-expanded') === '1') document.documentElement.classList.add('sidebar-expanded'); } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="../../assets/css/estadistica-inferencial.css">
+  <script defer src="../../assets/js/plotly.min.js"></script>
+  <script defer src="../../assets/js/common.js"></script>
+  <script defer src="../../assets/js/sidebar.js"></script>
+  <script defer src="../../assets/js/aviso.js"></script>
+  <script defer src="../../assets/js/resumen-cifras.js?v=3"></script>
+  <script defer src="../../assets/js/estadistica-inferencial.js"></script>
+  <script defer src="../../assets/js/modelo-discreto.js"></script>
+  <script defer src="../../assets/js/variable-continua.js"></script>
+  <script defer src="../../assets/js/modelo-continuo.js"></script>
+  <script defer src="../../assets/js/inferencial-ampliacion.js"></script>
+  <script defer src="../../assets/js/indice-lateral.js"></script>
+</head>
+<body class="has-sidebar">
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Navegación lateral">
+      <button class="sidebar-toggle" id="sidebar-toggle" type="button" aria-label="Alternar menú lateral" aria-expanded="false" aria-controls="sidebar">
+        <span class="sidebar-toggle-icon" aria-hidden="true">☰</span>
+      </button>
+      <a class="sidebar-brand" href="../../index.html" aria-label="Terra, inicio">
+        <img class="sidebar-logo" src="../../assets/img/logo-universidad.png" alt="" width="34" height="34">
+        <span class="sidebar-brand-text">
+          <span class="sidebar-title">Universidad Central del Ecuador</span>
+        </span>
+      </a>
+      <nav class="sidebar-nav" aria-label="Navegación lateral">
+        <ul class="sidebar-list">
+          <li>
+            <a class="sidebar-link" href="../../index.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10.4V20h13v-9.6"/></svg>
+              <span class="sidebar-link-label">Inicio</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="../general/introduccion.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v16H5.5C4.7 20 4 19.3 4 18.5Z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v16h5.5c.8 0 1.5-.7 1.5-1.5Z"/></svg>
+              <span class="sidebar-link-label">Introducción</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="../general/mapa.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Z"/><path d="M9 4v14m6-12v14"/></svg>
+              <span class="sidebar-link-label">Mapa Web</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="estadistica.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18 6H7l6 6-6 6h11"/></svg>
+              <span class="sidebar-link-label">Estadística Descriptiva</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link is-active" href="estadistica-inferencial.html" aria-current="page">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 20h18"/><path d="M5 20c2-9 4-14 7-14s5 5 7 14"/><path d="M12 6v14"/></svg>
+              <span class="sidebar-link-label">Estadística Inferencial</span>
+            </a>
+          </li>
+            <a class="sidebar-link" href="../regresiones/regresion.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 20h16"/><path d="M4 20V4"/><circle cx="8" cy="15" r="1.2"/><circle cx="12" cy="11" r="1.2"/><circle cx="17" cy="9" r="1.2"/><path d="M6 17 19 6"/></svg>
+              <span class="sidebar-link-label">Regresión</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="../general/machine-learning.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="2.5"/><circle cx="6" cy="6" r="1.5"/><circle cx="18" cy="6" r="1.5"/><circle cx="12" cy="20" r="1.5"/><path d="M10.2 10.2 7.3 7.3M13.8 10.2l2.9-2.9M12 14.5v4"/></svg>
+              <span class="sidebar-link-label">Machine Learning</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="../general/conclusiones.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5 9.5 17 19 7"/></svg>
+              <span class="sidebar-link-label">Conclusiones</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="../general/herramientas.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.7 6.3a4 4 0 0 0 5 5L12 19a2.1 2.1 0 0 1-3-3l7.7-7.7"/><path d="M4 4l5 5"/></svg>
+              <span class="sidebar-link-label">Herramientas</span>
+            </a>
+          </li>
+          <li>
+            <a class="sidebar-link" href="../general/equipo.html">
+              <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 5.5a3 3 0 0 1 0 5"/><path d="M18 14.5c1.8.8 3 2.6 3 4.5"/></svg>
+              <span class="sidebar-link-label">Equipo</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <div class="app-main">
+      <div class="sidebar-backdrop" id="sidebar-backdrop" hidden></div>
+      <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+      <header class="site-header">
+        <div class="container header-inner">
+          <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="sidebar">
+            <span aria-hidden="true">☰</span>
+          </button>
+          <a class="brand" href="../../index.html" aria-label="Terra, inicio">
+            <img class="sidebar-logo" src="../../assets/img/logo-universidad.png" alt="" width="34" height="34">
+            <span class="brand-word">Universidad Central del Ecuador</span>
+            <span class="brand-caption">Proyecto de Estadística</span>
+          </a>
+        </div>
+      </header>
+
+      <main id="contenido">
+        <section class="page-hero" aria-labelledby="inferencial-titulo">
+          <video class="hero-video" autoplay muted loop playsinline preload="auto" aria-hidden="true" tabindex="-1">
+            <source src="../../assets/video/video-inferencial.mp4" type="video/mp4">
+            Tu navegador no puede reproducir el video.
+          </video>
+          <div class="hero-overlay" aria-hidden="true"></div>
+          <div class="container hero-content">
+            <p class="section-kicker">04 / Análisis estadístico · 4.2</p>
+            <h1 id="inferencial-titulo">Estadística inferencial.</h1>
+            <p class="aside-meta">Brasil · Enero de 2023</p>
+            <p class="page-lead">Modelos de probabilidad para la producción terrestre de petróleo por pozo: variables aleatorias discretas y continuas, pruebas de ajuste, estimación e intervalos de confianza.</p>
+          </div>
+        </section>
+
+        <section class="section resumen-clave" id="resumen-inferencial" aria-labelledby="resumen-inferencial-titulo">
+          <div class="container">
+            <p class="section-kicker">En cifras</p>
+            <h2 id="resumen-inferencial-titulo" class="subsection-title">Resumen de la inferencial</h2>
+            <dl class="stat-metrics resumen-metrics">
+              <div><dt>Muestra · n</dt><dd><span class="metric-value" data-target="5308" data-decimals="0">5.308</span> <span class="metric-unit">pozos</span></dd></div>
+              <div><dt>Media de Y · IC 95 %</dt><dd><span class="metric-value" data-target="12.98" data-decimals="2">12,98</span> <span class="metric-unit">[12,02; 13,93]</span></dd></div>
+              <div><dt>Mediana observada de Y</dt><dd><span class="metric-value" data-target="4.99" data-decimals="2">4,99</span> <span class="metric-unit">bbl/día</span></dd></div>
+              <div><dt>Modelo continuo elegido</dt><dd>Lognormal <span class="metric-unit">r = 0,993</span></dd></div>
+            </dl>
+
+            <aside class="frame-note" aria-label="Población, muestra y tamaños muestrales">
+              <strong>Población, muestra y tamaños.</strong> Población: pozos terrestres de Brasil, de tamaño N no fijado. Muestra: pozos con reporte en enero de 2023, n = 5.308 (igual que en la <a href="estadistica.html#poblacion-individuo">descriptiva</a>). La variable discreta X usa los 5.308 pozos. La variable continua Y (óleo) usa n = 4.888: los <strong>420 pozos sin óleo se excluyen solo del análisis continuo</strong>, porque un modelo continuo positivo no puede describir una masa de probabilidad en 0. Como N no se fija, ni los intervalos (4.2.13) ni el tamaño muestral (4.2.14) usan corrección por población finita.
+            </aside>
+
+            <h3 class="tdf-subtitle">Veredicto por modelo</h3>
+            <p class="stat-scope">Abre cada tarjeta para ver el detalle; α = 0,05 en todas las pruebas χ².</p>
+            <details class="var-card">
+              <summary><span class="var-card-tipo">Discreta · X días de producción · n = 5.308</span><span class="var-card-titulo">Binomial</span><span class="var-card-preview var-card-veredicto">χ² = 656.869 · gl 13 · se rechaza</span></summary>
+              <p>p̂ = 0,7743. La varianza observada (106,7) es casi 20 veces la binomial (5,4): los pozos no comparten una misma probabilidad diaria de producir. Ver <a href="#modelo-discreto">4.2.3</a> y <a href="#test-ajuste-discreto">4.2.4</a>.</p>
+            </details>
+            <details class="var-card">
+              <summary><span class="var-card-tipo">Discreta · X días de producción · n = 5.308</span><span class="var-card-titulo">Beta-binomial</span><span class="var-card-preview var-card-veredicto">χ² = 3.444,5 · gl 29 · se rechaza</span></summary>
+              <p>Capta la sobredispersión mucho mejor que la binomial, pero no reproduce los dos picos (356 pozos con 0 días y 1.594 con 31). Un modelo de mezcla queda como trabajo futuro (<a href="#test-ajuste-discreto">4.2.4</a>).</p>
+            </details>
+            <details class="var-card">
+              <summary><span class="var-card-tipo">Continua · Y óleo por pozo productor · n = 4.888</span><span class="var-card-titulo">Lognormal (elegido)</span><span class="var-card-preview var-card-veredicto">χ² = 130,5 · gl 6 · se rechaza · r = 0,993</span></summary>
+              <p>μ̂ = 1,5544 y σ̂ = 1,4344. Es el mejor de los tres modelos evaluados. En una submuestra aleatoria de n = 300 no se rechaza (p = 0,125): el rechazo se explica en buena parte por la sensibilidad del χ² a un n grande (<a href="#submuestras">4.2.17</a>).</p>
+            </details>
+            <details class="var-card">
+              <summary><span class="var-card-tipo">Continua · Y óleo por pozo productor · n = 4.888</span><span class="var-card-titulo">Gamma y Weibull</span><span class="var-card-preview var-card-veredicto">χ² = 1.495,5 y 764,8 · se rechazan</span></summary>
+              <p>Ajustan peor que la lognormal en las mismas 14 clases (<a href="#conjetura-continua">4.2.8</a>).</p>
+            </details>
+            <details class="var-card">
+              <summary><span class="var-card-tipo">Continua · agua por pozo productor · n = 4.955</span><span class="var-card-titulo">Gamma (segunda VAC)</span><span class="var-card-preview var-card-veredicto">χ² = 75,9 · gl 11 · se rechaza · r = 0,996</span></summary>
+              <p>Para el agua el mejor modelo es la gamma, no la lognormal (χ² = 1.929,9). Ver <a href="#vac-agua">4.2.15</a>.</p>
+            </details>
+            <details class="var-card">
+              <summary><span class="var-card-tipo">Discreta · pozos por campo · n = 221 campos</span><span class="var-card-titulo">Binomial negativa (segunda VAD)</span><span class="var-card-preview var-card-veredicto">χ² = 45,4 · gl 19 · se rechaza</span></summary>
+              <p>Ajusta mucho mejor que Poisson (χ² = 3.134,9), que no admite sobredispersión. Ver <a href="#vad-campos">4.2.16</a>.</p>
+            </details>
+            <noscript><p class="status status-error">Las tablas y gráficas de esta página se generan con JavaScript. Las cifras clave están en este resumen; para ver el resto, activa JavaScript y abre la página desde un servidor (python3 -m http.server).</p></noscript>
+          </div>
+        </section>
+
+        <div class="inferencial-cuerpo con-indice">
+          <aside class="indice-lateral" id="indice-lateral" aria-label="Índice de la estadística inferencial">
+            <details>
+              <summary>Contenido · 4.2</summary>
+              <nav class="indice-contenido" aria-label="Secciones 4.2.1 a 4.2.18">
+                <div class="indice-grupo">
+                  <p class="indice-grupo-titulo" id="indice-grupo-1">Variable discreta</p>
+                  <ul class="indice-lista" aria-labelledby="indice-grupo-1">
+                    <li><a href="#vad"><span class="indice-numero">4.2.1</span><span>Identificar VAD<span class="indice-estado"></span></span></a></li>
+                    <li><a href="#tdf-vad"><span class="indice-numero">4.2.2</span><span>TDF y gráfica de barras<span class="indice-estado"></span></span></a></li>
+                    <li><a href="#modelo-discreto"><span class="indice-numero">4.2.3</span><span>Modelo de probabilidad discreto<span class="indice-estado"></span></span></a></li>
+                    <li><a href="#test-ajuste-discreto"><span class="indice-numero">4.2.4</span><span>Test de ajuste<span class="indice-estado"></span></span></a></li>
+                  </ul>
+                </div>
+                <div class="indice-grupo">
+                  <p class="indice-grupo-titulo" id="indice-grupo-2">Variable continua</p>
+                  <ul class="indice-lista" aria-labelledby="indice-grupo-2">
+                    <li><a href="#vac"><span class="indice-numero">4.2.5</span><span>Identificar VAC<span class="indice-estado"></span></span></a></li>
+                    <li><a href="#histograma-relativo"><span class="indice-numero">4.2.6</span><span>Tabla e histograma (frecuencia relativa)<span class="indice-estado"></span></span></a></li>
+                    <li><a href="#histograma-densidad"><span class="indice-numero">4.2.7</span><span>Tabla e histograma (densidad de probabilidad)<span class="indice-estado"></span></span></a></li>
+                    <li><a href="#conjetura-continua"><span class="indice-numero">4.2.8</span><span>Conjetura del modelo continuo<span class="indice-estado"></span></span></a></li>
+                    <li><a href="#parametros-continuos"><span class="indice-numero">4.2.9</span><span>Cálculo de parámetros y ajuste gráfico<span class="indice-estado"></span></span></a></li>
+                    <li><a href="#test-ajuste-continuo"><span class="indice-numero">4.2.10</span><span>Test de ajuste (Pearson y chi-cuadrado)<span class="indice-estado"></span></span></a></li>
+                    <li><a href="#restricciones"><span class="indice-numero">4.2.11</span><span>Restricciones<span class="indice-estado"></span></span></a></li>
+                  </ul>
+                </div>
+                <div class="indice-grupo">
+                  <p class="indice-grupo-titulo" id="indice-grupo-3">Inferencia</p>
+                  <ul class="indice-lista" aria-labelledby="indice-grupo-3">
+                    <li><a href="#probabilidades"><span class="indice-numero">4.2.12</span><span>Cálculos de probabilidad<span class="indice-estado"></span></span></a></li>
+                    <li><a href="#estimacion"><span class="indice-numero">4.2.13</span><span>Estimación puntual y por intervalos de confianza<span class="indice-estado"></span></span></a></li>
+                    <li><a href="#tamano-muestral"><span class="indice-numero">4.2.14</span><span>Cálculo del tamaño muestral<span class="indice-estado"></span></span></a></li>
+                  </ul>
+                </div>
+                <div class="indice-grupo">
+                  <p class="indice-grupo-titulo" id="indice-grupo-4">Ampliación y validación</p>
+                  <ul class="indice-lista" aria-labelledby="indice-grupo-4">
+                    <li><a href="#vac-agua"><span class="indice-numero">4.2.15</span><span>Segunda VAC: agua por pozo<span class="indice-estado"></span></span></a></li>
+                    <li><a href="#vad-campos"><span class="indice-numero">4.2.16</span><span>Segunda VAD: pozos por campo<span class="indice-estado"></span></span></a></li>
+                    <li><a href="#submuestras"><span class="indice-numero">4.2.17</span><span>χ² en submuestras aleatorias<span class="indice-estado"></span></span></a></li>
+                    <li><a href="#validacion-anual"><span class="indice-numero">4.2.18</span><span>Validación con 2023 completo<span class="indice-estado"></span></span></a></li>
+                  </ul>
+                </div>
+              </nav>
+            </details>
+          </aside>
+          <div class="inferencial-secciones">
+        <section class="section cream" id="vad" aria-labelledby="vad-titulo">
+          <div class="container">
+            <p class="section-kicker">4.2.1</p>
+            <h2 id="vad-titulo">Identificar la variable aleatoria discreta (VAD)</h2>
+            <p id="estado-vad" class="status" role="status">Cargando la variable aleatoria…</p>
+
+            <div id="contenido-vad" hidden>
+              <dl class="stat-metrics">
+                <div><dt>Pozos analizados · n</dt><dd id="vad-n"></dd></div>
+                <div><dt>Recorrido observado · R<sub>X</sub></dt><dd id="vad-rango"></dd></div>
+                <div><dt>Media · x̄</dt><dd><span id="vad-media"></span> <span class="metric-unit">días</span></dd></div>
+                <div><dt>Varianza muestral · s²</dt><dd id="vad-varianza"></dd></div>
+              </dl>
+
+              <div class="method-grid">
+                <article class="method-card">
+                  <p class="method-card-tag">Definición</p>
+                  <h4>Días completos de producción por pozo</h4>
+                  <p>X es el número de días completos que cada pozo terrestre produjo durante enero de 2023. Se obtiene de <code>Tempo de Produção (hs por mês)</code> dividiendo las horas entre 24 y conservando la parte entera.</p>
+                  <p>Es <strong>discreta</strong> porque solo toma valores enteros y su recorrido es finito y numerable: enero tiene 31 días (744 horas).</p>
+                </article>
+                <article class="method-card teal">
+                  <p class="method-card-tag">Notación</p>
+                  <h4>Representación simbólica</h4>
+                  <p class="method-symbolic" aria-label="X de p sub i igual a la parte entera de t sub i entre 24">X(p<sub>i</sub>) = ⌊t<sub>i</sub> / 24⌋</p>
+                  <p class="stat-notation">t<sub>i</sub>: horas de producción del pozo p<sub>i</sub> en el mes; i = 1, 2, …, n con n = <span id="vad-notacion-n"></span>.</p>
+                  <p class="stat-notation">R<sub>X</sub> = {0, 1, 2, …, 31}</p>
+                  <div class="vad-domain" aria-label="Valores posibles de X de 0 a 31"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span><span>22</span><span>23</span><span>24</span><span>25</span><span>26</span><span>27</span><span>28</span><span>29</span><span>30</span><span>31</span></div>
+                </article>
+              </div>
+
+              <aside class="frame-note">
+                <strong>Criterio por pozo.</strong> <span id="vad-repetidos"></span> pozos aparecen en varias filas y sus horas pueden repetirse entre filas; sumarlas superaría las 744 horas del mes. Por eso se toma el máximo de horas registrado para cada pozo.
+              </aside>
+              <p class="source">Fuente: <span id="vad-fuente"></span> · Variable derivada de las horas de producción del mes.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="tdf-vad" aria-labelledby="tdf-vad-titulo">
+          <div class="container">
+            <p class="section-kicker">4.2.2</p>
+            <h2 id="tdf-vad-titulo">TDF y gráfica de barras</h2>
+            <p id="estado-tdf-vad" class="status" role="status">Construyendo la tabla de frecuencias…</p>
+
+            <div id="contenido-tdf-vad" hidden>
+              <p class="section-intro">Al ser una variable discreta, la tabla usa cada valor de X como una clase, sin agrupar en intervalos.</p>
+
+              <div class="table-scroll">
+                <table class="data-table">
+                  <caption>Tabla de distribución de frecuencias de X: días completos de producción por pozo, enero de 2023</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col" class="numero">x</th>
+                      <th scope="col" class="numero">fᵢ</th>
+                      <th scope="col" class="numero">hᵢ</th>
+                      <th scope="col" class="numero">Fᵢ</th>
+                      <th scope="col" class="numero">Hᵢ</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cuerpo-tdf-vad"></tbody>
+                  <tfoot id="pie-tdf-vad"></tfoot>
+                </table>
+              </div>
+
+              <div class="chart-card">
+                <p class="section-kicker">Gráfica de barras</p>
+                <h3 class="chart-title">Frecuencia relativa de los días completos de producción</h3>
+                <div id="grafica-vad" class="chart-box chart-box-tall" role="img" aria-label="Gráfica de barras de la frecuencia relativa de X, de 0 a 31 días"></div>
+              </div>
+
+              <aside class="frame-note"><p id="nota-tdf-vad"></p></aside>
+              <p class="source">fᵢ: frecuencia absoluta; hᵢ = fᵢ / n; Fᵢ y Hᵢ: frecuencias acumuladas. La barra más oscura marca la moda.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section cream" id="modelo-discreto" aria-labelledby="modelo-discreto-titulo">
+          <div class="container">
+            <p class="section-kicker">4.2.3</p>
+            <h2 id="modelo-discreto-titulo">Modelo de probabilidad discreto</h2>
+            <p id="estado-modelo-discreto" class="status" role="status">Calculando el modelo…</p>
+
+            <div id="contenido-modelo-discreto" hidden>
+              <div class="method-grid">
+                <article class="method-card">
+                  <p class="method-card-tag">Conjetura</p>
+                  <h4>Modelo binomial</h4>
+                  <p>Cada uno de los 31 días de enero se trata como un ensayo con dos resultados: el pozo produce el día completo o no. Si los días fueran independientes y con la misma probabilidad p, X seguiría una distribución binomial.</p>
+                  <p class="method-symbolic" aria-label="X sigue una binomial de 31 ensayos y probabilidad p">X ~ B(n = 31; p)</p>
+                  <p class="stat-notation">P(X = x) = C(31, x) · pˣ · (1 − p)³¹⁻ˣ, x = 0, 1, …, 31.</p>
+                  <p class="stat-notation">p̂ = x̄ / 31 = <span id="md-p-formula"></span>.</p>
+                </article>
+                <article class="method-card teal">
+                  <p class="method-card-tag">Alternativa</p>
+                  <h4>Modelo beta-binomial</h4>
+                  <p>Si la probabilidad de producir cambia de un pozo a otro, la varianza crece por encima de la binomial. La beta-binomial modela esa sobredispersión con dos parámetros, estimados por máxima verosimilitud.</p>
+                  <p class="method-symbolic" aria-label="X sigue una beta binomial de 31 ensayos y parámetros alfa y beta">X ~ BB(31; α, β)</p>
+                  <p class="stat-notation">α̂ = <span id="md-alfa"></span>; β̂ = <span id="md-beta"></span>. Varianza teórica: <span id="md-var-bb"></span>.</p>
+                </article>
+              </div>
+
+              <dl class="stat-metrics">
+                <div><dt>Probabilidad estimada · p̂</dt><dd id="md-p"></dd></div>
+                <div><dt>Media observada · x̄</dt><dd id="md-media-obs"></dd></div>
+                <div><dt>Varianza observada · s²</dt><dd id="md-var-obs"></dd></div>
+                <div><dt>Varianza binomial · np̂(1 − p̂)</dt><dd id="md-var-binom"></dd></div>
+              </dl>
+
+              <aside class="frame-note">
+                <strong>Sobredispersión.</strong> La varianza observada es <span id="md-razon"></span> veces la que predice la binomial. Esto anticipa un mal ajuste del modelo binomial: los pozos no comparten una misma probabilidad diaria de producir.
+              </aside>
+
+              <div class="chart-card">
+                <p class="section-kicker">Ajuste gráfico</p>
+                <h3 class="chart-title">Probabilidades observadas y teóricas</h3>
+                <div id="grafica-modelo-discreto" class="chart-box chart-box-tall" role="img" aria-label="Comparación de la distribución observada de X con los modelos binomial y beta-binomial"></div>
+              </div>
+
+              <div class="table-scroll">
+                <table class="data-table">
+                  <caption>Probabilidades observadas y teóricas de X, con frecuencias esperadas para n pozos</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col" class="numero">x</th>
+                      <th scope="col" class="numero">fᵢ</th>
+                      <th scope="col" class="numero">hᵢ</th>
+                      <th scope="col" class="numero">P binomial</th>
+                      <th scope="col" class="numero">E binomial</th>
+                      <th scope="col" class="numero">P beta-binomial</th>
+                      <th scope="col" class="numero">E beta-binomial</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cuerpo-modelo-discreto"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="test-ajuste-discreto" aria-labelledby="test-ajuste-discreto-titulo">
+          <div class="container">
+            <p class="section-kicker">4.2.4</p>
+            <h2 id="test-ajuste-discreto-titulo">Test de ajuste</h2>
+            <p id="estado-test-discreto" class="status" role="status">Calculando la prueba…</p>
+
+            <div id="contenido-test-discreto" hidden>
+              <div class="method-grid">
+                <article class="method-card">
+                  <p class="method-card-tag">Hipótesis</p>
+                  <h4>Prueba chi-cuadrado de bondad de ajuste</h4>
+                  <p><strong>H₀:</strong> X sigue el modelo propuesto.<br><strong>H₁:</strong> X no sigue el modelo propuesto.</p>
+                  <p>Nivel de significancia α = 0,05. Se rechaza H₀ si χ² supera el valor crítico.</p>
+                </article>
+                <article class="method-card teal">
+                  <p class="method-card-tag">Estadístico</p>
+                  <h4>Cálculo</h4>
+                  <p class="method-symbolic" aria-label="Chi cuadrado igual a la suma de observadas menos esperadas al cuadrado entre esperadas">χ² = Σ (Oᵢ − Eᵢ)² / Eᵢ</p>
+                  <p class="stat-notation">gl = k − 1 − m, con k clases tras agrupar y m parámetros estimados (1 en la binomial, 2 en la beta-binomial).</p>
+                </article>
+              </div>
+
+              <h3 class="tdf-subtitle">a) Modelo binomial</h3>
+              <div class="table-scroll">
+                <table class="data-table">
+                  <caption>Frecuencias observadas (O) y esperadas (E) agrupadas para que E ≥ 5 · <span id="prueba-binomial-clases"></span> clases</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col" class="numero">x</th>
+                      <th scope="col" class="numero">Oᵢ</th>
+                      <th scope="col" class="numero">Eᵢ</th>
+                      <th scope="col" class="numero">(Oᵢ − Eᵢ)² / Eᵢ</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cuerpo-prueba-binomial"></tbody>
+                  <tfoot id="pie-prueba-binomial"></tfoot>
+                </table>
+              </div>
+              <dl class="stat-metrics test-metrics">
+                <div><dt>Estadístico · χ²</dt><dd id="prueba-binomial-chi"></dd></div>
+                <div><dt>Grados de libertad · gl</dt><dd id="prueba-binomial-gl"></dd></div>
+                <div><dt>Valor crítico · χ²<sub>0,05; gl</sub></dt><dd id="prueba-binomial-critico"></dd></div>
+                <div><dt>Valor p</dt><dd id="prueba-binomial-p"></dd></div>
+              </dl>
+              <p class="test-decision" id="prueba-binomial-decision"></p>
+
+
+              <h3 class="tdf-subtitle">b) Modelo beta-binomial</h3>
+              <div class="table-scroll">
+                <table class="data-table">
+                  <caption>Frecuencias observadas (O) y esperadas (E) agrupadas para que E ≥ 5 · <span id="prueba-betabinomial-clases"></span> clases</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col" class="numero">x</th>
+                      <th scope="col" class="numero">Oᵢ</th>
+                      <th scope="col" class="numero">Eᵢ</th>
+                      <th scope="col" class="numero">(Oᵢ − Eᵢ)² / Eᵢ</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cuerpo-prueba-betabinomial"></tbody>
+                  <tfoot id="pie-prueba-betabinomial"></tfoot>
+                </table>
+              </div>
+              <dl class="stat-metrics test-metrics">
+                <div><dt>Estadístico · χ²</dt><dd id="prueba-betabinomial-chi"></dd></div>
+                <div><dt>Grados de libertad · gl</dt><dd id="prueba-betabinomial-gl"></dd></div>
+                <div><dt>Valor crítico · χ²<sub>0,05; gl</sub></dt><dd id="prueba-betabinomial-critico"></dd></div>
+                <div><dt>Valor p</dt><dd id="prueba-betabinomial-p"></dd></div>
+              </dl>
+              <p class="test-decision" id="prueba-betabinomial-decision"></p>
+
+              <aside class="frame-note">
+                <strong>Conclusión.</strong> Con α = 0,05, ambos modelos se rechazan. La distribución de X tiene dos picos (0 días y 30–31 días) que ninguno de los dos reproduce: muchos pozos producen todo el mes y un grupo no completa ningún día. Con n = 5.308, la prueba detecta incluso diferencias pequeñas; aun así, la beta-binomial describe la dispersión mucho mejor que la binomial. <strong>Trabajo futuro:</strong> la forma de dos picos sugiere un modelo de mezcla, con una componente para pozos parados (masa en 0 días) y otra para pozos activos (concentrada en 30–31 días), que un modelo simple no puede reproducir. En <a href="#submuestras">4.2.17</a> la prueba se repite en submuestras de n = 300.
+              </aside>
+            </div>
+          </div>
+        </section>
+
+        <section class="section cream" id="vac" aria-labelledby="vac-titulo">
+          <div class="container">
+            <p class="section-kicker">4.2.5</p>
+            <h2 id="vac-titulo">Identificar la variable aleatoria continua (VAC)</h2>
+            <p id="estado-vac" class="status" role="status">Cargando la variable continua…</p>
+
+            <div id="contenido-vac" hidden>
+              <dl class="stat-metrics">
+                <div><dt>Pozos productores · n</dt><dd id="vac-n"></dd></div>
+                <div><dt>Mediana</dt><dd><span id="vac-mediana"></span> <span class="metric-unit">bbl/día</span></dd></div>
+                <div><dt>Media · ȳ</dt><dd><span id="vac-media"></span> <span class="metric-unit">bbl/día</span></dd></div>
+                <div><dt>Máximo</dt><dd><span id="vac-max"></span> <span class="metric-unit">bbl/día</span></dd></div>
+              </dl>
+
+              <div class="method-grid">
+                <article class="method-card">
+                  <p class="method-card-tag">Definición</p>
+                  <h4>Óleo por pozo productor</h4>
+                  <p>Y es el volumen de óleo (bbl/día) de cada pozo terrestre con producción positiva en enero de 2023. Cuando un pozo aparece en varias filas, sus volúmenes se suman.</p>
+                  <p>Es <strong>continua</strong> porque se mide en una escala real: entre dos valores cualesquiera puede existir otro.</p>
+                </article>
+                <article class="method-card teal">
+                  <p class="method-card-tag">Notación</p>
+                  <h4>Representación simbólica</h4>
+                  <p class="method-symbolic" aria-label="Y de p sub i igual al óleo del pozo, mayor que cero">Y(p<sub>i</sub>) = óleo<sub>i</sub> &gt; 0</p>
+                  <p class="stat-notation">R<sub>Y</sub> = (0; +∞). Recorrido observado: <span id="vac-min"></span> a <span id="vac-max-2"></span> bbl/día.</p>
+                </article>
+              </div>
+
+              <aside class="frame-note">
+                <strong>Pozos excluidos solo aquí.</strong> <span id="vac-excluidos"></span> pozos con óleo igual a cero se dejan fuera del análisis continuo (4.2.5 a 4.2.14): forman una masa de probabilidad en 0 que un modelo continuo no puede describir. Siguen incluidos en la variable discreta X y en toda la descriptiva (n = 5.308). La asimetría de Y es <span id="vac-asimetria"></span>; en escala log₁₀ baja a <span id="vac-asimetria-log"></span>, por lo que las tablas siguientes usan clases de igual ancho en log₁₀(y).
+              </aside>
+              <p class="source">Fuente: <span id="vac-fuente"></span> · Óleo por pozo, filas repetidas sumadas.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="histograma-relativo" aria-labelledby="histograma-relativo-titulo">
+          <div class="container">
+            <p class="section-kicker">4.2.6</p>
+            <h2 id="histograma-relativo-titulo">Tabla e histograma (frecuencia relativa)</h2>
+            <p id="estado-histograma-relativo" class="status" role="status">Construyendo la tabla…</p>
+
+            <div id="contenido-histograma-relativo" hidden>
+              <p class="section-intro">Sturges: k = ⌈1 + 3,322 · log₁₀(n)⌉ = <span id="hr-k"></span> clases de igual ancho en t = log₁₀(y), con amplitud A = <span id="hr-amplitud"></span>. Los límites se expresan en bbl/día.</p>
+
+              <div class="table-scroll">
+                <table class="data-table">
+                  <caption>Distribución de frecuencias relativas de Y, óleo por pozo productor</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col" class="numero">Clase</th>
+                      <th scope="col">Intervalo bbl/día (última clase cerrada)</th>
+                      <th scope="col">Intervalo en log₁₀</th>
+                      <th scope="col" class="numero">Marca yᵢ</th>
+                      <th scope="col" class="numero">fᵢ</th>
+                      <th scope="col" class="numero">hᵢ</th>
+                      <th scope="col" class="numero">Fᵢ</th>
+                      <th scope="col" class="numero">Hᵢ</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cuerpo-histograma-relativo"></tbody>
+                  <tfoot id="pie-histograma-relativo"></tfoot>
+                </table>
+              </div>
+
+              <div class="chart-card">
+                <p class="section-kicker">Histograma</p>
+                <h3 class="chart-title">Frecuencia relativa del óleo por pozo productor</h3>
+                <div id="grafica-histograma-relativo" class="chart-box chart-box-tall" role="img" aria-label="Histograma de frecuencias relativas del óleo por pozo productor en escala logarítmica"></div>
+              </div>
+
+              <aside class="frame-note"><p id="nota-histograma-relativo"></p></aside>
+              <p class="source">Marca de clase yᵢ = √(Lᵢ · Lᵢ₊₁), punto medio en escala logarítmica. La última clase se cierra en el máximo observado.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section cream" id="histograma-densidad" aria-labelledby="histograma-densidad-titulo">
+          <div class="container">
+            <p class="section-kicker">4.2.7</p>
+            <h2 id="histograma-densidad-titulo">Tabla e histograma (densidad de probabilidad)</h2>
+            <p id="estado-histograma-densidad" class="status" role="status">Construyendo la tabla…</p>
+
+            <div id="contenido-histograma-densidad" hidden>
+              <p class="section-intro">La densidad divide la frecuencia relativa entre el ancho de la clase, de modo que el área total del histograma es 1. Se presenta en t = log₁₀(y), donde las clases tienen igual ancho, y en la escala original de y.</p>
+
+              <div class="method-grid">
+                <article class="method-card">
+                  <p class="method-card-tag">Escala log₁₀</p>
+                  <h4>Densidad de t = log₁₀(y)</h4>
+                  <p class="method-symbolic" aria-label="g sub i igual a h sub i entre delta t">gᵢ = hᵢ / Δt</p>
+                  <p class="stat-notation">Es la escala del histograma; Σ gᵢ · Δt = 1.</p>
+                </article>
+                <article class="method-card teal">
+                  <p class="method-card-tag">Escala original</p>
+                  <h4>Densidad de y (bbl/día)</h4>
+                  <p class="method-symbolic" aria-label="f sub i igual a h sub i entre delta y">fᵢ = hᵢ / Δy</p>
+                  <p class="stat-notation">Las clases tienen anchos distintos en bbl/día; Σ fᵢ · Δy = 1.</p>
+                </article>
+              </div>
+
+              <div class="table-scroll">
+                <table class="data-table">
+                  <caption>Densidad de probabilidad empírica del óleo por pozo productor</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col" class="numero">Clase</th>
+                      <th scope="col">Intervalo bbl/día</th>
+                      <th scope="col" class="numero">hᵢ</th>
+                      <th scope="col" class="numero">Δt</th>
+                      <th scope="col" class="numero">gᵢ = hᵢ / Δt</th>
+                      <th scope="col" class="numero">Δy (bbl/día)</th>
+                      <th scope="col" class="numero">fᵢ = hᵢ / Δy</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cuerpo-histograma-densidad"></tbody>
+                  <tfoot id="pie-histograma-densidad"></tfoot>
+                </table>
+              </div>
+
+              <div class="chart-card">
+                <p class="section-kicker">Histograma de densidad</p>
+                <h3 class="chart-title">Densidad de probabilidad empírica</h3>
+                <div id="grafica-histograma-densidad" class="chart-box chart-box-tall" role="img" aria-label="Histograma de densidad de probabilidad del logaritmo del óleo por pozo productor"></div>
+              </div>
+
+              <aside class="frame-note">
+                <strong>Forma de la distribución.</strong> En escala logarítmica el histograma tiene forma de campana, con un único pico. Esta forma servirá en 4.2.8 para conjeturar un modelo continuo, como el lognormal.
+              </aside>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="conjetura-continua" aria-labelledby="conjetura-continua-titulo">
+          <div class="container">
+            <p class="section-kicker">4.2.8</p>
+            <h2 id="conjetura-continua-titulo">Conjetura del modelo de probabilidad continuo</h2>
+            <p id="estado-mc-conjetura" class="status" role="status">Evaluando modelos…</p>
+
+            <div id="contenido-mc-conjetura" hidden>
+              <div class="method-grid">
+                <article class="method-card">
+                  <p class="method-card-tag">Evidencia</p>
+                  <h4>Forma de la distribución</h4>
+                  <p>Y solo toma valores positivos, tiene una cola larga hacia la derecha y su media (<span id="mc-media-obs"></span> bbl/día) casi triplica su mediana (<span id="mc-mediana-obs"></span> bbl/día). En escala logarítmica, el histograma de 4.2.7 tiene forma de campana simétrica.</p>
+                </article>
+                <article class="method-card teal">
+                  <p class="method-card-tag">Conjetura</p>
+                  <h4>Modelo lognormal</h4>
+                  <p>Si ln Y sigue una distribución normal, Y sigue una lognormal. Es el modelo habitual para volúmenes de producción que resultan de muchos factores multiplicativos.</p>
+                  <p class="method-symbolic" aria-label="Y sigue una lognormal de parámetros mu y sigma">Y ~ LN(μ, σ) ⇔ ln Y ~ N(μ, σ)</p>
+                  <p class="stat-notation">f(y) = 1 / (yσ√(2π)) · exp(−(ln y − μ)² / (2σ²)), y &gt; 0.</p>
+                </article>
+              </div>
+
+              <h3 class="tdf-subtitle">Comparación con otros modelos de cola derecha</h3>
+              <div class="table-scroll">
+                <table class="data-table">
+                  <caption>Modelos candidatos ajustados por máxima verosimilitud sobre las 14 clases de 4.2.6</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Modelo</th>
+                      <th scope="col" class="numero">Parámetros</th>
+                      <th scope="col" class="numero">r de Pearson</th>
+                      <th scope="col" class="numero">χ²</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cuerpo-candidatos"></tbody>
+                </table>
+              </div>
+              <p class="source">Lognormal: μ ; σ. Gamma: forma ; escala. Weibull: forma ; escala. Mayor r y menor χ² indican mejor ajuste.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section cream" id="parametros-continuos" aria-labelledby="parametros-continuos-titulo">
+          <div class="container">
+            <p class="section-kicker">4.2.9</p>
+            <h2 id="parametros-continuos-titulo">Cálculo de parámetros y ajuste gráfico</h2>
+            <p id="estado-mc-parametros" class="status" role="status">Calculando parámetros…</p>
+
+            <div id="contenido-mc-parametros" hidden>
+              <dl class="stat-metrics">
+                <div><dt>μ̂ = media de ln y</dt><dd id="mc-mu"></dd></div>
+                <div><dt>σ̂ = desviación de ln y</dt><dd id="mc-sigma"></dd></div>
+                <div><dt>Mediana teórica · e^μ̂</dt><dd><span id="mc-mediana-teo"></span> <span class="metric-unit">bbl/día</span></dd></div>
+                <div><dt>Media teórica · e^(μ̂+σ̂²/2)</dt><dd><span id="mc-media-teo"></span> <span class="metric-unit">bbl/día</span></dd></div>
+              </dl>
+
+              <div class="method-grid">
+                <article class="method-card">
+                  <p class="method-card-tag">Estimadores</p>
+                  <h4>Máxima verosimilitud</h4>
+                  <p class="method-symbolic" aria-label="mu gorro igual a la media de los logaritmos">μ̂ = (1/n) Σ ln yᵢ</p>
+                  <p class="method-symbolic" aria-label="sigma gorro igual a la raíz de la media de los cuadrados de las desviaciones">σ̂ = √[(1/n) Σ (ln yᵢ − μ̂)²]</p>
+                </article>
+                <article class="method-card teal">
+                  <p class="method-card-tag">Modelo ajustado</p>
+                  <h4>Y ~ LN(<span id="mc-mu-2"></span>; <span id="mc-sigma-2"></span>)</h4>
+                  <p>La media teórica supera a la mediana por la asimetría del modelo. La curva se superpone al histograma de densidad de 4.2.7, en la escala log₁₀ con μ/ln 10 y σ/ln 10.</p>
+                </article>
+              </div>
+
+              <div class="chart-card">
+                <p class="section-kicker">Ajuste gráfico</p>
+                <h3 class="chart-title">Histograma de densidad y curva lognormal</h3>
+                <div id="grafica-ajuste-continuo" class="chart-box chart-box-tall" role="img" aria-label="Histograma de densidad del logaritmo del óleo por pozo con la curva lognormal ajustada"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="test-ajuste-continuo" aria-labelledby="test-ajuste-continuo-titulo">
+          <div class="container">
+            <p class="section-kicker">4.2.10</p>
+            <h2 id="test-ajuste-continuo-titulo">Test de ajuste (Pearson y chi-cuadrado)</h2>
+            <p id="estado-mc-test-continuo" class="status" role="status">Calculando las pruebas…</p>
+
+            <div id="contenido-mc-test-continuo" hidden>
+              <div class="method-grid">
+                <article class="method-card">
+                  <p class="method-card-tag">Pearson</p>
+                  <h4>Correlación entre frecuencias observadas y esperadas</h4>
+                  <p class="method-symbolic" aria-label="r igual a covarianza entre observadas y esperadas sobre el producto de sus desviaciones">r = cov(hᵢ, pᵢ) / (s<sub>h</sub> · s<sub>p</sub>)</p>
+                  <p class="stat-notation">Un valor cercano a 1 indica que el modelo reproduce la forma de la distribución. R² = r² es la proporción de variación explicada.</p>
+                </article>
+                <article class="method-card teal">
+                  <p class="method-card-tag">Chi-cuadrado</p>
+                  <h4>Prueba de bondad de ajuste</h4>
+                  <p><strong>H₀:</strong> Y sigue una lognormal. <strong>H₁:</strong> no la sigue. α = 0,05.</p>
+                  <p class="method-symbolic" aria-label="Chi cuadrado igual a la suma de observadas menos esperadas al cuadrado entre esperadas">χ² = Σ (Oᵢ − Eᵢ)² / Eᵢ</p>
+                  <p class="stat-notation">gl = k − 1 − 2, porque se estiman μ y σ.</p>
+                </article>
+              </div>
+
+              <dl class="stat-metrics test-metrics">
+                <div><dt>r de Pearson</dt><dd id="pearson-r"></dd></div>
+                <div><dt>R² = r²</dt><dd id="pearson-r2"></dd></div>
+                <div><dt>χ² · gl</dt><dd><span id="prueba-continua-chi"></span> <span class="metric-unit">· gl <span id="prueba-continua-gl"></span></span></dd></div>
+                <div><dt>Valor crítico · valor p</dt><dd><span id="prueba-continua-critico"></span> <span class="metric-unit">· p <span id="prueba-continua-p"></span></span></dd></div>
+              </dl>
+              <div class="decision-row">
+                <p class="test-decision" id="pearson-decision"></p>
+                <p class="test-decision" id="prueba-continua-decision"></p>
+              </div>
+
+              <div class="chart-card">
+                <p class="section-kicker">Pearson</p>
+                <h3 class="chart-title">Frecuencia observada frente a probabilidad esperada</h3>
+                <div id="grafica-pearson" class="chart-box chart-box-tall" role="img" aria-label="Diagrama de dispersión de las frecuencias observadas frente a las probabilidades esperadas por el modelo lognormal"></div>
+              </div>
+
+              <h3 class="tdf-subtitle">Tabla de la prueba chi-cuadrado</h3>
+              <div class="table-scroll">
+                <table class="data-table">
+                  <caption>Clases agrupadas para que Eᵢ ≥ 5 · <span id="prueba-continua-clases"></span> clases</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Intervalo (bbl/día)</th>
+                      <th scope="col" class="numero">Oᵢ</th>
+                      <th scope="col" class="numero">Eᵢ</th>
+                      <th scope="col" class="numero">(Oᵢ − Eᵢ)² / Eᵢ</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cuerpo-prueba-continua"></tbody>
+                  <tfoot id="pie-prueba-continua"></tfoot>
+                </table>
+              </div>
+
+              <aside class="frame-note">
+                <strong>Interpretación.</strong> Pearson indica que el modelo lognormal reproduce casi toda la forma de la distribución. La prueba chi-cuadrado, en cambio, rechaza H₀: con n = 4.888 pozos detecta desviaciones pequeñas, sobre todo en la cola izquierda (pozos con producción muy baja). El lognormal es el mejor de los modelos evaluados y sirve como aproximación, pero no como ajuste exacto. En una submuestra aleatoria de n = 300 el χ² ya no rechaza la lognormal (<a href="#submuestras">4.2.17</a>).
+              </aside>
+            </div>
+          </div>
+        </section>
+
+        <section class="section cream" id="restricciones" aria-labelledby="restricciones-titulo">
+          <div class="container">
+            <p class="section-kicker">4.2.11</p>
+            <h2 id="restricciones-titulo">Restricciones</h2>
+            <p id="estado-mc-restricciones" class="status" role="status">Cargando restricciones…</p>
+
+            <div id="contenido-mc-restricciones" hidden>
+              <div class="restriction-grid">
+                <article class="method-card">
+                  <p class="method-card-tag">Dominio</p>
+                  <h4>Solo pozos productores</h4>
+                  <p>El modelo describe Y &gt; 0. Los pozos con óleo igual a cero quedan fuera y deben tratarse aparte: la proporción de pozos sin producción no la estima la lognormal.</p>
+                </article>
+                <article class="method-card">
+                  <p class="method-card-tag">Ajuste</p>
+                  <h4>Aproximación, no ajuste exacto</h4>
+                  <p>La prueba chi-cuadrado rechaza H₀ (χ² = <span id="rs-chi"></span> frente a <span id="rs-critico"></span>). Las probabilidades del modelo deben leerse como aproximaciones, con más cautela en la cola izquierda.</p>
+                </article>
+                <article class="method-card">
+                  <p class="method-card-tag">Independencia</p>
+                  <h4>Pozos del mismo campo</h4>
+                  <p>Los estimadores suponen pozos independientes. Pozos del mismo campo u operador pueden estar correlacionados, lo que haría los intervalos de confianza algo más estrechos de lo real.</p>
+                </article>
+                <article class="method-card">
+                  <p class="method-card-tag">Período</p>
+                  <h4>Un solo mes</h4>
+                  <p>Los parámetros corresponden a enero de 2023. No deben extrapolarse a otros meses ni usarse para pronosticar sin datos adicionales.</p>
+                </article>
+                <article class="method-card">
+                  <p class="method-card-tag">Colas</p>
+                  <h4>Valores extremos</h4>
+                  <p>Por encima de unos 300 bbl/día hay muy pocos pozos (n = <span id="rs-n"></span> en total); las probabilidades de producción muy alta tienen poca base empírica.</p>
+                </article>
+                <article class="method-card">
+                  <p class="method-card-tag">Inferencia</p>
+                  <h4>Muestra por corte temporal</h4>
+                  <p>La muestra son los pozos de enero de 2023 dentro de la población de pozos terrestres de Brasil. No es una muestra aleatoria: los intervalos de 4.2.13 suponen que el mes representa al proceso de producción. En 4.2.18 se contrastan con los 12 meses de 2023.</p>
+                </article>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="probabilidades" aria-labelledby="probabilidades-titulo">
+          <div class="container">
+            <p class="section-kicker">4.2.12</p>
+            <h2 id="probabilidades-titulo">Cálculos de probabilidad</h2>
+            <p id="estado-mc-probabilidades" class="status" role="status">Calculando probabilidades…</p>
+
+            <div id="contenido-mc-probabilidades" hidden>
+              <div class="method-grid">
+                <article class="method-card">
+                  <p class="method-card-tag">Método</p>
+                  <h4>Probabilidad con el modelo lognormal</h4>
+                  <p class="method-symbolic" aria-label="Probabilidad de que Y esté entre a y b igual a Phi de z b menos Phi de z a">P(a ≤ Y &lt; b) = Φ((ln b − μ)/σ) − Φ((ln a − μ)/σ)</p>
+                  <p class="stat-notation">Φ es la función de distribución normal estándar. ȳ = <span id="prob-media"></span> bbl/día.</p>
+                </article>
+                <article class="method-card teal calculator-card">
+                  <p class="method-card-tag">Calculadora</p>
+                  <h4>Calcula P(a ≤ Y &lt; b)</h4>
+                  <div class="calculator-fields">
+                    <label>a (bbl/día)<input id="calc-prob-a" type="number" min="0" step="any" value="5" inputmode="decimal"></label>
+                    <label>b (bbl/día)<input id="calc-prob-b" type="number" min="0" step="any" value="50" inputmode="decimal"></label>
+                  </div>
+                  <p class="calculator-result" id="calc-prob-resultado" role="status" aria-live="polite"></p>
+                </article>
+              </div>
+
+              <div class="table-scroll">
+                <table class="data-table">
+                  <caption>Probabilidades del modelo lognormal frente a las proporciones observadas</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Evento</th>
+                      <th scope="col" class="numero">Modelo</th>
+                      <th scope="col" class="numero">Observada</th>
+                      <th scope="col" class="numero">Diferencia</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cuerpo-probabilidades"></tbody>
+                </table>
+              </div>
+              <p class="source">pp: puntos porcentuales. Las diferencias pequeñas confirman que el modelo sirve como aproximación.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section cream" id="estimacion" aria-labelledby="estimacion-titulo">
+          <div class="container">
+            <p class="section-kicker">4.2.13</p>
+            <h2 id="estimacion-titulo">Estimación puntual y por intervalos de confianza</h2>
+            <p id="estado-mc-estimacion" class="status" role="status">Calculando intervalos…</p>
+
+            <div id="contenido-mc-estimacion" hidden>
+              <p class="section-intro">Nivel de confianza: <span id="ic-confianza"></span>. Valores críticos: t<sub>0,025; n−1</sub> = <span id="ic-t"></span> y z<sub>0,025</sub> = <span id="ic-z"></span>.</p>
+
+              <div class="table-scroll">
+                <table class="data-table">
+                  <caption>Estimación puntual e intervalos de confianza para los parámetros de Y</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Parámetro</th>
+                      <th scope="col">Método</th>
+                      <th scope="col" class="numero">Estimación puntual</th>
+                      <th scope="col" class="numero">Intervalo de confianza</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cuerpo-intervalos"></tbody>
+                </table>
+              </div>
+
+              <aside class="frame-note">
+                <strong>Lectura.</strong> Con una confianza del 95 %, la mediana de Y estimada por estadísticos de orden (sin suponer modelo) está entre <span id="ic-mediana-orden-rango"></span> bbl/día, y la producción media por pozo, entre <span id="ic-media-rango"></span> bbl/día. El intervalo de la media es más ancho porque los pocos pozos de producción muy alta aumentan la variabilidad. Aquí σ se estima con n − 1 en el denominador. No se aplica corrección por población finita, porque la población (pozos terrestres de Brasil) no tiene un N fijo.
+              </aside>
+              <aside class="frame-note nota-alerta">
+                <strong>Mediana del modelo frente a la mediana observada.</strong> El IC del 95 % de la mediana del modelo lognormal, e^μ, es <span id="ic-mediana-rango-2">[4,55; 4,93]</span> bbl/día, pero la mediana muestral de los pozos productores es <span id="ic-mediana-observada">4,99</span> bbl/día. No es un error de cálculo: el intervalo estima la mediana <em>de la lognormal</em>, y la lognormal coloca demasiada probabilidad en la cola izquierda (pozos de producción muy baja). Es la misma desviación que detecta el χ² en 4.2.10. En cambio, el IC de la mediana por estadísticos de orden, <span id="ic-mediana-orden-rango-2"></span> bbl/día, no supone ningún modelo y sí contiene la mediana observada. Con todo 2023 se comparan ambos intervalos (<a href="#validacion-anual">4.2.18</a>).
+              </aside>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="tamano-muestral" aria-labelledby="tamano-muestral-titulo">
+          <div class="container">
+            <p class="section-kicker">4.2.14</p>
+            <h2 id="tamano-muestral-titulo">Cálculo del tamaño muestral</h2>
+            <p id="estado-mc-tamano" class="status" role="status">Calculando tamaños de muestra…</p>
+
+            <div id="contenido-mc-tamano" hidden>
+              <div class="method-grid">
+                <article class="method-card">
+                  <p class="method-card-tag">Fórmulas</p>
+                  <h4>Población sin N fijo</h4>
+                  <p class="method-symbolic" aria-label="n cero igual a z por s entre E al cuadrado">Media: n₀ = (z · s / E)²</p>
+                  <p class="method-symbolic" aria-label="n cero igual a z al cuadrado por p por uno menos p entre E al cuadrado">Proporción: n₀ = z² · p̂(1 − p̂) / E²</p>
+                  <p class="stat-notation">n = ⌈n₀⌉. Igual que en 4.2.13, no se aplica la corrección n₀ / (1 + (n₀ − 1) / N), porque la población de pozos terrestres de Brasil no tiene un N fijo. s = <span id="tm-s"></span> bbl/día; confianza del 95 % (z = 1,96). Muestra actual: n = <span id="tm-muestra">4.888</span> pozos productores.</p>
+                </article>
+                <article class="method-card teal calculator-card">
+                  <p class="method-card-tag">Calculadora</p>
+                  <h4>Tamaño para estimar la media de Y</h4>
+                  <div class="calculator-fields">
+                    <label>Error E (bbl/día)<input id="calc-tm-error" type="number" min="0.1" step="0.1" value="3" inputmode="decimal"></label>
+                    <label>Confianza
+                      <select id="calc-tm-confianza">
+                        <option value="0.90">90 %</option>
+                        <option value="0.95" selected>95 %</option>
+                        <option value="0.99">99 %</option>
+                      </select>
+                    </label>
+                  </div>
+                  <p class="calculator-result" id="calc-tm-resultado" role="status" aria-live="polite"></p>
+                </article>
+              </div>
+
+              <div class="table-scroll">
+                <table class="data-table">
+                  <caption>Tamaño de muestra necesario para un muestreo aleatorio simple de los pozos productores</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Objetivo</th>
+                      <th scope="col" class="numero">Error máximo E</th>
+                      <th scope="col" class="numero">n = ⌈n₀⌉</th>
+                      <th scope="col" class="numero">¿Lo cubre la muestra de enero?</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cuerpo-tamanos"></tbody>
+                </table>
+              </div>
+
+              <aside class="frame-note">
+                <strong>Uso.</strong> El cálculo indica cuántos pozos productores harían falta en un muestreo aleatorio para estimar la media o la proporción con un error dado, y si la muestra de enero (n = 4.888) alcanza. La gran dispersión de Y exige muestras grandes para errores pequeños: un error de ± 1 bbl/día requiere casi tantos pozos como los que tiene la muestra.
+              </aside>
+            </div>
+          </div>
+        </section>
+
+        <section class="section cream" id="vac-agua" aria-labelledby="vac-agua-titulo">
+          <div class="container">
+            <p class="section-kicker">4.2.15</p>
+            <h2 id="vac-agua-titulo">Segunda variable continua: agua por pozo</h2>
+            <p id="estado-agua" class="status" role="status">Cargando el modelo del agua…</p>
+
+            <div id="contenido-agua" hidden>
+              <dl class="stat-metrics">
+                <div><dt>Pozos con agua &gt; 0 · n</dt><dd id="agua-n"></dd></div>
+                <div><dt>Mediana</dt><dd><span id="agua-mediana"></span> <span class="metric-unit">bbl/día</span></dd></div>
+                <div><dt>Media · w̄</dt><dd><span id="agua-media"></span> <span class="metric-unit">bbl/día</span></dd></div>
+                <div><dt>Mejor modelo</dt><dd id="agua-mejor"></dd></div>
+              </dl>
+
+              <div class="method-grid">
+                <article class="method-card">
+                  <p class="method-card-tag">Definición</p>
+                  <h4>Agua producida por pozo</h4>
+                  <p>W es el volumen de agua (bbl/día) de cada pozo con agua positiva en enero de 2023, con las filas repetidas sumadas. Es continua y de razón. Se excluyen solo aquí los <span id="agua-excluidos"></span> pozos con agua igual a cero.</p>
+                </article>
+                <article class="method-card teal">
+                  <p class="method-card-tag">Método</p>
+                  <h4>Mismo procedimiento que el óleo</h4>
+                  <p>Clases de Sturges de igual ancho en log₁₀(w) (k = <span id="agua-k"></span>), ajuste por máxima verosimilitud de lognormal, gamma y Weibull, r de Pearson y χ² con clases agrupadas para que Eᵢ ≥ 5.</p>
+                </article>
+              </div>
+
+              <div class="table-scroll">
+                <table class="data-table">
+                  <caption>Modelos candidatos para el agua por pozo productor</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Modelo</th>
+                      <th scope="col" class="numero">Parámetros</th>
+                      <th scope="col" class="numero">r de Pearson</th>
+                      <th scope="col" class="numero">χ² · gl</th>
+                      <th scope="col" class="numero">Valor crítico</th>
+                      <th scope="col">Decisión</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cuerpo-agua-candidatos"></tbody>
+                </table>
+              </div>
+              <p class="source">Lognormal: μ ; σ. Gamma: forma ; escala (bbl/día). Weibull: forma ; escala (bbl/día).</p>
+
+              <div class="chart-card">
+                <p class="section-kicker">Ajuste gráfico</p>
+                <h3 class="chart-title">Frecuencia relativa observada y probabilidad del mejor modelo</h3>
+                <div id="grafica-agua" class="chart-box chart-box-tall" role="img" aria-label="Histograma de frecuencias relativas del agua por pozo en clases log10 con la probabilidad del modelo gamma por clase"></div>
+              </div>
+
+              <div class="table-scroll">
+                <table class="data-table">
+                  <caption>Estimación puntual e intervalos de confianza del 95 % para el agua por pozo productor</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Parámetro</th>
+                      <th scope="col">Método</th>
+                      <th scope="col" class="numero">Estimación puntual</th>
+                      <th scope="col" class="numero">Intervalo de confianza</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cuerpo-agua-intervalos"></tbody>
+                </table>
+              </div>
+
+              <aside class="frame-note"><p id="nota-agua"></p></aside>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="vad-campos" aria-labelledby="vad-campos-titulo">
+          <div class="container">
+            <p class="section-kicker">4.2.16</p>
+            <h2 id="vad-campos-titulo">Segunda variable discreta: pozos por campo</h2>
+            <p id="estado-campos" class="status" role="status">Cargando el modelo de conteo…</p>
+
+            <div id="contenido-campos" hidden>
+              <dl class="stat-metrics">
+                <div><dt>Campos · n</dt><dd id="campos-n"></dd></div>
+                <div><dt>Media · x̄</dt><dd><span id="campos-media"></span> <span class="metric-unit">pozos</span></dd></div>
+                <div><dt>Mediana</dt><dd><span id="campos-mediana"></span> <span class="metric-unit">pozos</span></dd></div>
+                <div><dt>Máximo</dt><dd><span id="campos-max"></span> <span class="metric-unit">pozos</span></dd></div>
+              </dl>
+
+              <div class="method-grid">
+                <article class="method-card">
+                  <p class="method-card-tag">Definición</p>
+                  <h4>Número de pozos de cada campo</h4>
+                  <p>V = número de pozos distintos con producción reportada en cada campo en enero de 2023. Aquí la unidad estadística es el <strong>campo</strong>, no el pozo. Un pozo que aporta a dos campos cuenta en ambos: por eso la suma de pozos por campo da 5.471 y no 5.308, que es el número de pozos únicos de la descriptiva. V es discreta (conteo) y vale al menos 1.</p>
+                </article>
+                <article class="method-card teal">
+                  <p class="method-card-tag">Modelos</p>
+                  <h4>Poisson frente a binomial negativa</h4>
+                  <p class="method-symbolic" aria-label="V menos uno sigue una Poisson de parámetro lambda o una binomial negativa de parámetros r y p">V − 1 ~ P(λ) &nbsp;o&nbsp; V − 1 ~ BN(r, p)</p>
+                  <p class="stat-notation">Se modela V − 1 porque todo campo del archivo tiene al menos un pozo. Poisson exige media = varianza; la binomial negativa admite varianza mayor que la media. Parámetros por máxima verosimilitud.</p>
+                </article>
+              </div>
+
+              <div class="table-scroll">
+                <table class="data-table">
+                  <caption>Distribución de los campos según su número de pozos, con las probabilidades de cada modelo</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Pozos por campo</th>
+                      <th scope="col" class="numero">fᵢ</th>
+                      <th scope="col" class="numero">hᵢ</th>
+                      <th scope="col" class="numero">Hᵢ</th>
+                      <th scope="col" class="numero">P Poisson</th>
+                      <th scope="col" class="numero">P binomial negativa</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cuerpo-campos"></tbody>
+                </table>
+              </div>
+
+              <div class="table-scroll">
+                <table class="data-table">
+                  <caption>Prueba χ² de bondad de ajuste (clases agrupadas para que Eᵢ ≥ 5)</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Modelo</th>
+                      <th scope="col" class="numero">Parámetros</th>
+                      <th scope="col" class="numero">χ²</th>
+                      <th scope="col" class="numero">gl</th>
+                      <th scope="col" class="numero">Valor crítico</th>
+                      <th scope="col" class="numero">Valor p</th>
+                      <th scope="col">Decisión</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cuerpo-campos-prueba"></tbody>
+                </table>
+              </div>
+
+              <aside class="frame-note"><p id="nota-campos"></p></aside>
+            </div>
+          </div>
+        </section>
+
+        <section class="section cream" id="submuestras" aria-labelledby="submuestras-titulo">
+          <div class="container">
+            <p class="section-kicker">4.2.17</p>
+            <h2 id="submuestras-titulo">Prueba χ² en submuestras aleatorias</h2>
+            <p id="estado-submuestras" class="status" role="status">Cargando submuestras…</p>
+
+            <div id="contenido-submuestras" hidden>
+              <p class="section-intro">Con n grande, el χ² rechaza diferencias muy pequeñas entre lo observado y el modelo. Para separar ese efecto del mal ajuste real, la prueba se repite en una submuestra aleatoria simple de <span id="sub-tamano"></span> pozos (semilla <span id="sub-semilla"></span>) y en <span id="sub-replicas"></span> submuestras más del mismo tamaño. Los parámetros se reestiman en cada submuestra; Y usa las mismas clases de 4.2.6.</p>
+
+              <div class="table-scroll">
+                <table class="data-table">
+                  <caption>χ² con la muestra completa y con submuestras de n = <span id="sub-tamano-2"></span> pozos</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Modelo</th>
+                      <th scope="col" class="numero">Completa: χ² · gl</th>
+                      <th scope="col">Decisión</th>
+                      <th scope="col" class="numero">Submuestra: χ² · gl</th>
+                      <th scope="col" class="numero">Valor p</th>
+                      <th scope="col">Decisión</th>
+                      <th scope="col" class="numero">% que rechaza (<span id="sub-replicas-2">500</span> réplicas)</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cuerpo-submuestras"></tbody>
+                </table>
+              </div>
+
+              <aside class="frame-note"><p id="nota-submuestras"></p></aside>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="validacion-anual" aria-labelledby="validacion-anual-titulo">
+          <div class="container">
+            <p class="section-kicker">4.2.18</p>
+            <h2 id="validacion-anual-titulo">Validación de los intervalos de enero con todo 2023</h2>
+            <p id="estado-validacion" class="status" role="status">Cargando la validación anual…</p>
+
+            <div id="contenido-validacion" hidden>
+              <dl class="stat-metrics">
+                <div><dt>Pozo-mes productores en 2023</dt><dd id="val-obs"></dd></div>
+                <div><dt>Media anual de Y</dt><dd><span id="val-media"></span> <span class="metric-unit">bbl/día</span></dd></div>
+                <div><dt>IC 95 % de la media (enero)</dt><dd id="val-ic-media"></dd></div>
+                <div><dt>Meses con la media dentro del IC</dt><dd id="val-meses"></dd></div>
+                <div><dt>Meses con la mediana dentro del IC sin modelo</dt><dd id="val-meses-mediana-orden"></dd></div>
+              </dl>
+
+              <div class="chart-card">
+                <p class="section-kicker">Media y mediana mensual</p>
+                <h3 class="chart-title">Óleo por pozo productor en cada mes de 2023 frente a los IC de enero</h3>
+                <div id="grafica-validacion" class="chart-box chart-box-tall" role="img" aria-label="Medias y medianas mensuales del óleo por pozo productor en 2023 con las bandas de los intervalos de confianza de enero"></div>
+              </div>
+
+              <div class="table-scroll">
+                <table class="data-table">
+                  <caption>Óleo por pozo productor en cada mes de 2023 (Y &gt; 0, filas repetidas sumadas)</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Mes</th>
+                      <th scope="col" class="numero">Pozos</th>
+                      <th scope="col" class="numero">Productores</th>
+                      <th scope="col" class="numero">Media</th>
+                      <th scope="col">¿Dentro del IC de la media?</th>
+                      <th scope="col" class="numero">Mediana</th>
+                      <th scope="col">¿Dentro del IC del modelo?</th>
+                      <th scope="col">¿Dentro del IC sin modelo?</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cuerpo-validacion"></tbody>
+                </table>
+              </div>
+
+              <aside class="frame-note"><p id="nota-validacion"></p></aside>
+              <p class="source">Fuente: <span id="val-fuente"></span>. Media anual: promedio de todos los pozo-mes con Y &gt; 0. Generado con analysis/python/2_descriptiva_inferencial.py --anual.</p>
+            </div>
+          </div>
+        </section>
+          </div>
+        </div>
+      </main>
+
+      <footer class="site-footer">
+        <div class="container footer-row">
+          <div>
+            <p>© 2026 Integrantes: <span class="footer-members">Génesis Once, Esther Places, Evelyn Rodríguez, Andrea Sarmiento, Melany Zapata</span></p>
+            <p class="footer-location">Proyecto académico · Brasil, enero de 2023</p>
+            <p class="footer-location">Universidad Central del Ecuador · FIGEMPA · <a href="../general/equipo.html">Equipo</a></p>
+          </div>
+          <div>
+            <p class="footer-label">Fuente</p>
+            <p>ANP (Brasil) · Agregación por pozo y Estado</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+  <script defer src="../../assets/js/fondo-curvas.js"></script>
+</body>
+</html>
