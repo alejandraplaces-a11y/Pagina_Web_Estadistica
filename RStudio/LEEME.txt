@@ -1,0 +1,46 @@
+INFORMES EN R PARA RPUBS · POZOS TERRESTRES DE BRASIL (ANP, ENERO 2023)
+
+Contenido
+  27 archivos .Rmd, uno por variable, con la misma estructura del ejemplo:
+    1 Configuración y Carga de Datos
+    2 Extracción y Limpieza de la Variable
+    3 Identificación de la Variable
+    4 Tabla de Distribución de Frecuencias
+    5 Representación Gráfica
+    6 Tabla de Indicadores
+    7 Conclusión
+  2023_01_producao_Terra.csv        archivo de producción de la ANP
+  pozos_brasil_coordenadas_ANP.csv  Tabela de Poços (para categoría, dirección,
+                                    latitud, longitud, altitud, profundidad y
+                                    clase de profundidad)
+
+Cómo usarlos
+  1. Deja los .Rmd y los dos .csv en la MISMA carpeta.
+  2. En RStudio, instala una sola vez los paquetes:
+       install.packages(c("readr", "dplyr", "gt", "rmarkdown"))
+  3. Abre un .Rmd y cambia el nombre del autor en la línea:
+       autor <- "Grupo Brasil"
+     (y, si quieres, el campo author: del encabezado).
+  4. Pulsa «Knit». Si el CSV no está en la carpeta, se abre una ventana
+     para elegirlo.
+  5. En la vista previa, pulsa «Publish» → RPubs. Copia el enlace y ponlo en
+     la tarjeta de esa variable en tu página.
+
+Archivos por tipo
+  Nominales (9):  estado, cuenca, campo, operador, instalacion,
+                  produce_oleo, produce_gas, categoria, direccion
+  Ordinales (4):  clase_api, actividad, nivel_produccion, clase_profundidad
+  Discretas (2):  dias, pozos_campo
+  Continuas (12): horas, oleo, condensado, gas_asociado, gas_no_asociado,
+                  gas_total, agua, api, latitud, longitud, altitud, profundidad
+
+Notas
+  - Un pozo puede aparecer en varias filas: se consolida un registro por pozo
+    (volúmenes sumados, horas = máximo, datos cualitativos y API de la fila con
+    más óleo). Así salen los 5.308 pozos de la página.
+  - Campo principal y Operador principal muestran las 14 categorías más
+    frecuentes y agrupan el resto en «Otros» para que se lean.
+  - Las variables de volumen (óleo, gas, agua, condensado) y las horas usan una
+    clase {0} y clases de Sturges en log10, como en la página.
+  - Clase de profundidad: Somero hasta 1.000 m inclusive (así salen 3.306 /
+    1.380 / 120, los conteos de la página).
