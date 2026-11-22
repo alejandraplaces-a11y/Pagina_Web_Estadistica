@@ -1794,6 +1794,9 @@ h1 { animation-delay: .12s; }
   padding-block: clamp(72px, 9vw, 120px) clamp(52px, 6vw, 76px);
 }
 
+/* Altura común del recuadro verde: la de estadística descriptiva es la referencia. */
+.page-hero { min-height: 612px; }
+
 .hero-badge {
   display: inline-flex;
   align-items: center;
@@ -2773,38 +2776,11 @@ html.sidebar-expanded body.has-sidebar { padding-left: 0; }
    ============================================================ */
 
 .mapa-page {
-  padding-block: clamp(40px, 6vw, 72px) clamp(56px, 8vw, 96px);
+  padding-block: 0 clamp(56px, 8vw, 96px);
   background: var(--paper-2);
-  border-top: 1px solid var(--line);
 }
 
-.map-hero {
-  padding-block: clamp(40px, 6vw, 72px) clamp(24px, 4vw, 48px);
-  background: var(--paper-2);
-  border-bottom: 1px solid var(--line);
-}
-
-.map-hero .eyebrow { margin-bottom: 14px; }
-
-.map-hero h1 {
-  font-family: var(--serif);
-  font-size: clamp(2rem, 4.4vw, 3.4rem);
-  font-weight: 500;
-  line-height: 1.02;
-  letter-spacing: -.04em;
-  color: var(--ink);
-  max-width: 22ch;
-}
-
-.map-hero h1 span { color: var(--basin-2); }
-
-.map-hero .lead {
-  margin: 18px 0 0;
-  color: var(--ink-soft);
-  font-size: 14px;
-  line-height: 1.7;
-  max-width: 60ch;
-}
+.mapa-page .page-hero h1 { max-width: none; }
 
 .map-stage {
   display: grid;

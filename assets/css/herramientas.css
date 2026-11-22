@@ -238,9 +238,3 @@ html.fondo-curvas .page-hero {
   position: relative !important;
   z-index: 2 !important;
 }
-
-/* Igualar el tamaño del recuadro verde (hero) con el de conclusiones: aquí el
-   lead cabe en una sola línea y deja el hero más corto que en conclusiones. */
-@media (min-width: 761px) {
-  .page-hero .hero-content { min-height: 406px; }
-}

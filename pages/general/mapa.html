@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
   <link rel="stylesheet" href="../../assets/css/styles.css">
+  <link rel="stylesheet" href="../../assets/css/estadistica.css">
   <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
           integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script defer src="../../assets/js/common.js"></script>
@@ -117,13 +118,17 @@
       </header>
 
       <main id="inicio" class="mapa-page">
-        <section class="map-hero" aria-labelledby="mapa-titulo">
-          <div class="container">
-            <nav class="breadcrumb" aria-label="Ruta de navegación">
-            </nav>
-            <p class="eyebrow">VISUALIZACIÓN GEOESPACIAL · BRASIL · ENERO 2023</p>
+        <section class="page-hero" aria-labelledby="mapa-titulo">
+          <video class="hero-video" autoplay muted loop playsinline preload="auto" aria-hidden="true" tabindex="-1">
+            <source src="../../assets/video/video-completo.mp4" type="video/mp4">
+            Tu navegador no puede reproducir el video.
+          </video>
+          <div class="hero-overlay" aria-hidden="true"></div>
+          <div class="container hero-content">
+            <p class="section-kicker">Visualización geoespacial</p>
             <h1 id="mapa-titulo">Mapa interactivo de la <span>producción terrestre</span></h1>
-            <p class="lead">Explora el óleo producido y la cantidad de pozos únicos por Estado. Cambia la métrica, filtra por valor mínimo o selecciona un Estado para ver su detalle.</p>
+            <p class="aside-meta">Brasil · Enero de 2023</p>
+            <p class="page-lead">Explora el óleo producido y la cantidad de pozos únicos por Estado. Cambia la métrica, filtra por valor mínimo o selecciona un Estado para ver su detalle.</p>
           </div>
         </section>
 
