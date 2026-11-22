@@ -1,8 +1,8 @@
 (() => {
   'use strict';
 
-  // Aviso que solo aparece en la primera visita al sitio.
-  // Se guarda en localStorage para no volver a mostrarlo.
+  // Aviso que aparece una vez por sesión/pestaña.
+  // Se guarda en sessionStorage para no repetirlo en la misma pestaña.
   const STORAGE_KEY = 'terra-aviso-visto';
 
   const CONTENIDO = {
@@ -15,16 +15,16 @@
 
   function yaVisto() {
     try {
-      return localStorage.getItem(STORAGE_KEY) === '1';
+      return sessionStorage.getItem(STORAGE_KEY) === '1';
     } catch (e) {
-      // Si localStorage no está disponible, volvemos a mostrar siempre.
+      // Si sessionStorage no está disponible, volvemos a mostrar siempre.
       return false;
     }
   }
 
   function marcarVisto() {
     try {
-      localStorage.setItem(STORAGE_KEY, '1');
+      sessionStorage.setItem(STORAGE_KEY, '1');
     } catch (e) {}
   }
 
@@ -101,7 +101,7 @@
   }
 
   function iniciar() {
-    // Solo muestra el aviso si el usuario aún no lo había visto.
+    // Solo muestra el aviso una vez por pestaña.
     if (!yaVisto()) {
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', mostrar, { once: true });
@@ -109,7 +109,7 @@
         mostrar();
       }
     }
-    // Si ya lo vio, nada se hace; el aviso no aparece en ninguna carga.
+    // Si ya se mostró en esta pestaña, no se repite.
   }
 
   iniciar();
