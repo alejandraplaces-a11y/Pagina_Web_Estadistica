@@ -15,17 +15,9 @@
 }
 
 .page-hero .container { position: relative; z-index: 1; }
-.page-hero .hero-overlay {
-  background: linear-gradient(
-    to right,
-    rgba(14, 47, 41, .88) 0%,
-    rgba(14, 47, 41, .6) 55%,
-    rgba(14, 47, 41, .28) 100%
-  );
-}
 
-.page-hero .section-kicker { color: var(--oil-light); }
-.page-hero .section-kicker::before { background: var(--oil); }
+.page-hero .section-kicker { color: #F2C14E; }
+.page-hero .section-kicker::before { background: currentColor; }
 
 .page-hero h1 {
   font-family: var(--serif);
@@ -38,9 +30,9 @@
   animation-delay: 0.12s;
 }
 
-.aside-meta { margin-top: 10px; color: rgba(248, 249, 243, 0.6); font-size: 13px; }
+.aside-meta { margin-top: 10px; color: rgba(248, 249, 243, 0.85); font-size: 13px; }
 
-.page-lead { margin-top: 18px; max-width: 680px; color: rgba(248, 249, 243, 0.78); font-size: 16px; line-height: 1.75; }
+.page-lead { margin-top: 18px; max-width: 680px; color: rgba(248, 249, 243, 0.95); font-size: 16px; line-height: 1.75; }
 
 /* Secciones */
 .section.cream { background: var(--paper-2); }
@@ -263,46 +255,34 @@
 .grupo-variables-conteo { font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); white-space: nowrap; }
 .grupo-variables-descripcion { margin-top: 12px; max-width: 78ch; color: var(--ink-soft); font-size: 13px; line-height: 1.75; }
 
-.tarjetas-variables { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; margin-top: 16px; }
+.tarjetas-variables { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; align-items: start; }
 
-.tarjeta-variable { display: flex; flex-direction: column; gap: 6px; min-width: 0; padding: 12px 14px; background: #FFFFFF; border: 1px solid var(--line); border-radius: 10px; transition: border-color .2s var(--ease), transform .2s var(--ease); }
-.tarjeta-variable:hover { border-color: var(--oil); transform: translateY(-2px); }
-.tarjeta-variable-tipo { align-self: flex-start; padding: 2px 8px; border-radius: 999px; background: rgba(140, 109, 70, .1); font-family: var(--sans); font-size: 9px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--oil-deep); }
-.tarjeta-variable-nombre { font-family: var(--serif); font-size: 15px; font-weight: 500; letter-spacing: -0.01em; line-height: 1.3; color: var(--ink); }
-.tarjeta-variable-enlace { display: inline-flex; align-items: center; gap: 5px; align-self: flex-start; margin-top: auto; padding-top: 2px; font-family: var(--sans); font-size: 11px; font-weight: 600; color: var(--oil-deep); text-decoration: none; }
+/* --- Tarjetas desplegables (details) con ilustraciones SVG animadas ---
+   Paleta fija: #F5F0E6, #FBEFC8, #F2C14E, #C9930A, #0d2b24.
+   No se redefinen las variables globales del resto del sitio. */
+/* --- Tarjetas desplegables (details) verticales blancas --- */
+.tarjeta-variable {
+  display: block; min-width: 0; background: #FFFFFF; border: 1px solid #D8D2C5;
+  border-radius: 12px; overflow: hidden;
+  box-shadow: 0 2px 8px -4px rgba(11, 34, 30, .12);
+  transition: box-shadow .2s var(--ease), transform .2s var(--ease);
+}
+.tarjeta-variable:hover { box-shadow: 0 6px 14px -4px rgba(11, 34, 30, .16); transform: translateY(-2px); }
+.tarjeta-variable:focus-within { outline: 2px solid var(--oil); outline-offset: 2px; }
+.tarjeta-variable-resumen { display: block; cursor: pointer; list-style: none; }
+.tarjeta-variable-resumen::-webkit-details-marker { display: none; }
+.tarjeta-variable-imagen { display: block; width: 100%; aspect-ratio: 8 / 5; overflow: hidden; background: #F5F0E6; border-bottom: 1px solid #D8D2C5; }
+.tarjeta-variable-imagen svg { display: block; width: 100%; height: 100%; }
+.tarjeta-variable-pie { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 12px 12px 14px; background: #FFFFFF; }
+.tarjeta-variable-nombre { font-family: var(--serif); font-size: 15px; font-weight: 500; line-height: 1.3; color: #0B221E; white-space: normal; overflow: visible; }
+.tarjeta-variable-boton { flex: none; display: grid; place-items: center; width: 28px; height: 28px; border: none; border-radius: 50%; background: #0d2b24; color: #F2C14E; }
+.tarjeta-variable-boton svg { width: 14px; height: 14px; }
+.tarjeta-variable[open] .tarjeta-variable-boton .tarjeta-variable-chevron { transform: rotate(180deg); transition: transform .25s var(--ease); }
+.tarjeta-variable-cuerpo { display: none; padding: 0 14px 12px; }
+.tarjeta-variable[open] > .tarjeta-variable-cuerpo { display: block; }
+.tarjeta-variable-descripcion { margin-top: 10px; font-family: var(--sans); font-size: 12.5px; line-height: 1.6; color: var(--ink-soft); }
+.tarjeta-variable-enlace { display: inline-flex; align-items: center; gap: 5px; margin-top: 8px; font-family: var(--sans); font-size: 11px; font-weight: 600; color: var(--oil-deep); text-decoration: none; }
 .tarjeta-variable-enlace:hover { color: var(--ink); text-decoration: underline; }
 .tarjeta-variable-enlace:focus-visible { outline: 2px solid var(--oil); outline-offset: 3px; border-radius: 4px; }
 .tarjeta-variable-flecha { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-
-/* ============================================================
-   Responsive de los componentes nuevos
-   ============================================================ */
-
-@media (max-width: 900px) {
-  .grid-documentos { grid-template-columns: minmax(0, 1fr); }
-  .tarjetas-variables { grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); }
-}
-
-@media (max-width: 560px) {
-  .bloque-plegable { padding: 0 14px; }
-  .bloque-plegable-resumen { flex-direction: column; gap: 2px; }
-  .tarjetas-variables { grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); }
-  .grupo-variables-encabezado { flex-direction: column; gap: 4px; }
-  .documento-tarjeta { padding: 22px 20px 20px; }
-}
-
-/* Fondo en canvas: contenedores generales transparentes; el hero con video
-   conserva su fondo y superposición originales. */
-html.fondo-curvas body,
-html.fondo-curvas main,
-html.fondo-curvas .app-main,
-html.fondo-curvas .wrap,
-html.fondo-curvas .section:not(.page-hero):not(.hero):not(.video-hero) {
-  background: transparent;
-}
-html.fondo-curvas .hero,
-html.fondo-curvas .video-hero,
-html.fondo-curvas .page-hero {
-  position: relative !important;
-  z-index: 2 !important;
-}
+.tarjeta-svg { display: block; width: 100%; height: 100%; }

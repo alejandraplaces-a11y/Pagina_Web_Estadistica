@@ -4,3 +4,21 @@
 opencode-playground/
 __pycache__/
 .venv/
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
+
+# Scaffold local de Playwright (no es parte del sitio estático)
+package.json
+package-lock.json
+playwright.config.ts
+/tests/
+
+# Prototipos / borradores locales
+*Fondos*doradas.html
+Tarjetas de variables ilustradas.html

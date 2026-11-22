@@ -497,74 +497,78 @@
     }
   }
 
-  function draw(t) {
-    const canvas = document.getElementById(CANVAS_ID);
-    if (!canvas) return;
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const cssW = canvas.clientWidth || window.innerWidth;
-    const cssH = canvas.clientHeight || window.innerHeight;
-    const pixelW = Math.round(cssW * dpr);
-    const pixelH = Math.round(cssH * dpr);
-    if (canvas.width !== pixelW || canvas.height !== pixelH) {
-      canvas.width = pixelW;
-      canvas.height = pixelH;
-    }
-    const ctx = canvas.getContext('2d');
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.clearRect(0, 0, cssW, cssH);
-    ctx.fillStyle = PAPER;
-    ctx.fillRect(0, 0, cssW, cssH);
-
-    let field = canvas.__fondoField;
-    if (!field || field.w !== cssW || field.h !== cssH) {
-      field = createModel(cssW, cssH);
-      canvas.__fondoField = field;
-      canvas.__fondoWells = null;
-    }
-    sampleField(field, t);
-
-    let wells = canvas.__fondoWells;
-    if (!wells) {
-      wells = findWells(field, cssW, cssH);
-      canvas.__fondoWells = wells;
-    }
-
-    // Niveles fijos sobre el rango inicial: el campo respira y las curvas
-    // se expanden/contraen en lugar de renormalizarse en cada fotograma.
-    const span = (field.baseMax - field.baseMin) || 1;
-    const levels = [];
-    for (let i = 0; i < LEVEL_COUNT; i++) {
-      levels.push(field.baseMin + span * (0.1 + (i / (LEVEL_COUNT - 1)) * 0.83));
-    }
-    const contours = [];
-    for (let i = 0; i < levels.length; i++) contours.push(traceLevel(field, levels[i]));
-
-    // Halos muy tenues en los niveles más altos (crestas).
-    ctx.fillStyle = RIDGE_HALO;
-    for (let i = LEVEL_COUNT - 2; i < LEVEL_COUNT; i++) {
-      const paths = contours[i];
-      for (let j = 0; j < paths.length; j++) {
-        const pts = paths[j].points;
-        if (!paths[j].closed || pts.length < 3) continue;
-        ctx.beginPath();
-        ctx.moveTo(pts[0].x, pts[0].y);
-        for (let k = 1; k < pts.length; k++) ctx.lineTo(pts[k].x, pts[k].y);
-        ctx.closePath();
-        ctx.fill();
+  /* Devuelve el motor de la animación — el mismo que corre tras todas las
+   * páginas — sobre cualquier <canvas>; se reutiliza en otros archivos. */
+  function createEngine(canvas) {
+    function draw(t) {
+      if (!canvas.isConnected) return;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const cssW = canvas.clientWidth || window.innerWidth;
+      const cssH = canvas.clientHeight || window.innerHeight;
+      const pixelW = Math.round(cssW * dpr);
+      const pixelH = Math.round(cssH * dpr);
+      if (canvas.width !== pixelW || canvas.height !== pixelH) {
+        canvas.width = pixelW;
+        canvas.height = pixelH;
       }
-    }
+      const ctx = canvas.getContext('2d');
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, cssW, cssH);
+      ctx.fillStyle = PAPER;
+      ctx.fillRect(0, 0, cssW, cssH);
 
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    for (let i = 0; i < contours.length; i++) {
-      const master = i % MASTER_EVERY === MASTER_EVERY - 1;
-      ctx.strokeStyle = master ? LEVEL_MASTER : LEVEL_MINOR;
-      ctx.lineWidth = master ? 1.8 : 1.2;
-      const paths = contours[i];
-      for (let j = 0; j < paths.length; j++) strokePath(ctx, paths[j].points, paths[j].closed);
-    }
+      let field = canvas.__fondoField;
+      if (!field || field.w !== cssW || field.h !== cssH) {
+        field = createModel(cssW, cssH);
+        canvas.__fondoField = field;
+        canvas.__fondoWells = null;
+      }
+      sampleField(field, t);
 
-    drawWells(ctx, wells, t, cssW, cssH);
+      let wells = canvas.__fondoWells;
+      if (!wells) {
+        wells = findWells(field, cssW, cssH);
+        canvas.__fondoWells = wells;
+      }
+
+      // Niveles fijos sobre el rango inicial: el campo respira y las curvas
+      // se expanden/contraen en lugar de renormalizarse en cada fotograma.
+      const span = (field.baseMax - field.baseMin) || 1;
+      const levels = [];
+      for (let i = 0; i < LEVEL_COUNT; i++) {
+        levels.push(field.baseMin + span * (0.1 + (i / (LEVEL_COUNT - 1)) * 0.83));
+      }
+      const contours = [];
+      for (let i = 0; i < levels.length; i++) contours.push(traceLevel(field, levels[i]));
+
+      // Halos muy tenues en los niveles más altos (crestas).
+      ctx.fillStyle = RIDGE_HALO;
+      for (let i = LEVEL_COUNT - 2; i < LEVEL_COUNT; i++) {
+        const paths = contours[i];
+        for (let j = 0; j < paths.length; j++) {
+          const pts = paths[j].points;
+          if (!paths[j].closed || pts.length < 3) continue;
+          ctx.beginPath();
+          ctx.moveTo(pts[0].x, pts[0].y);
+          for (let k = 1; k < pts.length; k++) ctx.lineTo(pts[k].x, pts[k].y);
+          ctx.closePath();
+          ctx.fill();
+        }
+      }
+
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      for (let i = 0; i < contours.length; i++) {
+        const master = i % MASTER_EVERY === MASTER_EVERY - 1;
+        ctx.strokeStyle = master ? LEVEL_MASTER : LEVEL_MINOR;
+        ctx.lineWidth = master ? 1.8 : 1.2;
+        const paths = contours[i];
+        for (let j = 0; j < paths.length; j++) strokePath(ctx, paths[j].points, paths[j].closed);
+      }
+
+      drawWells(ctx, wells, t, cssW, cssH);
+    }
+    return { draw: draw };
   }
 
   /* Estilos mínicos: también cubren las subpáginas de análisis, que no cargan
@@ -603,6 +607,7 @@
     canvas.style.background = PAPER;
     document.documentElement.classList.add('fondo-curvas');
     document.body.insertBefore(canvas, document.body.firstChild);
+    const engine = createEngine(canvas);
 
     const motion = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
     const reduced = function () { return !!(motion && motion.matches); };
@@ -622,7 +627,7 @@
       lastDraw = now;
       t += (accumulated / 1000) * TIME_SCALE;
       accumulated = 0;
-      draw(t);
+      engine.draw(t);
     }
 
     function startAnimation() {
@@ -643,13 +648,13 @@
     function syncMotion() {
       if (reduced()) {
         stopAnimation();
-        draw(0);
+        engine.draw(0);
       } else {
         startAnimation();
       }
     }
 
-    draw(0);
+    engine.draw(0);
     syncMotion();
 
     if (motion) {
@@ -669,6 +674,8 @@
       resizeTimer = setTimeout(function () { draw(t); }, DEBOUNCE_MS);
     }, { passive: true });
   }
+
+  window.FondoCurvas = { createEngine: createEngine };
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);

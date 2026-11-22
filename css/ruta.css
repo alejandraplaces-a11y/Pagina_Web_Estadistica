@@ -1,10 +1,9 @@
-/* Recorrido interactivo de la portada: tema oscuro verde, separado del resto del sitio. */
+/* Recorrido interactivo de la portada: la sección es transparente para que se
+   vea el fondo animado; las tarjetas conservan su tema oscuro. */
 .ruta-seccion {
   padding: 64px 0 56px;
-  color: #d7e8e1;
-  background:
-    radial-gradient(1100px 480px at 85% -10%, #173a32 0%, transparent 60%),
-    #0b1a16;
+  color: var(--ink, #0B221E);
+  background: transparent;
 }
 
 .ruta-seccion .container {
@@ -17,7 +16,7 @@
   font-weight: 600;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #6fd3b0;
+  color: var(--oil, #8C6D46);
 }
 
 .ruta-seccion h2 {
@@ -27,7 +26,7 @@
   font-weight: 600;
   line-height: 1.1;
   letter-spacing: -0.02em;
-  color: #c9f5de;
+  color: var(--ink, #0B221E);
 }
 
 .ruta-intro {
@@ -35,7 +34,7 @@
   max-width: 640px;
   font-size: 15px;
   line-height: 1.75;
-  color: #9fbcb1;
+  color: var(--ink-soft, #2C3531);
 }
 
 .ruta-grid {
@@ -316,11 +315,11 @@
   margin-top: 22px;
   font-size: 12px;
   line-height: 1.7;
-  color: #6f8f85;
+  color: var(--ink-soft, #2C3531);
 }
 
 .ruta-nota a {
-  color: #6fd3b0;
+  color: var(--oil-deep, #8C6D46);
 }
 
 @media (max-width: 900px) {
