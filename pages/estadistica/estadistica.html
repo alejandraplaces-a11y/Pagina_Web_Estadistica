@@ -116,16 +116,6 @@
             <span class="brand-word">Universidad Central del Ecuador</span>
             <span class="brand-caption">Proyecto de Estadística</span>
           </a>
-          <nav class="site-nav" aria-label="Navegación principal">
-            <a href="#resumen-inicial">Cifras</a>
-            <a href="#poblacion-individuo">Metodología</a>
-            <a href="#tablas-documentacion">Documentación</a>
-            <a href="#analisis-variables">Análisis</a>
-            <a href="#tdf">TDF</a>
-            <a href="#gdf">GDF</a>
-            <a href="#indicadores">Indicadores</a>
-            <a href="#resumen">Resumen</a>
-          </nav>
         </div>
       </header>
 
@@ -158,7 +148,6 @@
               <div><dt>Pozos sin óleo</dt><dd><span class="metric-value" data-target="420" data-decimals="0">420</span> <span class="metric-unit">(7,9 %)</span></dd></div>
               <div><dt>Pozos con grado API</dt><dd><span class="metric-value" data-target="4435" data-decimals="0">4.435</span> <span class="metric-unit">(83,6 %)</span></dd></div>
             </dl>
-            <p class="stat-scope">5.471 registros de enero de 2023 (ANP) consolidados en 5.308 pozos de 9 estados. La mediana describe mejor al pozo típico: la media se eleva por los pozos de producción alta. Rio Grande do Norte reúne el 60,2 % de los pozos y el 74,3 % de los pozos con grado API produce crudo mediano. </p>
             <noscript><p class="status status-error">Las tablas y gráficas de esta página se generan con JavaScript. Las cifras clave están en este resumen y los 17 análisis por variable están disponibles como informes locales en <a href="../../docs/descriptiva-brasil/LEEME.html">docs/descriptiva-brasil</a>>; para ver el resto, activa JavaScript y abre la página desde un servidor (python3 -m http.server).</p></noscript>
           </div>
         </section>
@@ -233,17 +222,10 @@
                 </article>
               </div>
 
-              <aside class="frame-note" aria-label="Distinción entre registros y pozos">
-                <strong>Registro ≠ individuo.</strong>
-                <span id="nota-registros">5.471 registros corresponden a 5.308 pozos únicos; 143 pozos aparecen en más de un registro.</span>
-                <strong>Criterio de consolidación:</strong> cada fila repetida de un pozo corresponde a un campo distinto al que aporta (mismo contrato y mismo Estado), así que sus volúmenes de óleo, gas y agua son partes del total del pozo y se <strong>suman</strong>. Este criterio se aplica igual en toda la descriptiva y la inferencial.
-              </aside>
-              <p class="source">Fuente: <span id="fuente-estadistica">2023_01_producao_Terra.csv</span> · Conteo de identificadores únicos, sin excluir producción igual a cero.</p>
-
+              
               <p class="section-kicker section-kicker-spaced">4.1.2</p>
               <h2 class="subsection-title">Muestra: método y tamaño</h2>
-              <p class="section-intro">La muestra son los pozos terrestres con producción reportada a la ANP en enero de 2023. Es la misma definición que se usa en la estadística inferencial (4.2), donde los intervalos de confianza y el tamaño muestral se calculan sobre esta muestra.</p>
-
+              
               <dl class="stat-metrics sample-metrics">
                 <div><dt>Tamaño de la muestra · n</dt><dd><span id="muestra-n">5.308</span> <span class="metric-unit">pozos</span></dd></div>
                 <div><dt>Pozos productores de óleo · n<sub>Y</sub></dt><dd><span id="muestra-productores">4.888</span> <span class="metric-unit">pozos</span></dd></div>
@@ -264,14 +246,6 @@
                 </article>
               </div>
 
-              <aside class="frame-note" aria-label="Tamaños muestrales usados">
-                <strong>Tamaños muestrales.</strong> Todas las variables por pozo usan n = 5.308; «pozos por campo» usa n = 221 porque su unidad es el campo, no el pozo. Solo el análisis continuo del óleo (4.2.5 a 4.2.14) usa n = 4.888, porque excluye los 420 pozos con óleo igual a cero; esos pozos sí se incluyen en esta página. Al no ser una muestra aleatoria, la representatividad nacional no está garantizada; en 4.2.18 los resultados de enero se contrastan con los 12 meses de 2023.
-              </aside>
-
-              <aside class="frame-note" aria-label="Reglas de consolidación por pozo">
-                <strong>Reglas que se aplican a cada pozo.</strong>
-                <strong>Volúmenes:</strong> se suman los de todas sus filas (óleo, condensado, gas y agua). <strong>Horas:</strong> se toma el máximo entre filas; es una aproximación declarada, no un tiempo único reconstruido (sin intervalos horarios no se puede reconstruir). <strong>Días equivalentes completos:</strong> parte entera de las horas entre 24; no son días calendario efectivamente trabajados. <strong>Categorías</strong> (campo, operador, tipo de instalación): se toma la de la fila con mayor óleo, y en empate la primera en el orden original del archivo. <strong>Grado API:</strong> el primer dato no nulo al ordenar las filas por óleo descendente; no se promedian grados ni se asume que sea el API de la mezcla del pozo.
-              </aside>
             </div>
           </div>
         </section>
@@ -280,670 +254,9 @@
           <div class="container">
             <p class="section-kicker">4.1.3</p>
             <h2 id="variables-titulo">Variables</h2>
-            <p class="section-intro">Variables documentadas del archivo por pozo (n = 5.308), con la Tabela de Poços para las de categoría, dirección y coordenadas: tipo, subtipo, dominio, rango observado, escala, fuente del dato y unidad. De ellas, 27 son las variables de interés que se analizan en las tarjetas y en 4.1.4–4.1.7.</p>
+            <p class="section-intro">Variables documentadas del archivo por pozo (n = 5.308), con la Tabela de Poços para las de categoría, dirección y coordenadas: tipo, subtipo, dominio, rango observado, escala, fuente del dato y unidad.</p>
 
-            <p class="variables-tabla-enlace"><a href="variables-tabla.html">Tabla completa de variables en página aparte</a></p>
-            <div id="contenido-variables">
-              <details class="bloque-plegable" open>
-                <summary class="bloque-plegable-resumen">Ver la tabla completa de variables <span class="bloque-plegable-nota">42 variables · 13 columnas</span></summary>
-                <div class="table-scroll">
-                  <table class="data-table tabla-variables">
-                    <caption>Variables del estudio por pozo y por campo, enero de 2023</caption>
-                    <thead>
-                      <tr>
-                        <th scope="col" class="numero">N°</th>
-                        <th scope="col">Nombre</th>
-                        <th scope="col">Nombre específico</th>
-                        <th scope="col">Nombre en código</th>
-                        <th scope="col">Descripción</th>
-                        <th scope="col">Tipo</th>
-                        <th scope="col">Subtipo</th>
-                        <th scope="col">Dominio</th>
-                        <th scope="col">Rango</th>
-                        <th scope="col">Instrumento de medida</th>
-                        <th scope="col">Sistema de medidas</th>
-                        <th scope="col">Escala de medición</th>
-                        <th scope="col">Variable de interés</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td class="numero">1</td>
-                        <td>Estado</td>
-                        <td>Estado</td>
-                        <td>estado</td>
-                        <td>Unidad federativa (estado) donde se ubica el pozo</td>
-                        <td>Cualitativa</td>
-                        <td>Nominal</td>
-                        <td>D = {x | x ∈ unidades federativas de Brasil}</td>
-                        <td>R = {Alagoas, Amazonas, Bahia, Ceará, Espírito Santo, Maranhão, Paraná, Rio Grande do Norte, Sergipe}</td>
-                        <td>Registro administrativo de la ANP</td>
-                        <td>Topónimo (nombre geográfico)</td>
-                        <td>Nominal</td>
-                        <td>Sí, compara la producción entre estados.</td>
-                      </tr>
-                      <tr>
-                        <td class="numero">2</td>
-                        <td>Bacia</td>
-                        <td>Cuenca</td>
-                        <td>cuenca</td>
-                        <td>Cuenca sedimentaria donde está el pozo</td>
-                        <td>Cualitativa</td>
-                        <td>Nominal</td>
-                        <td>D = {x | x ∈ cuencas sedimentarias de Brasil}</td>
-                        <td>R = {Alagoas, Amazonas, Barreirinhas, Camamu, Espírito Santo, Paraná, Parnaíba, Potiguar, Recôncavo, Sergipe, Solimões, Tucano Sul}</td>
-                        <td>Registro administrativo de la ANP</td>
-                        <td>Topónimo (nombre geológico)</td>
-                        <td>Nominal</td>
-                        <td>Sí, compara la producción entre cuencas.</td>
-                      </tr>
-                      <tr>
-                        <td class="numero">3</td>
-                        <td>Nome Poço · ANP</td>
-                        <td>Nombre_pozo</td>
-                        <td>pozo</td>
-                        <td>Código único del pozo asignado por la ANP</td>
-                        <td>Cualitativa</td>
-                        <td>Nominal</td>
-                        <td>D = {x | x ∈ códigos de pozo de la ANP}</td>
-                        <td>R = {y | y ∈ códigos de pozo ∧ y ∈ al conjunto de datos} (5.308)</td>
-                        <td>Registro administrativo de la ANP</td>
-                        <td>Adimensional (código único)</td>
-                        <td>Nominal</td>
-                        <td>No, es el identificador del pozo: define la unidad estadística.</td>
-                      </tr>
-                      <tr>
-                        <td class="numero">4</td>
-                        <td>Nome Poço · Operador</td>
-                        <td>Código_pozo_operador</td>
-                        <td>pozo_operador</td>
-                        <td>Código interno con que el operador identifica el pozo</td>
-                        <td>Cualitativa</td>
-                        <td>Nominal</td>
-                        <td>D = {x | x ∈ códigos alfanuméricos de operador}</td>
-                        <td>R = {y | y ∈ códigos de operador ∧ y ∈ al conjunto de datos} (5.308)</td>
-                        <td>Registro interno del operador</td>
-                        <td>Adimensional (código único)</td>
-                        <td>Nominal</td>
-                        <td>No, repite el identificador del pozo con el código del operador.</td>
-                      </tr>
-                      <tr>
-                        <td class="numero">5</td>
-                        <td>Campo</td>
-                        <td>Campo</td>
-                        <td>campo</td>
-                        <td>Campo de producción; si el pozo aporta a varios, el de mayor óleo</td>
-                        <td>Cualitativa</td>
-                        <td>Nominal</td>
-                        <td>D = {x | x ∈ campos con contrato de concesión de la ANP}</td>
-                        <td>R = {y | y ∈ campos ∧ y ∈ al conjunto de datos} (213 por pozo; 221 contando todas las filas)</td>
-                        <td>Registro administrativo de la ANP</td>
-                        <td>Topónimo (nombre del campo)</td>
-                        <td>Nominal</td>
-                        <td>Sí, agrupa los pozos para la regresión por campo.</td>
-                      </tr>
-                      <tr>
-                        <td class="numero">6</td>
-                        <td>Operador</td>
-                        <td>Operador</td>
-                        <td>operador</td>
-                        <td>Empresa que opera el pozo</td>
-                        <td>Cualitativa</td>
-                        <td>Nominal</td>
-                        <td>D = {x | x ∈ empresas autorizadas por la ANP}</td>
-                        <td>R = {y | y ∈ empresas ∧ y ∈ al conjunto de datos} (39)</td>
-                        <td>Registro administrativo de la ANP</td>
-                        <td>Razón social (texto)</td>
-                        <td>Nominal</td>
-                        <td>Sí, compara la producción entre empresas.</td>
-                      </tr>
-                      <tr>
-                        <td class="numero">7</td>
-                        <td>Número do Contrato</td>
-                        <td>Número_contrato</td>
-                        <td>numero_contrato</td>
-                        <td>Código del contrato de concesión</td>
-                        <td>Cualitativa</td>
-                        <td>Nominal</td>
-                        <td>D = {x | x ∈ códigos de contrato de la ANP}</td>
-                        <td>R = {y | y ∈ contratos ∧ y ∈ al conjunto de datos} (201)</td>
-                        <td>Registro administrativo de la ANP</td>
-                        <td>Adimensional (código único)</td>
-                        <td>Nominal</td>
-                        <td>No, es un código administrativo del contrato.</td>
-                      </tr>
-                      <tr>
-                        <td class="numero">8</td>
-                        <td>Período</td>
-                        <td>Período</td>
-                        <td>periodo</td>
-                        <td>Mes al que corresponde la producción</td>
-                        <td>Cuantitativa</td>
-                        <td>Discreta</td>
-                        <td>D = {x | x ∈ meses (aaaa/mm)}</td>
-                        <td>R = {2023/01}</td>
-                        <td>Registro administrativo de la ANP</td>
-                        <td>Calendario gregoriano (aaaa/mm)</td>
-                        <td>Intervalo</td>
-                        <td>No, es constante: solo delimita la muestra.</td>
-                      </tr>
-                      <tr>
-                        <td class="numero">9</td>
-                        <td>Óleo (bbl/dia)</td>
-                        <td>Óleo</td>
-                        <td>oleo</td>
-                        <td>Volumen medio diario de petróleo sin condensado</td>
-                        <td>Cuantitativa</td>
-                        <td>Continua</td>
-                        <td>D = {x ∈ ℝ | x ≥ 0}</td>
-                        <td>R = {y ∈ ℝ | 0 ≤ y ≤ 1.102,8289}</td>
-                        <td>Medición fiscal del operador declarada a la ANP</td>
-                        <td>Sistema anglosajón (barriles por día, bbl/día)</td>
-                        <td>Razón</td>
-                        <td>Sí, es la variable principal: descriptiva, modelo lognormal y regresión.</td>
-                      </tr>
-                      <tr>
-                        <td class="numero">10</td>
-                        <td>Condensado (bbl/dia)</td>
-                        <td>Condensado</td>
-                        <td>condensado</td>
-                        <td>Volumen medio diario de condensado</td>
-                        <td>Cuantitativa</td>
-                        <td>Continua</td>
-                        <td>D = {x ∈ ℝ | x ≥ 0}</td>
-                        <td>R = {y ∈ ℝ | 0 ≤ y ≤ 722,7292}</td>
-                        <td>Medición fiscal del operador declarada a la ANP</td>
-                        <td>Sistema anglosajón (barriles por día, bbl/día)</td>
-                        <td>Razón</td>
-                        <td>Sí, completa la producción de líquidos del pozo.</td>
-                      </tr>
-                      <tr>
-                        <td class="numero">11</td>
-                        <td>Petróleo (bbl/dia)</td>
-                        <td>Petróleo</td>
-                        <td>petroleo</td>
-                        <td>Óleo + condensado</td>
-                        <td>Cuantitativa</td>
-                        <td>Continua</td>
-                        <td>D = {x ∈ ℝ | x ≥ 0}</td>
-                        <td>R = {y ∈ ℝ | 0 ≤ y ≤ 1.102,8289}</td>
-                        <td>Medición fiscal del operador declarada a la ANP</td>
-                        <td>Sistema anglosajón (barriles por día, bbl/día)</td>
-                        <td>Razón</td>
-                        <td>No, es redundante: óleo + condensado.</td>
-                      </tr>
-                      <tr>
-                        <td class="numero">12</td>
-                        <td>Gás Natural · Associado</td>
-                        <td>Gas_asociado</td>
-                        <td>gas_asociado</td>
-                        <td>Gas producido junto con el petróleo</td>
-                        <td>Cuantitativa</td>
-                        <td>Continua</td>
-                        <td>D = {x ∈ ℝ | x ≥ 0}</td>
-                        <td>R = {y ∈ ℝ | 0 ≤ y ≤ 550,6889}</td>
-                        <td>Medición fiscal del operador declarada a la ANP</td>
-                        <td>Sistema métrico (miles de m³ por día, Mm³/día)</td>
-                        <td>Razón</td>
-                        <td>Sí, mide el gas que sale junto con el petróleo.</td>
-                      </tr>
-                      <tr>
-                        <td class="numero">13</td>
-                        <td>Gás Natural · Não Associado</td>
-                        <td>Gas_no_asociado</td>
-                        <td>gas_no_asociado</td>
-                        <td>Gas de yacimientos de gas</td>
-                        <td>Cuantitativa</td>
-                        <td>Continua</td>
-                        <td>D = {x ∈ ℝ | x ≥ 0}</td>
-                        <td>R = {y ∈ ℝ | 0 ≤ y ≤ 499,6123}</td>
-                        <td>Medición fiscal del operador declarada a la ANP</td>
-                        <td>Sistema métrico (miles de m³ por día, Mm³/día)</td>
-                        <td>Razón</td>
-                        <td>Sí, separa los pozos de gas de los de petróleo.</td>
-                      </tr>
-                      <tr>
-                        <td class="numero">14</td>
-                        <td>Gás Natural · Gás Total</td>
-                        <td>Gas_total</td>
-                        <td>gas_total</td>
-                        <td>Gas asociado + gas no asociado</td>
-                        <td>Cuantitativa</td>
-                        <td>Continua</td>
-                        <td>D = {x ∈ ℝ | x ≥ 0}</td>
-                        <td>R = {y ∈ ℝ | 0 ≤ y ≤ 550,6889}</td>
-                        <td>Medición fiscal del operador declarada a la ANP</td>
-                        <td>Sistema métrico (miles de m³ por día, Mm³/día)</td>
-                        <td>Razón</td>
-                        <td>Sí, es la variable x₂ de la regresión múltiple.</td>
-                      </tr>
-                      <tr>
-                        <td class="numero">15</td>
-                        <td>Volume Gás Royalties (Mm³/dia)</td>
-                        <td>Gas_regalías</td>
-                        <td>gas_regalias</td>
-                        <td>Base de cálculo de las regalías del gas</td>
-                        <td>Cuantitativa</td>
-                        <td>Continua</td>
-                        <td>D = {x ∈ ℝ | x ≥ 0}</td>
-                        <td>R = {y ∈ ℝ | 0 ≤ y ≤ 15.487,982}</td>
-                        <td>Medición fiscal del operador declarada a la ANP</td>
-                        <td>Sistema métrico (miles de m³ por día, Mm³/día)</td>
-                        <td>Razón</td>
-                        <td>No, es una base de cálculo de regalías, no una medida de producción.</td>
-                      </tr>
-                      <tr>
-                        <td class="numero">16</td>
-                        <td>Água (bbl/dia)</td>
-                        <td>Agua</td>
-                        <td>agua</td>
-                        <td>Volumen medio diario de agua producida</td>
-                        <td>Cuantitativa</td>
-                        <td>Continua</td>
-                        <td>D = {x ∈ ℝ | x ≥ 0}</td>
-                        <td>R = {y ∈ ℝ | 0 ≤ y ≤ 5.074,2289}</td>
-                        <td>Medición fiscal del operador declarada a la ANP</td>
-                        <td>Sistema anglosajón (barriles por día, bbl/día)</td>
-                        <td>Razón</td>
-                        <td>Sí, es la segunda variable continua de la inferencial (modelo gamma).</td>
-                      </tr>
-                      <tr>
-                        <td class="numero">17</td>
-                        <td>Instalação Destino</td>
-                        <td>Instalación_destino</td>
-                        <td>instalacion_destino</td>
-                        <td>Nombre de la instalación que recibe la producción</td>
-                        <td>Cualitativa</td>
-                        <td>Nominal</td>
-                        <td>D = {x | x ∈ instalaciones registradas en la ANP}</td>
-                        <td>R = {y | y ∈ instalaciones ∧ y ∈ al conjunto de datos} (319)</td>
-                        <td>Registro administrativo de la ANP</td>
-                        <td>Nombre propio (texto)</td>
-                        <td>Nominal</td>
-                        <td>No, es un nombre propio casi único por pozo.</td>
-                      </tr>
-                      <tr>
-                        <td class="numero">18</td>
-                        <td>Tipo Instalação</td>
-                        <td>Tipo_instalación</td>
-                        <td>tipo_instalacion</td>
-                        <td>Tipo de instalación que recibe la producción</td>
-                        <td>Cualitativa</td>
-                        <td>Nominal</td>
-                        <td>D = {x | x ∈ tipos de instalación de la ANP}</td>
-                        <td>R = {INSTALACAO EMB/DESEMB, UEP}</td>
-                        <td>Registro administrativo de la ANP</td>
-                        <td>Clasificación de instalaciones</td>
-                        <td>Nominal</td>
-                        <td>Sí, describe a dónde va la producción.</td>
-                      </tr>
-                      <tr>
-                        <td class="numero">19</td>
-                        <td>Tempo de Produção (hs por mês)</td>
-                        <td>Tiempo_producción</td>
-                        <td>horas</td>
-                        <td>Horas en que el pozo produjo durante el mes</td>
-                        <td>Cuantitativa</td>
-                        <td>Continua</td>
-                        <td>D = {x ∈ ℝ | 0 ≤ x ≤ 744}</td>
-                        <td>R = {y ∈ ℝ | 0 ≤ y ≤ 744}</td>
-                        <td>Medición fiscal del operador declarada a la ANP</td>
-                        <td>Horas por mes (h/mes)</td>
-                        <td>Razón</td>
-                        <td>Sí, de ella sale la variable discreta días de producción.</td>
-                      </tr>
-                      <tr>
-                        <td class="numero">20</td>
-                        <td>Período da Carga</td>
-                        <td>Período_carga</td>
-                        <td>periodo_carga</td>
-                        <td>Mes en que el operador cargó el registro en el sistema de la ANP</td>
-                        <td>Cuantitativa</td>
-                        <td>Discreta</td>
-                        <td>D = {x | x ∈ meses (aaaa/mm)}</td>
-                        <td>R = {y | 2015/07 ≤ y ≤ 2022/02} (11 valores)</td>
-                        <td>Registro administrativo de la ANP</td>
-                        <td>Calendario gregoriano (aaaa/mm)</td>
-                        <td>Intervalo</td>
-                        <td>No, es una fecha administrativa de carga.</td>
-                      </tr>
-                      <tr>
-                        <td class="numero">21</td>
-                        <td>Corrente</td>
-                        <td>Corriente</td>
-                        <td>corriente</td>
-                        <td>Corriente de crudo a la que se entrega la producción</td>
-                        <td>Cualitativa</td>
-                        <td>Nominal</td>
-                        <td>D = {x | x ∈ corrientes de crudo de la ANP}</td>
-                        <td>R = {y | y ∈ corrientes ∧ y ∈ al conjunto de datos} (39)</td>
-                        <td>Registro administrativo de la ANP</td>
-                        <td>Nombre de corriente (texto)</td>
-                        <td>Nominal</td>
-                        <td>No, se resume en el grado API y la clase de crudo.</td>
-                      </tr>
-                      <tr>
-                        <td class="numero">22</td>
-                        <td>Grau API</td>
-                        <td>Grado_API</td>
-                        <td>api</td>
-                        <td>Densidad del crudo: 141,5 / densidad relativa − 131,5</td>
-                        <td>Cuantitativa</td>
-                        <td>Continua</td>
-                        <td>D = {x ∈ ℝ}</td>
-                        <td>R = {y ∈ ℝ | 13,20 ≤ y ≤ 64,64}</td>
-                        <td>Análisis de laboratorio de la corriente</td>
-                        <td>Grados API (°API)</td>
-                        <td>Intervalo</td>
-                        <td>Sí, define la calidad del crudo y la clase de crudo.</td>
-                      </tr>
-                      <tr>
-                        <td class="numero">23</td>
-                        <td>Fração de Destilados (Leves, Médios, Pesados)</td>
-                        <td>Fracción_destilados</td>
-                        <td>fraccion_destilados</td>
-                        <td>Porcentaje del crudo que destila en cada rango de temperatura</td>
-                        <td>Cuantitativa</td>
-                        <td>Continua</td>
-                        <td>D = {x ∈ ℝ | 0 ≤ x ≤ 100}</td>
-                        <td>Livianos: 7,28 ≤ y ≤ 100 · Medios: 0 ≤ y ≤ 75,1 · Pesados: 0 ≤ y ≤ 81,51</td>
-                        <td>Análisis de laboratorio de la corriente (destilación)</td>
-                        <td>Porcentaje (%)</td>
-                        <td>Razón</td>
-                        <td>No, es un análisis por corriente, no por pozo.</td>
-                      </tr>
-                      <tr>
-                        <td class="numero">24</td>
-                        <td>% em Volumes (Metano … Gás Carbônico)</td>
-                        <td>Composición_gas</td>
-                        <td>composicion_gas</td>
-                        <td>Porcentaje en volumen de 16 componentes del gas, de metano a gas carbónico</td>
-                        <td>Cuantitativa</td>
-                        <td>Continua</td>
-                        <td>D = {x ∈ ℝ | 0 ≤ x ≤ 100}</td>
-                        <td>Metano: 56,17 ≤ y ≤ 98,62 · resto de componentes: 0 ≤ y ≤ 23,76</td>
-                        <td>Análisis de laboratorio del gas (cromatografía)</td>
-                        <td>Porcentaje en volumen (%)</td>
-                        <td>Razón</td>
-                        <td>No, es un análisis por corriente, con muchos nulos.</td>
-                      </tr>
-                      <tr>
-                        <td class="numero">25</td>
-                        <td>Densidade GLP Gás</td>
-                        <td>Densidad_GLP_gas</td>
-                        <td>densidad_glp_gas</td>
-                        <td>Densidad del gas licuado de petróleo en estado gaseoso</td>
-                        <td>Cuantitativa</td>
-                        <td>Continua</td>
-                        <td>D = {x ∈ ℝ | x &gt; 0}</td>
-                        <td>R = {y ∈ ℝ | 1,9406 ≤ y ≤ 2,4486}</td>
-                        <td>Análisis de laboratorio del gas</td>
-                        <td>kg/m³ (el archivo no la indica)</td>
-                        <td>Razón</td>
-                        <td>No, es una propiedad del gas por corriente.</td>
-                      </tr>
-                      <tr>
-                        <td class="numero">26</td>
-                        <td>Densidade GLP Líquido</td>
-                        <td>Densidad_GLP_líquido</td>
-                        <td>densidad_glp_liquido</td>
-                        <td>Densidad del gas licuado de petróleo en estado líquido</td>
-                        <td>Cuantitativa</td>
-                        <td>Continua</td>
-                        <td>D = {x ∈ ℝ | x &gt; 0}</td>
-                        <td>R = {y ∈ ℝ | 520,9388 ≤ y ≤ 580,8302}</td>
-                        <td>Análisis de laboratorio del gas</td>
-                        <td>kg/m³ (el archivo no la indica)</td>
-                        <td>Razón</td>
-                        <td>No, es una propiedad del gas por corriente.</td>
-                      </tr>
-                      <tr>
-                        <td class="numero">27</td>
-                        <td>PCS GP (kJ/m³)</td>
-                        <td>Poder_calorífico_gas</td>
-                        <td>pcs_gas</td>
-                        <td>Energía que libera el gas al quemarse por completo</td>
-                        <td>Cuantitativa</td>
-                        <td>Continua</td>
-                        <td>D = {x ∈ ℝ | x &gt; 0}</td>
-                        <td>R = {y ∈ ℝ | 26.309,0136 ≤ y ≤ 42.742,2362}</td>
-                        <td>Análisis de laboratorio del gas</td>
-                        <td>Sistema Internacional (kJ/m³)</td>
-                        <td>Razón</td>
-                        <td>No, es una propiedad del gas por corriente.</td>
-                      </tr>
-                      <tr>
-                        <td class="numero">28</td>
-                        <td>Data de atualização</td>
-                        <td>Fecha_actualización</td>
-                        <td>fecha_actualizacion</td>
-                        <td>Fecha de publicación del archivo</td>
-                        <td>Cuantitativa</td>
-                        <td>Discreta</td>
-                        <td>D = {x | x ∈ fechas (dd/mm/aaaa)}</td>
-                        <td>R = {13/03/2023}</td>
-                        <td>Registro administrativo de la ANP</td>
-                        <td>Calendario gregoriano (dd/mm/aaaa)</td>
-                        <td>Intervalo</td>
-                        <td>No, es constante: fecha de publicación del archivo.</td>
-                      </tr>
-                      <tr>
-                        <td class="numero">29</td>
-                        <td>— (derivada de Grau API)</td>
-                        <td>Clase_crudo</td>
-                        <td>clase_api</td>
-                        <td>Pesado: API &lt; 22,3°; mediano: 22,3° a 31,1°; ligero: API &gt; 31,1°</td>
-                        <td>Cualitativa</td>
-                        <td>Ordinal</td>
-                        <td>D = {Pesado, Mediano, Ligero}</td>
-                        <td>R = {Pesado &lt; Mediano &lt; Ligero}</td>
-                        <td>Clasificación a partir del grado API</td>
-                        <td>Clasificación por grado API</td>
-                        <td>Ordinal</td>
-                        <td>Sí, es la variable ordinal del estudio.</td>
-                      </tr>
-                      <tr>
-                        <td class="numero">30</td>
-                        <td>— (derivada de Tempo de Produção)</td>
-                        <td>Días_producción</td>
-                        <td>dias</td>
-                        <td>⌊horas / 24⌋</td>
-                        <td>Cuantitativa</td>
-                        <td>Discreta</td>
-                        <td>D = {x ∈ ℕ | 0 ≤ x ≤ 31}</td>
-                        <td>R = {0, 1, 2, …, 31}</td>
-                        <td>Cálculo a partir de las horas</td>
-                        <td>Días (conteo)</td>
-                        <td>Razón</td>
-                        <td>Sí, es la variable discreta de la inferencial (binomial y beta-binomial).</td>
-                      </tr>
-                      <tr>
-                        <td class="numero">31</td>
-                        <td>CATEGORIA (Tabela de Poços)</td>
-                        <td>Categoría_pozo</td>
-                        <td>categoria</td>
-                        <td>Propósito con que se perforó el pozo</td>
-                        <td>Cualitativa</td>
-                        <td>Nominal</td>
-                        <td>D = {x | x ∈ categorías de pozo de la ANP}</td>
-                        <td>R = {Desenvolvimento, Extensão, Pioneiro, Especial, Injeção, Pioneiro Adjacente, Jazida Mais Profunda, Jazida Mais Rasa}</td>
-                        <td>Registro administrativo de la ANP (Tabela de Poços)</td>
-                        <td>Clasificación de pozos de la ANP</td>
-                        <td>Nominal</td>
-                        <td>Sí, distingue pozos de desarrollo, exploración e inyección.</td>
-                      </tr>
-                      <tr>
-                        <td class="numero">32</td>
-                        <td>DIRECAO (Tabela de Poços)</td>
-                        <td>Dirección_pozo</td>
-                        <td>direccion</td>
-                        <td>Trayectoria de la perforación</td>
-                        <td>Cualitativa</td>
-                        <td>Nominal</td>
-                        <td>D = {Vertical, Direcional, Horizontal}</td>
-                        <td>R = {y | y ∈ {Vertical, Direcional, Horizontal} ∧ y ∈ al conjunto de datos}</td>
-                        <td>Registro administrativo de la ANP (Tabela de Poços)</td>
-                        <td>Clasificación de trayectoria</td>
-                        <td>Nominal</td>
-                        <td>Sí, compara pozos verticales, direccionales y horizontales.</td>
-                      </tr>
-                      <tr>
-                        <td class="numero">33</td>
-                        <td>SITUACAO (Tabela de Poços)</td>
-                        <td>Situación_pozo</td>
-                        <td>situacion</td>
-                        <td>Estado operativo del pozo al 15/11/2026</td>
-                        <td>Cualitativa</td>
-                        <td>Nominal</td>
-                        <td>D = {x | x ∈ situaciones de pozo de la ANP}</td>
-                        <td>R = {y | y ∈ situaciones ∧ y ∈ al conjunto de datos} (12)</td>
-                        <td>Registro administrativo de la ANP (Tabela de Poços)</td>
-                        <td>Clasificación operativa de la ANP</td>
-                        <td>Nominal</td>
-                        <td>No, es la situación al 15/11/2026, no la de enero de 2023.</td>
-                      </tr>
-                      <tr>
-                        <td class="numero">34</td>
-                        <td>LATITUDE_BASE_DD (Tabela de Poços)</td>
-                        <td>Latitud</td>
-                        <td>latitud</td>
-                        <td>Latitud de la base del pozo, en grados decimales</td>
-                        <td>Cuantitativa</td>
-                        <td>Continua</td>
-                        <td>D = {x ∈ ℝ | −90 ≤ x ≤ 90}</td>
-                        <td>R = {y ∈ ℝ | −24,7303 ≤ y ≤ −2,5817}</td>
-                        <td>Receptor GNSS/GPS y topografía (datum SIRGAS2000)</td>
-                        <td>Grados decimales (°)</td>
-                        <td>Intervalo</td>
-                        <td>Sí, ubica cada pozo en el mapa.</td>
-                      </tr>
-                      <tr>
-                        <td class="numero">35</td>
-                        <td>LONGITUDE_BASE_DD (Tabela de Poços)</td>
-                        <td>Longitud</td>
-                        <td>longitud</td>
-                        <td>Longitud de la base del pozo, en grados decimales</td>
-                        <td>Cuantitativa</td>
-                        <td>Continua</td>
-                        <td>D = {x ∈ ℝ | −180 ≤ x ≤ 180}</td>
-                        <td>R = {y ∈ ℝ | −65,6630 ≤ y ≤ −35,5797}</td>
-                        <td>Receptor GNSS/GPS y topografía (datum SIRGAS2000)</td>
-                        <td>Grados decimales (°)</td>
-                        <td>Intervalo</td>
-                        <td>Sí, ubica cada pozo en el mapa.</td>
-                      </tr>
-                      <tr>
-                        <td class="numero">36</td>
-                        <td>COTA_ALTIMETRICA_M (Tabela de Poços)</td>
-                        <td>Altitud</td>
-                        <td>altitud_m</td>
-                        <td>Elevación del terreno en la boca del pozo sobre el nivel del mar</td>
-                        <td>Cuantitativa</td>
-                        <td>Continua</td>
-                        <td>D = {x ∈ ℝ}</td>
-                        <td>R = {y ∈ ℝ | 0 ≤ y ≤ 397,5}</td>
-                        <td>Topografía</td>
-                        <td>Sistema métrico (metros sobre el nivel del mar)</td>
-                        <td>Intervalo</td>
-                        <td>Sí, describe el terreno donde está cada pozo.</td>
-                      </tr>
-                      <tr>
-                        <td class="numero">37</td>
-                        <td>PROFUNDIDADE_SONDADOR_M (Tabela de Poços)</td>
-                        <td>Profundidad_perforada</td>
-                        <td>profundidad_m</td>
-                        <td>Profundidad final del pozo medida por el perforador</td>
-                        <td>Cuantitativa</td>
-                        <td>Continua</td>
-                        <td>D = {x ∈ ℝ | x &gt; 0}</td>
-                        <td>R = {y ∈ ℝ | 181,4 ≤ y ≤ 4.618}</td>
-                        <td>Registro de perforación (sonda)</td>
-                        <td>Sistema métrico (metros)</td>
-                        <td>Razón</td>
-                        <td>Sí, permite relacionar la profundidad con la producción.</td>
-                      </tr>
-                      <tr>
-                        <td class="numero">38</td>
-                        <td>PROFUNDIDADE_VERTICAL_M (Tabela de Poços)</td>
-                        <td>Profundidad_vertical</td>
-                        <td>profundidad_vertical_m</td>
-                        <td>Profundidad vertical referida al nivel del mar</td>
-                        <td>Cuantitativa</td>
-                        <td>Continua</td>
-                        <td>D = {x ∈ ℝ}</td>
-                        <td>R = {y ∈ ℝ | −4.110,38 ≤ y ≤ 7.363,6}</td>
-                        <td>Registro de perforación (sonda)</td>
-                        <td>Sistema métrico (metros)</td>
-                        <td>Intervalo</td>
-                        <td>No, está referida al nivel del mar y tiene valores negativos.</td>
-                      </tr>
-                      <tr>
-                        <td class="numero">39</td>
-                        <td>MESA_ROTATIVA (Tabela de Poços)</td>
-                        <td>Elevación_mesa_rotatoria</td>
-                        <td>mesa_rotativa_m</td>
-                        <td>Altura de la mesa de perforación sobre el nivel del mar</td>
-                        <td>Cuantitativa</td>
-                        <td>Continua</td>
-                        <td>D = {x ∈ ℝ}</td>
-                        <td>R = {y ∈ ℝ | 0 ≤ y ≤ 1.009}</td>
-                        <td>Topografía</td>
-                        <td>Sistema métrico (metros sobre el nivel del mar)</td>
-                        <td>Intervalo</td>
-                        <td>No, solo sirve para revisar la altitud.</td>
-                      </tr>
-                      <tr>
-                        <td class="numero">40</td>
-                        <td>— (derivada de los días de producción)</td>
-                        <td>Nivel_actividad</td>
-                        <td>actividad</td>
-                        <td>Actividad del pozo en enero: inactivo (0 días), parcial (1 a 30 días), continuo (31 días)</td>
-                        <td>Cualitativa</td>
-                        <td>Ordinal</td>
-                        <td>D = {Inactivo, Parcial, Continuo}</td>
-                        <td>R = {Inactivo &lt; Parcial &lt; Continuo}</td>
-                        <td>Cálculo a partir de los días de producción</td>
-                        <td>Clasificación por días</td>
-                        <td>Ordinal</td>
-                        <td>Sí, resume la actividad del pozo en el mes.</td>
-                      </tr>
-                      <tr>
-                        <td class="numero">41</td>
-                        <td>— (derivada del óleo)</td>
-                        <td>Nivel_producción</td>
-                        <td>nivel_oleo</td>
-                        <td>Producción por cuartiles: bajo ≤ 1,45 bbl/día (Q₁), medio, alto &gt; 10,64 bbl/día (Q₃)</td>
-                        <td>Cualitativa</td>
-                        <td>Ordinal</td>
-                        <td>D = {Bajo, Medio, Alto}</td>
-                        <td>R = {Bajo &lt; Medio &lt; Alto}</td>
-                        <td>Cálculo a partir del óleo</td>
-                        <td>Clasificación por cuartiles</td>
-                        <td>Ordinal</td>
-                        <td>Sí, agrupa los pozos por cuartiles de producción.</td>
-                      </tr>
-                      <tr>
-                        <td class="numero">42</td>
-                        <td>— (derivada de la profundidad perforada)</td>
-                        <td>Clase_profundidad</td>
-                        <td>clase_profundidad</td>
-                        <td>Profundidad del pozo: somero &lt; 1.000 m, intermedio de 1.000 a 3.000 m, profundo &gt; 3.000 m (criterio del grupo)</td>
-                        <td>Cualitativa</td>
-                        <td>Ordinal</td>
-                        <td>D = {Somero, Intermedio, Profundo}</td>
-                        <td>R = {Somero &lt; Intermedio &lt; Profundo}</td>
-                        <td>Cálculo a partir de la profundidad perforada</td>
-                        <td>Clasificación por profundidad</td>
-                        <td>Ordinal</td>
-                        <td>Sí, permite comparar la producción según la profundidad.</td>
-                      </tr>
-                    </tbody>
-
-                  </table>
-                </div>
-                <p class="source">«Fuente: ANP, producción por pozo, enero de 2023 (publicado el 13/03/2023), y Tabela de Poços de la ANP (actualizada al 15/11/2026)».</p>
-                </details>
-            </div>
+            <p class="variables-tabla-enlace"><button type="button" onclick="window.open('variables-tabla.html', '_blank')">Tabla de variables</button></p>
           </div>
         </section>
 
@@ -1312,12 +625,19 @@
 <script>
 (function () {
   'use strict';
+  document.querySelectorAll('.tarjeta-variable').forEach(function (d) {
+    d.open = true;
+    d.querySelector('summary').addEventListener('click', function (ev) {
+      ev.preventDefault();
+      d.open = true;
+    });
+  });
   document.querySelectorAll('.tarjeta-variable-boton').forEach(function (btn) {
     btn.addEventListener('click', function (ev) {
       var d = btn.closest('.tarjeta-variable');
       if (!d) { return; }
       ev.preventDefault();
-      d.open = !d.open;
+      d.open = true;
     });
   });
 })();
@@ -1329,7 +649,6 @@
           <div class="container">
             <p class="section-kicker">4.1.4</p>
             <h2 id="tdf-titulo">Tablas de distribución de frecuencias (TDF)</h2>
-            <p class="section-intro">Una tabla por tipo de variable: nominal, ordinal, discreta y continua. En todas, hᵢ = fᵢ / n, Fᵢ = Σ fⱼ y Hᵢ = Fᵢ / n. Abre cada tarjeta para ver la tabla completa.</p>
             <p id="estado-tdf" class="status" role="status">Cargando distribuciones…</p>
 
             <div id="contenido-tdf" hidden>
@@ -1380,7 +699,6 @@
                   </table>
                 </div>
                 <p class="source">Orden natural: pesado &lt; mediano &lt; ligero. <span id="nota-api"></span></p>
-                <aside class="frame-note"><strong>El grado API es de la corriente, no del pozo.</strong> En el archivo solo hay 37 valores distintos de API, así que muchos pozos comparten el mismo grado: por eso Q₁ y la mediana coinciden (23,2°) y se cuentan 1.211 atípicos (27,3 %). A los 20 pozos con varias corrientes se les asignó el API de la fila con más óleo.</aside>
               </details>
 
               <details class="var-card">
@@ -1430,7 +748,6 @@
                     <tbody id="tabla-oleo"></tbody>
                   </table>
                 </div>
-                <aside class="frame-note"><p id="nota-tdf"></p></aside>
                 <p class="source">Clases: Sturges sobre los pozos con óleo &gt; 0, k = ⌈1 + 3,322 · log₁₀(n<sub>Y</sub>)⌉, con igual ancho A en t = log₁₀(x); son las mismas clases de 4.2.6. La última clase se cierra en el máximo observado. Marca xᵢ = √(Lᵢ · Lᵢ₊₁). Fuente: <span id="fuente-tdf"></span>.</p>
               </details>
             </div>
@@ -1471,7 +788,6 @@
                 <h3 class="chart-title">Óleo por pozo (bbl/día, escala log₁₀)</h3>
                 <div id="gdf-ojiva" class="chart-box" role="img" aria-label="Ojiva de frecuencias relativas acumuladas del óleo por pozo sobre los límites superiores de clase"></div>
               </div>
-              <p id="nota-gdf" class="stat-scope"></p>
             </div>
           </div>
         </section>
@@ -1483,8 +799,6 @@
             <p id="estado-indicadores" class="status" role="status">Calculando indicadores…</p>
 
             <div id="contenido-indicadores" hidden>
-              <p class="section-intro">Variables continuas de producción por pozo (n = <span id="indicadores-n"></span>). Los ceros se incluyen. Atípicos: valores fuera de [Q₁ − 1,5·RIC; Q₃ + 1,5·RIC].</p>
-
               <details class="bloque-plegable" open>
                 <summary class="bloque-plegable-resumen">Ver los indicadores de óleo, gas y agua <span class="bloque-plegable-nota">17 medidas · 3 variables</span></summary>
                 <div class="table-scroll">
@@ -1520,10 +834,6 @@
                   </table>
                 </div>
 
-                <aside class="frame-note">
-                  <strong>Media frente a mediana.</strong> La distribución del óleo es muy asimétrica: unos pocos pozos producen cantidades muy altas. Por ello, la mediana describe mejor al pozo típico, mientras que la media resume el total por pozo y se eleva por los valores extremos. <span id="nota-indicadores"></span>
-                </aside>
-                <p class="source">Varianza con n − 1; asimetría G₁ y curtosis en exceso G₂ con corrección muestral. La moda de una variable continua se reporta como clase modal con las clases log₁₀ calculadas en el script (las del óleo coinciden con 4.1.4). El CV solo se calcula en escala de razón y con media distinta de cero; no aplica al grado API, que es de intervalo. Fuente: <span id="fuente-indicadores"></span>.</p>
               </details>
             </div>
           </div>
@@ -1536,8 +846,7 @@
             <p id="estado-resumen" class="status" role="status">Preparando el resumen…</p>
 
             <div id="contenido-resumen" hidden>
-              <p class="section-intro">Óleo por pozo (bbl/día) según Estado. Cada fila resume los pozos de ese Estado; la última fila corresponde a toda la muestra.</p>
-
+              
               <details class="bloque-plegable" open>
                 <summary class="bloque-plegable-resumen">Ver el resumen por Estado <span class="bloque-plegable-nota">9 estados + total</span></summary>
                 <div class="table-scroll">
@@ -1560,7 +869,6 @@
                     <tbody id="cuerpo-resumen"></tbody>
                   </table>
                 </div>
-                <p class="stat-scope" id="nota-resumen"></p>
               </details>
             </div>
           </div>

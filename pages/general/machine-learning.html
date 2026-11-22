@@ -139,7 +139,6 @@
               <div><dt>Regresión: Random Forest</dt><dd>R² en log = 0,853 (frente a 0,827 del modelo base)</dd></div>
               <div><dt>Clasificación: Gradient Boosting</dt><dd>Anticipa el 55 % de los pozos que dejan de producir óleo</dd></div>
             </dl>
-            <p class="stat-scope">Los modelos se eligieron en septiembre (validación) y se evaluaron una sola vez en octubre–diciembre (prueba).</p>
           </div>
         </section>
 
@@ -179,13 +178,6 @@
           <div class="container">
             <p class="section-kicker">Datos y método</p>
             <h2 id="datos-metodo-titulo" class="subsection-title">Información del estudio</h2>
-            <ul>
-              <li><strong>Unidad:</strong> pozo-mes. Los 12 archivos mensuales de 2023 de la ANP (producción terrestre por pozo).</li>
-              <li><strong>Diseño de previo a posteriori:</strong> Cada fila usa el mes t y el mes t − 1 de un pozo para predecir el mes t + 1. Ninguna variable de entrada se mide en el mes que se predice: no hay fuga de datos. Esto importa porque en otros proyectos usar la producción para predecir el nivel de producción da un acierto falso del 99 %.</li>
-              <li><strong>Variables de entrada:</strong> tabla siguiente.</li>
-              <li><strong>División temporal:</strong> Entrenamiento: marzo–agosto (32 302 filas). Validación: septiembre (6 302 filas; elegir hiperparámetros y umbral). Prueba: octubre–diciembre (19 698 filas; evaluación final). Pozos‑mes sin mes siguiente: 1 583 no entran en el cálculo.</li>
-              <li><strong>Modelos comparados:</strong> Persistencia (mes siguiente = actual), modelo lineal (Ridge / regresión logística), Random Forest, Gradient Boosting, red neuronal MLP. Los modelos se eligen en validación y se evalúan una sola vez en la prueba.</li>
-            </ul>
             <div class="table-scroll">
               <table class="data-table">
                 <caption>Variables de entrada</caption>
@@ -207,7 +199,6 @@
                 </tbody>
               </table>
             </div>
-            <p class="source">Fuente: 2023_01_producao_Terra.csv (ANP). Unidad estadística: pozo‑mes; n = 58 302 (con mes siguiente).</p>
           </div>
         </section>
 

@@ -44,6 +44,22 @@
 
 .section-intro { margin-top: 14px; max-width: 720px; color: var(--ink-soft); line-height: 1.75; }
 
+/* Botón que abre la tabla de variables en página aparte */
+.variables-tabla-enlace button {
+  width: 100%;
+  margin-top: 17px;
+  padding: 10px 32px;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--oil-deep);
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.variables-tabla-enlace button:hover { border-color: var(--oil-deep); }
+
 /* Indicadores de muestra */
 .sample-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 24px; }
 

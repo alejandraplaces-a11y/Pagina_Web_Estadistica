@@ -96,12 +96,7 @@
     $('#preview-dias').textContent = `0 días: ${fmt.entero.format(dias[0].fi)} pozos · 31 días: ${fmt.entero.format(dias[31].fi)} pozos`;
     $('#preview-oleo').textContent = `${oleo.k + 1} clases · clase modal ${intervalo(modal, oleo.filas.indexOf(modal) === oleo.filas.length - 1)} bbl/día (${fmt.pct.format(modal.hi)})`;
 
-    const primera = oleo.filas[1];
-    const ultima = oleo.filas[oleo.filas.length - 1];
-    $('#nota-tdf').textContent = `La clase 0 reúne los ${fmt.entero.format(oleo.ceros)} pozos sin óleo (${fmt.pct.format(oleo.filas[0].hi)}); no tienen logaritmo, por eso van aparte. `
-      + `Los ${fmt.entero.format(oleo.positivos)} pozos productores se reparten en ${oleo.k} clases de igual ancho en log₁₀, desde ${volumen(primera.li)} hasta ${volumen(ultima.ls)} bbl/día. `
-      + `La última clase se cierra por la derecha, [${volumen(ultima.li)}; ${volumen(ultima.ls)}], porque ${volumen(ultima.ls)} es el máximo observado. `
-      + 'Con clases de igual ancho en bbl/día (Sturges lineal, A = 79) el 98 % de los pozos caía en la primera clase y 7 clases quedaban vacías; la escala log₁₀ reparte los pozos y muestra la forma de la distribución.';
+
   }
 
   function layoutPlotly(extra = {}) {

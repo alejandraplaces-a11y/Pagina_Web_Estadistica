@@ -150,7 +150,6 @@
               <div><dt>R² (determinación)</dt><dd>0,5498</dd></div>
               <div><dt>Modelo</dt><dd class="dd-ecuacion">y = a + b·x</dd></div>
             </dl>
-            <aside class="frame-note"><strong>¿Por qué?</strong> La correlación es fuerte (r = 0,742) y la pendiente es significativa, pero el ajuste lo deciden dos campos: Estreito (950 pozos) y Canto do Amaro (707), con distancias de Cook de 3,28 y 3,20. Sin ellos, R² cae de 0,550 a 0,205. Además, predice al menos 185 bbl/día para cualquier campo, cuando los 36 campos de un pozo tienen una mediana de 7,7 bbl/día.</aside>
             <noscript><p class="status status-error">Las tablas, gráficas y cálculos se generan con JavaScript; el dictamen y las cifras clave están arriba.</p></noscript>
           </div>
         </section>
@@ -232,7 +231,6 @@
                 <div><dt>1 − R² (no determinación)</dt><dd id="ind-k2"></dd></div>
                 <div><dt>Error estándar de la estimación</dt><dd id="ind-s"></dd></div>
               </dl>
-              <p class="stat-scope" id="prueba-r"></p>
               <div class="table-scroll">
                 <table class="data-table">
                   <caption>Coeficientes con error estándar, prueba t (gl = <span id="ind-gl"></span>; t crítico = <span id="ind-tc"></span>) e IC del 95 %</caption>
@@ -240,7 +238,6 @@
                   <tbody id="cuerpo-coeficientes"></tbody>
                 </table>
               </div>
-              <p class="source">r, R² y el error estándar se calculan en la forma linealizada (y = a + b·x), que es la que minimiza el ajuste. Para comparar modelos con distinta transformación de y, ver la <a href="regresion.html#comparacion">tabla comparativa</a>.</p>
             </div>
           </div>
         </section>
@@ -256,7 +253,6 @@
                 <h3 class="chart-title">Residuo de cada campo frente a x</h3>
                 <div id="grafica-residuos" class="chart-box" role="img" aria-label="Gráfica de residuos del modelo frente al número de pozos"></div>
               </div>
-              <p class="stat-scope" id="nota-normalidad"></p>
               <div class="table-scroll">
                 <table class="data-table">
                   <caption>Los 5 campos con mayor distancia de Cook</caption>
@@ -264,8 +260,6 @@
                   <tbody id="cuerpo-influyentes"></tbody>
                 </table>
               </div>
-              <aside class="frame-note"><p id="nota-sensibilidad"></p></aside>
-              <p class="source">D de Cook mide cuánto cambian los coeficientes si se quita el campo. D &gt; 1: el campo por sí solo cambia el ajuste; D &gt; 4/n es un umbral de revisión.</p>
             </div>
           </div>
         </section>

@@ -150,7 +150,6 @@
               <div><dt>R² (determinación)</dt><dd>0,6417</dd></div>
               <div><dt>Modelo</dt><dd class="dd-ecuacion">y = a·xᵇ</dd></div>
             </dl>
-            <aside class="frame-note"><strong>¿Por qué?</strong> Tiene la correlación más fuerte (r = 0,801) y es el único modelo simple que cumple los supuestos: ningún campo tiene distancia de Cook mayor que 1 y los residuos en escala ln son casi normales. El exponente b = 1,057 tiene un IC del 95 % de [0,935; 1,179], que contiene el 1. No se rechaza que el óleo sea proporcional al número de pozos (t = 0,92 para H₀: b = 1): cada pozo aporta en mediana unos 8,8 bbl/día.</aside>
             <noscript><p class="status status-error">Las tablas, gráficas y cálculos se generan con JavaScript; el dictamen y las cifras clave están arriba.</p></noscript>
           </div>
         </section>
@@ -232,7 +231,6 @@
                 <div><dt>1 − R² (no determinación)</dt><dd id="ind-k2"></dd></div>
                 <div><dt>Error estándar de la estimación</dt><dd id="ind-s"></dd></div>
               </dl>
-              <p class="stat-scope" id="prueba-r"></p>
               <div class="table-scroll">
                 <table class="data-table">
                   <caption>Coeficientes con error estándar, prueba t (gl = <span id="ind-gl"></span>; t crítico = <span id="ind-tc"></span>) e IC del 95 %</caption>
@@ -240,7 +238,6 @@
                   <tbody id="cuerpo-coeficientes"></tbody>
                 </table>
               </div>
-              <p class="source">r, R² y el error estándar se calculan en la forma linealizada (ln y = ln a + b·ln x), que es la que minimiza el ajuste. Para comparar modelos con distinta transformación de y, ver la <a href="regresion.html#comparacion">tabla comparativa</a>.</p>
             </div>
           </div>
         </section>
@@ -256,7 +253,6 @@
                 <h3 class="chart-title">Residuo de cada campo frente a x</h3>
                 <div id="grafica-residuos" class="chart-box" role="img" aria-label="Gráfica de residuos del modelo frente al número de pozos"></div>
               </div>
-              <p class="stat-scope" id="nota-normalidad"></p>
               <div class="table-scroll">
                 <table class="data-table">
                   <caption>Los 5 campos con mayor distancia de Cook</caption>
@@ -264,8 +260,6 @@
                   <tbody id="cuerpo-influyentes"></tbody>
                 </table>
               </div>
-              <aside class="frame-note"><p id="nota-sensibilidad"></p></aside>
-              <p class="source">D de Cook mide cuánto cambian los coeficientes si se quita el campo. D &gt; 1: el campo por sí solo cambia el ajuste; D &gt; 4/n es un umbral de revisión.</p>
             </div>
           </div>
         </section>

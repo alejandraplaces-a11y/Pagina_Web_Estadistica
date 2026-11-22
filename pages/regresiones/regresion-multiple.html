@@ -150,7 +150,6 @@
               <div><dt>Múltiple lineal · R²</dt><dd>0,781 <span class="metric-unit">sin 4 campos: 0,488</span></dd></div>
               <div><dt>Campos con D de Cook &gt; 1</dt><dd>0 <span class="metric-unit">frente a 4 en el lineal</span></dd></div>
             </dl>
-            <aside class="frame-note"><strong>¿Por qué no el lineal?</strong> El múltiple lineal y = b₀ + b₁·x₁ + b₂·x₂ da R² = 0,781, pero ese valor lo producen cuatro campos: Canto do Amaro, Leste do Urucu, Estreito y Rio Urucu (distancias de Cook de 3,0 a 4,6). Sin ellos, R² cae a 0,488 y el coeficiente del gas pasa de 0,69 a 2,45: el modelo no es estable y sus residuos no son normales. Al aplicar logaritmos a las tres variables, el modelo sigue siendo lineal en sus parámetros, explica el 80,9 % de la variación de ln y, ningún campo lo domina y sus residuos son casi normales (p = 0,052).</aside>
             <noscript><p class="status status-error">Las tablas, el plano 3D y la calculadora se generan con JavaScript; el dictamen y las cifras clave están arriba.</p></noscript>
           </div>
         </section>
@@ -265,10 +264,8 @@
                   <tbody id="influyentes-log"></tbody>
                 </table>
               </div>
-              <p class="source">D de Cook &gt; 1: muy influyente; D &gt; 4/n = 0,024: influyente (umbral de revisión). Es el mismo criterio que en las páginas de los modelos simples.</p>
-                <aside class="frame-note">Con el gas constante, un 10 % más de pozos se asocia con un 6,8 % más de óleo; con los pozos constantes, un 10 % más de gas, con un 3,3 % más. x₁ y x₂ tienen r = 0,575 en escala ln (VIF = 1,49): hay correlación, pero no multicolinealidad. Ningún campo supera D de Cook &gt; 1; cinco superan el umbral de revisión D &gt; 4/165 = 0,024, encabezados por PA-1ENV25DAM_AM-T-84_AM-T-85 (D = 0,148), pero ninguno domina el ajuste. R² en bbl/día = 0,673 y error relativo mediano del 49,7 %.</aside>
               </details>
-              <details class="var-card">
+              <details class="var-card" open>
                 <summary><span class="var-card-tipo">Comparación</span><span class="var-card-titulo">Múltiple lineal</span><span class="var-card-preview">ŷ = 118,67 + 6,346·x₁ + 0,6887·x₂ · R² = 0,781 · inestable</span></summary>
               <div class="table-scroll">
                 <table class="data-table">
@@ -291,7 +288,6 @@
                   <tbody id="influyentes-lin"></tbody>
                 </table>
               </div>
-                <aside class="frame-note">x₁ y x₂ casi no están correlacionadas (r = 0,004), pero el gas solo es alto en dos campos del Amazonas (Leste do Urucu y Rio Urucu) y el número de pozos, en Estreito y Canto do Amaro. Esos cuatro campos fijan el plano: sin ellos, R² cae a 0,488 y b₂ pasa de 0,689 a 2,451. Error relativo mediano del 111,8 % y residuos no normales (p &lt; 0,0001).</aside>
               </details>
             </div>
           </div>

@@ -133,11 +133,6 @@ function renderIndicadores(variables, claseApi) {
     );
     otras.appendChild(fila);
   });
-
-  const o = variables.oleo;
-  document.getElementById('nota-indicadores').textContent =
-    `En el óleo, ${formatosIndicadores.entero.format(o.outliers_alto)} pozos superan Lₛ = ${numeroIndicador(o.lim_sup)} bbl/día. ` +
-    'El gas tiene la asimetría más fuerte: la mayoría de pozos produce muy poco gas y unos pocos pozos de gas concentran casi todo el volumen.';
 }
 
 function renderResumen(datos) {
@@ -156,19 +151,11 @@ function renderResumen(datos) {
     });
     cuerpo.appendChild(tr);
   });
-
-  const o = datos.variables.oleo;
-  document.getElementById('nota-resumen').textContent =
-    `Pozos con óleo igual a cero: ${formatosIndicadores.entero.format(o.ceros)} ` +
-    `(${formatosIndicadores.porcentaje.format(o.ceros / o.n)}). ` +
-    'Se incluyen en todos los cálculos. El CV expresa la desviación estándar como porcentaje de la media; Paraná no tiene CV porque su media es 0.';
 }
 
 async function cargarIndicadoresYResumen() {
   try {
     const datos = await leerJSON('analysis/data/indicadores_descriptivos.json');
-    document.getElementById('indicadores-n').textContent = formatosIndicadores.entero.format(datos.n);
-    document.getElementById('fuente-indicadores').textContent = datos.fuente;
 
     renderIndicadores(datos.variables, datos.clase_api);
     renderResumen(datos);

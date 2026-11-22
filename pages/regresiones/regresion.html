@@ -152,7 +152,6 @@
               <div><dt>Exponente b · IC 95 %</dt><dd><span class="metric-value" data-target="1.057" data-decimals="3">1,057</span> <span class="metric-unit">[0,935; 1,179]</span></dd></div>
               <div><dt>Múltiple recomendado · R²</dt><dd><span class="metric-value" data-target="0.809" data-decimals="3">0,809</span> <span class="metric-unit">ln y = f(ln x₁, ln x₂)</span></dd></div>
             </dl>
-            <p class="stat-scope">Unidad: campo de producción con óleo &gt; 0 en enero de 2023 (165 de 221 campos). El óleo de un campo crece casi en proporción a sus pozos, unos 8,8 bbl/día por pozo en mediana; si además se considera el gas del campo, se explica el 80,9 % de la variación de ln y.</p>
             <noscript><p class="status status-error">Las tablas y gráficas de esta página se generan con JavaScript. Las cifras clave y los dictámenes están en este resumen y en las tarjetas de modelos.</p></noscript>
           </div>
         </section>
@@ -161,10 +160,8 @@
           <div class="container">
             <p class="section-kicker">Modelos de regresión</p>
             <h2 id="galeria-titulo" class="subsection-title">Modelado de relaciones</h2>
-            <p class="section-intro">Cada modelo tiene su página con el cálculo de parámetros paso a paso, el ajuste gráfico, los indicadores con su prueba de significancia, el análisis de residuos, las restricciones y una calculadora.</p>
-
+            
             <h3 class="grupo-modelos">Regresión simple de una variable</h3>
-            <p class="stat-scope">Relación entre una variable independiente (x: pozos del campo) y una dependiente (y: óleo del campo) con cinco formas funcionales. La barra muestra R² en la forma linealizada de cada modelo.</p>
             <ul class="modelo-galeria">
               <li class="modelo-tarjeta ">
                 <p class="modelo-tipo">Simple</p>
@@ -219,7 +216,6 @@
             </ul>
 
             <h3 class="grupo-modelos">Regresión múltiple con dos variables</h3>
-            <p class="stat-scope">Modelado conjunto de dos predictores (x₁: pozos; x₂: gas natural del campo) sobre la respuesta y, con visualización tridimensional del plano de regresión.</p>
             <ul class="modelo-galeria galeria-multiple">
               <li class="modelo-tarjeta es-multiple">
                 <p class="modelo-tipo">Múltiple · recomendado</p>
@@ -266,10 +262,6 @@
                 <p class="stat-notation">Cuantitativa continua, escala de razón. Recorrido observado: 0,43 a 6.855,09 bbl/día; mediana 82,61.</p>
               </article>
             </div>
-            <aside class="frame-note">
-              <strong>¿Por qué el campo y no el pozo?</strong> Pozo a pozo, las variables de producción casi no se relacionan entre sí (r ≤ 0,58), porque cada pozo tiene una historia propia. Al agrupar por campo aparece una relación clara entre tamaño del campo y producción. Se excluyen los <span id="campos-sin-oleo">56</span> campos sin óleo (campos de gas), porque y = 0 no admite logaritmos en los modelos potencial y exponencial. Un pozo que aporta a dos campos cuenta en ambos, con el volumen que reporta en cada uno.
-            </aside>
-            <p class="source">Fuente: 2023_01_producao_Terra.csv (ANP). Unidad estadística: campo de producción; n = <span id="reg-n">165</span>.</p>
           </div>
         </section>
 
@@ -279,7 +271,6 @@
             <h2 id="tabla-pares-titulo">Tabla de pares de valores (x, y)</h2>
             <p id="estado-pares" class="status" role="status">Cargando pares de valores…</p>
             <div id="contenido-pares" hidden>
-              <p class="section-intro">Los 10 campos con más óleo se muestran abajo; abre la tarjeta para ver los 165 pares. Ordena con los encabezados.</p>
               <div class="table-scroll">
                 <table class="data-table">
                   <caption>Los 10 campos con mayor producción de óleo, enero de 2023</caption>
@@ -303,7 +294,6 @@
                   </table>
                 </div>
               </details>
-              <p class="source">Σx = 5.329 pozos y no 5.308: los campos se cuentan por separado y un pozo que aporta a dos campos aparece en el x de ambos. Σy = 63.422,64 bbl/día es el óleo de los 165 campos con producción positiva.</p>
             </div>
           </div>
         </section>
@@ -327,7 +317,6 @@
                 </div>
                 <div id="grafica-dispersion" class="chart-box chart-box-tall" role="img" aria-label="Diagrama de dispersión del óleo de cada campo frente a su número de pozos"></div>
               </div>
-              <aside class="frame-note"><p id="nota-dispersion">En escala lineal, unos pocos campos grandes (Estreito con 950 pozos, Canto do Amaro con 707) estiran los ejes y casi todos los puntos quedan en una esquina. En escala log-log la nube se alinea en una recta: es la primera pista de un modelo potencial.</p></aside>
             </div>
           </div>
         </section>
@@ -336,7 +325,6 @@
           <div class="container">
             <p class="section-kicker">4.3.1 · d)</p>
             <h2 id="conjetura-titulo">Conjetura del modelo matemático y = f(x)</h2>
-            <p class="section-intro">Se prueban cinco formas funcionales. Las no lineales se linealizan con logaritmos para estimar sus parámetros por mínimos cuadrados.</p>
             <div class="table-scroll">
               <table class="data-table">
                 <caption>Modelos candidatos y su linealización</caption>
@@ -363,7 +351,6 @@
                 <div id="grafica-modelos" class="chart-box chart-box-tall" role="img" aria-label="Diagrama de dispersión en escala log-log con las curvas ajustadas de los modelos lineal, potencial, exponencial, logarítmico y polinómico"></div>
                 <p class="source">Ejes en escala logarítmica para ver los 165 campos. Pulsa un modelo para mostrarlo u ocultarlo.</p>
               </div>
-              <aside class="frame-note"><strong>Conjetura.</strong> La nube es una recta en escala log-log y la dispersión de y crece con x. Ambos rasgos apuntan al <strong>modelo potencial</strong>. El exponencial crece demasiado rápido para los campos grandes y el logarítmico se queda corto.</aside>
             </div>
           </div>
         </section>
@@ -406,8 +393,6 @@
                 <h3 class="chart-title">Determinación frente a no determinación (forma linealizada)</h3>
                 <div id="grafica-indicadores" class="chart-box" role="img" aria-label="Barras apiladas con la determinación y la no determinación de cada modelo"></div>
               </div>
-              <aside class="frame-note"><strong>Criterio de elección.</strong> r, R² y 1 − R² se calculan en la forma linealizada de cada modelo, así que no se pueden comparar directamente entre sí: el lineal mide la variación de y y el potencial la de ln y. Por eso se añaden tres criterios comunes. <strong>R² en ln y</strong> mide a todos los modelos en la misma escala, la adecuada porque el óleo es muy asimétrico. El <strong>error relativo mediano</strong> |y − ŷ| / y indica cuánto se equivoca el modelo en un campo típico. Los <strong>campos con D de Cook &gt; 1</strong> muestran si el ajuste depende de unos pocos puntos; en las páginas de cada modelo, D &gt; 4/n se marca como umbral de revisión. El modelo potencial es el mejor en los tres: R² en ln y = 0,642, error relativo mediano del 66 %, ningún campo supera D &gt; 1 y 8 superan 4/n = 0,024 sin dominar el ajuste. Aunque el lineal tiene R² = 0,550 en bbl/día, ese valor lo producen Estreito y Canto do Amaro; sin ellos baja a 0,205.</aside>
-              <p class="source">Lectura de |r|: &lt; 0,3 débil; 0,3–0,7 moderada; ≥ 0,7 fuerte. En el polinómico, r es la correlación múltiple R = √R². «No aplica»: el modelo predice valores negativos, que no tienen logaritmo.</p>
             </div>
           </div>
         </section>

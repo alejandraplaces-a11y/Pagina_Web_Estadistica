@@ -143,33 +143,30 @@
               <div><dt>Modelo continuo elegido</dt><dd>Lognormal <span class="metric-unit">r = 0,993</span></dd></div>
             </dl>
 
-            <aside class="frame-note" aria-label="Población, muestra y tamaños muestrales">
-              <strong>Población, muestra y tamaños.</strong> Población: pozos terrestres de Brasil, de tamaño N no fijado. Muestra: pozos con reporte en enero de 2023, n = 5.308 (igual que en la <a href="estadistica.html#poblacion-individuo">descriptiva</a>). La variable discreta X usa los 5.308 pozos. La variable continua Y (óleo) usa n = 4.888: los <strong>420 pozos sin óleo se excluyen solo del análisis continuo</strong>, porque un modelo continuo positivo no puede describir una masa de probabilidad en 0. Como N no se fija, ni los intervalos (4.2.13) ni el tamaño muestral (4.2.14) usan corrección por población finita.
-            </aside>
+            
 
             <h3 class="tdf-subtitle">Veredicto por modelo</h3>
-            <p class="stat-scope">Abre cada tarjeta para ver el detalle; α = 0,05 en todas las pruebas χ².</p>
-            <details class="var-card">
+            <details class="var-card" open>
               <summary><span class="var-card-tipo">Discreta · X días de producción · n = 5.308</span><span class="var-card-titulo">Binomial</span><span class="var-card-preview var-card-veredicto">χ² = 656.869 · gl 13 · se rechaza</span></summary>
               <p>p̂ = 0,7743. La varianza observada (106,7) es casi 20 veces la binomial (5,4): los pozos no comparten una misma probabilidad diaria de producir. Ver <a href="#modelo-discreto">4.2.3</a> y <a href="#test-ajuste-discreto">4.2.4</a>.</p>
             </details>
-            <details class="var-card">
+            <details class="var-card" open>
               <summary><span class="var-card-tipo">Discreta · X días de producción · n = 5.308</span><span class="var-card-titulo">Beta-binomial</span><span class="var-card-preview var-card-veredicto">χ² = 3.444,5 · gl 29 · se rechaza</span></summary>
               <p>Capta la sobredispersión mucho mejor que la binomial, pero no reproduce los dos picos (356 pozos con 0 días y 1.594 con 31). Un modelo de mezcla queda como trabajo futuro (<a href="#test-ajuste-discreto">4.2.4</a>).</p>
             </details>
-            <details class="var-card">
+            <details class="var-card" open>
               <summary><span class="var-card-tipo">Continua · Y óleo por pozo productor · n = 4.888</span><span class="var-card-titulo">Lognormal (elegido)</span><span class="var-card-preview var-card-veredicto">χ² = 130,5 · gl 6 · se rechaza · r = 0,993</span></summary>
               <p>μ̂ = 1,5544 y σ̂ = 1,4344. Es el mejor de los tres modelos evaluados. En una submuestra aleatoria de n = 300 no se rechaza (p = 0,125): el rechazo se explica en buena parte por la sensibilidad del χ² a un n grande (<a href="#submuestras">4.2.17</a>).</p>
             </details>
-            <details class="var-card">
+            <details class="var-card" open>
               <summary><span class="var-card-tipo">Continua · Y óleo por pozo productor · n = 4.888</span><span class="var-card-titulo">Gamma y Weibull</span><span class="var-card-preview var-card-veredicto">χ² = 1.495,5 y 764,8 · se rechazan</span></summary>
               <p>Ajustan peor que la lognormal en las mismas 14 clases (<a href="#conjetura-continua">4.2.8</a>).</p>
             </details>
-            <details class="var-card">
+            <details class="var-card" open>
               <summary><span class="var-card-tipo">Continua · agua por pozo productor · n = 4.955</span><span class="var-card-titulo">Gamma (segunda VAC)</span><span class="var-card-preview var-card-veredicto">χ² = 75,9 · gl 11 · se rechaza · r = 0,996</span></summary>
               <p>Para el agua el mejor modelo es la gamma, no la lognormal (χ² = 1.929,9). Ver <a href="#vac-agua">4.2.15</a>.</p>
             </details>
-            <details class="var-card">
+            <details class="var-card" open>
               <summary><span class="var-card-tipo">Discreta · pozos por campo · n = 221 campos</span><span class="var-card-titulo">Binomial negativa (segunda VAD)</span><span class="var-card-preview var-card-veredicto">χ² = 45,4 · gl 19 · se rechaza</span></summary>
               <p>Ajusta mucho mejor que Poisson (χ² = 3.134,9), que no admite sobredispersión. Ver <a href="#vad-campos">4.2.16</a>.</p>
             </details>
@@ -255,10 +252,6 @@
                 </article>
               </div>
 
-              <aside class="frame-note">
-                <strong>Criterio por pozo.</strong> <span id="vad-repetidos"></span> pozos aparecen en varias filas y sus horas pueden repetirse entre filas; sumarlas superaría las 744 horas del mes. Por eso se toma el máximo de horas registrado para cada pozo.
-              </aside>
-              <p class="source">Fuente: <span id="vad-fuente"></span> · Variable derivada de las horas de producción del mes.</p>
             </div>
           </div>
         </section>
@@ -270,7 +263,6 @@
             <p id="estado-tdf-vad" class="status" role="status">Construyendo la tabla de frecuencias…</p>
 
             <div id="contenido-tdf-vad" hidden>
-              <p class="section-intro">Al ser una variable discreta, la tabla usa cada valor de X como una clase, sin agrupar en intervalos.</p>
 
               <div class="table-scroll">
                 <table class="data-table">
@@ -294,9 +286,6 @@
                 <h3 class="chart-title">Frecuencia relativa de los días completos de producción</h3>
                 <div id="grafica-vad" class="chart-box chart-box-tall" role="img" aria-label="Gráfica de barras de la frecuencia relativa de X, de 0 a 31 días"></div>
               </div>
-
-              <aside class="frame-note"><p id="nota-tdf-vad"></p></aside>
-              <p class="source">fᵢ: frecuencia absoluta; hᵢ = fᵢ / n; Fᵢ y Hᵢ: frecuencias acumuladas. La barra más oscura marca la moda.</p>
             </div>
           </div>
         </section>
@@ -332,10 +321,6 @@
                 <div><dt>Varianza observada · s²</dt><dd id="md-var-obs"></dd></div>
                 <div><dt>Varianza binomial · np̂(1 − p̂)</dt><dd id="md-var-binom"></dd></div>
               </dl>
-
-              <aside class="frame-note">
-                <strong>Sobredispersión.</strong> La varianza observada es <span id="md-razon"></span> veces la que predice la binomial. Esto anticipa un mal ajuste del modelo binomial: los pozos no comparten una misma probabilidad diaria de producir.
-              </aside>
 
               <div class="chart-card">
                 <p class="section-kicker">Ajuste gráfico</p>
@@ -435,9 +420,6 @@
               </dl>
               <p class="test-decision" id="prueba-betabinomial-decision"></p>
 
-              <aside class="frame-note">
-                <strong>Conclusión.</strong> Con α = 0,05, ambos modelos se rechazan. La distribución de X tiene dos picos (0 días y 30–31 días) que ninguno de los dos reproduce: muchos pozos producen todo el mes y un grupo no completa ningún día. Con n = 5.308, la prueba detecta incluso diferencias pequeñas; aun así, la beta-binomial describe la dispersión mucho mejor que la binomial. <strong>Trabajo futuro:</strong> la forma de dos picos sugiere un modelo de mezcla, con una componente para pozos parados (masa en 0 días) y otra para pozos activos (concentrada en 30–31 días), que un modelo simple no puede reproducir. En <a href="#submuestras">4.2.17</a> la prueba se repite en submuestras de n = 300.
-              </aside>
             </div>
           </div>
         </section>
@@ -470,11 +452,6 @@
                   <p class="stat-notation">R<sub>Y</sub> = (0; +∞). Recorrido observado: <span id="vac-min"></span> a <span id="vac-max-2"></span> bbl/día.</p>
                 </article>
               </div>
-
-              <aside class="frame-note">
-                <strong>Pozos excluidos solo aquí.</strong> <span id="vac-excluidos"></span> pozos con óleo igual a cero se dejan fuera del análisis continuo (4.2.5 a 4.2.14): forman una masa de probabilidad en 0 que un modelo continuo no puede describir. Siguen incluidos en la variable discreta X y en toda la descriptiva (n = 5.308). La asimetría de Y es <span id="vac-asimetria"></span>; en escala log₁₀ baja a <span id="vac-asimetria-log"></span>, por lo que las tablas siguientes usan clases de igual ancho en log₁₀(y).
-              </aside>
-              <p class="source">Fuente: <span id="vac-fuente"></span> · Óleo por pozo, filas repetidas sumadas.</p>
             </div>
           </div>
         </section>
@@ -486,8 +463,7 @@
             <p id="estado-histograma-relativo" class="status" role="status">Construyendo la tabla…</p>
 
             <div id="contenido-histograma-relativo" hidden>
-              <p class="section-intro">Sturges: k = ⌈1 + 3,322 · log₁₀(n)⌉ = <span id="hr-k"></span> clases de igual ancho en t = log₁₀(y), con amplitud A = <span id="hr-amplitud"></span>. Los límites se expresan en bbl/día.</p>
-
+              
               <div class="table-scroll">
                 <table class="data-table">
                   <caption>Distribución de frecuencias relativas de Y, óleo por pozo productor</caption>
@@ -513,9 +489,6 @@
                 <h3 class="chart-title">Frecuencia relativa del óleo por pozo productor</h3>
                 <div id="grafica-histograma-relativo" class="chart-box chart-box-tall" role="img" aria-label="Histograma de frecuencias relativas del óleo por pozo productor en escala logarítmica"></div>
               </div>
-
-              <aside class="frame-note"><p id="nota-histograma-relativo"></p></aside>
-              <p class="source">Marca de clase yᵢ = √(Lᵢ · Lᵢ₊₁), punto medio en escala logarítmica. La última clase se cierra en el máximo observado.</p>
             </div>
           </div>
         </section>
@@ -527,8 +500,7 @@
             <p id="estado-histograma-densidad" class="status" role="status">Construyendo la tabla…</p>
 
             <div id="contenido-histograma-densidad" hidden>
-              <p class="section-intro">La densidad divide la frecuencia relativa entre el ancho de la clase, de modo que el área total del histograma es 1. Se presenta en t = log₁₀(y), donde las clases tienen igual ancho, y en la escala original de y.</p>
-
+              
               <div class="method-grid">
                 <article class="method-card">
                   <p class="method-card-tag">Escala log₁₀</p>
@@ -568,10 +540,6 @@
                 <h3 class="chart-title">Densidad de probabilidad empírica</h3>
                 <div id="grafica-histograma-densidad" class="chart-box chart-box-tall" role="img" aria-label="Histograma de densidad de probabilidad del logaritmo del óleo por pozo productor"></div>
               </div>
-
-              <aside class="frame-note">
-                <strong>Forma de la distribución.</strong> En escala logarítmica el histograma tiene forma de campana, con un único pico. Esta forma servirá en 4.2.8 para conjeturar un modelo continuo, como el lognormal.
-              </aside>
             </div>
           </div>
         </section>
@@ -613,7 +581,6 @@
                   <tbody id="cuerpo-candidatos"></tbody>
                 </table>
               </div>
-              <p class="source">Lognormal: μ ; σ. Gamma: forma ; escala. Weibull: forma ; escala. Mayor r y menor χ² indican mejor ajuste.</p>
             </div>
           </div>
         </section>
@@ -711,10 +678,6 @@
                   <tfoot id="pie-prueba-continua"></tfoot>
                 </table>
               </div>
-
-              <aside class="frame-note">
-                <strong>Interpretación.</strong> Pearson indica que el modelo lognormal reproduce casi toda la forma de la distribución. La prueba chi-cuadrado, en cambio, rechaza H₀: con n = 4.888 pozos detecta desviaciones pequeñas, sobre todo en la cola izquierda (pozos con producción muy baja). El lognormal es el mejor de los modelos evaluados y sirve como aproximación, pero no como ajuste exacto. En una submuestra aleatoria de n = 300 el χ² ya no rechaza la lognormal (<a href="#submuestras">4.2.17</a>).
-              </aside>
             </div>
           </div>
         </section>
@@ -801,7 +764,6 @@
                   <tbody id="cuerpo-probabilidades"></tbody>
                 </table>
               </div>
-              <p class="source">pp: puntos porcentuales. Las diferencias pequeñas confirman que el modelo sirve como aproximación.</p>
             </div>
           </div>
         </section>
@@ -813,8 +775,7 @@
             <p id="estado-mc-estimacion" class="status" role="status">Calculando intervalos…</p>
 
             <div id="contenido-mc-estimacion" hidden>
-              <p class="section-intro">Nivel de confianza: <span id="ic-confianza"></span>. Valores críticos: t<sub>0,025; n−1</sub> = <span id="ic-t"></span> y z<sub>0,025</sub> = <span id="ic-z"></span>.</p>
-
+              
               <div class="table-scroll">
                 <table class="data-table">
                   <caption>Estimación puntual e intervalos de confianza para los parámetros de Y</caption>
@@ -829,13 +790,6 @@
                   <tbody id="cuerpo-intervalos"></tbody>
                 </table>
               </div>
-
-              <aside class="frame-note">
-                <strong>Lectura.</strong> Con una confianza del 95 %, la mediana de Y estimada por estadísticos de orden (sin suponer modelo) está entre <span id="ic-mediana-orden-rango"></span> bbl/día, y la producción media por pozo, entre <span id="ic-media-rango"></span> bbl/día. El intervalo de la media es más ancho porque los pocos pozos de producción muy alta aumentan la variabilidad. Aquí σ se estima con n − 1 en el denominador. No se aplica corrección por población finita, porque la población (pozos terrestres de Brasil) no tiene un N fijo.
-              </aside>
-              <aside class="frame-note nota-alerta">
-                <strong>Mediana del modelo frente a la mediana observada.</strong> El IC del 95 % de la mediana del modelo lognormal, e^μ, es <span id="ic-mediana-rango-2">[4,55; 4,93]</span> bbl/día, pero la mediana muestral de los pozos productores es <span id="ic-mediana-observada">4,99</span> bbl/día. No es un error de cálculo: el intervalo estima la mediana <em>de la lognormal</em>, y la lognormal coloca demasiada probabilidad en la cola izquierda (pozos de producción muy baja). Es la misma desviación que detecta el χ² en 4.2.10. En cambio, el IC de la mediana por estadísticos de orden, <span id="ic-mediana-orden-rango-2"></span> bbl/día, no supone ningún modelo y sí contiene la mediana observada. Con todo 2023 se comparan ambos intervalos (<a href="#validacion-anual">4.2.18</a>).
-              </aside>
             </div>
           </div>
         </section>
@@ -886,10 +840,6 @@
                   <tbody id="cuerpo-tamanos"></tbody>
                 </table>
               </div>
-
-              <aside class="frame-note">
-                <strong>Uso.</strong> El cálculo indica cuántos pozos productores harían falta en un muestreo aleatorio para estimar la media o la proporción con un error dado, y si la muestra de enero (n = 4.888) alcanza. La gran dispersión de Y exige muestras grandes para errores pequeños: un error de ± 1 bbl/día requiere casi tantos pozos como los que tiene la muestra.
-              </aside>
             </div>
           </div>
         </section>
@@ -937,7 +887,6 @@
                   <tbody id="cuerpo-agua-candidatos"></tbody>
                 </table>
               </div>
-              <p class="source">Lognormal: μ ; σ. Gamma: forma ; escala (bbl/día). Weibull: forma ; escala (bbl/día).</p>
 
               <div class="chart-card">
                 <p class="section-kicker">Ajuste gráfico</p>
@@ -960,7 +909,6 @@
                 </table>
               </div>
 
-              <aside class="frame-note"><p id="nota-agua"></p></aside>
             </div>
           </div>
         </section>
@@ -1027,8 +975,6 @@
                   <tbody id="cuerpo-campos-prueba"></tbody>
                 </table>
               </div>
-
-              <aside class="frame-note"><p id="nota-campos"></p></aside>
             </div>
           </div>
         </section>
@@ -1040,7 +986,6 @@
             <p id="estado-submuestras" class="status" role="status">Cargando submuestras…</p>
 
             <div id="contenido-submuestras" hidden>
-              <p class="section-intro">Con n grande, el χ² rechaza diferencias muy pequeñas entre lo observado y el modelo. Para separar ese efecto del mal ajuste real, la prueba se repite en una submuestra aleatoria simple de <span id="sub-tamano"></span> pozos (semilla <span id="sub-semilla"></span>) y en <span id="sub-replicas"></span> submuestras más del mismo tamaño. Los parámetros se reestiman en cada submuestra; Y usa las mismas clases de 4.2.6.</p>
 
               <div class="table-scroll">
                 <table class="data-table">
@@ -1059,8 +1004,6 @@
                   <tbody id="cuerpo-submuestras"></tbody>
                 </table>
               </div>
-
-              <aside class="frame-note"><p id="nota-submuestras"></p></aside>
             </div>
           </div>
         </section>
@@ -1104,9 +1047,6 @@
                   <tbody id="cuerpo-validacion"></tbody>
                 </table>
               </div>
-
-              <aside class="frame-note"><p id="nota-validacion"></p></aside>
-              <p class="source">Fuente: <span id="val-fuente"></span>. Media anual: promedio de todos los pozo-mes con Y &gt; 0. Generado con analysis/python/2_descriptiva_inferencial.py --anual.</p>
             </div>
           </div>
         </section>
