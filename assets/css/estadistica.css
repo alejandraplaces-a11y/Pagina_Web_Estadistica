@@ -149,6 +149,8 @@
 .data-table .fila-total th, .data-table .fila-total td { font-weight: 650; border-top: 2px solid var(--line); }
 .tabla-variables { min-width: 1280px; font-size: 13px; }
 .tabla-variables td, .tabla-variables th { padding: 10px 12px; }
+.tabla-indicadores { min-width: 1180px; font-size: 13px; }
+.tabla-indicadores td, .tabla-indicadores th { padding: 10px 12px; }
 
 /* Resumen inicial con las cifras clave. */
 .resumen-clave { padding-top: 48px; padding-bottom: 48px; }

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tabla de indicadores · Producción terrestre de petróleo en Brasil</title>
+  <link rel="stylesheet" href="../../assets/css/styles.css">
+  <link rel="stylesheet" href="../../assets/css/estadistica.css">
+  <style>
+    .tabla-indicadores th[scope="row"]{text-align:left;position:sticky;left:0;background:var(--surface,#fff);min-width:14rem}
+    .tabla-indicadores td.numero{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+    .tabla-indicadores tr.grupo th{text-align:left;font-style:italic;background:var(--surface-alt,#f1f1f1)}
+  </style>
+</head>
+<body>
+  <!-- Generado desde analysis/data/2023_01_producao_Terra.csv -->
+  <div class="table-scroll">
+    <table class="data-table tabla-indicadores">
+      <caption>Indicadores descriptivos por pozo, enero de 2023 (n = 5.308). CV en %; atípicos por IQR (1,5 × IQR). Fuente: ANP, 2023_01_producao_Terra.csv</caption>
+      <thead>
+        <tr>
+          <th scope="col" rowspan="2">Variable</th><th scope="col" rowspan="2">Tipo</th><th scope="col" rowspan="2">Unidad</th>
+          <th scope="col" rowspan="2">n</th><th scope="col" rowspan="2">Categorías</th>
+          <th scope="colgroup" colspan="3">Tendencia central</th>
+          <th scope="colgroup" colspan="4">Posición</th>
+          <th scope="colgroup" colspan="3">Dispersión</th>
+          <th scope="colgroup" colspan="2">Forma</th>
+          <th scope="colgroup" colspan="2">Atípicos</th>
+        </tr>
+        <tr>
+          <th scope="col">Media</th><th scope="col">Mediana</th><th scope="col">Moda / clase modal</th>
+          <th scope="col">Mín.</th><th scope="col">Q1</th><th scope="col">Q3</th><th scope="col">Máx.</th>
+          <th scope="col">sd</th><th scope="col">CV (%)</th><th scope="col">IQR</th>
+          <th scope="col">Asimetría</th><th scope="col">Curtosis en exceso</th>
+          <th scope="col">n</th><th scope="col">%</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="grupo"><th scope="rowgroup" colspan="19">Operación</th></tr>
+        <tr><th scope="row">Horas de producción registradas</th><td>Cuantitativa</td><td>h/mes</td><td class="numero">5.308</td><td>—</td><td class="numero">585</td><td class="numero">738</td><td class="numero">744 <small>(30,0 %)</small></td><td class="numero">0</td><td class="numero">501</td><td class="numero">744</td><td class="numero">744</td><td class="numero">248</td><td class="numero">42,4</td><td class="numero">243</td><td class="numero">-1,38</td><td class="numero">0,36</td><td class="numero">615</td><td class="numero">11,6</td></tr>
+        <tr><th scope="row">Días equivalentes completos</th><td>Cuantitativa</td><td>días</td><td class="numero">5.308</td><td>—</td><td class="numero">24</td><td class="numero">30</td><td class="numero">31 <small>(30,0 %)</small></td><td class="numero">0</td><td class="numero">20</td><td class="numero">31</td><td class="numero">31</td><td class="numero">10</td><td class="numero">43,0</td><td class="numero">11</td><td class="numero">-1,37</td><td class="numero">0,32</td><td class="numero">508</td><td class="numero">9,6</td></tr>
+        <tr class="grupo"><th scope="rowgroup" colspan="19">Líquidos</th></tr>
+        <tr><th scope="row">Óleo (crudo)</th><td>Cuantitativa</td><td>bbl/día</td><td class="numero">5.308</td><td>—</td><td class="numero">11,95</td><td class="numero">4,42</td><td class="numero">0 <small>(7,9 %)</small></td><td class="numero">0,00</td><td class="numero">1,45</td><td class="numero">10,64</td><td class="numero">1.102,83</td><td class="numero">32,98</td><td class="numero">276,0</td><td class="numero">9,18</td><td class="numero">12,36</td><td class="numero">276,96</td><td class="numero">539</td><td class="numero">10,2</td></tr>
+        <tr><th scope="row">Condensado</th><td>Cuantitativa</td><td>bbl/día</td><td class="numero">5.308</td><td>—</td><td class="numero">0,70</td><td class="numero">0,00</td><td class="numero">0 <small>(98,1 %)</small></td><td class="numero">0,00</td><td class="numero">0,00</td><td class="numero">0,00</td><td class="numero">722,73</td><td class="numero">14,27</td><td class="numero">2.039,2</td><td class="numero">0,00</td><td class="numero">34,52</td><td class="numero">1.475,38</td><td class="numero">99</td><td class="numero">1,9</td></tr>
+        <tr><th scope="row">Petróleo total (óleo + condensado)</th><td>Cuantitativa</td><td>bbl/día</td><td class="numero">5.308</td><td>—</td><td class="numero">12,65</td><td class="numero">4,51</td><td class="numero">0 <small>(6,0 %)</small></td><td class="numero">0,00</td><td class="numero">1,52</td><td class="numero">10,80</td><td class="numero">1.102,83</td><td class="numero">35,70</td><td class="numero">282,3</td><td class="numero">9,28</td><td class="numero">11,75</td><td class="numero">235,00</td><td class="numero">551</td><td class="numero">10,4</td></tr>
+        <tr class="grupo"><th scope="rowgroup" colspan="19">Gas natural</th></tr>
+        <tr><th scope="row">Gas asociado</th><td>Cuantitativa</td><td>Mm³/día</td><td class="numero">5.308</td><td>—</td><td class="numero">2,0100</td><td class="numero">0,0043</td><td class="numero">0 <small>(8,8 %)</small></td><td class="numero">0,0000</td><td class="numero">0,0009</td><td class="numero">0,0400</td><td class="numero">550,6889</td><td class="numero">21,0093</td><td class="numero">1.045,2</td><td class="numero">0,0391</td><td class="numero">15,25</td><td class="numero">274,22</td><td class="numero">924</td><td class="numero">17,4</td></tr>
+        <tr><th scope="row">Gas no asociado</th><td>Cuantitativa</td><td>Mm³/día</td><td class="numero">5.308</td><td>—</td><td class="numero">1,7814</td><td class="numero">0,0000</td><td class="numero">0 <small>(95,7 %)</small></td><td class="numero">0,0000</td><td class="numero">0,0000</td><td class="numero">0,0000</td><td class="numero">499,6123</td><td class="numero">17,5846</td><td class="numero">987,1</td><td class="numero">0,0000</td><td class="numero">15,53</td><td class="numero">302,01</td><td class="numero">227</td><td class="numero">4,3</td></tr>
+        <tr><th scope="row">Gas total</th><td>Cuantitativa</td><td>Mm³/día</td><td class="numero">5.308</td><td>—</td><td class="numero">3,7915</td><td class="numero">0,0057</td><td class="numero">[0,00; 0,01)</td><td class="numero">0,0000</td><td class="numero">0,0013</td><td class="numero">0,0665</td><td class="numero">550,6889</td><td class="numero">27,2662</td><td class="numero">719,1</td><td class="numero">0,0652</td><td class="numero">10,94</td><td class="numero">144,45</td><td class="numero">993</td><td class="numero">18,7</td></tr>
+        <tr><th scope="row">Gas para regalías</th><td>Cuantitativa</td><td>Mm³/día</td><td class="numero">5.308</td><td>—</td><td class="numero">76,914</td><td class="numero">0,152</td><td class="numero">0 <small>(6,7 %)</small></td><td class="numero">0,000</td><td class="numero">0,031</td><td class="numero">1,805</td><td class="numero">15.487,982</td><td class="numero">540,079</td><td class="numero">702,2</td><td class="numero">1,774</td><td class="numero">13,70</td><td class="numero">267,43</td><td class="numero">982</td><td class="numero">18,5</td></tr>
+        <tr class="grupo"><th scope="rowgroup" colspan="19">Agua</th></tr>
+        <tr><th scope="row">Agua producida</th><td>Cuantitativa</td><td>bbl/día</td><td class="numero">5.308</td><td>—</td><td class="numero">244,65</td><td class="numero">99,88</td><td class="numero">0 <small>(6,7 %)</small></td><td class="numero">0,00</td><td class="numero">13,28</td><td class="numero">331,00</td><td class="numero">5.074,23</td><td class="numero">401,41</td><td class="numero">164,1</td><td class="numero">317,72</td><td class="numero">4,26</td><td class="numero">27,08</td><td class="numero">290</td><td class="numero">5,5</td></tr>
+        <tr><th scope="row">Corte de agua (derivada: agua / (agua + petróleo))</th><td>Cuantitativa</td><td>%</td><td class="numero">5.078</td><td>—</td><td class="numero">82,21</td><td class="numero">96,28</td><td class="numero">[96,94; 98,96)</td><td class="numero">0,00</td><td class="numero">81,45</td><td class="numero">98,81</td><td class="numero">100,00</td><td class="numero">28,73</td><td class="numero">35,0</td><td class="numero">17,36</td><td class="numero">-1,90</td><td class="numero">2,33</td><td class="numero">741</td><td class="numero">14,6</td></tr>
+        <tr class="grupo"><th scope="rowgroup" colspan="19">Calidad</th></tr>
+        <tr><th scope="row">Grado API</th><td>Cuantitativa</td><td>°API</td><td class="numero">4.435</td><td>—</td><td class="numero">25,20</td><td class="numero">23,20</td><td class="numero">23,20 <small>(60,0 %)</small></td><td class="numero">13,20</td><td class="numero">23,20</td><td class="numero">24,50</td><td class="numero">64,64</td><td class="numero">7,04</td><td class="numero">27,9</td><td class="numero">1,30</td><td class="numero">1,67</td><td class="numero">3,84</td><td class="numero">1.211</td><td class="numero">27,3</td></tr>
+        <tr class="grupo"><th scope="rowgroup" colspan="19">Variables cualitativas</th></tr>
+        <tr><th scope="row">Estado</th><td>Nominal</td><td>—</td><td class="numero">5.308</td><td class="numero">9</td><td>—</td><td>—</td><td>Rio Grande do Norte <small>(60,2 %)</small></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+        <tr><th scope="row">Cuenca</th><td>Nominal</td><td>—</td><td class="numero">5.308</td><td class="numero">12</td><td>—</td><td>—</td><td>Potiguar <small>(64,0 %)</small></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+        <tr><th scope="row">Campo principal</th><td>Nominal</td><td>—</td><td class="numero">5.308</td><td class="numero">213</td><td>—</td><td>—</td><td>ESTREITO <small>(17,9 %)</small></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+        <tr><th scope="row">Operador principal</th><td>Nominal</td><td>—</td><td class="numero">5.308</td><td class="numero">39</td><td>—</td><td>—</td><td>Petrobras <small>(58,4 %)</small></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+        <tr><th scope="row">Tipo de instalación</th><td>Nominal</td><td>—</td><td class="numero">5.308</td><td class="numero">3</td><td>—</td><td>—</td><td>INSTALACAO EMB/DESEMB <small>(95,6 %)</small></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+        <tr><th scope="row">Clase de crudo por API</th><td>Ordinal</td><td>—</td><td class="numero">4.435</td><td class="numero">3</td><td>—</td><td>Mediano</td><td>Mediano <small>(74,3 %)</small></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+        <tr><th scope="row">Produce óleo</th><td>Binaria</td><td>—</td><td class="numero">5.308</td><td class="numero">2</td><td>—</td><td>—</td><td>Sí <small>(92,1 %)</small></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+        <tr><th scope="row">Produce gas total</th><td>Binaria</td><td>—</td><td class="numero">5.308</td><td class="numero">2</td><td>—</td><td>—</td><td>Sí <small>(95,5 %)</small></td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
